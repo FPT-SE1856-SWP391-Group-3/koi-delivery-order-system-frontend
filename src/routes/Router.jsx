@@ -34,7 +34,7 @@ import UserOrderDetail from "../components/user/order/UserOrderDetail";
 import ManageOrder from "../components/admin/order/ManageOrder";
 import ManageOrderDetail from "../components/admin/order/ManageOrderDetail";
 import CreateFeedback from "../components/user/feedback/CreateFeedback";
-import ManageFeedBack from "../components/user/feedback/ManageFeedBack";
+import ManageFeedBack from "../components/user/feedback/ManageFeedback";
 import EditFeedback from "../components/user/feedback/EditFeedback";
 import AddDocument from "../components/user/document/AddDocument";
 import CreateTransportationReportDetails from "../components/admin/report/CreateTransportationReportDetails";
