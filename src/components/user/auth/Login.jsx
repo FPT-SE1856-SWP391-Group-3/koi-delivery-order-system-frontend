@@ -12,11 +12,12 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     try {
-      api.post("Users/login", data).then((data) => {
+      api.post("Users/login/jwt/", data).then((data) => {
         if (data.success) {
           alert("Đăng nhập thành công!");
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("userId", JSON.stringify(data.userId));
+          localStorage.setItem("token", JSON.stringify(data.stringToken));
           navigate("/");
         } else {
           alert("Đăng nhập thất bại!");
