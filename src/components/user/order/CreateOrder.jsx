@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Header from "../common/Header";
 import { set, useForm } from "react-hook-form";
-import api from "../../../api/CallAPI";
 
 export default function CreateOrder() {
   const customerId = JSON.parse(localStorage.getItem("userId"));
