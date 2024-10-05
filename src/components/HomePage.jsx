@@ -2,6 +2,7 @@ import Header from "./user/common/Header";
 
 export default function HomePage() {
     let user = JSON.parse(localStorage.getItem('user'));
+    console.log(user);
 
     return (
         <>

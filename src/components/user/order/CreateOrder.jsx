@@ -228,12 +228,6 @@ export default function CreateOrder() {
                 (kois?.find((k) => k.koiId === parseInt(koi.koiId))?.price ||
                   0)}{" "}
               D
-              {
-                (koi.totalPrice =
-                  koi.amount *
-                  (kois?.find((k) => k.koiId === parseInt(koi.koiId))?.price ||
-                    0))
-              }
             </p>
             <input
               type="text"
