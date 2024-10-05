@@ -7,12 +7,26 @@ import Header from '../common/Header';
 export default function AddDocument() {
     const { register, handleSubmit } = useForm();
     const navigate = useNavigate();
-    let { orderId } = useParams();
+    // const [customerDocumentFile, setCustomerDocumentFile] = useState([]);
+    let { orderId, userId } = useParams();
+
+    // const handleFileChange = (e) => {
+    //   setCustomerDocumentFile([...customerDocumentFile, e.target.files[0]]); //append the file list
+    // };
+
+
+
 
     const onSubmit = async (data) => {
-        console.log(data);
+        console.log(data.customerDocumentFile.name);
+        const customerData = new FormData();
+        customerData.append("orderId", orderId);
+          customerData.append("customerDocumentFile", data.customerDocumentFile[0]); // Gửi file đầu tiên trong danh sách
+        customerData.append("description", data.description);
+        customerData.append("userId", userId);
+        console.log(customerData);
         try {
-            api.post("CustomsDocuments/", data)
+            api.postForm("CustomerDocuments/", customerData)
                 .then(data => {
                     if (data.success) {
                         alert('Thêm thành công!');
@@ -47,13 +61,24 @@ export default function AddDocument() {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="filePath">Đường dẫn tệp</label>
+                  <label htmlFor="userId">Mã người dùng</label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
-                    id="filePath"
-                    name="filePath"
-                    {...register("filePath")}
+                    id="userId"
+                    name="userId"
+                    value={userId}
+                    readOnly
+                    {...register("userId")}
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    id="customerDocumentFile"
+                    name="customerDocumentFile"
+                    type="file"
+                    accept="multipart/form-data"
+                    {...register("customerDocumentFile")}
                   />
                 </div>
                 <div className="form-group">

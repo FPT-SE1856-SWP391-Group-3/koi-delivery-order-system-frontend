@@ -73,7 +73,7 @@ export default function UserOrder(){
                         <td>
                         <button
                             className="btn btn-primary"
-                            onClick={() => navigate("/add-document/" + order.orderId)}
+                            onClick={() => navigate("/add-document/" + order.orderId + "/" + order.customerId)}
                         >
                             Document
                         </button>

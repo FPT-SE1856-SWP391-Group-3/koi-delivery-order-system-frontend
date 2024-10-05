@@ -23,6 +23,14 @@ const apiInstance = axios.create({
   },
 });
 
+// Tao mot instance axios de gui file
+const formApiInstance = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+
 // Thêm một interceptor để kiểm tra response lỗi `401`
 apiInstance.interceptors.response.use(
   (response) => {
@@ -75,6 +83,17 @@ const post = async (url: string, data: any) => {
     });
 };
 
+// Hàm POST file
+const postForm = async (url: string, data: any) => {
+  const fullUrl = buildUrl(url);
+  return formApiInstance.post(fullUrl, data)
+    .then(response => response.data)
+    .catch(error => {
+      console.error(`POST ${fullUrl} failed:`, error);
+      throw error;
+    });
+};
+
 // Hàm PUT
 const put = async (url: string, data: any) => {
   const fullUrl = buildUrl(url);
@@ -103,5 +122,6 @@ export default {
   post,
   put,
   del,
+  postForm,
   buildUrl
 };

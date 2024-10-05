@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Header from "../common/Header";
 import { set, useForm } from "react-hook-form";
+import api from "../../../api/CallAPI";
 
 export default function CreateOrder() {
   const customerId = JSON.parse(localStorage.getItem("userId"));
@@ -15,6 +16,8 @@ export default function CreateOrder() {
   const [totalOrderPrice, setTotalOrderPrice] = useState(0);
   const [totalOrderWeight, setTotalOrderWeight] = useState(0);
   const [kois, setKois] = useState();
+  const [orderServiceDetails, setOrderServiceDetails] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
 
   //Lay dia chi nguoi dung
@@ -46,6 +49,15 @@ export default function CreateOrder() {
       }
     });
 
+    api.get("OrderServiceDetails/").then((data) => {
+      if (data.success) {
+        console.log(data.orderServiceDetails);
+        setOrderServiceDetails(data.orderServiceDetails);
+      } else {
+        console.log("Không có dịch vụ!");
+      }
+    });
+
   }, []);
 
   //Them koi
@@ -63,19 +75,30 @@ export default function CreateOrder() {
   };
 
   const calculateTotalPrice = (koiList) => {
+    let totalOrderPrice = 0;
+    let totalWeight = 0; 
     let totalPrice = 0;
-    let totalWeight = 0;
     koiList.forEach((koi) => {
       const koiData = kois.find((k) => k.koiId === parseInt(koi.koiId));
       if (koiData) {
         const koiPrice = koiData.price || 0;
         const koiWeight = koiData.weight || 0;
-        totalPrice += koi.amount * koiPrice; // Tính tổng giá
+        totalOrderPrice += koi.amount * koiPrice; // Tính tổng giá
         totalWeight += koi.amount * koiWeight; // Tính tổng khối lượng
       }
     });
-    setTotalOrderPrice(totalPrice);
+    setTotalOrderPrice(totalOrderPrice);
     setTotalOrderWeight(totalWeight);
+    console.log(totalOrderPrice);
+    if (totalOrderPrice > 0){
+    orderServiceDetails.forEach((orderServiceDetail) => {
+      totalPrice += orderServiceDetail.orderServiceDetailPrice;
+    });
+      setTotalPrice(totalPrice + totalOrderPrice);
+  } else {
+    setTotalPrice(0);
+  }
+
   };
 
   //Tao don hang
@@ -89,6 +112,7 @@ export default function CreateOrder() {
       koiId: koiIds,
       amount: amounts,
       koiCondition: koiConditions,
+      totalPrice: totalPrice,
     };
     console.log(fullOrderData);
     try {
@@ -104,6 +128,27 @@ export default function CreateOrder() {
       alert("An error occurred during registration. Please try again.");
     }
   };
+
+   const importFile= async (e) => {
+     console.log(file); //check all files
+     for (const uploadedFile of file) {
+       if (uploadedFile) {
+         const formData = new FormData(); //make a bew FormData for every file.
+         formData.append("file", uploadedFile, uploadedFile.name); //append the file to the formdata
+         try {
+           api.postFile("CustomsDocuments/test", formData).then((data) => {
+             if (data.success) {
+               alert("Upload thành công!");
+             } else {
+               alert("Upload thất bại!");
+             }
+           });
+         } catch (ex) {
+           console.log(ex);
+         }
+       }
+     }
+   }
 
   return (
     <>
@@ -249,13 +294,16 @@ export default function CreateOrder() {
 
         <h2>Tong gia: {totalOrderPrice} VND</h2>
         <h2>Tong khoi luong: {totalOrderWeight} g</h2>
-        <h1>Cac dich vu</h1>
-        <p>Ten dich vu</p>
-        <p>Gia dich vu: {} </p>
-        <h1>Gia cuoc</h1>
-        <p>Gia cuoc: {} </p>
+        {orderServiceDetails.map((orderServiceDetail) => (
+          <>
+            <h1>Cac dich vu</h1>
+            <p>Gia dich vu: {orderServiceDetail.orderServiceDetailName} </p>
+            <p>Gia cuoc: {orderServiceDetail.orderServiceDetailPrice} </p>
 
-        <h1>Tong tien: {}</h1>
+          </>
+        ))}
+
+        <h1>Tong tien: {totalPrice}</h1>
         <input type="submit" value="Submit" />
       </form>
     </>
