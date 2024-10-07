@@ -62,6 +62,19 @@ apiInstance.interceptors.request.use(
 );
 
 // Hàm GET
+const getFile = (url: string, params: any = {}) => {
+  const fullUrl = buildUrl(url);
+  return apiInstance.get(fullUrl, { params, responseType: 'blob' })
+    .then(response => response.data)
+    .then(data => {
+      return URL.createObjectURL(data); // Trả về URL cho file ảnh
+    })
+    .catch(error => {
+      console.error(`GET ${fullUrl} failed:`, error);
+      throw error;
+    });
+};
+
 const get = async (url: string, params: any = {}) => {
   const fullUrl = buildUrl(url);
   return apiInstance.get(fullUrl, { params })
@@ -123,5 +136,6 @@ export default {
   put,
   del,
   postForm,
+  getFile,
   buildUrl
 };
