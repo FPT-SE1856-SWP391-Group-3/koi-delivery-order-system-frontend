@@ -1,8 +1,9 @@
 import api from "../../api/CallAPI";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export default function UploadFile() {
     const [file, setFile] = useState([]);    //define list instead
-  
+  const[image, setImage] = useState({});
+
   const handleFileChange = (e) => {
     setFile([...file,e.target.files[0]])      //append the file list
     };
@@ -26,7 +27,15 @@ export default function UploadFile() {
           console.log(ex);
         }
   };}}
-    
+
+ useEffect(() => {
+  var response = api.getFile("Certifications/image","Resources\\fb1b3108-dc39-4ba1-b0e5-699e34d5a85d_0dc8f74f9258d109ebfc0b889758ccbf6c814d0f_output.png");
+  console.log(response);
+  response.then((data) => {
+    setImage(data);
+    console.log(image);
+  });
+ }, [image]);
 
   return (
     <>
@@ -38,6 +47,7 @@ export default function UploadFile() {
         onChange={handleFileChange}
       />
       <input type="button" value="upload" onClick={importFile} />
+      <img src={image} alt="image" />
     </>
   );
     
