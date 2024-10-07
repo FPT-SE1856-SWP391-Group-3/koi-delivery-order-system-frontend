@@ -5,6 +5,7 @@ import Header from "../../user/common/Header";
 
 export default function ManageCertification() {
     const [certifications, setCertifications] = useState([]);
+    const [imageURL, setImageURL] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -45,15 +46,33 @@ export default function ManageCertification() {
             <Header />
             <h1>Certifications</h1>
             <a href="/admin/create-certification">Add Certification</a>
-            {certifications.map((certification) => (
-                <div key={certification.certificationId}>
-                    <h3>CertificationId: {certification.certificationId}</h3>
-                    <h3>CertificationName: {certification.certificationName}</h3>
-                    <h3>CertificateFile: {certification.certificateFile}</h3>
-                    <button onClick={() => deleteCertification(certification.certificationId)}>Delete</button>
-                    <a href={"/admin/update-certification/" + certification.certificationId}>Update</a>
-                </div>
-            ))}
+            <table>
+                <thead>
+                    <tr>
+                        <th>CertificationId</th>
+                        <th>CertificationName</th>
+                        <th>CertificateFile</th>
+                        <th>Image</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {certifications.map((certification) => (
+                        <tr key={certification.certificationId}>
+                            <td>{certification.certificationId}</td>
+                            <td>{certification.certificationName}</td>
+                            <td>{certification.certificateFile}</td>
+                            <td>
+                                <img src={api.imageBuildUrl(certification.certificateFile)} width="100px" alt="Certificate" />
+                            </td>
+                            <td>
+                                <button onClick={() => deleteCertification(certification.certificationId)}>Delete</button>
+                                <a href={"/admin/edit-certification/" + certification.certificationId}>Update</a>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 }

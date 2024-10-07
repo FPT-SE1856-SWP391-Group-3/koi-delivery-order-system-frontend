@@ -3,8 +3,12 @@ import axios from 'axios';
 // Địa chỉ API cơ bản
 const API_BASE_URL = "https://localhost:7160/api";
 
+const BASE_URL = "https://localhost:7160/";
+
 // Hàm cấu hình URL đầy đủ
 const buildUrl = (url: string) => `${API_BASE_URL}/${url}`;
+
+const imageBuildUrl = (imageUrl: string) => BASE_URL + imageUrl;
 
 // Lấy token từ localStorage
 const getToken = () => {
@@ -21,6 +25,10 @@ const apiInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+});
+
+const apiFileInstance = axios.create({
+  baseURL: API_BASE_URL,
 });
 
 // Tao mot instance axios de gui file
@@ -62,13 +70,11 @@ apiInstance.interceptors.request.use(
 );
 
 // Hàm GET
-const getFile = (url: string, params: any = {}) => {
+const getFile = (url: string, path: any = {}) => {
   const fullUrl = buildUrl(url);
-  return apiInstance.get(fullUrl, { params, responseType: 'blob' })
+  const params = { path: path };
+  return apiFileInstance.get(fullUrl, { params, responseType: 'blob' })
     .then(response => response.data)
-    .then(data => {
-      return URL.createObjectURL(data); // Trả về URL cho file ảnh
-    })
     .catch(error => {
       console.error(`GET ${fullUrl} failed:`, error);
       throw error;
@@ -118,6 +124,16 @@ const put = async (url: string, data: any) => {
     });
 };
 
+const putForm = async (url: string, data: any) => {
+  const fullUrl = buildUrl(url);
+  return formApiInstance.put(fullUrl, data)
+    .then(response => response.data)
+    .catch(error => {
+      console.error(`POST ${fullUrl} failed:`, error);
+      throw error;
+    });
+};
+
 // Hàm DELETE
 const del = async (url: string) => {
   const fullUrl = buildUrl(url);
@@ -137,5 +153,7 @@ export default {
   del,
   postForm,
   getFile,
-  buildUrl
+  buildUrl,
+  imageBuildUrl,
+  putForm
 };

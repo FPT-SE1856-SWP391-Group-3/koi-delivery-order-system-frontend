@@ -13,6 +13,7 @@ export default function EditCertification() {
     console.log(certificationId);
     console.log(certification);
 
+
     useEffect(() => {
         // Gọi API để lấy thông tin Certification dựa trên certificationId
         const fetchCertification = async () => {
@@ -40,21 +41,16 @@ export default function EditCertification() {
     // Cập nhật Certification
     const handleSubmit = async (e) => {
         e.preventDefault(); // Ngăn chặn reload trang
-        const formData = new FormData();
-        formData.append("certificationName", certification.certificationName);
-        if (certification.certificateFile) {
-            formData.append("certificateFile", certification.certificateFile);
-        }
+        console.log(certification);
+        const certificationData = new FormData();
+        certificationData.set('certificationName', certification.certificationName);
+        certificationData.set('certificateFile', certification.certificateFile);
 
         try {
-            api.put("Certifications/" + certificationId, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            }).then((data) => {
+            api.putForm("Certifications/" + certificationId, certificationData).then((data) => {
                 if (data.success) {
                     alert("Cập nhật thành công!");
-                    navigate("/admin/manage-certifications");
+                    navigate("/admin/manage-certification");
                 } else {
                     alert("Cập nhật thất bại!");
                 }
