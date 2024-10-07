@@ -47,17 +47,33 @@ export default function ManageKoi(){
             <Header />
             <h1>Koi</h1>
             <a href="/admin/add-koi">Add Koi</a>
-            {kois.map((koi) => (
-              <div key={koi.koiId}>
-                <h3>KoiId: {koi.koiId}</h3>
-                <h3>Name: {koi.koiName}</h3>
-                <h3>Type: {koi.koiTypeName}</h3>
-                <h3>Price: {koi.price}</h3>
-                <h3>Wight: {koi.weight}</h3>
+            <table>
+              <thead>
+          <tr>
+            <th>KoiId</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Weight</th>
+            <th>Actions</th>
+          </tr>
+              </thead>
+              <tbody>
+          {kois.map((koi) => (
+            <tr key={koi.koiId}>
+              <td>{koi.koiId}</td>
+              <td>{koi.koiName}</td>
+              <td>{koi.koiTypeName}</td>
+              <td>{koi.price}</td>
+              <td>{koi.weight}</td>
+              <td>
                 <button onClick={() => deleteKoi(koi.koiId)}>Delete</button>
                 <a href={"/admin/edit-koi/" + koi.koiId}>Update</a>
-              </div>
-            ))}
+              </td>
+            </tr>
+          ))}
+              </tbody>
+            </table>
           </div>
         );
         
