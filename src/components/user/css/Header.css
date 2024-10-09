@@ -1,4 +1,4 @@
-body {
+/* body {
     font-family: Helvetica;
     margin: 0;
 }
@@ -19,6 +19,7 @@ a {
     font-size: 1.5em;
     margin: .6em 0;
     display: inline-block;
+    align-items: center;
 }
 
 
@@ -31,4 +32,12 @@ a {
 .site-navigation li {
     display: inline-block;
     margin: 1.4em 1em 1em 1em;
+} */
+
+.header{
+    height: 34vw;
+    margin: 0;
+    background: url('/header_img.png') no-repeat;
+    background-size: contain;
+    position: relative;
 }

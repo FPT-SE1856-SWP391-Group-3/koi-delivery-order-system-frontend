@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import api from '../../../api/CallAPI';
-import Header from '../common/Header';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import api from "../../../api/CallAPI";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import "../css/Login.css";
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
@@ -42,7 +42,6 @@ export default function Login() {
         },
         body: JSON.stringify({ IdToken: googleIdToken }), // Gửi IdToken tới backend
       });
-      
 
       // Kiểm tra kiểu nội dung của phản hồi
       const contentType = res.headers.get("content-type");
@@ -74,7 +73,36 @@ export default function Login() {
 
   return (
     <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
-      <Header />
+      <nav className="navbarlogin">
+        <div className="menu-icon">
+          <button>☰ Menu</button>
+        </div>
+
+        <div className="nav-right">
+          <ul className="nav-links">
+            <li>
+              <a href="#">Help</a>
+            </li>
+            <li>
+              <a href="#">Contact us</a>
+            </li>
+            <li>
+              <a href="#">
+                English <span>▼</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">Sign Up</a>
+            </li>
+          </ul>
+          <div className="home-icon">
+            <a href="/">
+              <h1>HOME</h1>
+            </a>
+          </div>
+        </div>
+      </nav>
+
       <h1>Login</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
@@ -105,4 +133,3 @@ export default function Login() {
     </GoogleOAuthProvider>
   );
 }
-
