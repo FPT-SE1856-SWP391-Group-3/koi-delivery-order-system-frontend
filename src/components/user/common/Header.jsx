@@ -1,17 +1,18 @@
 import { useState } from "react";
 import "./../css/Header.css";
+import LOGO from "/Logo.png";
 
 export default function Header() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+
+ // const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   return (
-    <>
-      <header className="site-header">
-        <div className="site-identity">
-          <h1>
-            <a href="/">Site Name</a>
-          </h1>
-        </div>
+    <div className='header'>
+      <div className="header-content">
+      </div>
+    </div>
+
+      /*{ <header className="site-header">
         <nav className="site-navigation">
           <ul className="nav">
             {user ? (
@@ -39,12 +40,12 @@ export default function Header() {
               </>
             ) : (
               <li>
-                <a href="/login">Login</a>
+                <a href="/login">Register/login</a>
               </li>
             )}
           </ul>
         </nav>
-      </header>
-    </>
+      </header> }*/
+  
   );
 }
