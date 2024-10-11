@@ -1,0 +1,68 @@
+.body-container{
+    padding-top: 20px;
+}
+
+.body-container ul{
+    display: flex;
+    justify-content: center;
+}
+
+.body-container ul li{
+    display: inline;
+}
+
+.body-container .active{
+    background: #993030;
+    color: white;
+}
+
+.body-container button{
+    background: white;
+    font-size: 25px;
+    color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: solid 1px  black;
+    padding: 15px 60px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 10px 10px 15px rgba(166, 169, 180, 0.368);
+    transition: 0.7s;
+}
+.tracking-selector{
+    margin-top: 25px;
+}
+
+.tracking-selector button{
+    background: rgb(202, 199, 199); 
+    font-size: 25px;
+    color: black;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: solid 1px  black;
+    padding: 15px 60px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 10px 10px 15px rgba(166, 169, 180, 0.368);
+    display: flex;
+    justify-content: center;
+}
+
+.tracking-selector button img{
+    width: auto; 
+    height: 30px;
+    padding-right: 30px;
+    background-color: transparent;
+}
+
+.tracking-selector .chosen{
+    background: white;
+}
+
+.services-content{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;   
+}
+
+.services-content p{
+    font-size: 30px;
+}

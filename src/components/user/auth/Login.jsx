@@ -4,6 +4,11 @@ import { useForm } from "react-hook-form";
 import api from "../../../api/CallAPI";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import "../css/Login.css";
+import google from "../../../assets/google.png";
+import facebook from "../../../assets/facebook.png";
+import apple from "../../../assets/apple.png";
+import koiFish from "../../../assets/koi-fish.png";
+import home from "../../../assets/home.png";
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
@@ -73,37 +78,75 @@ export default function Login() {
 
   return (
     <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
-      <nav className="navbarlogin">
-        <div className="menu-icon">
-          <button>☰ Menu</button>
+      <div>
+        <div className="home-icon">
+          <a href="/">
+            <img src={home} />
+          </a>
         </div>
 
-        <div className="nav-right">
-          <ul className="nav-links">
-            <li>
-              <a href="#">Help</a>
-            </li>
-            <li>
-              <a href="#">Contact us</a>
-            </li>
-            <li>
-              <a href="#">
-                English <span>▼</span>
-              </a>
-            </li>
-            <li>
-              <a href="#">Sign Up</a>
-            </li>
-          </ul>
-          <div className="home-icon">
-            <a href="/">
-              <h1>HOME</h1>
-            </a>
+        <div className="container">
+          <div className="login-box">
+            <div className="login-left">
+              <h1>Sign In</h1>
+              <p>
+                Dont have an account? <a href="/register">Sign Up</a>
+              </p>
+
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Email"
+                  className="input-field"
+                  {...register("email")}
+                />
+
+                <label htmlFor="password">Password</label>
+                <div className="password-wrapper">
+                  <input
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    className="input-field"
+                    name="password"
+                    {...register("password")}
+                  />
+                  <span className="password-icon"></span>
+                </div>
+
+                <button type="submit" className="btn">
+                  Sign In
+                </button>
+              </form>
+
+              <div className="social-login">
+                <p>or continue with</p>
+                <div className="social-icons">
+                  <button className="google-btn">
+                    <img src={google} alt="google" className="icon" />
+                  </button>
+                  <button className="facebook-btn">
+                    <img src={facebook} alt="facebook" className="icon" />
+                  </button>
+                  <button className="apple-btn">
+                    <img src={apple} alt="apple" className="icon" />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="login-right">
+              <img src={koiFish} alt="Koi Fish" className="koi-fish" />
+            </div>
           </div>
         </div>
-      </nav>
-
-      <h1>Login</h1>
+      </div>
+    </GoogleOAuthProvider>
+  );
+}
+/* {/* <h1>Login</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="email">Email</label>
@@ -133,3 +176,4 @@ export default function Login() {
     </GoogleOAuthProvider>
   );
 }
+      </div> */

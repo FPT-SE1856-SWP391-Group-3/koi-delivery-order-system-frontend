@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  .home-icon{
+    display: flex;
+    justify-content: right;
+    background-color:#fff;
+  }
+  
+  .home-icon img{
+    margin-right: 10px;
+    width: 30px;
+    height: auto;
+  }
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+  }
+  
+  .signup-box {
+    display: flex;
+    width: 100vw; /* 100% of the viewport width */
+    height: 100vh; /* 100% of the viewport height */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .signup-left {
+    width: 50%;
+    padding: 40px;
+    border-right: none;
+  }
+  
+  .signup-right {
+    width: 50%;
+    padding: 40px;
+    outline: none;
+  }
+  
+  .koi-fish {
+    width: 80%;
+    max-width: 730px;
+    height: auto;
+    max-height: 700px;
+    mix-blend-mode: hard-light;
+  }
+  
+  .koi-description {
+    font-size: 16px;
+    color: #888;
+  }
+  
+  .signup-right h1 {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  input.input-field {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #789ade;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    outline: none;
+  }
+  
+  .password-wrapper {
+    position: relative;
+  }
+  
+  .password-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  
+  .btn {
+    width: 100%;
+    background-color: #547ce6;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 80px;
+    background: #547ce6;
+    box-shadow: 0px 4px 12px 0px rgba(200, 211, 249, 0.6) inset,
+      4px 8px 12px 0px rgba(78, 99, 141, 0.06);
+  }
+  
+  .social-login {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .social-text {
+    margin-bottom: 10px;
+  }
+  
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .social-btn {
+    background-color: white;
+    border: 2px solid #4a90e2;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .social-btn img {
+    width: 100%;
+    height: auto;
+  }

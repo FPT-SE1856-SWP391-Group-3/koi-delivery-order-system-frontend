@@ -13,9 +13,11 @@ const Footer = () => {
           <img src={LOGO} />
           <h2>KOI Delivery</h2>
           <p>
-            The company delivers fish and related certificates (origin, health,
-            awards, ...) to customers and provides support until the fish adapt
-            to the new environment.
+            At KOI Delivery, we specialize in the safe and efficient
+            transportation of koi fish, ensuring the highest standards of care
+            throughout their journey. With a commitment to reliability and
+            expertise, we deliver your prized koi to their destination with the
+            utmost care.
           </p>
           <div className="footer-social-icon">
             <img src={facebookicon} />
