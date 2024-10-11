@@ -52,7 +52,7 @@ import CreateCertification from "../components/admin/certification/CreateCertifi
 var adminUrl = '/admin';
 
 const getAccessToken = () => {
-  return localStorage.getItem("user");
+  return localStorage.getItem("token");
 };
 
 // Function to check if the user is authenticated
