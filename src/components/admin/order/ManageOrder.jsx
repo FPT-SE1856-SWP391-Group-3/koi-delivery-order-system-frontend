@@ -4,15 +4,17 @@ import api from "../../../api/CallAPI";
 import Header from "../../user/common/Header";
 import { useEffect } from "react";
 import { set } from "react-hook-form";
+import Sidebar from "../../user/common/Sidebar";
 
 
 export default function ManageOrder(){
     const navigate = useNavigate();
     const [order, setOrder] = useState([]);
     const [orderStatus, setOrderStatus] = useState([]);
+    const [user , setUser] = useState(JSON.parse(localStorage.getItem("user")));
     
     useEffect(() => {
-      api.get("Orders/").then((data) => {
+       api.get("Orders/").then((data) => {
         if (data.success) {
           setOrder(data.order);
           console.log(data.order);
@@ -30,7 +32,7 @@ export default function ManageOrder(){
       });
     }, []);
 
-    const updateOrderStatus = async (event, orderId) => {
+    const updateOrderStatusBySelect = async (event, orderId) => {
         console.log(orderId);
         var updateOrderStatus = {
             updateOrderStatusId: parseInt(event.target.value)
@@ -41,7 +43,6 @@ export default function ManageOrder(){
             .then((data) => {
                 if (data.success) {
                     alert("Cập nhật trạng thái thành công!");
-                    navigate("/admin/manage-order");
                 } else {
                     alert("Cập nhật trạng thái thất bại!");
                 }
@@ -52,11 +53,52 @@ export default function ManageOrder(){
             alert("An error occurred during update. Please try again.");
         }
     }
+
+    const updateOrderStatusByClick = async (event, orderId, orderStatusId) => {
+        console.log(orderId);
+        if (orderStatusId < 6) {
+          var updateOrderStatus = {
+            updateOrderStatusId: orderStatusId + 1,
+          };
+        } else {
+            alert("Đơn hàng đã hoàn thành!");
+        }
+        console.log(updateOrderStatus)
+        try{
+            api.put("Orders/update-status/" + orderId, updateOrderStatus)
+            .then((data) => {
+                if (data.success) {
+                    alert("Cập nhật trạng thái thành công!");
+                    setOrder((order) => order.map((order) => {
+                        if (order.orderId === orderId) {
+                            return {
+                                ...order,
+                                orderStatusId: updateOrderStatus.updateOrderStatusId,
+                                orderStatus: orderStatus.find((orderStatus) => orderStatus.orderStatusId === updateOrderStatus.updateOrderStatusId)
+                            };
+                        } else {
+                            return order;
+                        }
+                    }));
+                } else {
+                    alert("Cập nhật trạng thái thất bại!");
+                }
+            });
+
+        } catch(error){
+            console.error("Error during update:", error);
+            alert("An error occurred during update. Please try again.");
+        }
+    }
+
+
+
     
     return (
         <div>
         <Header />
-        <div className="container">
+        <Sidebar/>
+        <div className="content">
             <div className="row">
             <div className="col-md-6 offset-md-3">
                 <h2 className="text-center">Danh sách đơn hàng</h2>
@@ -96,13 +138,17 @@ export default function ManageOrder(){
                         </button>
                         </td>
                         <td>
-                            <select 
-                            onChange={(event) => {updateOrderStatus(event, order.orderId); }}>
+                            { user.userRoleId == 5  ? <select className="update-status-select"
+                            onChange={(event) => {updateOrderStatusBySelect(event, order.orderId);}}>
                                 {orderStatus.map((orderStatus) => (
                                     <option key={orderStatus.orderStatusId} value={orderStatus.orderStatusId} selected={orderStatus.orderStatusId === order.orderStatusId}>{orderStatus.orderStatusName}</option>
                                 ))}
-                            </select>
-                        </td>
+                            </select> : 
+                            <button className="update-status-button" onClick={(event) => updateOrderStatusByClick(event, order.orderId, order.orderStatusId)}> 
+                                {order.orderStatus.orderStatusName}
+                            </button>
+                            }               
+                        </td>   
                         <button className="btn btn-primary" onClick={() => navigate("/admin/create-transportation-report/" + order.orderId)}>Transportation Report</button>
                     </tr>
                     ))}

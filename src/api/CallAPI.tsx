@@ -3,8 +3,12 @@ import axios from 'axios';
 // Địa chỉ API cơ bản
 const API_BASE_URL = "https://localhost:7160/api";
 
+const BASE_URL = "https://localhost:7160/";
+
 // Hàm cấu hình URL đầy đủ
 const buildUrl = (url: string) => `${API_BASE_URL}/${url}`;
+
+const imageBuildUrl = (imageUrl: string) => BASE_URL + imageUrl;
 
 // Lấy token từ localStorage
 const getToken = () => {
@@ -20,6 +24,18 @@ const apiInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
+  },
+});
+
+const apiFileInstance = axios.create({
+  baseURL: API_BASE_URL,
+});
+
+// Tao mot instance axios de gui file
+const formApiInstance = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "multipart/form-data",
   },
 });
 
@@ -54,6 +70,17 @@ apiInstance.interceptors.request.use(
 );
 
 // Hàm GET
+const getFile = (url: string, path: any = {}) => {
+  const fullUrl = buildUrl(url);
+  const params = { path: path };
+  return apiFileInstance.get(fullUrl, { params, responseType: 'blob' })
+    .then(response => response.data)
+    .catch(error => {
+      console.error(`GET ${fullUrl} failed:`, error);
+      throw error;
+    });
+};
+
 const get = async (url: string, params: any = {}) => {
   const fullUrl = buildUrl(url);
   return apiInstance.get(fullUrl, { params })
@@ -75,6 +102,17 @@ const post = async (url: string, data: any) => {
     });
 };
 
+// Hàm POST file
+const postForm = async (url: string, data: any) => {
+  const fullUrl = buildUrl(url);
+  return formApiInstance.post(fullUrl, data)
+    .then(response => response.data)
+    .catch(error => {
+      console.error(`POST ${fullUrl} failed:`, error);
+      throw error;
+    });
+};
+
 // Hàm PUT
 const put = async (url: string, data: any) => {
   const fullUrl = buildUrl(url);
@@ -82,6 +120,16 @@ const put = async (url: string, data: any) => {
     .then(response => response.data)
     .catch(error => {
       console.error(`PUT ${fullUrl} failed:`, error);
+      throw error;
+    });
+};
+
+const putForm = async (url: string, data: any) => {
+  const fullUrl = buildUrl(url);
+  return formApiInstance.put(fullUrl, data)
+    .then(response => response.data)
+    .catch(error => {
+      console.error(`POST ${fullUrl} failed:`, error);
       throw error;
     });
 };
@@ -103,5 +151,9 @@ export default {
   post,
   put,
   del,
-  buildUrl
+  postForm,
+  getFile,
+  buildUrl,
+  imageBuildUrl,
+  putForm
 };

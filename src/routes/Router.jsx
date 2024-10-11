@@ -44,6 +44,10 @@ import EditTransportationReportDetails from "../components/admin/report/EditTran
 import EditBlogNews from "../components/admin/blogandnews/EditBlogNews";
 import ManageBlogNews from "../components/admin/blogandnews/ManageBlogNews";
 import CreateBlogNews from "../components/admin/blogandnews/CreateBlogNews";
+import UploadFile from "../components/test/UploadFile";
+import ManageCertification from "../components/admin/certification/ManageCertification";
+import EditCertification from "../components/admin/certification/EditCertification";
+import CreateCertification from "../components/admin/certification/CreateCertification";
 // Function to get the access token from cookies
 var adminUrl = '/admin';
 
@@ -86,6 +90,11 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+    index: true,
+  },
+  {
+    path: "/upload-file",
+    element: <UploadFile />,
     index: true,
   },
   {
@@ -148,7 +157,7 @@ const router = createBrowserRouter([
         element: <EditFeedback/>,
       },
       {
-        path:"/add-document/:orderId",
+        path:"/add-document/:orderId/:userId",
         element: <AddDocument/>,
       },
 
@@ -246,6 +255,18 @@ const router = createBrowserRouter([
           {
             path: adminUrl + "/create-blog-news/",
             element: <CreateBlogNews/>,
+          },
+          {
+            path: adminUrl + "/edit-certification/:certificationId",
+            element: <EditCertification/>,
+          },
+          {
+            path: adminUrl + "/manage-certification/",
+            element: <ManageCertification/>,
+          },
+          {
+            path: adminUrl + "/create-certification/",
+            element: <CreateCertification/>,
           },
         ],
       },

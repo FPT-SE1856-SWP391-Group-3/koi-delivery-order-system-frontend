@@ -3,24 +3,24 @@
   padding: 0;
   box-sizing: border-box;
 }
-  
+
 body {
   font-family: Arial, sans-serif;
 }
-  
-.home-icon{
+
+.home-icon {
   display: flex;
   justify-content: right;
-  background-color:#fff;
+  background-color: #fff;
 }
 
-.home-icon img{
+.home-icon img {
   margin-right: 10px;
   width: 30px;
   height: auto;
 }
 
-  /* Container and Login Box */
+/* Container and Login Box */
 .container {
   display: flex;
   justify-content: center;
