@@ -12,7 +12,10 @@ function App() {
         //    <Route path="/login" element={<Login />} />
         //    <Route path="/register" element={<Register />} />
         //</Routes>
-        <RouterProvider router={router} />
+        <div className="app">
+            <RouterProvider router={router} />
+        </div>
+        
     );
 }
 
