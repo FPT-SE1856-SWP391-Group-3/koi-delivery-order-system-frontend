@@ -1,51 +1,49 @@
-import { useState } from "react";
-import "./../css/Header.css";
-import LOGO from "/Logo.png";
+import React, { useState } from "react";
+import "../css/Header.css";
+import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 
-export default function Header() {
+const Header = ({ data }) => {
+  const [slide, setSlide] = useState(0);
 
- // const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const nextSlide = () => {
+    setSlide(slide === data.length - 1 ? 0 : slide + 1);
+  };
 
+  const prevSlide = () => {
+    setSlide(slide === 0 ? data.length - 1 : slide - 1);
+  };
   return (
-    <div className='header'>
-      <div className="header-content">
-      </div>
+    <div className="testimonial">
+      <BsArrowLeftCircleFill onClick={prevSlide} className="arrow arrow-left" />
+      {data.map((item, idx) => {
+        return (
+          <img
+            src={item.src}
+            alt={item.alt}
+            key={idx}
+            className={slide === idx ? "slide" : "slide slide-hidden"}
+          />
+        );
+      })}
+      <BsArrowRightCircleFill
+        onClick={nextSlide}
+        className="arrow arrow-right"
+      />
+      <span className="indicators">
+        {data.map((_, idx) => {
+          return (
+            <button
+              key={idx}
+              className={
+                slide === idx ? "indicator" : "indicator indicator-inactive"
+              }
+              onClick={() => setSlide(idx)}
+            ></button>
+          );
+        })}
+      </span>
     </div>
-
-      /*{ <header className="site-header">
-        <nav className="site-navigation">
-          <ul className="nav">
-            {user ? (
-              <>
-                <li>
-                  <a href="/view-profile">{user.userName}</a>
-                </li>
-                <li>
-                  <a href="/logout">Logout</a>
-                </li>
-                <li>
-                  <a href="/orders">Order</a>
-                </li>
-                <li>
-                  <a href="/create-order">Create Order</a>
-                </li>
-                <li>
-                  <a href="/manage-feedback">Manage Feedback</a>
-                </li>
-                {user.roleId >= 3 ? (
-                  <li>
-                    <a href="/admin/manage-user">Admin</a>
-                  </li>
-                ) : null}
-              </>
-            ) : (
-              <li>
-                <a href="/login">Register/login</a>
-              </li>
-            )}
-          </ul>
-        </nav>
-      </header> }*/
-  
   );
-}
+};
+
+export default Header;

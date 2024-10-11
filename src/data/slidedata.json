@@ -1,0 +1,16 @@
+{
+    "slides": [
+        {
+            "src": "/img1.png",
+            "alt": "Image 1 for slide"
+        },
+        {
+            "src": "/img3.png",
+            "alt": "Image 2 for slide"
+        },
+        {
+            "src": "/img2.png",
+            "alt": "Image 3 for slide"
+        }
+    ]
+}

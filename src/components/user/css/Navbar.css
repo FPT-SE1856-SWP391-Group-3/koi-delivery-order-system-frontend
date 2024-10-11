@@ -29,12 +29,12 @@
     list-style: none;
     gap: 20px;
     color: #49557e;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .navbar-menu a{
     color: #49557e;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .navbar-right {
@@ -45,8 +45,9 @@
 
 .navbar button {
     background: #178686;
-    font-size: 16px;
-    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    color: aliceblue;
     border: none;
     padding: 15px 30px;
     border-radius: 50px;
@@ -65,65 +66,4 @@
 
 .navbar li{
     cursor: pointer;
-}
-
-@media (max-width:1050px) {
-    .navbar .logo {
-        width: 40px;
-    }
-
-    .navber .logoicon h2{
-        font-size: 15px;
-    }
-
-    .navbar-menu{
-        gap: 20px;
-        font-size: 17px;
-    }
-
-    .navbar-right{
-        gap: 30px;
-    }
-
-    .navbar-right img{
-        width: 22px;
-    }
-
-    .navbar-right button{
-        padding: 8px 25px;
-    }
-}
-
-@media (max-width:900px) {
-    .navbar .logo {
-        width: 30px;
-    }
-    
-    .navber .logoicon h2{
-        font-size: 13px;
-    }
-
-    .navbar-menu{
-        gap: 20px;
-        font-size: 16px;
-    }
-
-    .navbar-right{
-        gap: 20px;
-    }
-
-    .navbar-right img{
-        width: 20px;
-    }
-
-    .navbar-right button{
-        padding: 7px 20px;
-        font-size: 15px;
-    }
-}
-
-@media (max-width:750px) {
-    .navbar-menu{
-        display: none;
-    }
 }
