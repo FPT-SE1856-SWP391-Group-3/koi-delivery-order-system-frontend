@@ -48,19 +48,31 @@ import UploadFile from "../components/test/UploadFile";
 import ManageCertification from "../components/admin/certification/ManageCertification";
 import EditCertification from "../components/admin/certification/EditCertification";
 import CreateCertification from "../components/admin/certification/CreateCertification";
+import api from "../api/CallAPI";
+import EditDocument from "../components/user/document/EditDocument";
+import ManageDocument from "../components/user/document/ManageDocument";
 // Function to get the access token from cookies
 var adminUrl = '/admin';
 
 const getAccessToken = () => {
+  api.get("Users/token/check").then((data) => {
+    if (data.success) {
+      return localStorage.getItem("token");
+    } else {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
+  });
+  console.log(JSON.parse(localStorage.getItem("user")));
   return localStorage.getItem("token");
 };
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => {
-  if (!getAccessToken()) {
-    return false;
+  if (getAccessToken()) {
+    return getAccessToken();
   }
-  return getAccessToken();
+  return false;
 };
 
 const isAdmin = () => {
@@ -159,6 +171,14 @@ const router = createBrowserRouter([
       {
         path:"/add-document/:orderId/:userId",
         element: <AddDocument/>,
+      },
+      {
+        path:"/edit-document/:documentId",
+        element: <EditDocument/>,
+      },
+      {
+        path:"/manage-document/:orderId",
+        element: <ManageDocument/>,
       },
 
       {

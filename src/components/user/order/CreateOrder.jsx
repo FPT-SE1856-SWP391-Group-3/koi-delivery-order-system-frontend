@@ -17,6 +17,7 @@ export default function CreateOrder() {
   const [kois, setKois] = useState();
   const [orderServiceDetails, setOrderServiceDetails] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const navigate = useNavigate();
 
 
   //Lay dia chi nguoi dung
@@ -73,6 +74,12 @@ export default function CreateOrder() {
     calculateTotalPrice(updatedKoiList);
   };
 
+  const handleDeleteKoi = (index) =>{
+    koiList.splice(index, 1);
+    setKoiList([...koiList]);
+    calculateTotalPrice(koiList);
+  }
+
   const calculateTotalPrice = (koiList) => {
     let totalOrderPrice = 0;
     let totalWeight = 0; 
@@ -102,6 +109,7 @@ export default function CreateOrder() {
 
   //Tao don hang
   const onSubmit = async (data) => {
+    console.log(data);
     const koiIds = koiList.map((koi) => koi.koiId);
     const amounts = koiList.map((koi) => koi.amount);
     const koiConditions = koiList.map((koi) => koi.koiCondition);
@@ -118,6 +126,7 @@ export default function CreateOrder() {
       api.post("Orders/", fullOrderData).then((data) => {
         if (data.success) {
           alert("Thêm thành công!");
+          navigate("/add-document/" + data.orderId + "/" + customerId); 
         } else {
           alert("Thêm thất bại!");
         }
@@ -128,26 +137,26 @@ export default function CreateOrder() {
     }
   };
 
-   const importFile= async (e) => {
-     console.log(file); //check all files
-     for (const uploadedFile of file) {
-       if (uploadedFile) {
-         const formData = new FormData(); //make a bew FormData for every file.
-         formData.append("file", uploadedFile, uploadedFile.name); //append the file to the formdata
-         try {
-           api.postFile("CustomsDocuments/test", formData).then((data) => {
-             if (data.success) {
-               alert("Upload thành công!");
-             } else {
-               alert("Upload thất bại!");
-             }
-           });
-         } catch (ex) {
-           console.log(ex);
-         }
-       }
-     }
-   }
+  //  const importFile= async (e) => {
+  //    console.log(file); //check all files
+  //    for (const uploadedFile of file) {
+  //      if (uploadedFile) {
+  //        const formData = new FormData(); //make a bew FormData for every file.
+  //        formData.append("file", uploadedFile, uploadedFile.name); //append the file to the formdata
+  //        try {
+  //          api.postFile("CustomsDocuments/test", formData).then((data) => {
+  //            if (data.success) {
+  //              alert("Upload thành công!");
+  //            } else {
+  //              alert("Upload thất bại!");
+  //            }
+  //          });
+  //        } catch (ex) {
+  //          console.log(ex);
+  //        }
+  //      }
+  //    }
+  //  }
 
   return (
     <>
@@ -281,6 +290,7 @@ export default function CreateOrder() {
               onChange={(event) => handleKoiChange(index, event)}
             />{" "}
             Tinh Trang
+            <button type="button" onClick={() => handleDeleteKoi(index)}>Xoa</button>
           </div>
         ))}
         <button type="button" onClick={handleAddKoi}>
@@ -298,7 +308,6 @@ export default function CreateOrder() {
             <h1>Cac dich vu</h1>
             <p>Gia dich vu: {orderServiceDetail.orderServiceDetailName} </p>
             <p>Gia cuoc: {orderServiceDetail.orderServiceDetailPrice} </p>
-
           </>
         ))}
 
