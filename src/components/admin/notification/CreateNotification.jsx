@@ -60,7 +60,7 @@ export default function CreateNotification() {
                 <div className="form-group">
                   <label htmlFor="receiverId">Receiver ID</label>
                   <input
-                    type="number"
+                    type="text"
                     className="form-control"
                     id="receiverId"
                     name="receiverId"

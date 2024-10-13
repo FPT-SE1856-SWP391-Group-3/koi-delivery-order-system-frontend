@@ -53,21 +53,25 @@ import EditDocument from "../components/user/document/EditDocument";
 import ManageDocument from "../components/user/document/ManageDocument";
 import CreateNotification from "../components/admin/notification/CreateNotification";
 import ManageNotification from "../components/admin/notification/ManageNotification";
+import GetNotification from "../components/user/notification/GetNotification";
 // Function to get the access token from cookies
 var adminUrl = '/admin';
 
-const getAccessToken = () => {
-  api.get("Users/token/check").then((data) => {
+const getAccessToken = async () => {
+  var isAccessToken = false;
+  await api.get("Users/token/check").then((data) => {
     if (data.success) {
-      return localStorage.getItem("token");
-    } else {
+      localStorage.getItem("token");
+      console.log(data);
+      isAccessToken = true;
+    } else if (data.success === false) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      console.log(data);
     }
   });
-  console.log(JSON.parse(localStorage.getItem("user")));
-  return localStorage.getItem("token");
-};
+  return isAccessToken;
+};  
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -187,9 +191,10 @@ const router = createBrowserRouter([
         element: <CreateNotification/>,
       },
       {
-        path:"/manage-notification/",
-        element: <ManageNotification/>,
+        path:"/get-notification",
+        element: <GetNotification/>,
       },
+      
       {
         element: <AdminRoute isAdmin={isAdmin()} />,
         children: [
@@ -296,6 +301,10 @@ const router = createBrowserRouter([
           {
             path: adminUrl + "/create-certification/",
             element: <CreateCertification/>,
+          },
+          {
+            path: adminUrl + "/manage-notification/",
+            element: <ManageNotification/>,
           },
         ],
       },

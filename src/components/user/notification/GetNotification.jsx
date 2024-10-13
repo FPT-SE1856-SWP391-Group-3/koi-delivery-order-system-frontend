@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import Header from "../../user/common/Header";
+import Header from "../common/Header";
 
-export default function ManageNotification() {
+export default function GetNotification() {
     const [notifications, setNotifications] = useState([]);
     const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("user"));
 
     useEffect(() => {
         try {
-            api.get("Notifications/").then((data) => {
+            console.log(user.userId);
+            api.get("Notifications/" + user.userId).then((data) => {
+
               if (data.success) {
                 setNotifications(data.notifications);
                 console.log(data.notifications);
@@ -20,7 +23,7 @@ export default function ManageNotification() {
         } catch (error) {
             alert("An error has occurred. Please try again.");
         }
-    }, []);
+    }, [user.userId]);
 
     async function deleteNotification(notificationId) {
         try {
