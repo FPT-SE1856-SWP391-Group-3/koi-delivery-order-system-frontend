@@ -48,19 +48,37 @@ import UploadFile from "../components/test/UploadFile";
 import ManageCertification from "../components/admin/certification/ManageCertification";
 import EditCertification from "../components/admin/certification/EditCertification";
 import CreateCertification from "../components/admin/certification/CreateCertification";
+import api from "../api/CallAPI";
+import EditDocument from "../components/user/document/EditDocument";
+import ManageDocument from "../components/user/document/ManageDocument";
+import CreateNotification from "../components/admin/notification/CreateNotification";
+import ManageNotification from "../components/admin/notification/ManageNotification";
+import GetNotification from "../components/user/notification/GetNotification";
 // Function to get the access token from cookies
 var adminUrl = '/admin';
 
-const getAccessToken = () => {
-  return localStorage.getItem("user");
-};
+const getAccessToken = async () => {
+  var isAccessToken = false;
+  await api.get("Users/token/check").then((data) => {
+    if (data.success) {
+      localStorage.getItem("token");
+      console.log(data);
+      isAccessToken = true;
+    } else if (data.success === false) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      console.log(data);
+    }
+  });
+  return isAccessToken;
+};  
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => {
-  if (!getAccessToken()) {
-    return false;
+  if (getAccessToken()) {
+    return getAccessToken();
   }
-  return getAccessToken();
+  return false;
 };
 
 const isAdmin = () => {
@@ -160,7 +178,23 @@ const router = createBrowserRouter([
         path:"/add-document/:orderId/:userId",
         element: <AddDocument/>,
       },
-
+      {
+        path:"/edit-document/:documentId",
+        element: <EditDocument/>,
+      },
+      {
+        path:"/manage-document/:orderId",
+        element: <ManageDocument/>,
+      },
+      {
+        path:"/add-notification",
+        element: <CreateNotification/>,
+      },
+      {
+        path:"/get-notification",
+        element: <GetNotification/>,
+      },
+      
       {
         element: <AdminRoute isAdmin={isAdmin()} />,
         children: [
@@ -267,6 +301,10 @@ const router = createBrowserRouter([
           {
             path: adminUrl + "/create-certification/",
             element: <CreateCertification/>,
+          },
+          {
+            path: adminUrl + "/manage-notification/",
+            element: <ManageNotification/>,
           },
         ],
       },

@@ -8,7 +8,7 @@ import { useEffect } from "react";
 export default function UserOrder(){
 
     const navigate = useNavigate();
-    const [order, setOrder] = useState([]);
+    const [order, setOrder] = useState([{}]);
     const userId = JSON.parse(localStorage.getItem("userId"));
     
     useEffect(() => {
@@ -20,11 +20,11 @@ export default function UserOrder(){
             console.log("Không có đơn hàng!");
           }
         });
-    }, []);
+    }, [userId]);
     
     return (
         <div>
-        <Header />
+        {/* <Header /> */}
         <div className="container">
             <div className="row">
             <div className="col-md-6 offset-md-3">
@@ -53,7 +53,7 @@ export default function UserOrder(){
                         <td>{order.startAddress == null ? "" : order.startAddress.addressLine}</td>
                         <td>{order.endAddress == null ? "" : order.endAddress.addressLine}</td>
                         <td>{order.totalPrice}</td>
-                        <td>{order.orderStatus.orderStatusName}</td>
+                        <td>{order.orderStatus == null ? "" : order.orderStatus.orderStatusName}</td>
                         <td>
                         <button
                             className="btn btn-primary"

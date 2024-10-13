@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Header from "../../user/common/Header";
@@ -8,12 +8,27 @@ export default function CreatKoi() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   let userId = JSON.parse(localStorage.getItem("userId"));
+  const [certificationId, setCertificationId] = useState([""]);
 
-  //Them dia chi
+
+  const addCertification = async () => {
+    setCertificationId([...certificationId, ""]);
+  };
+
+  const deleteCertification = async () => {
+    const list = [...certificationId];
+    list.pop();
+    setCertificationId(list);
+  };
+
   const onSubmit = async (data) => {
-    console.log(data);
+    const koiData = {
+      data,
+      certificationId,
+    };
+    console.log(koiData);
     try {
-      api.post("Kois", data).then((data) => {
+      api.post("Kois", koiData).then((data) => {
         if (data.success) {
           alert("Thêm thành công!");
           navigate("/");
@@ -25,7 +40,11 @@ export default function CreatKoi() {
       console.error("Error:", error);
       alert("Error! Please try again.");
     }
+
   };
+
+
+
 
   return (
     <div>
@@ -84,6 +103,34 @@ export default function CreatKoi() {
                   {...register("price")}
                 />
               </div>
+              <button
+                type="button" // Prevent form submission
+                className="btn btn-primary"
+                onClick={addCertification} // Call function directly
+              >
+                Thêm chứng chỉ
+              </button>{" "}
+              <button
+                type="button" 
+                className="btn btn-primary"
+                onClick={deleteCertification}
+              >
+                Xoa chung chi
+              </button>
+              {certificationId.map((koiCertification, index) => (
+                <div key={index}>
+                  <div className="form-group">
+                    <label htmlFor="koiCertificationId">Chứng chỉ {index + 1}</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="koiCertificationId"
+                      name="koiCertificationId"
+                      onChange={(e) => {certificationId[index] = e.target.value }}
+                    />
+                  </div>
+                </div>
+              ))}
               <button type="submit" className="btn btn-primary">
                 Thêm
               </button>
