@@ -51,6 +51,8 @@ import CreateCertification from "../components/admin/certification/CreateCertifi
 import api from "../api/CallAPI";
 import EditDocument from "../components/user/document/EditDocument";
 import ManageDocument from "../components/user/document/ManageDocument";
+import CreateNotification from "../components/admin/notification/CreateNotification";
+import ManageNotification from "../components/admin/notification/ManageNotification";
 // Function to get the access token from cookies
 var adminUrl = '/admin';
 
@@ -180,7 +182,14 @@ const router = createBrowserRouter([
         path:"/manage-document/:orderId",
         element: <ManageDocument/>,
       },
-
+      {
+        path:"/add-notification",
+        element: <CreateNotification/>,
+      },
+      {
+        path:"/manage-notification/",
+        element: <ManageNotification/>,
+      },
       {
         element: <AdminRoute isAdmin={isAdmin()} />,
         children: [
