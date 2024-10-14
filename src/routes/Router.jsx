@@ -55,23 +55,24 @@ import CreateNotification from "../components/admin/notification/CreateNotificat
 import ManageNotification from "../components/admin/notification/ManageNotification";
 import GetNotification from "../components/user/notification/GetNotification";
 // Function to get the access token from cookies
-var adminUrl = '/admin';
+var adminUrl = "/admin";
 
 const getAccessToken = async () => {
   var isAccessToken = false;
-  await api.get("Users/token/check").then((data) => {
-    if (data.success) {
-      localStorage.getItem("token");
-      console.log(data);
-      isAccessToken = true;
-    } else if (data.success === false) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      console.log(data);
-    }
-  });
-  return isAccessToken;
-};  
+  try {
+    await api.post("Users/token/check").then((data) => {
+      if (data.success) {
+        localStorage.getItem("token");
+        console.log(data);
+        isAccessToken = true;
+      }
+    });
+  } catch (error) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    return isAccessToken;
+  }
+};
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => {
@@ -127,74 +128,74 @@ const router = createBrowserRouter([
         element: <EditProfile />,
       },
       {
-        path:"/add-address",
+        path: "/add-address",
         element: <AddAddress />,
       },
       {
-        path:"/user-address",
+        path: "/user-address",
         element: <UserAddress />,
       },
       {
-        path:"/edit-address/:addressId",
+        path: "/edit-address/:addressId",
         element: <EditAddress />,
       },
       {
-        path:"/user-payment",
+        path: "/user-payment",
         element: <UserPayment />,
       },
       {
-        path:"/add-payment/",
+        path: "/add-payment/",
         element: <AddPayment />,
       },
       {
-        path:"/edit-payment/:id",
+        path: "/edit-payment/:id",
         element: <EditPayment />,
       },
       {
-        path:"/create-order/",
+        path: "/create-order/",
         element: <CreateOrder />,
       },
       {
-        path:"/orders",
-        element: <UserOrder/>,
+        path: "/orders",
+        element: <UserOrder />,
       },
       {
-        path:"/order-detail/:orderId",
-        element: <UserOrderDetail/>,
+        path: "/order-detail/:orderId",
+        element: <UserOrderDetail />,
       },
       {
-        path:"/feedback/:orderId",
-        element: <CreateFeedback/>,
+        path: "/feedback/:orderId",
+        element: <CreateFeedback />,
       },
       {
-        path:"/manage-feedback/",
-        element: <ManageFeedBack/>,
+        path: "/manage-feedback/",
+        element: <ManageFeedBack />,
       },
       {
-        path:"/edit-feedback/:customerFeedbackId",
-        element: <EditFeedback/>,
+        path: "/edit-feedback/:customerFeedbackId",
+        element: <EditFeedback />,
       },
       {
-        path:"/add-document/:orderId/:userId",
-        element: <AddDocument/>,
+        path: "/add-document/:orderId/:userId",
+        element: <AddDocument />,
       },
       {
-        path:"/edit-document/:documentId",
-        element: <EditDocument/>,
+        path: "/edit-document/:documentId",
+        element: <EditDocument />,
       },
       {
-        path:"/manage-document/:orderId",
-        element: <ManageDocument/>,
+        path: "/manage-document/:orderId",
+        element: <ManageDocument />,
       },
       {
-        path:"/add-notification",
-        element: <CreateNotification/>,
+        path: "/add-notification",
+        element: <CreateNotification />,
       },
       {
-        path:"/get-notification",
-        element: <GetNotification/>,
+        path: "/get-notification",
+        element: <GetNotification />,
       },
-      
+
       {
         element: <AdminRoute isAdmin={isAdmin()} />,
         children: [
@@ -206,10 +207,10 @@ const router = createBrowserRouter([
             path: adminUrl + "/update-user/:id",
             element: <UpdateUser />,
           },
-           {
-             path: adminUrl + "/user-address/:id",
-             element: <ManageUserAddress />,
-           },
+          {
+            path: adminUrl + "/user-address/:id",
+            element: <ManageUserAddress />,
+          },
           {
             path: adminUrl + "/manage-koi/",
             element: <ManageKoi />,
@@ -268,43 +269,43 @@ const router = createBrowserRouter([
           },
           {
             path: adminUrl + "/create-transportation-report/:orderId/",
-            element: <CreateTransportationReportDetails/>,
+            element: <CreateTransportationReportDetails />,
           },
           {
             path: adminUrl + "/manage-transportation-report/",
-            element: <ManageTransportationReportDetails/>,
+            element: <ManageTransportationReportDetails />,
           },
           {
             path: adminUrl + "/edit-transportation-report/:reportId",
-            element: <EditTransportationReportDetails/>,
+            element: <EditTransportationReportDetails />,
           },
           {
             path: adminUrl + "/edit-blog-news/:postId",
-            element: <EditBlogNews/>,
+            element: <EditBlogNews />,
           },
           {
             path: adminUrl + "/manage-blog-news/",
-            element: <ManageBlogNews/>,
+            element: <ManageBlogNews />,
           },
           {
             path: adminUrl + "/create-blog-news/",
-            element: <CreateBlogNews/>,
+            element: <CreateBlogNews />,
           },
           {
             path: adminUrl + "/edit-certification/:certificationId",
-            element: <EditCertification/>,
+            element: <EditCertification />,
           },
           {
             path: adminUrl + "/manage-certification/",
-            element: <ManageCertification/>,
+            element: <ManageCertification />,
           },
           {
             path: adminUrl + "/create-certification/",
-            element: <CreateCertification/>,
+            element: <CreateCertification />,
           },
           {
             path: adminUrl + "/manage-notification/",
-            element: <ManageNotification/>,
+            element: <ManageNotification />,
           },
         ],
       },
