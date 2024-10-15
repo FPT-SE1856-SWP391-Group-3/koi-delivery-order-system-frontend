@@ -126,6 +126,11 @@ export default function Login() {
                 <div className="social-icons">
                   <button className="google-btn">
                     <img src={google} alt="google" className="icon" />
+                    <GoogleLogin
+                      onSuccess={handleGoogleSuccess}
+                      onError={handleGoogleFailure}
+                      useOneTap // Hiển thị nút đăng nhập Google
+                    />
                   </button>
                   <button className="facebook-btn">
                     <img src={facebook} alt="facebook" className="icon" />
