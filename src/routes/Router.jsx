@@ -69,7 +69,6 @@ const getAccessToken = async () => {
     });
   } catch (error) {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
     return isAccessToken;
   }
 };
