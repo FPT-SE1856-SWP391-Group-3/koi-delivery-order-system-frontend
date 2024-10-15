@@ -91,6 +91,7 @@ export default function ManageOrder(){
         }
     }
 
+    console.log(user.roleId);
 
 
     
@@ -138,7 +139,7 @@ export default function ManageOrder(){
                         </button>
                         </td>
                         <td>
-                            { user.userRoleId == 5  ? <select className="update-status-select"
+                            { user.roleId === 5  ? <select className="update-status-select"
                             onChange={(event) => {updateOrderStatusBySelect(event, order.orderId);}}>
                                 {orderStatus.map((orderStatus) => (
                                     <option key={orderStatus.orderStatusId} value={orderStatus.orderStatusId} selected={orderStatus.orderStatusId === order.orderStatusId}>{orderStatus.orderStatusName}</option>
