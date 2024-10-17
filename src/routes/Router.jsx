@@ -55,10 +55,16 @@ import CreateNotification from "../components/admin/notification/CreateNotificat
 import ManageNotification from "../components/admin/notification/ManageNotification";
 import GetNotification from "../components/user/notification/GetNotification";
 import UpdatePassword from "../components/user/profile/UpdatePassword";
+import ManageOrderDocument from "../components/admin/order/OrderDocument";
+import EditOrderDocument from "../components/admin/order/EditOrderDocument";
+import CreateOrderDocument from "../components/admin/order/CreateOrderDocument";
 // Function to get the access token from cookies
 var adminUrl = "/admin";
 
 const getAccessToken = async () => {
+  if (!localStorage.getItem("token")) {
+    return false;
+  }
   try {
     const data = await api.post("Users/token/check");
 
@@ -306,6 +312,18 @@ const router = createBrowserRouter([
           {
             path: adminUrl + "/manage-notification/",
             element: <ManageNotification />,
+          },
+          {
+            path: adminUrl + "/manage-order-document/",
+            element: <ManageOrderDocument />,
+          },
+          {
+            path: adminUrl + "/create-order-document/:orderId/:orderStatusId",
+            element: <CreateOrderDocument />,
+          },
+          {
+            path: adminUrl + "/edit-order-document/:orderId",
+            element: <EditOrderDocument />,
           },
         ],
       },

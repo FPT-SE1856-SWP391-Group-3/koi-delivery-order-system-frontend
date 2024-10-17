@@ -80,8 +80,8 @@ export default function ManageOrder(){
                             return order;
                         }
                     }));
-                } else {
-                    alert("Cập nhật trạng thái thất bại!");
+                } else if (data.success === false) {
+                    alert("Hãy thêm tài liệu cho đơn hàng trước khi chuyển trạng thái!");
                 }
             });
 
@@ -120,10 +120,10 @@ export default function ManageOrder(){
                     </tr>
                 </thead>
                 <tbody>
-                    {order.map((order) => (
-                    <tr key={order.orderId}>
-                        <td>{order.customerId}</td>
+                    {order.map((order) => 
+                    { var data = ( <tr key={order.orderId}>
                         <td>{order.orderId}</td>
+                        <td>{order.customerId}</td>
                         <td>{order.orderDate}</td>
                         <td>{order.deliveryDate}</td>
                         <td>{order.startAddress == null ? "" : order.startAddress.addressLine}</td>
@@ -150,9 +150,17 @@ export default function ManageOrder(){
                             </button>
                             }               
                         </td>   
+                        <button className="btn btn-primary" onClick={() => navigate("/admin/create-order-document/" + order.orderId + "/" + order.orderStatusId)}>Create Order Document</button>
                         <button className="btn btn-primary" onClick={() => navigate("/admin/create-transportation-report/" + order.orderId)}>Transportation Report</button>
                     </tr>
-                    ))}
+                    )
+                    
+                    if ((user.roleId === 3 && order.orderStatusId === 1) || user.roleId != 3){
+                        console.log("User ID: " + user.roleId);
+                        console.log("Order Status ID: " + order.orderStatusId); 
+                        return data;
+                    }
+                    })}
                 </tbody>
                 </table>
             </div>
