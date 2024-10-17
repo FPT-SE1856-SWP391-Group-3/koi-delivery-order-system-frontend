@@ -38,7 +38,7 @@ export default function EditProfile() {
 
     return (
         <div>
-            <Header/>
+            {/* <Header/> */}
             <h1>Update Profile</h1>
             <form onSubmit={handleSubmit}>
                 <div>

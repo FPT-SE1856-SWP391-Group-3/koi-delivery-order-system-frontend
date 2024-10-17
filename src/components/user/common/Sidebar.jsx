@@ -20,6 +20,7 @@ export default function Sidebar() {
         <a href="/admin/manage-transportation-report">Manage Report</a>
         <a href="/admin/manage-blog-news">Manage Blog News</a>
         <a href="/admin/manage-certification">Manage Certification</a>
+        <a href="/admin/manage-order-document">Manage Order Document</a>
       </div>
     </>
   );

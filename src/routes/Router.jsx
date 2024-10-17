@@ -54,41 +54,44 @@ import ManageDocument from "../components/user/document/ManageDocument";
 import CreateNotification from "../components/admin/notification/CreateNotification";
 import ManageNotification from "../components/admin/notification/ManageNotification";
 import GetNotification from "../components/user/notification/GetNotification";
+import UpdatePassword from "../components/user/profile/UpdatePassword";
+import ManageOrderDocument from "../components/admin/order/OrderDocument";
+import EditOrderDocument from "../components/admin/order/EditOrderDocument";
+import CreateOrderDocument from "../components/admin/order/CreateOrderDocument";
 // Function to get the access token from cookies
 var adminUrl = "/admin";
 
 const getAccessToken = async () => {
-  var isAccessToken = false;
+  if (!localStorage.getItem("token")) {
+    return false;
+  }
   try {
-    await api.post("Users/token/check").then((data) => {
-      if (data.success) {
-        localStorage.getItem("token");
-        console.log(data);
-        isAccessToken = true;
-      }
-    });
+    const data = await api.post("Users/token/check");
+
+    if (data.success) {
+      console.log(data);
+      return localStorage.getItem("token");
+    } else {
+      localStorage.removeItem("token");
+      console.log(data);
+      return false;
+    }
   } catch (error) {
     localStorage.removeItem("token");
-    return isAccessToken;
+    return false;
   }
 };
 
 // Function to check if the user is authenticated
-const isAuthenticated = () => {
-  if (getAccessToken()) {
-    return getAccessToken();
-  }
-  return false;
+const isAuthenticated = async () => {
+  const token = await getAccessToken();
+  return !!token; // !! la chuyen doi ve kieu boolean
 };
 
+// Function to check if the user is admin
 const isAdmin = () => {
-  let user = JSON.parse(localStorage.getItem("user"));
-  if (user != null) {
-    if (user.roleId >= 3) {
-      return true;
-    }
-  }
-  return false;
+  const user = JSON.parse(localStorage.getItem("user"));
+  return user && user.roleId >= 3;
 };
 
 // Create the router configuration
@@ -116,7 +119,7 @@ const router = createBrowserRouter([
     index: true,
   },
   {
-    element: <ProtectedRoute isAuthenticated={isAuthenticated()} />,
+    element: <ProtectedRoute isAuthenticated={await isAuthenticated()} />,
     children: [
       {
         path: "/view-profile",
@@ -125,6 +128,10 @@ const router = createBrowserRouter([
       {
         path: "/edit-profile",
         element: <EditProfile />,
+      },
+      {
+        path: "/update-password",
+        element: <UpdatePassword />,
       },
       {
         path: "/add-address",
@@ -305,6 +312,18 @@ const router = createBrowserRouter([
           {
             path: adminUrl + "/manage-notification/",
             element: <ManageNotification />,
+          },
+          {
+            path: adminUrl + "/manage-order-document/",
+            element: <ManageOrderDocument />,
+          },
+          {
+            path: adminUrl + "/create-order-document/:orderId/:orderStatusId",
+            element: <CreateOrderDocument />,
+          },
+          {
+            path: adminUrl + "/edit-order-document/:orderId",
+            element: <EditOrderDocument />,
           },
         ],
       },

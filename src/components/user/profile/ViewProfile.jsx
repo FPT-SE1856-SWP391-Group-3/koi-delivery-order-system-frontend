@@ -33,17 +33,44 @@ export default function ViewProfile() {
         <div>
             <Header/>
             <h1>View Profile</h1>
-            <h3>Username: {user.userName}</h3>
-            <h3>UserId: {user.userId}</h3>
-            <h3>PhoneNumber: {user.phoneNumber}</h3>
-            <h3>Role: {user.roleName}</h3>
-            <h3><a href="/edit-profile">Update</a></h3>
-            <h3><button onClick={deleteUser}>Delete</button></h3>
-            <a href="/user-address">View Address</a>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Username:</td>
+                        <td>{user.userName}</td>
+                    </tr>
+                    <tr>
+                        <td>UserId:</td>
+                        <td>{user.userId}</td>
+                    </tr>
+                    <tr>
+                        <td>PhoneNumber:</td>
+                        <td>{user.phoneNumber}</td>
+                    </tr>
+                    <tr>
+                        <td>Role:</td>
+                        <td>{user.roleName}</td>
+                    </tr>
+                    <tr>
+                        <td>Update:</td>
+                        <td><a href="/edit-profile">Update</a></td>
+                    </tr>
+                    <tr>
+                        <td>Delete:</td>
+                        <td><button onClick={deleteUser}>Delete</button></td>
+                    </tr>
+                    <tr>
+                        <td>View Address:</td>
+                        <td><a href="/user-address">View Address</a></td>
+                    </tr>
+                    
+                </tbody>
+            </table>
             <h3>-------------------------------------------</h3>
             <h1>View Payment</h1>
             <a href="/user-payment">View Payment</a>
-
+            <h1>Update Password</h1>
+            <a href="/update-password">Update Password</a>
         </div>
     );
 }

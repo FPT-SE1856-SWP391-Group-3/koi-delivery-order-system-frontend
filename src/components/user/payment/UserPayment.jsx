@@ -54,12 +54,13 @@ export default function UserPayment (){
                     <div className="col-md-9">
                         <div className="container">
                             <h2>Quản lý phương thức thanh toán</h2>
-                            <table className="table">
+                            <table className="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>Mã phương thức thanh toán</th>
                                         <th>Chủ thẻ</th>
                                         <th>Phương thức thanh toán</th>
+                                        <th>Số thẻ</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
