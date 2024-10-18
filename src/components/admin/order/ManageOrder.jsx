@@ -112,6 +112,8 @@ export default function ManageOrder(){
                     <th scope="col">Ngày giao hàng</th>
                     <th scope="col">Địa chỉ lấy hàng</th>
                     <th scope="col">Địa chỉ giao hàng</th>
+                    <th scope="col">Khoảng cách</th>
+                    <th scope="col">Thời gian giao hàng</th>
                     <th scope="col">Tổng tiền</th>
                     <th scope="col">Trạng thái</th>
                     <th scope="col">Chi tiết</th>
@@ -128,6 +130,8 @@ export default function ManageOrder(){
                         <td>{order.deliveryDate}</td>
                         <td>{order.startAddress == null ? "" : order.startAddress.addressLine}</td>
                         <td>{order.endAddress == null ? "" : order.endAddress.addressLine}</td>
+                        <td>{order.distance}</td>
+                        <td>{order.duration}</td>
                         <td>{order.totalPrice}</td>
                         <td>{order.orderStatus.orderStatusName}</td>
                         <td>
