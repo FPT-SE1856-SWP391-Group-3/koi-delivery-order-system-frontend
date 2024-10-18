@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Header from "../common/Header";
 import { set, useForm } from "react-hook-form";
+import axios from "axios";
 
 export default function CreateOrder() {
   const customerId = JSON.parse(localStorage.getItem("userId"));
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [address, setAddress] = useState([]);
   const [koiList, setKoiList] = useState([
@@ -19,6 +20,10 @@ export default function CreateOrder() {
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
 
+  const [cityName, setCityName] = useState("");
+  const [districtName, setDistrictName] = useState("");
+  const [wardName, setWardName] = useState("");
+  const [addresses, setAddresses] = useState([]);
 
   //Lay dia chi nguoi dung
   useEffect(() => {
@@ -58,6 +63,14 @@ export default function CreateOrder() {
       }
     });
 
+    axios
+    .get(
+      "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+    )
+    .then((response) => response.data)
+    .then((data) => {
+      setAddresses(data);
+    });
   }, []);
 
   //Them koi
@@ -106,6 +119,16 @@ export default function CreateOrder() {
   }
 
   };
+  const [fullAddress, setFullAddress] = useState();
+  const [partAddress, setPartAddress] = useState();
+
+  const handleChange = (e) => {
+      console.log(e.target.value);
+      if (e.target.value != "") {
+        setFullAddress(e.target.value + ", " + wardName + ", " + districtName + ", " + cityName);
+        setPartAddress(wardName + ", " + districtName + ", " + cityName);
+      } 
+}
 
   //Tao don hang
   const onSubmit = async (data) => {
@@ -120,6 +143,8 @@ export default function CreateOrder() {
       amount: amounts,
       koiCondition: koiConditions,
       totalPrice: totalPrice,
+      receiverPartAddressLine : partAddress,
+      receiverFullAddressLine : fullAddress
     };
     console.log(fullOrderData);
     try {
@@ -158,6 +183,9 @@ export default function CreateOrder() {
   //    }
   //  }
 
+
+  console.log(fullAddress);
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -177,7 +205,7 @@ export default function CreateOrder() {
           type="hidden"
           id="startAddress"
           name="startAddress"
-          value={address.addressId}
+          value={"Bãi cỏ KTX khu B, Phường Đông Hòa, Dĩ An, Tỉnh Bình Dương, Việt Nam"}
           {...register("startAddress")}
         />
         <input
@@ -201,33 +229,82 @@ export default function CreateOrder() {
           placeholder="Email nguoi nhan"
           {...register("receiverEmail")}
         />
+              <div className="form-group">
+                <label htmlFor="city">Thành phố</label>
+                <select
+                  onChange={(e) => {
+                    setCityName(e.target.value);
+                  }}
+                >
+                  <option value="">Chọn thành phố</option>
+                  {addresses.map((address) => (
+                    <option key={address.Id} value={address.Name}>
+                      {address.Name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="district">Huyện</label>
+                <select
+                  onChange={(e) => {
+                    setDistrictName(e.target.value);
+                  }}
+                >
+                  <option value="">Chọn huyện</option>
+                  {addresses.map((address) => {
+                    if (address.Name == cityName) {
+                      return address.Districts.map((district) => (
+                        <option key={district.Id} value={district.Name}>
+                          {district.Name}
+                        </option>
+                      ));
+                    }
+                  })}
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="ward">Quận/Xã</label>
+                <select
+                  onChange={(e) => {
+                    setWardName(e.target.value);
+                  }}
+                >
+                  <option value="">Chọn quận/xã</option>
+                  {addresses.map((address) => {
+                    if (address.Name == cityName) {
+                      return address.Districts.map((district) => {
+                        if (district.Name == districtName) {
+                          return district.Wards.map((ward) => (
+                            <option key={ward.Id} value={ward.Name}>
+                              {ward.Name}
+                            </option>
+                          ));
+                        }
+                      });
+                    }
+                  })}
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="specificAddress">Địa chỉ cụ thể</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="specificAddress"
+                  name="specificAddress"
+                  onChange={(e) => {
+                      handleChange(e) 
+                    }
+                  }
+                />
+              </div>
         <input
           type="text"
           id="receiverAddressLine"
           name="receiverAddressLine"
           placeholder="Dia chi nguoi nhan"
-          {...register("receiverAddressLine")}
-        />
-        <input
-          type="text"
-          id="receiverCity"
-          name="receiverCity"
-          placeholder="Thanh pho"
-          {...register("receiverCity")}
-        />
-        <input
-          type="text"
-          id="receiverPostalCode"
-          name="receiverPostalCode"
-          placeholder="Ma buu dien"
-          {...register("receiverPostalCode")}
-        />
-        <input
-          type="text"
-          id="receiverCountry"
-          name="receiverCountry"
-          placeholder="Quoc gia"
-          {...register("receiverCountry")}
+          value={fullAddress}
         />
 
         <h1>Thong tin loai hang</h1>

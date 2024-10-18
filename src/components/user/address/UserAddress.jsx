@@ -50,10 +50,7 @@ export default function UserAddress() {
                 <div key={address.addressId}>
                     <h3>AddressId: {address.addressId}</h3>
                     <h3>UserId: {address.userId}</h3>
-                    <h3>Address: {address.address}</h3>
-                    <h3>City: {address.city}</h3>
-                    <h3>Country: {address.country}</h3>
-                    <h3>ZipCode: {address.zipCode}</h3>
+                    <h3>Address: {address.addressLine}</h3>
                     <h3>
                         <a href={"/edit-address/" + address.addressId}>Update</a>
                     </h3>

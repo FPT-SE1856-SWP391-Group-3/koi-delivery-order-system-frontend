@@ -119,7 +119,7 @@ const router = createBrowserRouter([
     index: true,
   },
   {
-    element: <ProtectedRoute isAuthenticated={await isAuthenticated()} />,
+    element: <ProtectedRoute isAuthenticated={isAuthenticated()} />,
     children: [
       {
         path: "/view-profile",
