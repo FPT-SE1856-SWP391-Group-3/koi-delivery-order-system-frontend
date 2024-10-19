@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import Header from "../common/Header";
 import { useEffect } from "react";
 
 export default function UserOrderDetail() {
@@ -9,22 +8,20 @@ export default function UserOrderDetail() {
   const { orderId } = useParams();
 
   useEffect(() => {
-    api.get("OrderDetails/" + orderId)
-      .then((data) => {
-        if (data.success) {
-            setUserOrderDetails(data.orderDetail);
-            console.log(data.orderDetail);
-        } else {
-          console.log("Không có chi tiết đơn hàng!");
-        }
-      });
+    api.get("OrderDetails/" + orderId).then((data) => {
+      if (data.success) {
+        setUserOrderDetails(data.orderDetail);
+        console.log(data.orderDetail);
+      } else {
+        console.log("Không có chi tiết đơn hàng!");
+      }
+    });
   }, []);
 
-    console.log(UserOrderDetails)
+  console.log(UserOrderDetails);
 
   return (
     <div>
-      <Header />
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">

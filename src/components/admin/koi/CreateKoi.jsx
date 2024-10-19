@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import Header from "../../user/common/Header";
+
 import { useForm } from "react-hook-form";
 
 export default function CreatKoi() {
@@ -9,7 +9,6 @@ export default function CreatKoi() {
   const navigate = useNavigate();
   let userId = JSON.parse(localStorage.getItem("userId"));
   const [certificationId, setCertificationId] = useState([""]);
-
 
   const addCertification = async () => {
     setCertificationId([...certificationId, ""]);
@@ -40,15 +39,10 @@ export default function CreatKoi() {
       console.error("Error:", error);
       alert("Error! Please try again.");
     }
-
   };
-
-
-
 
   return (
     <div>
-      <Header />
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">
@@ -111,7 +105,7 @@ export default function CreatKoi() {
                 Thêm chứng chỉ
               </button>{" "}
               <button
-                type="button" 
+                type="button"
                 className="btn btn-primary"
                 onClick={deleteCertification}
               >
@@ -120,13 +114,17 @@ export default function CreatKoi() {
               {certificationId.map((koiCertification, index) => (
                 <div key={index}>
                   <div className="form-group">
-                    <label htmlFor="koiCertificationId">Chứng chỉ {index + 1}</label>
+                    <label htmlFor="koiCertificationId">
+                      Chứng chỉ {index + 1}
+                    </label>
                     <input
                       type="text"
                       className="form-control"
                       id="koiCertificationId"
                       name="koiCertificationId"
-                      onChange={(e) => {certificationId[index] = e.target.value }}
+                      onChange={(e) => {
+                        certificationId[index] = e.target.value;
+                      }}
                     />
                   </div>
                 </div>

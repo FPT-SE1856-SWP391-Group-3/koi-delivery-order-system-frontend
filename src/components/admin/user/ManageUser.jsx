@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
-import Header from "../../user/common/Header";
+import "../user/ManageUser.css";
 
 export default function ManageUser() {
   const [users, setUsers] = useState([]);
@@ -45,7 +45,6 @@ export default function ManageUser() {
 
   return (
     <div>
-      <Header />
       <Sidebar />
       <div className="content">
         <h1>Manage User</h1>
@@ -67,21 +66,30 @@ export default function ManageUser() {
                 <td>{user.phoneNumber}</td>
                 <td>{user.roleName}</td>
                 <td>
-                  <button onClick={() => deleteUser(user.userId)}>
-                    Delete
-                  </button>
-                  <a
-                    href={"/admin/update-user/" + user.userId}
-                    className="btn btn-primary"
-                  >
-                    Update
-                  </a>
-                  <a
-                    href={"/admin/user-address/" + user.userId}
-                    className="btn btn-primary"
-                  >
-                    Address
-                  </a>
+                  <div className="action-buttons">
+                    <button
+                      className="btn_delete"
+                      onClick={() => deleteUser(user.userId)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() =>
+                        navigate("/admin/update-user/" + user.userId)
+                      }
+                      className="btn_update"
+                    >
+                      Update
+                    </button>
+                    <button
+                      onClick={() =>
+                        navigate("/admin/user-address/" + user.userId)
+                      }
+                      className="btn_address"
+                    >
+                      Address
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

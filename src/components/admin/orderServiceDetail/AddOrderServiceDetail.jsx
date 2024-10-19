@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import Header from "../../user/common/Header";
 
 export default function AddOrderServiceDetail() {
   const { register, handleSubmit } = useForm();
@@ -12,15 +11,14 @@ export default function AddOrderServiceDetail() {
   const onSubmit = async (data) => {
     console.log(data);
     try {
-     api.post("OrderServiceDetails/", data)
-        .then((data) => {
-          if (data.success) {
-            alert("Thêm thành công!");
-            navigate("/");
-          } else {
-            alert("Thêm thất bại!");
-          }
-        });
+      api.post("OrderServiceDetails/", data).then((data) => {
+        if (data.success) {
+          alert("Thêm thành công!");
+          navigate("/");
+        } else {
+          alert("Thêm thất bại!");
+        }
+      });
     } catch (error) {
       console.error("Error during registration:", error);
       alert("An error occurred during registration. Please try again.");
@@ -29,7 +27,6 @@ export default function AddOrderServiceDetail() {
 
   return (
     <div>
-      <Header />
       <div className="container"></div>
       <div className="row">
         <div className="col-md-6 offset-md-3">

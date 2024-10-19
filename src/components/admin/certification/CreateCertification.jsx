@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import Header from "../../user/common/Header";
 import { useFieldArray, useForm } from "react-hook-form";
 
 export default function CreateCertification() {
@@ -47,14 +46,13 @@ export default function CreateCertification() {
   console.log(fields);
   return (
     <div>
-      <Header />
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">
             <h2 className="text-center">Thêm Chứng Chỉ mới</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
               {fields.map((field, index) => (
-                <> 
+                <>
                   <div>
                     <label
                       htmlFor={`certifications.${index}.certificationName`}
@@ -87,10 +85,15 @@ export default function CreateCertification() {
                   </button>
                 </>
               ))}
-              <button type="button" onClick={() => append({
-                certificationName: "",
-                certificateFile: null
-              })}>
+              <button
+                type="button"
+                onClick={() =>
+                  append({
+                    certificationName: "",
+                    certificateFile: null,
+                  })
+                }
+              >
                 Them
               </button>
               <button type="submit" className="btn btn-primary">

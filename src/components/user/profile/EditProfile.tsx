@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import api from '../../../api/CallAPI';
-import Header from '../common/Header';
+
 
 
 export default function EditProfile() {
@@ -38,7 +38,6 @@ export default function EditProfile() {
 
     return (
         <div>
-            {/* <Header/> */}
             <h1>Update Profile</h1>
             <form onSubmit={handleSubmit}>
                 <div>

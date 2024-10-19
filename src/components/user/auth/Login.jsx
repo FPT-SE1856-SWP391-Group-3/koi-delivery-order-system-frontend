@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import api from "../../../api/CallAPI";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import "../css/Login.css";
-import google from "../../../assets/google.png";
 import facebook from "../../../assets/facebook.png";
 import apple from "../../../assets/apple.png";
 import koiFish from "../../../assets/koi-fish.png";
@@ -125,7 +124,6 @@ export default function Login() {
                 <p>or continue with</p>
                 <div className="social-icons">
                   <button className="google-btn">
-                    <img src={google} alt="google" className="icon" />
                     <GoogleLogin
                       onSuccess={handleGoogleSuccess}
                       onError={handleGoogleFailure}

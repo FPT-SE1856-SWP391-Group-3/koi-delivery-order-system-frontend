@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import Header from "../../user/common/Header";
 import { set } from "react-hook-form";
 
 export default function ManageOrderDocument() {
@@ -54,7 +53,7 @@ export default function ManageOrderDocument() {
     }
   }
 
-     return (
+  return (
     <div>
       <h1>Documents</h1>
       {orderIds.map((orderId) => {
@@ -107,7 +106,9 @@ export default function ManageOrderDocument() {
                         Delete
                       </button>
                       <a
-                        href={"/admin/edit-document/" + document.orderDocumentId}
+                        href={
+                          "/admin/edit-document/" + document.orderDocumentId
+                        }
                       >
                         Update
                       </a>

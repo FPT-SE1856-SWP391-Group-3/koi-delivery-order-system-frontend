@@ -5,9 +5,7 @@ import api from "../../../api/CallAPI";
 import Header from "../common/Header";
 
 export default function EditAddress() {
-  const [updateAddress, setUpdateAddress] = useState([
-    { addressLine: "" },
-  ]);
+  const [updateAddress, setUpdateAddress] = useState([{ addressLine: "" }]);
   const [currentAddress, setCurrentAddress] = useState("");
   const [addresses, setAddresses] = useState([]);
   const [cityName, setCityName] = useState("");
@@ -41,7 +39,7 @@ export default function EditAddress() {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Ngăn chặn reload trang
     try {
-     await api.put("Addresses/" + addressId,  updateAddress).then((data) => {
+      await api.put("Addresses/" + addressId, updateAddress).then((data) => {
         if (data.success) {
           alert("Cập nhật thành công!");
           navigate("/user-address");
@@ -71,16 +69,22 @@ export default function EditAddress() {
       console.log(e.target.value);
       if (e.target.value != "") {
         setUpdateAddress({
-          addressLine : e.target.value + ", " + wardName + ", " + districtName + ", " + cityName
+          addressLine:
+            e.target.value +
+            ", " +
+            wardName +
+            ", " +
+            districtName +
+            ", " +
+            cityName,
         });
       } else {
         setUpdateAddress({
-          addressLine : ""
+          addressLine: "",
         });
       }
     }
-}
-
+  };
 
   return (
     <div>
@@ -90,7 +94,7 @@ export default function EditAddress() {
           <div className="col-md-6 offset-md-3">
             <h2 className="text-center">Cập nhật địa chỉ</h2>
             <form onSubmit={handleSubmit}>
-            <div className="form-group">
+              <div className="form-group">
                 <label htmlFor="city">Thành phố</label>
                 <select
                   onChange={(e) => {
@@ -155,19 +159,20 @@ export default function EditAddress() {
                   id="specificAddress"
                   name="specificAddress"
                   onChange={(e) => {
-                      handleChange(e) 
-                    }
-                  }
+                    handleChange(e);
+                  }}
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="addressLine">Địa chỉ hiện tại {currentAddress}  </label>
+                <label htmlFor="addressLine">
+                  Địa chỉ hiện tại {currentAddress}{" "}
+                </label>
                 <input
                   type="text"
                   className="form-control"
                   id="addressLine"
                   name="addressLine"
-                  value={updateAddress.addressLine}  
+                  value={updateAddress.addressLine}
                   readOnly
                 />
               </div>
