@@ -1,9 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import Header from "../common/Header";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 export default function AddAddress() {
   const { register, handleSubmit, setValue } = useForm();
@@ -45,20 +42,27 @@ export default function AddAddress() {
   }, []);
 
   const handleChange = (e) => {
-      if (cityName && districtName && wardName) {
-        console.log(e.target.value);
-        if (e.target.value != "") {
-          setAddressLine(e.target.value + ", " + wardName + ", " + districtName + ", " + cityName);
-        } else {
-          setAddressLine("");
-        }
+    if (cityName && districtName && wardName) {
+      console.log(e.target.value);
+      if (e.target.value != "") {
+        setAddressLine(
+          e.target.value +
+            ", " +
+            wardName +
+            ", " +
+            districtName +
+            ", " +
+            cityName
+        );
+      } else {
+        setAddressLine("");
       }
-  }
+    }
+  };
 
   console.log(addresses);
   return (
     <div>
-      <Header />
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">
@@ -138,9 +142,8 @@ export default function AddAddress() {
                   id="specificAddress"
                   name="specificAddress"
                   onChange={(e) => {
-                      handleChange(e) 
-                    }
-                  }
+                    handleChange(e);
+                  }}
                 />
               </div>
               <div className="form-group">

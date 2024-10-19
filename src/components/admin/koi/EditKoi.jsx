@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import Header from "../../user/common/Header";
+
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -58,7 +58,6 @@ export default function EditKoi() {
 
   return (
     <div>
-      <Header />
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">
