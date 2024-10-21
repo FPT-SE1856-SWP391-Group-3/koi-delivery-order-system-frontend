@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Header from "../../user/common/Header";
+import ComponentPath from "@componentPath";
 
 export default function ManageCertification() {
     const [certifications, setCertifications] = useState([]);
@@ -45,7 +46,7 @@ export default function ManageCertification() {
         <div>
             <Header />
             <h1>Certifications</h1>
-            <a href="/admin/create-certification">Add Certification</a>
+            <a href={ComponentPath.admin.certification.createCertification}>Add Certification</a>
             <table>
                 <thead>
                     <tr>
@@ -67,7 +68,7 @@ export default function ManageCertification() {
                             </td>
                             <td>
                                 <button onClick={() => deleteCertification(certification.certificationId)}>Delete</button>
-                                <a href={"/admin/edit-certification/" + certification.certificationId}>Update</a>
+                                <a href={ComponentPath.admin.certification.editCertification + certification.certificationId}>Update</a>
                             </td>
                         </tr>
                     ))}

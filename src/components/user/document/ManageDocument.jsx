@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Header from "../../user/common/Header";
+import ComponentPath from "../../../routes/ComponentPath";
+
 
 export default function ManageDocument() {
     const [customerDocuments, setCustomerDocuments] = useState([{}]);
@@ -72,7 +74,7 @@ export default function ManageDocument() {
                             <td>{document.description}</td>
                             <td>
                                 <button onClick={() => deleteDocument(document.documentId)}>Delete</button>
-                                <a href={"/admin/edit-document/" + document.documentId}>Update</a>
+                                <a href={ComponentPath.user.document.editDocument + document.documentId}>Update</a>
                             </td>
                         </tr>
                     ))}

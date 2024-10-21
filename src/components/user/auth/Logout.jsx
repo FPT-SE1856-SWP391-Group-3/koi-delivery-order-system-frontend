@@ -7,4 +7,7 @@ export default function Logout() {
     useEffect(() => {
         navigate("/");
     });
+    return (
+        <h1>Log out</h1>
+    )
 }

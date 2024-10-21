@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "jsx": "react",
+      "baseUrl": "src",
+      "paths": {
+        "@components/*": ["components/*"],
+        "@admin/*": ["components/admin/*"],
+        "@user/*": ["components/user/*"],
+        "@api": ["api/CallAPI"],
+        "@componentPath": ["src/routes/ComponentPath.jsx"],
+      }
+    },
+    "exclude": ["node_modules", "dist"]
+  }

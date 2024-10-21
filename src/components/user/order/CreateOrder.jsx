@@ -4,6 +4,7 @@ import api from "../../../api/CallAPI";
 import Header from "../common/Header";
 import { set, useForm } from "react-hook-form";
 import axios from "axios";
+import ComponentPath from "@componentPath";
 
 export default function CreateOrder() {
   const customerId = JSON.parse(localStorage.getItem("userId"));
@@ -165,7 +166,7 @@ export default function CreateOrder() {
       api.post("Orders/", fullOrderData).then((data) => {
         if (data.success) {
           alert("Thêm thành công!");
-          navigate("/add-document/" + data.orderId + "/" + customerId);
+          navigate(ComponentPath.user.document.createDocument + data.orderId + "/" + customerId);
         } else {
           alert("Thêm thất bại!");
         }

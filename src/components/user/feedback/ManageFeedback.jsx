@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Header from "../common/Header";
+import ComponentPath from "@componentPath";
 
 export default function ManageFeedBack() {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -88,7 +89,7 @@ export default function ManageFeedBack() {
                         </button>
                         <Link
                           to={{
-                            pathname: `/edit-feedback/${feedback.customerFeedbackId}`,
+                            pathname: ComponentPath.user.feedback.editFeedback + feedback.customerFeedbackId,
                             state: feedback,
                           }}
                         >

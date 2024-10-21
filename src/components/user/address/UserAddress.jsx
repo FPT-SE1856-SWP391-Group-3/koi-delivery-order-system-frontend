@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import api from '../../../api/CallAPI';
 import Header from '../common/Header';
+import ComponentPath from '@componentPath';
 
 export default function UserAddress() {
     const [addresses, setAddresses] = useState([]);
@@ -45,14 +46,14 @@ export default function UserAddress() {
         <div>
             <Header />
             <h1>Address</h1>
-            <a href="/add-address">Add address</a>
+            <a href={ComponentPath.user.address.createAddress}>Add address</a>
             {addresses.map((address) => (
                 <div key={address.addressId}>
                     <h3>AddressId: {address.addressId}</h3>
                     <h3>UserId: {address.userId}</h3>
                     <h3>Address: {address.addressLine}</h3>
                     <h3>
-                        <a href={"/edit-address/" + address.addressId}>Update</a>
+                        <a href={ComponentPath.user.address.editAddress + address.addressId}>Update</a>
                     </h3>
                     <h3>
                         <button onClick={() => deleteAddress(address.addressId)}>Delete</button>

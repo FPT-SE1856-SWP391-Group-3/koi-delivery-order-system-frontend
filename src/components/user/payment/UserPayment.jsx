@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from "react-router-dom";
 import api from '../../../api/CallAPI';
 import Header from '../common/Header';
+import ComponentPath from '@componentPath';
 
 export default function UserPayment (){
 
@@ -73,13 +74,13 @@ export default function UserPayment (){
                                             <td>{payment.paymentNumber}</td>
                                             <td>
                                                 <button className="btn btn-danger" onClick={() => deletePayment(payment.paymentId)}>Xóa</button>
-                                                <Link to={{ pathname: `/edit-payment/${payment.paymentId}`, state: payment }}>Sửa </Link>
+                                                <Link to={{ pathname: ComponentPath.user.payment.editPayment + payment.paymentId, state: payment }}>Sửa </Link>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
-                            <a href="/add-payment">Thêm phương thức thanh toán</a>
+                            <a href={ComponentPath.user.payment.createPayment}>Thêm phương thức thanh toán</a>
                         </div>
                     </div>
                 </div>

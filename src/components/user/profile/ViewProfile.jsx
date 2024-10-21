@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from "react-router-dom";
 import api from '../../../api/CallAPI';
 import Header from '../common/Header';
+import ComponentPath from '@componentPath';
 
 export default function ViewProfile() {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
@@ -53,7 +54,7 @@ export default function ViewProfile() {
                     </tr>
                     <tr>
                         <td>Update:</td>
-                        <td><a href="/edit-profile">Update</a></td>
+                        <td><a href={ComponentPath.user.profile.editProfile}>Update</a></td>
                     </tr>
                     <tr>
                         <td>Delete:</td>
@@ -61,16 +62,16 @@ export default function ViewProfile() {
                     </tr>
                     <tr>
                         <td>View Address:</td>
-                        <td><a href="/user-address">View Address</a></td>
+                        <td><a href={ComponentPath.user.address.viewAddress}>View Address</a></td>
                     </tr>
                     
                 </tbody>
             </table>
             <h3>-------------------------------------------</h3>
             <h1>View Payment</h1>
-            <a href="/user-payment">View Payment</a>
+            <a href={ComponentPath.user.payment.viewPayment}>View Payment</a>
             <h1>Update Password</h1>
-            <a href="/update-password">Update Password</a>
+            <a href={ComponentPath.user.payment.editPayment}>Update Password</a>  
         </div>
     );
 }
