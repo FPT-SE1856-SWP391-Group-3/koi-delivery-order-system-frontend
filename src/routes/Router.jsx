@@ -119,7 +119,7 @@ const router = createBrowserRouter([
     index: true,
   },
   {
-    element: <ProtectedRoute isAuthenticated={isAuthenticated()} />,
+    element: <ProtectedRoute isAuthenticated={await isAuthenticated()} />,
     children: [
       {
         path: "/view-profile",
@@ -203,7 +203,7 @@ const router = createBrowserRouter([
       },
 
       {
-        element: <AdminRoute isAdmin={isAdmin()} />,
+        element: <AdminRoute isAdmin={await isAdmin()} />,
         children: [
           {
             path: adminUrl + "/manage-user",

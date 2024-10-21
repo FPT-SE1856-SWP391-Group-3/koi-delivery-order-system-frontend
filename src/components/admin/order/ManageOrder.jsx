@@ -130,8 +130,8 @@ export default function ManageOrder(){
                         <td>{order.deliveryDate}</td>
                         <td>{order.startAddress == null ? "" : order.startAddress.addressLine}</td>
                         <td>{order.endAddress == null ? "" : order.endAddress.addressLine}</td>
-                        <td>{order.distance}</td>
-                        <td>{order.duration}</td>
+                        <td>{(order.distance/1000).toFixed(3)} KM</td>
+                        <td>{(order.duration/60/60).toFixed(3)} H </td>
                         <td>{order.totalPrice}</td>
                         <td>{order.orderStatus.orderStatusName}</td>
                         <td>
