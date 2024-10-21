@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import ComponentPath from "routes/ComponentPath";
 
 export default function UserPayment() {
   const [payments, setPayments] = useState([]);
@@ -73,20 +74,13 @@ export default function UserPayment() {
                         >
                           Xóa
                         </button>
-                        <Link
-                          to={{
-                            pathname: `/edit-payment/${payment.paymentId}`,
-                            state: payment,
-                          }}
-                        >
-                          Sửa{" "}
-                        </Link>
+                        <Link to={{ pathname: ComponentPath.user.payment.editPayment + payment.paymentId, state: payment }}>Sửa </Link>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <a href="/add-payment">Thêm phương thức thanh toán</a>
+               <a href={ComponentPath.user.payment.createPayment}>Thêm phương thức thanh toán</a>
             </div>
           </div>
         </div>

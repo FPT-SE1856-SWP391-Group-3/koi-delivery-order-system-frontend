@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import ComponentPath from "routes/ComponentPath";
+import Header from "@components/user/common/Header";
 
 export default function ManageFaq() {
   const [faqs, setFaqs] = useState([]);
@@ -40,15 +42,16 @@ export default function ManageFaq() {
 
   return (
     <div>
+      <Header/>
       <h1>FAQs</h1>
-      <a href="/admin/newFaq">Add FAQ</a>
+      <a href={ComponentPath.admin.faq.createFaq}>Add FAQ</a>
       {faqs.map((faq) => (
         <div key={faq.faqid}>
           <h3>FaqId: {faq.faqid}</h3>
           <h3>Question: {faq.question}</h3>
           <h3>Answer: {faq.answer}</h3>
           <button onClick={() => deleteFaq(faq.faqid)}>Delete</button>
-          <a href={"/admin/update-faq/" + faq.faqid}>Update</a>
+          <a href={ComponentPath.admin.faq.editFaq + faq.faqid}>Update</a>
         </div>
       ))}
     </div>

@@ -1,4 +1,3 @@
-import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 import ManageUserAddress from "../components/admin/address/ManageUserAddress";
 import ManageUser from "../components/admin/user/ManageUser";
@@ -10,7 +9,7 @@ import UserAddress from "../components/user/address/UserAddress";
 import Login from "../components/user/auth/Login";
 import Logout from "../components/user/auth/Logout";
 import Register from "../components/user/auth/Register";
-import ViewProfile from "../components/user/profile/ViewProfile";
+import ViewProfile from "@user/profile/ViewProfile";
 import AdminRoute from "./AdminRoute";
 import ProtectedRoute from "./ProtectedRoute";
 import UserPayment from "../components/user/payment/UserPayment";
@@ -58,6 +57,7 @@ import UpdatePassword from "../components/user/profile/UpdatePassword";
 import ManageOrderDocument from "../components/admin/order/OrderDocument";
 import EditOrderDocument from "../components/admin/order/EditOrderDocument";
 import CreateOrderDocument from "../components/admin/order/CreateOrderDocument";
+import ComponentPath from "./ComponentPath";
 // Function to get the access token from cookies
 var adminUrl = "/admin";
 
@@ -66,7 +66,7 @@ const getAccessToken = async () => {
     return false;
   }
   try {
-    const data = await api.post("Users/token/check");
+    const data = await api.post("Users/token/check", null);
 
     if (data.success) {
       console.log(data);
@@ -94,6 +94,8 @@ const isAdmin = () => {
   return user && user.roleId >= 3;
 };
 
+
+
 // Create the router configuration
 const router = createBrowserRouter([
   {
@@ -113,216 +115,219 @@ const router = createBrowserRouter([
     element: <HomePage />,
     index: true,
   },
+  // {
+  //   path: ComponentPath.uploadFile,
+  //   element: <UploadFile />,
+  //   index: true,
+  // },
   {
-    path: "/upload-file",
-    element: <UploadFile />,
-    index: true,
-  },
-  {
-    element: <ProtectedRoute isAuthenticated={isAuthenticated()} />,
+    element: <ProtectedRoute isAuthenticated={await isAuthenticated()} />,
     children: [
+      // Profile
       {
-        path: "/view-profile",
+        path: ComponentPath.user.profile.viewProfile,
         element: <ViewProfile />,
       },
       {
-        path: "/edit-profile",
+        path: ComponentPath.user.profile.editProfile,
         element: <EditProfile />,
       },
       {
-        path: "/update-password",
+        path: ComponentPath.user.profile.updatePassword,
         element: <UpdatePassword />,
       },
+      // Address
       {
-        path: "/add-address",
+        path: ComponentPath.user.address.createAddress,
         element: <AddAddress />,
       },
       {
-        path: "/user-address",
+        path: ComponentPath.user.address.viewAddress,
         element: <UserAddress />,
       },
       {
-        path: "/edit-address/:addressId",
+        path: ComponentPath.user.address.editAddress + "/:addressId",
         element: <EditAddress />,
       },
+      // Payment
       {
-        path: "/user-payment",
+        path: ComponentPath.user.payment.viewPayment,
         element: <UserPayment />,
       },
       {
-        path: "/add-payment/",
+        path: ComponentPath.user.payment.createPayment,
         element: <AddPayment />,
       },
       {
-        path: "/edit-payment/:id",
+        path: ComponentPath.user.payment.editPayment + "/:paymentId",
         element: <EditPayment />,
       },
       {
-        path: "/create-order/",
+        path: ComponentPath.user.order.createOrder,
         element: <CreateOrder />,
       },
       {
-        path: "/orders",
+        path: ComponentPath.user.order.viewOrder,
         element: <UserOrder />,
       },
       {
-        path: "/order-detail/:orderId",
+        path: ComponentPath.user.order.orderDetai.viewOrderDetail + ":orderId",
         element: <UserOrderDetail />,
       },
       {
-        path: "/feedback/:orderId",
+        path: ComponentPath.user.feedback.createFeedback + ":orderId",
         element: <CreateFeedback />,
       },
       {
-        path: "/manage-feedback/",
+        path: ComponentPath.user.feedback.manageFeedback,
         element: <ManageFeedBack />,
       },
       {
-        path: "/edit-feedback/:customerFeedbackId",
+        path: ComponentPath.user.feedback.editFeedback + ":customerFeedbackId",
         element: <EditFeedback />,
       },
       {
-        path: "/add-document/:orderId/:userId",
+        path: ComponentPath.user.document.createDocument + ":orderId/:userId",
         element: <AddDocument />,
       },
       {
-        path: "/edit-document/:documentId",
+        path: ComponentPath.user.document.editDocument + ":documentId",
         element: <EditDocument />,
       },
       {
-        path: "/manage-document/:orderId",
+        path: ComponentPath.user.document.manageDocument + ":orderId",
         element: <ManageDocument />,
       },
       {
-        path: "/add-notification",
+        path: ComponentPath.user.notification.createNotification,
         element: <CreateNotification />,
       },
       {
-        path: "/get-notification",
+        path: ComponentPath.user.notification.getNotification,
         element: <GetNotification />,
       },
 
       {
-        element: <AdminRoute isAdmin={isAdmin()} />,
+        element: <AdminRoute isAdmin={await isAdmin()} />,
         children: [
           {
-            path: adminUrl + "/manage-user",
+            path: ComponentPath.admin.user.manageUser,
             element: <ManageUser />,
           },
           {
-            path: adminUrl + "/update-user/:id",
+            path: ComponentPath.admin.user.editUser + ":id",
             element: <UpdateUser />,
           },
           {
-            path: adminUrl + "/user-address/:id",
+            path: ComponentPath.admin.address.manageUserAddress + ":id",
             element: <ManageUserAddress />,
           },
           {
-            path: adminUrl + "/manage-koi/",
+            path: ComponentPath.admin.koi.manageKoi,
             element: <ManageKoi />,
           },
           {
-            path: adminUrl + "/edit-koi/:koiId",
+            path: ComponentPath.admin.koi.editKoi + ":koiId",
             element: <EditKoi />,
           },
           {
-            path: adminUrl + "/add-koi/",
+            path: ComponentPath.admin.koi.createKoi,
             element: <CreatKoi />,
           },
           {
-            path: adminUrl + "/manage-order-service-detail/",
+            path: ComponentPath.admin.order.service.manageOrderService,
             element: <ManageOrderServiceDetail />,
           },
           {
-            path: adminUrl + "/add-order-service-detail/",
+            path: ComponentPath.admin.order.service.createOrderService,
             element: <AddOrderServiceDetail />,
           },
           {
-            path: adminUrl + "/update-order-service-detail/:id",
+            path: ComponentPath.admin.order.service.editOrderService + ":id",
             element: <EditOrderServiceDetail />,
           },
           {
-            path: adminUrl + "/manage-payment-type/",
+            path: ComponentPath.admin.payment.managePaymentType,
             element: <ManagePaymentType />,
           },
           {
-            path: adminUrl + "/edit-payment-type/:id",
+            path: ComponentPath.admin.payment.editPaymentType + ":id",
             element: <EditPaymentType />,
           },
           {
-            path: adminUrl + "/add-payment-type/",
+            path: ComponentPath.admin.payment.addPaymentType,
             element: <AddPaymentType />,
           },
           {
-            path: adminUrl + "/manage-faq/",
+            path: ComponentPath.admin.faq.manageFaq,
             element: <ManageFaq />,
           },
           {
-            path: adminUrl + "/update-faq/:faqId",
+            path: ComponentPath.admin.faq.editFaq + ":faqId",
             element: <UpdateFaq />,
           },
           {
-            path: adminUrl + "/new-faq/",
+            path: ComponentPath.admin.faq.createFaq,
             element: <NewFaq />,
           },
           {
-            path: adminUrl + "/manage-order/",
+            path: ComponentPath.admin.order.manageOrder,
             element: <ManageOrder />,
           },
           {
-            path: adminUrl + "/manage-order-detail/:orderId/",
+            path: ComponentPath.admin.order.manageOrderDetail + ":orderId",
             element: <ManageOrderDetail />,
           },
           {
-            path: adminUrl + "/create-transportation-report/:orderId/",
+            path: ComponentPath.admin.report.createReport + ":orderId",
             element: <CreateTransportationReportDetails />,
           },
           {
-            path: adminUrl + "/manage-transportation-report/",
+            path: ComponentPath.admin.report.manageReport,
             element: <ManageTransportationReportDetails />,
           },
           {
-            path: adminUrl + "/edit-transportation-report/:reportId",
+            path: ComponentPath.admin.report.editReport + ":reportId",
             element: <EditTransportationReportDetails />,
           },
           {
-            path: adminUrl + "/edit-blog-news/:postId",
+            path: ComponentPath.admin.blogNews.editBlogNews + ":postId",
             element: <EditBlogNews />,
           },
           {
-            path: adminUrl + "/manage-blog-news/",
+            path: ComponentPath.admin.blogNews.manageBlogNews,
             element: <ManageBlogNews />,
           },
           {
-            path: adminUrl + "/create-blog-news/",
+            path: ComponentPath.admin.blogNews.createBlogNews,
             element: <CreateBlogNews />,
           },
           {
-            path: adminUrl + "/edit-certification/:certificationId",
+            path: ComponentPath.admin.certification.editCertification + ":certificationId",
             element: <EditCertification />,
           },
           {
-            path: adminUrl + "/manage-certification/",
+            path: ComponentPath.admin.certification.manageCertification,
             element: <ManageCertification />,
           },
           {
-            path: adminUrl + "/create-certification/",
+            path: ComponentPath.admin.certification.createCertification,
             element: <CreateCertification />,
           },
           {
-            path: adminUrl + "/manage-notification/",
+            path: ComponentPath.admin.notification.manageNotification,
             element: <ManageNotification />,
           },
           {
-            path: adminUrl + "/manage-order-document/",
+            path: ComponentPath.admin.order.document.manageOrderDocument,
             element: <ManageOrderDocument />,
           },
           {
-            path: adminUrl + "/create-order-document/:orderId/:orderStatusId",
+            path: ComponentPath.admin.order.document.createOrderDocument + ":orderId/:orderStatusId",
             element: <CreateOrderDocument />,
           },
           {
-            path: adminUrl + "/edit-order-document/:orderId",
+            path: ComponentPath.admin.order.document.editOrderDocument + ":orderId",
             element: <EditOrderDocument />,
           },
         ],

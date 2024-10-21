@@ -4,6 +4,7 @@ import api from "../../../api/CallAPI";
 
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManageOrderServiceDetail() {
   const [orderServiceDetails, setOrderServiceDetails] = useState([]);
@@ -27,10 +28,10 @@ export default function ManageOrderServiceDetail() {
   async function deleteOrderService(orderServiceDetailId) {
     try {
       console.log(
-        url("OrderServices/deleteOrderServiceDetail/" + orderServiceDetailId)
+        ("OrderServices/deleteOrderServiceDetail/" + orderServiceDetailId)
       );
       const response = await fetch(
-        url("OrderServices/deleteOrderServiceDetail/" + orderServiceDetailId),
+      ("OrderServices/deleteOrderServiceDetail/" + orderServiceDetailId),
         {
           method: "DELETE",
           headers: {
@@ -58,7 +59,7 @@ export default function ManageOrderServiceDetail() {
   return (
     <div>
       <h1>Order Services</h1>
-      <a href="/admin/addOrderServiceDetail">Add Order Service</a>
+      <a href={ComponentPath.admin.order.service.createOrderService}>Add Order Service</a>
       {orderServiceDetails.map((orderServiceDetail) => (
         <div key={orderServiceDetail.orderServiceDetailId}>
           <h3>OrderServiceId: {orderServiceDetail.orderServiceDetailId}</h3>
@@ -73,7 +74,7 @@ export default function ManageOrderServiceDetail() {
           </button>
           <a
             href={
-              "/admin/updateOrderServiceDetail/" +
+              ComponentPath.admin.order.service.editOrderService +
               orderServiceDetail.orderServiceDetailId
             }
           >

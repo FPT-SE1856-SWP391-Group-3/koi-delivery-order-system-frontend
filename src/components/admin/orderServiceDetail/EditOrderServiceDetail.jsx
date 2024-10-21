@@ -52,7 +52,7 @@ export default function EditOrderServiceDetail() {
 
   return (
     <div>
-      <div className="container"></div>
+      <div className="content">
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <h2 className="text-center">Chỉnh sửa chi tiết dịch vụ đơn hàng</h2>
@@ -83,6 +83,7 @@ export default function EditOrderServiceDetail() {
           </form>
         </div>
       </div>
+    </div>
     </div>
   );
 }

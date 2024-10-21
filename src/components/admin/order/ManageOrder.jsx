@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { Component, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 
 import { useEffect } from "react";
 import { set } from "react-hook-form";
 import Sidebar from "../../user/common/Sidebar";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManageOrder() {
   const navigate = useNavigate();
@@ -152,7 +153,7 @@ export default function ManageOrder() {
                           className="btn btn-primary"
                           onClick={() =>
                             navigate(
-                              "/admin/manage-order-detail/" + order.orderId
+                              ComponentPath.admin.order.manageOrderDetail + order.orderId
                             )
                           }
                         >
@@ -199,7 +200,7 @@ export default function ManageOrder() {
                         className="btn btn-primary"
                         onClick={() =>
                           navigate(
-                            "/admin/create-order-document/" +
+                            ComponentPath.admin.order.document.createOrderDocument +
                               order.orderId +
                               "/" +
                               order.orderStatusId
@@ -212,7 +213,7 @@ export default function ManageOrder() {
                         className="btn btn-primary"
                         onClick={() =>
                           navigate(
-                            "/admin/create-transportation-report/" +
+                            ComponentPath.admin.report.createReport +
                               order.orderId
                           )
                         }

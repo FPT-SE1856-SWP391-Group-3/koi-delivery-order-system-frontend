@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManageKoi() {
   const [kois, setKois] = useState([]);
@@ -41,9 +42,9 @@ export default function ManageKoi() {
   return (
     <>
       <Sidebar />
-      <div>
+      <div className="content">
         <h1>Koi</h1>
-        <a href="/admin/add-koi">Add Koi</a>
+        <a href={ComponentPath.admin.koi.createKoi}>Add Koi</a>
         <table>
           <thead>
             <tr>
@@ -65,7 +66,7 @@ export default function ManageKoi() {
                 <td>{koi.weight}</td>
                 <td>
                   <button onClick={() => deleteKoi(koi.koiId)}>Delete</button>
-                  <a href={"/admin/edit-koi/" + koi.koiId}>Update</a>
+                  <a href={ComponentPath.admin.koi.editKoi + koi.koiId}>Update</a>
                 </td>
               </tr>
             ))}

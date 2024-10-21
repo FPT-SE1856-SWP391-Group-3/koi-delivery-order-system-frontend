@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import Header from "../../../components/user/common/Header";
 
 export default function CreateFeedback() {
   const { register, handleSubmit } = useForm();
@@ -27,7 +28,7 @@ export default function CreateFeedback() {
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-
+import ComponentPath from "routes/ComponentPath";
 export default function ManageBlogNews() {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ export default function ManageBlogNews() {
   return (
     <div>
       <h1>Blog and News</h1>
-      <a href="/admin/create-blog-news">Add Post</a>
+       <a href={ComponentPath.admin.blogNews.createBlogNews}>Add Post</a>
       {posts.map((post) => (
         <div key={post.postId}>
           <h3>PostId: {post.postId}</h3>
@@ -51,7 +51,7 @@ export default function ManageBlogNews() {
           <h3>PostDate: {post.postDate}</h3>
           <h3>Category: {post.category}</h3>
           <button onClick={() => deletePost(post.postId)}>Delete</button>
-          <a href={"/admin/edit-blog-news/" + post.postId}>Update</a>
+          <a href={ComponentPath.admin.blogNews.editBlogNews + post.postId}>Update</a>
         </div>
       ))}
     </div>

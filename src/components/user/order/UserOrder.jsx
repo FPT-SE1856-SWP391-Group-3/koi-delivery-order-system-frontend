@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { useEffect } from "react";
+import ComponentPath from "routes/ComponentPath";
 
 export default function UserOrder() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ export default function UserOrder() {
                       <button
                         className="btn btn-primary"
                         onClick={() =>
-                          navigate("/order-detail/" + order.orderId)
+                          navigate(ComponentPath.user.order.orderDetai.viewOrderDetail + order.orderId)
                         }
                       >
                         Chi tiết
@@ -75,7 +76,7 @@ export default function UserOrder() {
                     <td>
                       <button
                         className="btn btn-primary"
-                        onClick={() => navigate("/feedback/" + order.orderId)}
+                        onClick={() => navigate(ComponentPath.user.feedback.createFeedback + order.orderId)}
                       >
                         Feedback
                       </button>
@@ -85,7 +86,7 @@ export default function UserOrder() {
                         className="btn btn-primary"
                         onClick={() =>
                           navigate(
-                            "/add-document/" +
+                            ComponentPath.user.document.createDocument +
                               order.orderId +
                               "/" +
                               order.customerId

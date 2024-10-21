@@ -4,6 +4,7 @@ import api from "../../../api/CallAPI";
 
 import { useEffect } from "react";
 import { useState } from "react";
+import Sidebar from "@components/user/common/Sidebar";
 
 export default function EditPaymentType() {
   const { register, handleSubmit, setValue } = useForm();
@@ -45,27 +46,29 @@ export default function EditPaymentType() {
 
   return (
     <div>
-      <div className="container"></div>
-      <div className="row">
-        <div className="col-md-6 offset-md-3">
-          <h2 className="text-center">Chỉnh sửa phương thức thanh toán</h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-group">
-              <label htmlFor="paymentMethodName">
-                Tên phương thức thanh toán
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="paymentMethodName"
-                name="paymentMethodName"
-                {...register("paymentMethodName")}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Chỉnh sửa
-            </button>
-          </form>
+      <Sidebar />
+      <div className="content">
+        <div className="row">
+          <div className="col-md-6 offset-md-3">
+            <h2 className="text-center">Chỉnh sửa phương thức thanh toán</h2>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="form-group">
+                <label htmlFor="paymentMethodName">
+                  Tên phương thức thanh toán
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="paymentMethodName"
+                  name="paymentMethodName"
+                  {...register("paymentMethodName")}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary">
+                Chỉnh sửa
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

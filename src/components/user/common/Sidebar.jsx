@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 import "../css/Sidebar.css";
+import ComponentPath from "routes/ComponentPath";
 
 export default function Sidebar() {
   const handleLogout = () => {
@@ -16,18 +17,18 @@ export default function Sidebar() {
             Log Out
           </button>
         </div>
-        <a href="/admin/manage-user">Manage User</a>
-        <a href="/admin/manage-koi">Manage Koi</a>
-        <a href="/admin/manage-order-service-detail">
+        <a href={ComponentPath.admin.user.manageUser}>Manage User</a>
+        <a href={ComponentPath.admin.koi.manageKoi}>Manage Koi</a>
+        <a href={ComponentPath.admin.order.service.manageOrderService}>
           Manage Order System Detail
         </a>
-        <a href="/admin/manage-payment-type">Manage Payment Type</a>
-        <a href="/admin/manage-faq">Manage Faq</a>
-        <a href="/admin/manage-order">Manage Order</a>
-        <a href="/admin/manage-transportation-report">Manage Report</a>
-        <a href="/admin/manage-blog-news">Manage Blog News</a>
-        <a href="/admin/manage-certification">Manage Certification</a>
-        <a href="/admin/manage-order-document">Manage Order Document</a>
+        <a href={ComponentPath.admin.payment.managePaymentType}>Manage Payment Type</a>
+        <a href={ComponentPath.admin.faq.manageFaq}>Manage Faq</a>
+        <a href={ComponentPath.admin.order.manageOrder}>Manage Order</a>
+        <a href={ComponentPath.admin.report.manageReport}>Manage Report</a>
+        <a href={ComponentPath.admin.blogNews.manageBlogNews}>Manage Blog News</a>
+        <a href={ComponentPath.admin.certification.manageCertification}>Manage Certification</a>
+        <a href={ComponentPath.admin.order.document.manageOrderDocument}>Manage Order Document</a>
       </div>
     </>
   );

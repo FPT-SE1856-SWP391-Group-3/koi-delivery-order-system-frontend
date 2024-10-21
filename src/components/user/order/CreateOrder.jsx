@@ -4,6 +4,7 @@ import api from "../../../api/CallAPI";
 
 import { set, useForm } from "react-hook-form";
 import axios from "axios";
+import ComponentPath from "routes/ComponentPath";
 
 export default function CreateOrder() {
   const customerId = JSON.parse(localStorage.getItem("userId"));
@@ -153,7 +154,7 @@ export default function CreateOrder() {
       api.post("Orders/", fullOrderData).then((data) => {
         if (data.success) {
           alert("Thêm thành công!");
-          navigate("/add-document/" + data.orderId + "/" + customerId);
+          navigate(ComponentPath.user.document.createDocument + data.orderId + "/" + customerId);
         } else {
           alert("Thêm thất bại!");
         }
@@ -163,27 +164,6 @@ export default function CreateOrder() {
       alert("An error occurred during registration. Please try again.");
     }
   };
-
-  //  const importFile= async (e) => {
-  //    console.log(file); //check all files
-  //    for (const uploadedFile of file) {
-  //      if (uploadedFile) {
-  //        const formData = new FormData(); //make a bew FormData for every file.
-  //        formData.append("file", uploadedFile, uploadedFile.name); //append the file to the formdata
-  //        try {
-  //          api.postFile("CustomsDocuments/test", formData).then((data) => {
-  //            if (data.success) {
-  //              alert("Upload thành công!");
-  //            } else {
-  //              alert("Upload thất bại!");
-  //            }
-  //          });
-  //        } catch (ex) {
-  //          console.log(ex);
-  //        }
-  //      }
-  //    }
-  //  }
 
   console.log(fullAddress);
 

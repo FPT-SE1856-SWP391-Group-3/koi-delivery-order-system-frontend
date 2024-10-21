@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManagePaymentMethod() {
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -43,7 +44,7 @@ export default function ManagePaymentMethod() {
   return (
     <div>
       <h1>Payment Methods</h1>
-      <a href="/admin/addPaymentType">Add Payment Method</a>
+      <a href={ComponentPath.admin.payment.createPaymentType}>Add Payment Method</a>
       {paymentMethods.map((paymentType) => (
         <div key={paymentType.paymentMethodId}>
           <h3>PaymentMethodId: {paymentType.paymentMethodId}</h3>
@@ -53,7 +54,7 @@ export default function ManagePaymentMethod() {
           >
             Delete
           </button>
-          <a href={"/admin/updatePaymentType/" + paymentType.paymentMethodId}>
+          <a href={ComponentPath.admin.payment.editPaymentType + paymentType.paymentMethodId}>
             Update
           </a>
         </div>

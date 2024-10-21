@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
 import "../user/ManageUser.css";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManageUser() {
   const [users, setUsers] = useState([]);
@@ -75,7 +76,7 @@ export default function ManageUser() {
                     </button>
                     <button
                       onClick={() =>
-                        navigate("/admin/update-user/" + user.userId)
+                        navigate(ComponentPath.admin.user.editUser + user.userId)
                       }
                       className="btn_update"
                     >
@@ -83,7 +84,7 @@ export default function ManageUser() {
                     </button>
                     <button
                       onClick={() =>
-                        navigate("/admin/user-address/" + user.userId)
+                        navigate(ComponentPath.admin.address.manageUserAddress + user.userId)
                       }
                       className="btn_address"
                     >
