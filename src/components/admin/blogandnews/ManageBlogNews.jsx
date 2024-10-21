@@ -4,48 +4,46 @@ import api from "../../../api/CallAPI";
 import Header from "../../user/common/Header";
 import ComponentPath from "@componentPath";
 
+
 export default function ManageBlogNews() {
-    const [posts, setPosts] = useState([]);
-    const navigate = useNavigate();
+  const [posts, setPosts] = useState([]);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        try {
-            api.get('BlogNews/')
-                .then(data => {
-                    if (data.success) {
-                        setPosts(data.blogNews);
-                        console.log(data.blogNews);
-                    } else {
-                        console.log('Không có bài viết!');
-                    }
-                });
-        } catch (error) {
-            alert("An error has occurred. Please try again.");
+  useEffect(() => {
+    try {
+      api.get("BlogNews/").then((data) => {
+        if (data.success) {
+          setPosts(data.blogNews);
+          console.log(data.blogNews);
+        } else {
+          console.log("Không có bài viết!");
         }
-    }, []);
-
-    async function deletePost(postId) {
-        try {
-            api.del("BlogNews/" + postId).then((data) => {
-              if (data.success) {
-                alert("Xóa thành công!");
-                const newPosts = posts.filter((post) => post.postId !== postId);
-                setPosts(newPosts);
-              } else {
-                alert("Xóa thất bại!");
-              }
-            });
-        } catch (error) {
-            console.error("Error during deletion:", error);
-            alert("An error occurred during deletion. Please try again.");
-        }
+      });
+    } catch (error) {
+      alert("An error has occurred. Please try again.");
     }
+  }, []);
 
-    return (
-        <div>
-            <Header />
-            <h1>Blog and News</h1>
-            <a href={ComponentPath.admin.blogNews.createBlogNews}>Add Post</a>
+  async function deletePost(postId) {
+    try {
+      api.del("BlogNews/" + postId).then((data) => {
+        if (data.success) {
+          alert("Xóa thành công!");
+          const newPosts = posts.filter((post) => post.postId !== postId);
+          setPosts(newPosts);
+        } else {
+          alert("Xóa thất bại!");
+        }
+      });
+    } catch (error) {
+      console.error("Error during deletion:", error);
+      alert("An error occurred during deletion. Please try again.");
+    }
+  }
+  return (
+    <div>
+     <h1>Blog and News</h1>
+         <a href={ComponentPath.admin.blogNews.createBlogNews}>Add Post</a>
             {posts.map((post) => (
                 <div key={post.postId}>
                     <h3>PostId: {post.postId}</h3>
@@ -56,8 +54,8 @@ export default function ManageBlogNews() {
                     <h3>Category: {post.category}</h3>
                     <button onClick={() => deletePost(post.postId)}>Delete</button>
                     <a href={ComponentPath.admin.blogNews.editBlogNews + post.postId}>Update</a>
-                </div>
-            ))}
         </div>
-    );
+      ))}
+    </div>
+  );
 }

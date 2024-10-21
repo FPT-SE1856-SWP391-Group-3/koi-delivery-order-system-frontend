@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import Header from "../common/Header";
+
 import { set, useForm } from "react-hook-form";
 import axios from "axios";
 import ComponentPath from "@componentPath";
@@ -21,7 +21,6 @@ export default function CreateOrder() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [shippingMethods, setShippingMethods] = useState([]);
   const navigate = useNavigate();
-
   const [cityName, setCityName] = useState("");
   const [districtName, setDistrictName] = useState("");
   const [wardName, setWardName] = useState("");
@@ -167,6 +166,7 @@ export default function CreateOrder() {
         if (data.success) {
           alert("Thêm thành công!");
           navigate(ComponentPath.user.document.createDocument + data.orderId + "/" + customerId);
+
         } else {
           alert("Thêm thất bại!");
         }

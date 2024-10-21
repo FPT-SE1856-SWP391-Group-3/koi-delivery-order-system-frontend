@@ -4,6 +4,7 @@ import api from "../../../api/CallAPI";
 import Header from "../common/Header";
 import ComponentPath from "@componentPath";
 
+
 export default function ManageFeedBack() {
   const [feedbacks, setFeedbacks] = useState([]);
   const navigate = useNavigate();
@@ -27,17 +28,17 @@ export default function ManageFeedBack() {
 
   async function deleteFeedback(feedbackId) {
     try {
-     api.del("CustomerFeedbacks/" + feedbackId).then((data) => {
-      if (data.success) {
-        alert("Xóa thành công!");
-        const newFeedbacks = feedbacks.filter(
-          (feedback) => feedback.customerFeedbackId !== feedbackId
-        );
-        setFeedbacks(newFeedbacks);
-      } else {
-        alert("Xóa thất bại!");
-      }
-    });
+      api.del("CustomerFeedbacks/" + feedbackId).then((data) => {
+        if (data.success) {
+          alert("Xóa thành công!");
+          const newFeedbacks = feedbacks.filter(
+            (feedback) => feedback.customerFeedbackId !== feedbackId
+          );
+          setFeedbacks(newFeedbacks);
+        } else {
+          alert("Xóa thất bại!");
+        }
+      });
     } catch (error) {
       console.error("Error during deletion:", error);
       alert("An error occurred during deletion. Please try again.");
@@ -46,7 +47,6 @@ export default function ManageFeedBack() {
 
   return (
     <div>
-      <Header />
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-3"></div>
