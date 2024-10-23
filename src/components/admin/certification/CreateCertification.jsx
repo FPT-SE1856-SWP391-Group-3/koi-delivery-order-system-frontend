@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { useFieldArray, useForm } from "react-hook-form";
+import "../certification/CreateCertification.css";
 
 export default function CreateCertification() {
   const { control, register, handleSubmit } = useForm();
@@ -45,64 +46,66 @@ export default function CreateCertification() {
 
   console.log(fields);
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Thêm Chứng Chỉ mới</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              {fields.map((field, index) => (
-                <>
-                  <div>
-                    <label
-                      htmlFor={`certifications.${index}.certificationName`}
-                    >
-                      Tên Chứng Chỉ
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id={`certifications.${index}.certificationName`}
-                      name={`certifications.${index}.certificationName`}
-                      {...register(`certifications.${index}.certificationName`)}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor={`certifications.${index}.certificateFile`}>
-                      Tệp Chứng Chỉ
-                    </label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      id={`certifications.${index}.certificateFile`}
-                      name={`certifications.${index}.certificateFile`}
-                      accept="multipart/form-data"
-                      {...register(`certifications.${index}.certificateFile`)}
-                    />
-                  </div>
-                  <button type="button" onClick={() => remove(index)}>
-                    Xoa
-                  </button>
-                </>
-              ))}
+    <>
+      <a className="back-button" href="/admin/manage-certification">
+        Back
+      </a>
+      <div className="addcertificate-container">
+        <h1 className="form-title">Add new Certificate</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="addcertificate-form">
+          {fields.map((field, index) => (
+            <>
+              <div>
+                <label htmlFor={`certifications.${index}.certificationName`}>
+                  Certificate Name
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id={`certifications.${index}.certificationName`}
+                  name={`certifications.${index}.certificationName`}
+                  {...register(`certifications.${index}.certificationName`)}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor={`certifications.${index}.certificateFile`}>
+                  Certificate File
+                </label>
+                <input
+                  type="file"
+                  className="form-control"
+                  id={`certifications.${index}.certificateFile`}
+                  name={`certifications.${index}.certificateFile`}
+                  accept="multipart/form-data"
+                  {...register(`certifications.${index}.certificateFile`)}
+                />
+              </div>
               <button
                 type="button"
-                onClick={() =>
-                  append({
-                    certificationName: "",
-                    certificateFile: null,
-                  })
-                }
+                onClick={() => remove(index)}
+                className="delete-btn"
               >
-                Them
+                Delete[-]
               </button>
-              <button type="submit" className="btn btn-primary">
-                Thêm
-              </button>
-            </form>
-          </div>
-        </div>
+            </>
+          ))}
+          <button
+            type="button"
+            onClick={() =>
+              append({
+                certificationName: "",
+                certificateFile: null,
+              })
+            }
+            className="add-btn"
+          >
+            Add[+]
+          </button>
+          <button type="submit" className="btn-add">
+            ADD
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

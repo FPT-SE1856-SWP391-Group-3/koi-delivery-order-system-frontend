@@ -110,7 +110,7 @@ export default function UpdateUser() {
           {/*    <input type="password" id="confirmPassword" name="confirmPassword" />*/}
           {/*</div>*/}
           <button type="submit" className="btn-update">
-            Update
+            UPDATE
           </button>
         </form>
       </div>

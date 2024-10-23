@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import "../orderServiceDetail/AddOrderServiceDetail.css";
 
 export default function AddOrderServiceDetail() {
   const { register, handleSubmit } = useForm();
@@ -14,7 +15,7 @@ export default function AddOrderServiceDetail() {
       api.post("OrderServiceDetails/", data).then((data) => {
         if (data.success) {
           alert("Thêm thành công!");
-          navigate("/");
+          navigate("/admin/manage-order-service-detail");
         } else {
           alert("Thêm thất bại!");
         }
@@ -26,38 +27,39 @@ export default function AddOrderServiceDetail() {
   };
 
   return (
-    <div>
-      <div className="container"></div>
-      <div className="row">
-        <div className="col-md-6 offset-md-3">
-          <h2 className="text-center">Thêm chi tiết dịch vụ đơn hàng mới</h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-group">
-              <label htmlFor="OrderServiceDetailName">Tên dịch vụ</label>
-              <input
-                type="text"
-                className="form-control"
-                id="OrderServiceDetailName"
-                name="OrderServiceDetailName"
-                {...register("OrderServiceDetailName")}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="OrderServiceDetailPrice">Giá</label>
-              <input
-                type="text"
-                className="form-control"
-                id="OrderServiceDetailPrice"
-                name="OrderServiceDetailPrice"
-                {...register("OrderServiceDetailPrice")}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Thêm
-            </button>
-          </form>
-        </div>
+    <>
+      <a className="back-button" href="/admin/manage-order-service-detail">
+        Back
+      </a>
+      <div className="add-orderservice-container">
+        <h2 className="form-title">Add new order service details</h2>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="add-orderservice-form"
+        >
+          <div className="form-group">
+            <label htmlFor="OrderServiceDetailName">Service Name</label>
+            <input
+              type="text"
+              id="OrderServiceDetailName"
+              name="OrderServiceDetailName"
+              {...register("OrderServiceDetailName")}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="OrderServiceDetailPrice">Price</label>
+            <input
+              type="text"
+              id="OrderServiceDetailPrice"
+              name="OrderServiceDetailPrice"
+              {...register("OrderServiceDetailPrice")}
+            />
+          </div>
+          <button type="submit" className="btn-add">
+            ADD
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

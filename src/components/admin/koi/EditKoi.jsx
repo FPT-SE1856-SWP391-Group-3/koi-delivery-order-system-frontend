@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
+import "../koi/EditKoi.css";
 
 export default function EditKoi() {
   const [updateKoi, setUpdateKoi] = useState({
@@ -57,70 +57,74 @@ export default function EditKoi() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Cập nhật Koi</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="name">Tên</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  name="name"
-                  value={updateKoi.koiName}
-                  onChange={(e) =>
-                    setUpdateKoi({ ...updateKoi, koiName: e.target.value })
-                  } // Xử lý sự kiện thay đổi
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="id">Loại</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="id"
-                  name="id"
-                  value={updateKoi.koiTypeId}
-                  onChange={(e) =>
-                    setUpdateKoi({ ...updateKoi, koiTypeId: e.target.value })
-                  }
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="price">Giá</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="price"
-                  name="price"
-                  value={updateKoi.price}
-                  onChange={(e) =>
-                    setUpdateKoi({ ...updateKoi, price: e.target.value })
-                  }
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="weight">Trọng lượng</label>
-                <textarea
-                  className="form-control"
-                  id="weight"
-                  name="weight"
-                  value={updateKoi.weight}
-                  onChange={(e) =>
-                    setUpdateKoi({ ...updateKoi, weight: e.target.value })
-                  }
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Cập nhật
-              </button>
-            </form>
+    <>
+      <a className="back-button" href="/admin/manage-koi">
+        Back
+      </a>
+      <div className="updatekoi-container">
+        <h1 className="form-title">Update Koi</h1>
+        <form onSubmit={handleSubmit} className="updatekoi-form">
+          <div className="form-group">
+            <label htmlFor="name">Koi Name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              name="name"
+              placeholder="Nhập tên koi..."
+              value={updateKoi.koiName}
+              onChange={(e) =>
+                setUpdateKoi({ ...updateKoi, koiName: e.target.value })
+              }
+            />
           </div>
-        </div>
+          <div className="form-group">
+            <label htmlFor="id">Koi Type</label>
+            <input
+              type="number"
+              className="form-control"
+              id="id"
+              name="id"
+              placeholder="Nhập ID loại koi..."
+              value={updateKoi.koiTypeId}
+              onChange={(e) =>
+                setUpdateKoi({ ...updateKoi, koiTypeId: e.target.value })
+              }
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="price">Price</label>
+            <input
+              type="text"
+              className="form-control"
+              id="price"
+              name="price"
+              placeholder="Nhập giá koi..."
+              value={updateKoi.price}
+              onChange={(e) =>
+                setUpdateKoi({ ...updateKoi, price: e.target.value })
+              }
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="weight">Weight (kg)</label>
+            <input
+              type="number"
+              className="form-control"
+              id="weight"
+              name="weight"
+              placeholder="Nhập trọng lượng koi..."
+              value={updateKoi.weight}
+              onChange={(e) =>
+                setUpdateKoi({ ...updateKoi, weight: e.target.value })
+              }
+            />
+          </div>
+          <button type="submit" className="btn-update">
+            UPDATE
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

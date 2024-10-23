@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import "../faq/UpdateFag.css";
 
 export default function UpdateFaq() {
   const [updateFaq, setUpdateFaq] = useState({
@@ -52,44 +53,43 @@ export default function UpdateFaq() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Cập nhật FAQ</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="question">Câu hỏi</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="question"
-                  name="question"
-                  value={updateFaq.question}
-                  onChange={(e) =>
-                    setUpdateFaq({ ...updateFaq, question: e.target.value })
-                  } // Xử lý sự kiện thay đổi
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="answer">Câu trả lời</label>
-                <textarea
-                  className="form-control"
-                  id="answer"
-                  name="answer"
-                  value={updateFaq.answer}
-                  onChange={(e) =>
-                    setUpdateFaq({ ...updateFaq, answer: e.target.value })
-                  }
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Cập nhật
-              </button>
-            </form>
+    <>
+      <a className="back-button" href="/admin/manage-faq">
+        Back
+      </a>
+      <div className="updatefag-container">
+        <h2 className="form-title">Update FAQ</h2>
+        <form onSubmit={handleSubmit} className="updatefag-form">
+          <div className="form-group">
+            <label htmlFor="question">Question</label>
+            <input
+              type="text"
+              className="form-control"
+              id="question"
+              name="question"
+              value={updateFaq.question}
+              onChange={(e) =>
+                setUpdateFaq({ ...updateFaq, question: e.target.value })
+              } // Xử lý sự kiện thay đổi
+            />
           </div>
-        </div>
+          <div className="form-group">
+            <label htmlFor="answer">Answer</label>
+            <textarea
+              className="form-control"
+              id="answer"
+              name="answer"
+              value={updateFaq.answer}
+              onChange={(e) =>
+                setUpdateFaq({ ...updateFaq, answer: e.target.value })
+              }
+            />
+          </div>
+          <button type="submit" className="btn-update">
+            UPDATE
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

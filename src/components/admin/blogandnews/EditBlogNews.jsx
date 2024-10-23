@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import "../blogandnews/EditBlogNews.css";
 
 export default function EditBlogNews() {
   const [blogNews, setBlogNews] = useState({
@@ -53,57 +54,53 @@ export default function EditBlogNews() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Cập nhật BlogNews</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="title">Tiêu đề</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  name="title"
-                  value={blogNews.title}
-                  onChange={(e) =>
-                    setBlogNews({ ...blogNews, title: e.target.value })
-                  } // Xử lý sự kiện thay đổi
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="content">Nội dung</label>
-                <textarea
-                  className="form-control"
-                  id="content"
-                  name="content"
-                  value={blogNews.content}
-                  onChange={(e) =>
-                    setBlogNews({ ...blogNews, content: e.target.value })
-                  }
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="category">Danh mục</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="category"
-                  name="category"
-                  value={blogNews.category}
-                  onChange={(e) =>
-                    setBlogNews({ ...blogNews, category: e.target.value })
-                  }
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Cập nhật
-              </button>
-            </form>
+    <>
+      <a className="back-button" href="/admin/manage-blog-news">
+        Back
+      </a>
+      <div className="updateblog-container">
+        <h2 className="form-title">Update BlogNews</h2>
+        <form onSubmit={handleSubmit} className="updateblog-form">
+          <div className="form-group">
+            <label htmlFor="title">Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={blogNews.title}
+              onChange={(e) =>
+                setBlogNews({ ...blogNews, title: e.target.value })
+              } // Xử lý sự kiện thay đổi
+            />
           </div>
-        </div>
+          <div className="form-group">
+            <label htmlFor="content">Content</label>
+            <textarea
+              id="content"
+              name="content"
+              value={blogNews.content}
+              onChange={(e) =>
+                setBlogNews({ ...blogNews, content: e.target.value })
+              }
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="category">Category</label>
+            <input
+              type="text"
+              id="category"
+              name="category"
+              value={blogNews.category}
+              onChange={(e) =>
+                setBlogNews({ ...blogNews, category: e.target.value })
+              }
+            />
+          </div>
+          <button type="submit" className="btn-update">
+            UPDATE
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

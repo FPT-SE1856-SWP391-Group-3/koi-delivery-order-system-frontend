@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import "../order/CreateOrderDocument.css";
 
 export default function CreateOrderDocument() {
   const { control, register, handleSubmit } = useForm();
@@ -40,68 +41,68 @@ export default function CreateOrderDocument() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Thêm Tài liệu mới</h2>
-            <div className="form-group">
-              <label htmlFor={`orderId`}>Mã đơn hàng</label>
-              <input
-                type="number"
-                className="form-control"
-                id={`orderId`}
-                name={`orderId`}
-                value={orderId}
-                readOnly
-              />
-            </div>
-            <form onSubmit={handleSubmit(onSubmit)}>
+    <>
+      <a className="back-button" href="/admin/manage-order">
+        Back
+      </a>
+      <div className="adddocument-container">
+        <h1 className="form-title">Add new Document</h1>
+        <div className="form-group">
+          <label htmlFor={`orderId`}>OrderId</label>
+          <input
+            type="number"
+            id={`orderId`}
+            name={`orderId`}
+            value={orderId}
+            readOnly
+          />
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="add-form">
+          <div className="form-group">
+            <label htmlFor={`orderStatusId`}>OrderStatusId</label>
+            <input
+              type="number"
+              id={`orderStatusId`}
+              name={`orderStatusId`}
+              value={orderStatusId}
+            />
+          </div>
+          {fields.map((field, index) => (
+            <div key={field.id}>
               <div className="form-group">
-                <label htmlFor={`orderStatusId`}>Mã trạng thái đơn hàng</label>
                 <input
-                  type="number"
-                  className="form-control"
-                  id={`orderStatusId`}
-                  name={`orderStatusId`}
-                  value={orderStatusId}
+                  id="filePath"
+                  name="filePath"
+                  type="file"
+                  accept="multipart/form-data"
+                  {...register(`orderDocuments.${index}.filePath`)}
                 />
               </div>
-              {fields.map((field, index) => (
-                <div key={field.id}>
-                  <div className="form-group">
-                    <input
-                      id="filePath"
-                      name="filePath"
-                      type="file"
-                      accept="multipart/form-data"
-                      {...register(`orderDocuments.${index}.filePath`)}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="description">Mô tả</label>
-                    <textarea
-                      className="form-control"
-                      id="description"
-                      name="description"
-                      {...register(`orderDocuments.${index}.description`)}
-                    />
-                  </div>
-                  <button type="button" onClick={() => remove(index)}>
-                    Delete
-                  </button>
-                </div>
-              ))}
-              <button type="button" onClick={() => append({})}>
-                Add document
+              <div className="form-group">
+                <label htmlFor="description">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  {...register(`orderDocuments.${index}.description`)}
+                />
+              </div>
+              <button type="button" onClick={() => remove(index)}>
+                Delete
               </button>
-              <button type="submit" className="btn btn-primary">
-                Thêm
-              </button>
-            </form>
-          </div>
-        </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => append({})}
+            className="adddocument-btn"
+          >
+            Add document
+          </button>
+          <button type="submit" className="btn-add">
+            ADD
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

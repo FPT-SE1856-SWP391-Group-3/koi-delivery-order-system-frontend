@@ -1,69 +1,98 @@
+/* Tổng thể navbar */
 .navbar {
-  padding: 20px 0;
+  padding: 20px 8vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #eab67d;
-  padding: 20px;
-  border-bottom: 1px solid black;
+  border-bottom: 2px solid #e65a5a;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.navbar .logo {
-  width: 50px;
-}
-
+/* Logo */
 .logoicon {
   display: flex;
-  justify-content: center;
   align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  width: 60px;
 }
 
 .logoicon h2 {
-  margin-left: 10px;
   color: #e65a5a;
-  font-weight: 300;
+  font-weight: 450;
+  font-size: 24px;
 }
 
+/* Menu */
 .navbar-menu {
   display: flex;
+  gap: 30px;
   list-style: none;
-  gap: 20px;
-  color: #49557e;
-  font-size: 20px;
+}
+
+.navbar-menu li {
+  cursor: pointer;
 }
 
 .navbar-menu a {
+  text-decoration: none;
   color: #49557e;
   font-size: 20px;
+  font-weight: 600;
+  position: relative;
+  padding: 10px;
+  transition: color 0.3s ease;
 }
 
-.navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 40px;
+.navbar-menu a:hover {
+  color: #178686;
 }
 
-.navbar button {
+.navbar .active a {
+  color: #178686;
+  padding-bottom: 5px;
+  border-bottom: 3px solid #178686;
+  transition: border-bottom 0.3s ease;
+}
+
+/* Nút Sign In */
+.navbar-right button {
   background: #178686;
   font-size: 18px;
   font-weight: 600;
-  color: aliceblue;
+  color: #fff;
   border: none;
   padding: 15px 30px;
   border-radius: 50px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.navbar button:hover {
+.navbar-right button:hover {
   background-color: #126666;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.navbar .active {
-  padding-bottom: 2px;
-  border-bottom: 2px solid #49557e;
-}
+/* Responsive thiết bị nhỏ */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 20px;
+    flex-direction: column;
+  }
 
-.navbar li {
-  cursor: pointer;
+  .navbar-menu {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .navbar-right {
+    margin-top: 20px;
+  }
 }

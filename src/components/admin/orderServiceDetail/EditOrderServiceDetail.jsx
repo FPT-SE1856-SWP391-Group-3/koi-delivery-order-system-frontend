@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
-
 import { useEffect } from "react";
 import { useState } from "react";
+import "../orderServiceDetail/EditOrderServiceDetail.css";
 
 export default function EditOrderServiceDetail() {
   const { register, handleSubmit, setValue } = useForm();
@@ -39,7 +39,7 @@ export default function EditOrderServiceDetail() {
       api.put("OrderServiceDetails/" + id, data).then((data) => {
         if (data.success) {
           alert("Chỉnh sửa thành công!");
-          navigate("/");
+          navigate("/admin/manage-order-service-detail");
         } else {
           alert("Chỉnh sửa thất bại!");
         }
@@ -51,38 +51,39 @@ export default function EditOrderServiceDetail() {
   };
 
   return (
-    <div>
-      <div className="container"></div>
-      <div className="row">
-        <div className="col-md-6 offset-md-3">
-          <h2 className="text-center">Chỉnh sửa chi tiết dịch vụ đơn hàng</h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-group">
-              <label htmlFor="orderServiceDetailName">Tên dịch vụ</label>
-              <input
-                type="text"
-                className="form-control"
-                id="orderServiceDetailName"
-                name="orderServiceDetailName"
-                {...register("orderServiceDetailName")}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="orderServiceDetailPrice">Giá</label>
-              <input
-                type="text"
-                className="form-control"
-                id="orderServiceDetailPrice"
-                name="orderServiceDetailPrice"
-                {...register("orderServiceDetailPrice")}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              Chỉnh sửa
-            </button>
-          </form>
-        </div>
+    <>
+      <a className="back-button" href="/admin/manage-order-service-detail">
+        Back
+      </a>
+      <div className="update-orderservice-container">
+        <h1 className="form-title">Update Order service details</h1>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="update-orderservice-form"
+        >
+          <div className="form-group">
+            <label htmlFor="orderServiceDetailName">Service Name</label>
+            <input
+              type="text"
+              id="orderServiceDetailName"
+              name="orderServiceDetailName"
+              {...register("orderServiceDetailName")}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="orderServiceDetailPrice">Price</label>
+            <input
+              type="text"
+              id="orderServiceDetailPrice"
+              name="orderServiceDetailPrice"
+              {...register("orderServiceDetailPrice")}
+            />
+          </div>
+          <button type="submit" className="btn-update">
+            UPDATE
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

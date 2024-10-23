@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import Sidebar from "../../user/common/Sidebar";
+import "../blogandnews/ManageBlogNews.css";
 
 export default function ManageBlogNews() {
   const [posts, setPosts] = useState([]);
@@ -39,21 +41,53 @@ export default function ManageBlogNews() {
   }
 
   return (
-    <div>
-      <h1>Blog and News</h1>
-      <a href="/admin/create-blog-news">Add Post</a>
-      {posts.map((post) => (
-        <div key={post.postId}>
-          <h3>PostId: {post.postId}</h3>
-          <h3>UserId: {post.userId}</h3>
-          <h3>Title: {post.title}</h3>
-          <h3>Content: {post.content}</h3>
-          <h3>PostDate: {post.postDate}</h3>
-          <h3>Category: {post.category}</h3>
-          <button onClick={() => deletePost(post.postId)}>Delete</button>
-          <a href={"/admin/edit-blog-news/" + post.postId}>Update</a>
-        </div>
-      ))}
-    </div>
+    <>
+      <Sidebar />
+      <div className="content-container">
+        <h1>Blog and News</h1>
+        <a href="/admin/create-blog-news" className="add-blog-btn">
+          Add Post
+        </a>
+        <table className="blog-table">
+          <thead>
+            <tr>
+              <th>PostId</th>
+              <th>UserId</th>
+              <th>Title</th>
+              <th>Content</th>
+              <th>PostDate</th>
+              <th>Category</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {posts.map((post) => (
+              <tr key={post.postId}>
+                <td>{post.postId}</td>
+                <td>{post.userId}</td>
+                <td>{post.title}</td>
+                <td>{post.content}</td>
+                <td>{post.postDate}</td>
+                <td>{post.category}</td>
+                <td>
+                  <button
+                    onClick={() => deletePost(post.postId)}
+                    className="delete-btn"
+                  >
+                    Delete
+                  </button>
+                  <a
+                    href={"/admin/edit-blog-news/" + post.postId}
+                    className="update-btn"
+                  >
+                    Update
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }

@@ -1,0 +1,91 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f5f5f5;
+}
+
+.content-container {
+  margin-left: 260px; /* Phù hợp với kích thước sidebar */
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.content-container h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.add-service-btn {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: forestgreen;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+.add-service-btn:hover {
+  background-color: rgb(17, 88, 17);
+}
+.orderservice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+.orderservice-table th,
+.orderservice-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+.orderservice-table th {
+  background-color: #34495e;
+  color: white;
+}
+.orderservice-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.delete-btn,
+.update-btn {
+  background-color: #c0392b;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  margin-right: 8px;
+  text-decoration: none;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.delete-btn:hover {
+  background-color: #861f14;
+}
+.update-btn {
+  background-color: forestgreen;
+}
+
+.update-btn:hover {
+  background-color: rgb(17, 88, 17);
+}
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .content-container {
+    padding: 20px;
+  }
+}

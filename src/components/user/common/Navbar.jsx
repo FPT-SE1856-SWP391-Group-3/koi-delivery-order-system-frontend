@@ -7,7 +7,9 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="logoicon">
-        <img src={logo} className="logo" />
+        <a href="/">
+          <img src={logo} className="logo" />
+        </a>
         <h2>Koi Delivery</h2>
       </div>
 
@@ -22,30 +24,28 @@ const Navbar = () => {
           onClick={() => setMenu("services")}
           className={menu === "services" ? "active" : ""}
         >
-          Services
+          <a href="/services">Services</a>
         </li>
         <li
           onClick={() => setMenu("news")}
           className={menu === "news" ? "active" : ""}
         >
-          News
+          <a href="/news">News</a>
         </li>
         <li
           onClick={() => setMenu("customer-support")}
           className={menu === "customer-support" ? "active" : ""}
         >
-          {" "}
-          Customer Support
+          <a href="/customer-support">Customer Support</a>
         </li>
         <li
           onClick={() => setMenu("recruitment")}
           className={menu === "recruitment" ? "active" : ""}
         >
-          Recruitment
+          <a href="/recruitment">Recruitment</a>
         </li>
       </ul>
       <div className="navbar-right">
-        <img src="" />
         <a href="/login">
           <button>Sign In</button>
         </a>
