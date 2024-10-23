@@ -14,6 +14,7 @@ const faq = "/faq";
 const koi = "/koi";
 const report = "/report/transporation";
 const type = "/type";
+const dashboard = "/dashboard";
 
 const view = "/view/";
 const edit = "/edit/";
@@ -22,6 +23,7 @@ const admin = "/admin";
 
 const ComponentPath = {
   user: {
+    dashboard : dashboard,
     address: {
       addressPath: address,
       viewAddress: address + view,
@@ -74,6 +76,7 @@ const ComponentPath = {
     },
   },
   admin: {
+    dashboard : admin + dashboard,
     address: {
       manageUserAddress: admin + address + manage,
     },
