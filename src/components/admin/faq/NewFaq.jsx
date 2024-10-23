@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-
 import { useForm } from "react-hook-form";
+import "../faq/NewFaq.css";
 
 export default function NewFaq() {
   const { register, handleSubmit } = useForm();
@@ -28,38 +28,31 @@ export default function NewFaq() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Thêm FAQ mới</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="form-group">
-                <label htmlFor="question">Câu hỏi</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="question"
-                  name="question"
-                  {...register("question")}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="answer">Câu trả lời</label>
-                <textarea
-                  className="form-control"
-                  id="answer"
-                  name="answer"
-                  {...register("answer")}
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Thêm
-              </button>
-            </form>
+    <>
+      <a className="back-button" href="/admin/manage-faq">
+        Back
+      </a>
+      <div className="addfaq-container">
+        <h1 className="form-title">Add new FAQ</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="addfaq-form">
+          <div className="form-group">
+            <label htmlFor="question">Question</label>
+            <input
+              type="text"
+              id="question"
+              name="question"
+              {...register("question")}
+            />
           </div>
-        </div>
+          <div className="form-group">
+            <label htmlFor="answer">Answer</label>
+            <textarea id="answer" name="answer" {...register("answer")} />
+          </div>
+          <button type="submit" className="btn-add">
+            ADD
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

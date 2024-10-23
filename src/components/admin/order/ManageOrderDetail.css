@@ -1,0 +1,55 @@
+.back-button {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 10px;
+  font-size: 14px;
+  color: white;
+  background-color: #2c3e50;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  z-index: 1000; /* Đảm bảo nút nằm trên các thành phần khác */
+}
+
+.back-button:hover {
+  background-color: #1a252f;
+}
+
+.orderdetail-container {
+  margin: 100px auto 50px; /* Điều chỉnh để container không bị trùng với nút Back */
+  padding: 20px;
+  max-width: 1000px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.form-title {
+  font-size: 45px;
+  font-weight: bold;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.order-table th,
+.order-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.order-table th {
+  background-color: #34495e;
+  color: white;
+}
+
+.order-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}

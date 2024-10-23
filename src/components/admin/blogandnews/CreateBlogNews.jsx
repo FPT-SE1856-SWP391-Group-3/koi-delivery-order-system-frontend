@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-
 import { useForm } from "react-hook-form";
+import "../blogandnews/CreateBlogNews.css";
 
 export default function CreateBlogNews() {
   const { register, handleSubmit } = useForm();
@@ -16,6 +16,7 @@ export default function CreateBlogNews() {
       api.post("BlogNews", data).then((data) => {
         if (data.success) {
           alert("Thêm thành công!");
+          navigate("/admin/manage-blog-news");
         } else {
           alert("Thêm thất bại!");
         }
@@ -27,57 +28,45 @@ export default function CreateBlogNews() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Thêm Blog/News mới</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div>
-                <input
-                  type="hidden"
-                  id="userId"
-                  name="userId"
-                  value={userId}
-                  {...register("userId")}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="title">Tiêu đề</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="title"
-                  name="title"
-                  {...register("title")}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="content">Nội dung</label>
-                <textarea
-                  className="form-control"
-                  id="content"
-                  name="content"
-                  {...register("content")}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="category">Thể loại</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="category"
-                  name="category"
-                  {...register("category")}
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Thêm
-              </button>
-            </form>
+    <>
+      <a className="back-button" href="/admin/manage-blog-news">
+        Back
+      </a>
+      <div className="addblog-container">
+        <h1 className="form-title">Add Blog/News</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="addblog-form">
+          <div>
+            <input
+              type="hidden"
+              id="userId"
+              name="userId"
+              value={userId}
+              {...register("userId")}
+            />
           </div>
-        </div>
+          <div className="form-group">
+            <label htmlFor="title">Title</label>
+            <input type="text" id="title" name="title" {...register("title")} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="content">Content</label>
+            <textarea id="content" name="content" {...register("content")} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="category">Category</label>
+            <input
+              type="text"
+              className="form-control"
+              id="category"
+              name="category"
+              {...register("category")}
+            />
+          </div>
+          <button type="submit" className="btn-add">
+            ADD
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

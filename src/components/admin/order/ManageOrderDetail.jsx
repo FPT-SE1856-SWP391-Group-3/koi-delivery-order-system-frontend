@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
-
 import { useEffect } from "react";
+import "../order/ManageOrderDetail.css";
 
 export default function ManageOrderDetail() {
   const [UserOrderDetails, setUserOrderDetails] = useState([]);
@@ -22,36 +22,35 @@ export default function ManageOrderDetail() {
   console.log(UserOrderDetails);
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Danh sách chi tiết đơn hàng</h2>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">Mã chi tiết đơn hàng</th>
-                  <th scope="col">Ten ca koi </th>
-                  <th scope="col">trong luong</th>
-                  <th scope="col">Gia</th>
-                  <th scope="col">Loai</th>
-                </tr>
-              </thead>
-              <tbody>
-                {UserOrderDetails.map((UserOrderDetail) => (
-                  <tr key={UserOrderDetail.orderDetailId}>
-                    <td>{UserOrderDetail.orderDetailId}</td>
-                    <td>{UserOrderDetail.koi.koiName}</td>
-                    <td>{UserOrderDetail.koi.weight}</td>
-                    <td>{UserOrderDetail.koi.price}</td>
-                    <td>{UserOrderDetail.koi.koiType.koiTypeName}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+    <>
+      <a className="back-button" href="/admin/manage-order">
+        Back
+      </a>
+      <div className="orderdetail-container">
+        <h1 className="form-title">Order Details List</h1>
+        <table className="order-table">
+          <thead>
+            <tr>
+              <th>OrderDetailId</th>
+              <th>Koi Name</th>
+              <th>Weight</th>
+              <th>Price</th>
+              <th>Koi Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {UserOrderDetails.map((UserOrderDetail) => (
+              <tr key={UserOrderDetail.orderDetailId}>
+                <td>{UserOrderDetail.orderDetailId}</td>
+                <td>{UserOrderDetail.koi.koiName}</td>
+                <td>{UserOrderDetail.koi.weight}</td>
+                <td>{UserOrderDetail.koi.price}</td>
+                <td>{UserOrderDetail.koi.koiType.koiTypeName}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    </div>
+    </>
   );
 }

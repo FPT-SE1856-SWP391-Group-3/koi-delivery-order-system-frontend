@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-
-import { useEffect } from "react";
 import { set } from "react-hook-form";
 import Sidebar from "../../user/common/Sidebar";
+import "../order/ManageOrder.css";
 
 export default function ManageOrder() {
   const navigate = useNavigate();
@@ -103,138 +102,130 @@ export default function ManageOrder() {
   return (
     <div>
       <Sidebar />
-      <div className="content">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Danh sách đơn hàng</h2>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">Mã đơn hàng</th>
-                  <th scope="col">Mã khách hàng</th>
-                  <th scope="col">Ngày đặt hàng</th>
-                  <th scope="col">Ngày giao hàng</th>
-                  <th scope="col">Địa chỉ lấy hàng</th>
-                  <th scope="col">Địa chỉ giao hàng</th>
-                  <th scope="col">Khoảng cách</th>
-                  <th scope="col">Thời gian giao hàng</th>
-                  <th scope="col">Tổng tiền</th>
-                  <th scope="col">Trạng thái</th>
-                  <th scope="col">Chi tiết</th>
-                  <th scope="col">Chinh sua trang thai</th>
-                  <th scope="col">Transportation Report </th>
-                </tr>
-              </thead>
-              <tbody>
-                {order.map((order) => {
-                  var data = (
-                    <tr key={order.orderId}>
-                      <td>{order.orderId}</td>
-                      <td>{order.customerId}</td>
-                      <td>{order.orderDate}</td>
-                      <td>{order.deliveryDate}</td>
-                      <td>
-                        {order.startAddress == null
-                          ? ""
-                          : order.startAddress.addressLine}
-                      </td>
-                      <td>
-                        {order.endAddress == null
-                          ? ""
-                          : order.endAddress.addressLine}
-                      </td>
-                      <td>{order.distance}</td>
-                      <td>{order.duration}</td>
-                      <td>{order.totalPrice}</td>
-                      <td>{order.orderStatus.orderStatusName}</td>
-                      <td>
-                        <button
-                          className="btn btn-primary"
-                          onClick={() =>
-                            navigate(
-                              "/admin/manage-order-detail/" + order.orderId
-                            )
-                          }
-                        >
-                          Chi tiết
-                        </button>
-                      </td>
-                      <td>
-                        {user.roleId === 5 ? (
-                          <select
-                            className="update-status-select"
-                            onChange={(event) => {
-                              updateOrderStatusBySelect(event, order.orderId);
-                            }}
-                          >
-                            {orderStatus.map((orderStatus) => (
-                              <option
-                                key={orderStatus.orderStatusId}
-                                value={orderStatus.orderStatusId}
-                                selected={
-                                  orderStatus.orderStatusId ===
-                                  order.orderStatusId
-                                }
-                              >
-                                {orderStatus.orderStatusName}
-                              </option>
-                            ))}
-                          </select>
-                        ) : (
-                          <button
-                            className="update-status-button"
-                            onClick={(event) =>
-                              updateOrderStatusByClick(
-                                event,
-                                order.orderId,
-                                order.orderStatusId
-                              )
+      <div className="content-container">
+        <h1>Manage Order</h1>
+        <table className="order-table">
+          <thead>
+            <tr>
+              <th>OrderID</th>
+              <th>CustomerID</th>
+              <th>Order date</th>
+              <th>Delivery date</th>
+              <th>Pick up address</th>
+              <th>Shipping address</th>
+              <th>Distance</th>
+              <th>Delivery time</th>
+              <th>Total amount</th>
+              <th>Status</th>
+              <th>Detail</th>
+              <th>Edit Status</th>
+              <th>Transportation Report</th>
+            </tr>
+          </thead>
+          <tbody>
+            {order.map((order) => {
+              var data = (
+                <tr key={order.orderId}>
+                  <td>{order.orderId}</td>
+                  <td>{order.customerId}</td>
+                  <td>{order.orderDate}</td>
+                  <td>{order.deliveryDate}</td>
+                  <td>
+                    {order.startAddress == null
+                      ? ""
+                      : order.startAddress.addressLine}
+                  </td>
+                  <td>
+                    {order.endAddress == null
+                      ? ""
+                      : order.endAddress.addressLine}
+                  </td>
+                  <td>{order.distance}</td>
+                  <td>{order.duration}</td>
+                  <td>{order.totalPrice}</td>
+                  <td>{order.orderStatus.orderStatusName}</td>
+                  <td>
+                    <button
+                      className="detail-btn"
+                      onClick={() =>
+                        navigate("/admin/manage-order-detail/" + order.orderId)
+                      }
+                    >
+                      Details
+                    </button>
+                  </td>
+                  <td>
+                    {user.roleId === 5 ? (
+                      <select
+                        className="update-status-select"
+                        onChange={(event) => {
+                          updateOrderStatusBySelect(event, order.orderId);
+                        }}
+                      >
+                        {orderStatus.map((orderStatus) => (
+                          <option
+                            key={orderStatus.orderStatusId}
+                            value={orderStatus.orderStatusId}
+                            selected={
+                              orderStatus.orderStatusId === order.orderStatusId
                             }
                           >
-                            {order.orderStatus.orderStatusName}
-                          </button>
-                        )}
-                      </td>
+                            {orderStatus.orderStatusName}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
                       <button
-                        className="btn btn-primary"
-                        onClick={() =>
-                          navigate(
-                            "/admin/create-order-document/" +
-                              order.orderId +
-                              "/" +
-                              order.orderStatusId
+                        className="update-status-btn"
+                        onClick={(event) =>
+                          updateOrderStatusByClick(
+                            event,
+                            order.orderId,
+                            order.orderStatusId
                           )
                         }
                       >
-                        Create Order Document
+                        {order.orderStatus.orderStatusName}
                       </button>
-                      <button
-                        className="btn btn-primary"
-                        onClick={() =>
-                          navigate(
-                            "/admin/create-transportation-report/" +
-                              order.orderId
-                          )
-                        }
-                      >
-                        Transportation Report
-                      </button>
-                    </tr>
-                  );
+                    )}
+                  </td>
+                  <button
+                    className="createdocument-btn"
+                    onClick={() =>
+                      navigate(
+                        "/admin/create-order-document/" +
+                          order.orderId +
+                          "/" +
+                          order.orderStatusId
+                      )
+                    }
+                  >
+                    Create Order Document
+                  </button>
+                  <button
+                    className="createtransportation-btn"
+                    onClick={() =>
+                      navigate(
+                        "/admin/create-transportation-report/" + order.orderId
+                      )
+                    }
+                  >
+                    Transportation Report
+                  </button>
+                </tr>
+              );
 
-                  if (
-                    (user.roleId === 3 && order.orderStatusId === 1) ||
-                    user.roleId != 3
-                  ) {
-                    console.log("User ID: " + user.roleId);
-                    console.log("Order Status ID: " + order.orderStatusId);
-                    return data;
-                  }
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
+              if (
+                (user.roleId === 3 && order.orderStatusId === 1) ||
+                user.roleId != 3
+              ) {
+                console.log("User ID: " + user.roleId);
+                console.log("Order Status ID: " + order.orderStatusId);
+                return data;
+              }
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

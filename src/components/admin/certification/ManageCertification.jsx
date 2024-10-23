@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import Sidebar from "../../user/common/Sidebar";
+import "../certification/ManageCertification.css";
 
 export default function ManageCertification() {
   const [certifications, setCertifications] = useState([]);
@@ -43,51 +45,59 @@ export default function ManageCertification() {
 
   return (
     <div>
-      <h1>Certifications</h1>
-      <a href="/admin/create-certification">Add Certification</a>
-      <table>
-        <thead>
-          <tr>
-            <th>CertificationId</th>
-            <th>CertificationName</th>
-            <th>CertificateFile</th>
-            <th>Image</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {certifications.map((certification) => (
-            <tr key={certification.certificationId}>
-              <td>{certification.certificationId}</td>
-              <td>{certification.certificationName}</td>
-              <td>{certification.certificateFile}</td>
-              <td>
-                <img
-                  src={api.imageBuildUrl(certification.certificateFile)}
-                  width="100px"
-                  alt="Certificate"
-                />
-              </td>
-              <td>
-                <button
-                  onClick={() =>
-                    deleteCertification(certification.certificationId)
-                  }
-                >
-                  Delete
-                </button>
-                <a
-                  href={
-                    "/admin/edit-certification/" + certification.certificationId
-                  }
-                >
-                  Update
-                </a>
-              </td>
+      <Sidebar />
+      <div className="content-container">
+        <h1>Manage Certifications</h1>
+        <a href="/admin/create-certification" className="add-certificate-btn">
+          Add Certification
+        </a>
+        <table className="certificate-table">
+          <thead>
+            <tr>
+              <th>CertificationId</th>
+              <th>CertificationName</th>
+              <th>CertificateFile</th>
+              <th>Image</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {certifications.map((certification) => (
+              <tr key={certification.certificationId}>
+                <td>{certification.certificationId}</td>
+                <td>{certification.certificationName}</td>
+                <td>{certification.certificateFile}</td>
+                <td>
+                  <img
+                    src={api.imageBuildUrl(certification.certificateFile)}
+                    width="100px"
+                    alt="Certificate"
+                  />
+                </td>
+                <td>
+                  <button
+                    onClick={() =>
+                      deleteCertification(certification.certificationId)
+                    }
+                    className="delete-btn"
+                  >
+                    Delete
+                  </button>
+                  <a
+                    href={
+                      "/admin/edit-certification/" +
+                      certification.certificationId
+                    }
+                    className="update-btn"
+                  >
+                    Update
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

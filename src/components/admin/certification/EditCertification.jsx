@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import "../certification/EditCertification.css";
 
 export default function EditCertification() {
   const [certification, setCertification] = useState({
@@ -62,50 +63,47 @@ export default function EditCertification() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Cập nhật Certification</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="certificationName">Tên chứng chỉ</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="certificationName"
-                  name="certificationName"
-                  value={certification.certificationName}
-                  onChange={(e) =>
-                    setCertification({
-                      ...certification,
-                      certificationName: e.target.value,
-                    })
-                  } // Xử lý sự kiện thay đổi
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="certificateFile">Tệp chứng chỉ</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  id="certificateFile"
-                  name="certificateFile"
-                  onChange={(e) =>
-                    setCertification({
-                      ...certification,
-                      certificateFile: e.target.files[0],
-                    })
-                  }
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Cập nhật
-              </button>
-            </form>
+    <>
+      <a className="back-button" href="/admin/manage-certification">
+        Back
+      </a>
+      <div className="updatecertificate-container">
+        <h2 className="form-title">Update Certification</h2>
+        <form onSubmit={handleSubmit} className="updatecertificate-form">
+          <div className="form-group">
+            <label htmlFor="certificationName">Certificate Name</label>
+            <input
+              type="text"
+              id="certificationName"
+              name="certificationName"
+              value={certification.certificationName}
+              onChange={(e) =>
+                setCertification({
+                  ...certification,
+                  certificationName: e.target.value,
+                })
+              } // Xử lý sự kiện thay đổi
+            />
           </div>
-        </div>
+          <div className="form-group">
+            <label htmlFor="certificateFile">Certificate File</label>
+            <input
+              type="file"
+              id="certificateFile"
+              name="certificateFile"
+              onChange={(e) =>
+                setCertification({
+                  ...certification,
+                  certificateFile: e.target.files[0],
+                })
+              }
+            />
+          </div>
+          <button type="submit" className="btn-update">
+            UPDATE
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

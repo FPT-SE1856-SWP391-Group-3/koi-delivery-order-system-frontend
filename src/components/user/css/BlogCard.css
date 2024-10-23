@@ -1,0 +1,96 @@
+.blog-container {
+  margin: 50px 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.main-card {
+  width: 60%;
+  background-color: #fef4f4;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.main-img {
+  width: 100%;
+  height: auto;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  align-items: center;
+}
+
+.main-text h3 {
+  font-size: 24px;
+}
+
+.main-text p {
+  font-size: 16px;
+  margin: 0;
+}
+
+.icon {
+  margin-right: 10px;
+  /* Add your icon styling here, or use font awesome or similar */
+}
+
+.arrow-link {
+  text-decoration: none;
+}
+
+.arrow-icon {
+  /* Add arrow icon styling */
+}
+
+.side-cards {
+  width: 35%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.side-card {
+  display: flex;
+  background-color: #fef4f4;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.side-img {
+  width: 40%;
+  height: auto;
+}
+
+.side-content {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.side-content h4 {
+  font-size: 18px;
+  margin: 0 0 5px 0;
+}
+
+.side-content p {
+  font-size: 14px;
+  margin: 0;
+}
+
+.arrow-link {
+  margin-left: 10px;
+}
+
+.arrow-icon {
+  /* Add arrow icon styling */
+}
