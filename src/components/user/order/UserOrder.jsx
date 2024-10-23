@@ -1,13 +1,25 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { useEffect } from "react";
 import ComponentPath from "routes/ComponentPath";
+import Bootstrap from "../props/Bootstrap";
+import Modal from "react-bootstrap/Modal";
+import UserSidebar from "../common/UserSidebar";
+import Header from "../common/Header";
+import AddDocument from "../document/AddDocument";
+import CreateFeedback from "../feedback/CreateFeedback";
+import UserOrderDetail from "./UserOrderDetail";
 
 export default function UserOrder() {
   const navigate = useNavigate();
   const [order, setOrder] = useState([{}]);
   const userId = JSON.parse(localStorage.getItem("userId"));
+
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showDocumentModal, setShowDocumentModal] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
     api.get("Orders/" + userId).then((data) => {
@@ -20,11 +32,34 @@ export default function UserOrder() {
     });
   }, [userId]);
 
+  const handleShowDetailModal = (orderId) => {
+    setSelectedOrderId(orderId);
+    setShowDetailModal(true);
+  };
+
+  const handleShowFeedbackModal = (orderId) => {
+    setSelectedOrderId(orderId);
+    setShowFeedbackModal(true);
+  };
+
+  const handleShowDocumentModal = (orderId) => {
+    setSelectedOrderId(orderId);
+    setShowDocumentModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowDetailModal(false);
+    setShowFeedbackModal(false);
+    setShowDocumentModal(false);
+  };
+
   return (
     <div>
-      <div className="container">
+      <Bootstrap />
+      <UserSidebar />
+      <div className="content">
         <div className="row">
-          <div className="col-md-6 offset-md-3">
+          <div className="col-md-12">
             <h2 className="text-center">Danh sách đơn hàng</h2>
             <table className="table">
               <thead>
@@ -66,9 +101,7 @@ export default function UserOrder() {
                     <td>
                       <button
                         className="btn btn-primary"
-                        onClick={() =>
-                          navigate(ComponentPath.user.order.orderDetai.viewOrderDetail + order.orderId)
-                        }
+                        onClick={() => handleShowDetailModal(order.orderId)}
                       >
                         Chi tiết
                       </button>
@@ -76,7 +109,7 @@ export default function UserOrder() {
                     <td>
                       <button
                         className="btn btn-primary"
-                        onClick={() => navigate(ComponentPath.user.feedback.createFeedback + order.orderId)}
+                        onClick={() => handleShowFeedbackModal(order.orderId)}
                       >
                         Feedback
                       </button>
@@ -84,14 +117,7 @@ export default function UserOrder() {
                     <td>
                       <button
                         className="btn btn-primary"
-                        onClick={() =>
-                          navigate(
-                            ComponentPath.user.document.createDocument +
-                              order.orderId +
-                              "/" +
-                              order.customerId
-                          )
-                        }
+                        onClick={() => handleShowDocumentModal(order.orderId)}
                       >
                         Document
                       </button>
@@ -100,6 +126,36 @@ export default function UserOrder() {
                 ))}
               </tbody>
             </table>
+          </div>
+          <div>
+            <Modal show={showDetailModal} onHide={handleCloseModal}>
+              <Modal.Header closeButton>
+                <Modal.Title>Chi tiết đơn hàng</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <UserOrderDetail orderId={selectedOrderId} />
+              </Modal.Body>
+            </Modal>
+
+            {/* Modal Feedback */}
+            <Modal show={showFeedbackModal} onHide={handleCloseModal}>
+              <Modal.Header closeButton>
+                <Modal.Title>Thêm Feedback</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <CreateFeedback orderId={selectedOrderId} />
+              </Modal.Body>
+            </Modal>
+
+            {/* Modal Document */}
+            <Modal show={showDocumentModal} onHide={handleCloseModal}>
+              <Modal.Header closeButton>
+                <Modal.Title>Thêm Document</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <AddDocument orderId={selectedOrderId} />
+              </Modal.Body>
+            </Modal>
           </div>
         </div>
       </div>

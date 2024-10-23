@@ -3,15 +3,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import api from "../../../api/CallAPI";
 import Header from "../common/Header";
+import Bootstrap from "../props/Bootstrap";
 
-export default function EditAddress() {
+export default function EditAddress({ addressId, closeModal }) {
   const [updateAddress, setUpdateAddress] = useState([{ addressLine: "" }]);
   const [currentAddress, setCurrentAddress] = useState("");
   const [addresses, setAddresses] = useState([]);
   const [cityName, setCityName] = useState("");
   const [districtName, setDistrictName] = useState("");
   const [wardName, setWardName] = useState("");
-  const { addressId } = useParams(); // Lấy addressId từ URL params
+  // const { addressId } = useParams(); // Lấy addressId từ URL params
   const navigate = useNavigate();
   console.log(addressId);
 
@@ -42,7 +43,8 @@ export default function EditAddress() {
       await api.put("Addresses/" + addressId, updateAddress).then((data) => {
         if (data.success) {
           alert("Cập nhật thành công!");
-          navigate("/user-address");
+          closeModal();
+          navigate(0);
         } else {
           alert("Cập nhật thất bại!");
         }
@@ -88,14 +90,16 @@ export default function EditAddress() {
 
   return (
     <div>
-      <div className="container">
+      <Bootstrap />
+      <div className="">
         <div className="row">
-          <div className="col-md-6 offset-md-3">
+          <div className="col-lg-12">
             <h2 className="text-center">Cập nhật địa chỉ</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label htmlFor="city">Thành phố</label>
                 <select
+                  className="form-control"
                   onChange={(e) => {
                     setCityName(e.target.value);
                   }}
@@ -111,6 +115,7 @@ export default function EditAddress() {
               <div className="form-group">
                 <label htmlFor="district">Huyện</label>
                 <select
+                  className="form-control"
                   onChange={(e) => {
                     setDistrictName(e.target.value);
                   }}
@@ -130,6 +135,7 @@ export default function EditAddress() {
               <div className="form-group">
                 <label htmlFor="ward">Quận/Xã</label>
                 <select
+                  className="form-control"
                   onChange={(e) => {
                     setWardName(e.target.value);
                   }}
