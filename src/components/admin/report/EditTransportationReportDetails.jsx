@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import "../report/EditTransportationReportDetails.css";
 
 export default function EditTransportationReportDetails() {
   const [updateReport, setUpdateReport] = useState({
@@ -53,50 +54,47 @@ export default function EditTransportationReportDetails() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Cập nhật báo cáo vận chuyển</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="issueTypeId">Loại vấn đề</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="issueTypeId"
-                  name="issueTypeId"
-                  value={updateReport.issueTypeId}
-                  onChange={(e) =>
-                    setUpdateReport({
-                      ...updateReport,
-                      issueTypeId: e.target.value,
-                    })
-                  } // Xử lý sự kiện thay đổi
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="description">Mô tả</label>
-                <textarea
-                  className="form-control"
-                  id="description"
-                  name="description"
-                  value={updateReport.description}
-                  onChange={(e) =>
-                    setUpdateReport({
-                      ...updateReport,
-                      description: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Cập nhật
-              </button>
-            </form>
+    <>
+      <a className="back-button" href="/admin/manage-blog-news">
+        Back
+      </a>
+      <div className="updatereport-container">
+        <h2 className="form-title">Update Transportation Report</h2>
+        <form onSubmit={handleSubmit} className="updatereport-form">
+          <div className="form-group">
+            <label htmlFor="issueTypeId">Issue Type</label>
+            <input
+              type="text"
+              id="issueTypeId"
+              name="issueTypeId"
+              value={updateReport.issueTypeId}
+              onChange={(e) =>
+                setUpdateReport({
+                  ...updateReport,
+                  issueTypeId: e.target.value,
+                })
+              } // Xử lý sự kiện thay đổi
+            />
           </div>
-        </div>
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              value={updateReport.description}
+              onChange={(e) =>
+                setUpdateReport({
+                  ...updateReport,
+                  description: e.target.value,
+                })
+              }
+            />
+          </div>
+          <button type="submit" className="btn-update">
+            UPDATE
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

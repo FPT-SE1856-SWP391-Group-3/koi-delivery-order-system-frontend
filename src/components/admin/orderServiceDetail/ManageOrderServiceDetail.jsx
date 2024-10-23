@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import Sidebar from "../../user/common/Sidebar";
+import "../orderServiceDetail/OrderServiceDetail.css";
 import ComponentPath from "routes/ComponentPath";
 
 export default function ManageOrderServiceDetail() {
@@ -57,31 +58,57 @@ export default function ManageOrderServiceDetail() {
   }
 
   return (
-    <div>
-      <h1>Order Services</h1>
-      <a href={ComponentPath.admin.order.service.createOrderService}>Add Order Service</a>
-      {orderServiceDetails.map((orderServiceDetail) => (
-        <div key={orderServiceDetail.orderServiceDetailId}>
-          <h3>OrderServiceId: {orderServiceDetail.orderServiceDetailId}</h3>
-          <h3>Name: {orderServiceDetail.orderServiceDetailName}</h3>
-          <h3>Price: {orderServiceDetail.orderServiceDetailPrice}</h3>
-          <button
-            onClick={() =>
-              deleteOrderService(orderServiceDetail.orderServiceDetailId)
-            }
-          >
-            Delete
-          </button>
+    <>
+      <div>
+        <Sidebar />
+        <div className="content-container">
+          <h1>Manage Order Services</h1>
           <a
-            href={
+            href={ComponentPath.admin.order.service.createOrderService}
+            className="add-service-btn"
+          >
+            Add Order Service
+          </a>
+          <table className="orderservice-table">
+            <thead>
+              <th>OrderServiceId</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Action</th>
+            </thead>
+            <tbody>
+              {orderServiceDetails.map((orderServiceDetail) => (
+                <tr key={orderServiceDetail.orderServiceDetailId}>
+                  <td>{orderServiceDetail.orderServiceDetailId}</td>
+                  <td>{orderServiceDetail.orderServiceDetailName}</td>
+                  <td>{orderServiceDetail.orderServiceDetailPrice}</td>
+                  <td>
+                    <button
+                      onClick={() =>
+                        deleteOrderService(
+                          orderServiceDetail.orderServiceDetailId
+                        )
+                      }
+                      className="delete-btn"
+                    >
+                      Delete
+                    </button>
+                    <a
+                       href={
               ComponentPath.admin.order.service.editOrderService +
               orderServiceDetail.orderServiceDetailId
             }
-          >
-            Update
-          </a>
+                      className="update-btn"
+                    >
+                      Update
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   );
 }

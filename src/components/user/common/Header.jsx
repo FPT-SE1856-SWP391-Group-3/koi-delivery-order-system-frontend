@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/Header.css";
 import { BsArrowLeftCircleFill, BsArrowRightCircleFill } from "react-icons/bs";
 
 const Header = ({ data }) => {
   const [slide, setSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 3000);
+
+    return () => clearInterval(interval); // Cleanup the interval on component unmount
+  }, [slide]);
 
   const nextSlide = () => {
     setSlide(slide === data.length - 1 ? 0 : slide + 1);

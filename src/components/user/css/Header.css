@@ -5,15 +5,22 @@
   align-items: center;
   width: 100%;
   height: 400px;
+  overflow: hidden; /* Ensure slides stay within bounds */
 }
 
 .slide {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  transition: opacity 1s ease-in-out; /* Smooth transition effect */
+  opacity: 1; /* Visible slide */
 }
 
 .slide-hidden {
-  display: none;
+  opacity: 0; /* Hidden slide */
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .arrow {
@@ -56,4 +63,8 @@
 
 .indicator-inactive {
   background-color: grey;
+}
+
+.indicator:hover {
+  background-color: #eab67d;
 }

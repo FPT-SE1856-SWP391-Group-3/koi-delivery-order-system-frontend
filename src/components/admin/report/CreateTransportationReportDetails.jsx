@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import "../report/CreateTransportationReportDetails.css";
 
 export default function CreateTransportationReportDetails() {
   const { register, handleSubmit } = useForm();
@@ -26,50 +27,49 @@ export default function CreateTransportationReportDetails() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Thêm Báo cáo Vận chuyển mới</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="form-group">
-                <label htmlFor="orderId">Mã đơn hàng</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="orderId"
-                  name="orderId"
-                  value={orderId}
-                  readOnly
-                  {...register("orderId")}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="issueTypeId">Loại sự cố</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="issueTypeId"
-                  name="issueTypeId"
-                  {...register("issueTypeId")}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="description">Mô tả</label>
-                <textarea
-                  className="form-control"
-                  id="description"
-                  name="description"
-                  {...register("description")}
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Thêm
-              </button>
-            </form>
+    <>
+      <a className="back-button" href="/admin/manage-order">
+        Back
+      </a>
+      <div className="transportation-container">
+        <h1 className="form-title">Add new Transportation Report</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="transportation-form">
+          <div className="form-group">
+            <label htmlFor="orderId">OrderId</label>
+            <input
+              type="number"
+              className="form-control"
+              id="orderId"
+              name="orderId"
+              value={orderId}
+              readOnly
+              {...register("orderId")}
+            />
           </div>
-        </div>
+          <div className="form-group">
+            <label htmlFor="issueTypeId">Type of problem</label>
+            <input
+              type="number"
+              className="form-control"
+              id="issueTypeId"
+              name="issueTypeId"
+              {...register("issueTypeId")}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <textarea
+              className="form-control"
+              id="description"
+              name="description"
+              {...register("description")}
+            />
+          </div>
+          <button type="submit" className="btn-add">
+            ADD
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

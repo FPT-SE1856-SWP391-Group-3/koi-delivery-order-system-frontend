@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { set } from "react-hook-form";
+import Sidebar from "../../user/common/Sidebar";
 import ComponentPath from "routes/ComponentPath";
+
 
 export default function ManageOrderDocument() {
   const [orderDocuments, setOrderDocuments] = useState([{}]);
@@ -56,19 +58,20 @@ export default function ManageOrderDocument() {
 
   return (
     <div>
-      <h1>Documents</h1>
-      {orderIds.map((orderId) => {
-        // Lọc danh sách tài liệu theo orderId
-        const filteredDocuments = orderDocuments.filter(
-          (document) => document.orderId === orderId
-        );
+      <Sidebar />
+      <div className="content-container">
+        <h1>Documents</h1>
+        {orderIds.map((orderId) => {
+          // Lọc danh sách tài liệu theo orderId
+          const filteredDocuments = orderDocuments.filter(
+            (document) => document.orderId === orderId
+          );
 
-        // Chỉ hiển thị bảng nếu có tài liệu phù hợp
-        if (filteredDocuments.length === 0) {
-          return null; // Không hiển thị gì nếu không có tài liệu
-        }
+          // Chỉ hiển thị bảng nếu có tài liệu phù hợp
+          if (filteredDocuments.length === 0) {
+            return null; // Không hiển thị gì nếu không có tài liệu
+          }
 
-        return (
           <div key={orderId}>
             <h2>Order ID: {orderId}</h2>
             <table>
@@ -118,9 +121,9 @@ export default function ManageOrderDocument() {
                 ))}
               </tbody>
             </table>
-          </div>
-        );
-      })}
+          </div>;
+        })}
+      </div>
     </div>
   );
 }

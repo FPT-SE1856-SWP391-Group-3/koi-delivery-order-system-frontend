@@ -34,125 +34,75 @@ export default function Register() {
 
   return (
     <>
-      <div>
-        {/* Navigation Menu */}
-        <div className="home-icon">
-          <a href="/">
-            <img src={home} />
-          </a>
-        </div>
+      <div className="home-icon">
+        <a href="/">
+          <img src={home} alt="Home" />
+        </a>
+      </div>
 
-        {/* Sign-Up Form */}
-        <div className="container">
-          <div className="signup-box">
-            <div className="signup-left">
-              <img src={koiFish} alt="Koi Fish" className="koi-fish" />
-            </div>
+      <div className="container">
+        <div className="content-box">
+          <div className="image-side">
+            <img src={koiFish} alt="Koi Fish" className="koi-fish" />
+          </div>
 
-            <div className="signup-right">
-              <h1>Sign Up!</h1>
+          <div className="form-side">
+            <h1>Sign Up!</h1>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <label htmlFor="email">Email/SDT</label>
+              <input
+                type="text"
+                id="email"
+                placeholder="Email or Phone Number"
+                {...register("email", { required: true })}
+                className="input-field"
+              />
+              {errors.email && <span>This field is required</span>}
 
-              <form>
-                <label htmlFor="email">Email/SDT</label>
+              <label htmlFor="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                placeholder="Username"
+                {...register("username", { required: true })}
+                className="input-field"
+              />
+              {errors.username && <span>This field is required</span>}
+
+              <label htmlFor="password">Password</label>
+              <div className="password-wrapper">
                 <input
-                  type="text"
-                  id="email"
-                  placeholder="Email or Phone Number"
+                  type="password"
+                  id="password"
+                  placeholder="Password"
+                  {...register("password", { required: true })}
                   className="input-field"
                 />
+                {errors.password && <span>This field is required</span>}
+              </div>
 
-                <label htmlFor="username">Username</label>
-                <input
-                  type="text"
-                  id="username"
-                  placeholder="Username"
-                  className="input-field"
-                />
+              <button type="submit" className="btn">
+                Sign Up
+              </button>
+            </form>
 
-                <label htmlFor="password">Password</label>
-                <div className="password-wrapper">
-                  <input
-                    type="password"
-                    id="password"
-                    placeholder="Password"
-                    className="input-field"
-                  />
-                  <span className="password-icon"></span>
-                </div>
-
-                <button type="submit" className="btn">
-                  Sign Up
+            <div className="social-login">
+              <p className="social-text">or continue with</p>
+              <div className="social-icons">
+                <button className="social-btn google-btn">
+                  <img src={google} alt="Google" />
                 </button>
-              </form>
-
-              <div className="social-login">
-                <p className="social-text">or continue with</p>
-                <div className="social-icons">
-                  <button className="social-btn google-btn">
-                    <img src={google} alt="Google" />
-                  </button>
-                  <button className="social-btn facebook-btn">
-                    <img src={facebook} alt="Facebook" />
-                  </button>
-                  <button className="social-btn apple-btn">
-                    <img src={apple} alt="Apple" />
-                  </button>
-                </div>
+                <button className="social-btn facebook-btn">
+                  <img src={facebook} alt="Facebook" />
+                </button>
+                <button className="social-btn apple-btn">
+                  <img src={apple} alt="Apple" />
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* <h1>Registration</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            {...register("username", { required: true })}
-          />
-          {errors.username && <span>This field is required</span>}
-        </div>
-        <div>
-          <label htmlFor="fullname">Full Name</label>
-          <input
-            type="text"
-            id="fullname"
-            {...register("fullname", { required: true })}
-          />
-          {errors.fullname && <span>This field is required</span>}
-        </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            {...register("email", { required: true })}
-          />
-          {errors.email && <span>This field is required</span>}
-        </div>
-        <div>
-          <label htmlFor="phoneNumber">Phone Number</label>
-          <input
-            type="tel"
-            id="phoneNumber"
-            {...register("phoneNumber", { required: true })}
-          />
-          {errors.phoneNumber && <span>This field is required</span>}
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            {...register("password", { required: true })}
-          />
-          {errors.password && <span>This field is required</span>}
-        </div>
-        <button type="submit">Register</button>
-      </form> */}
     </>
   );
 }

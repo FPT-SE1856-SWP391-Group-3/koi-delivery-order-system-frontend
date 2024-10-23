@@ -1,10 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import { useEffect, useState } from "react";
+import "../payment/EditPaymentMethod.css";
 
-import { useEffect } from "react";
-import { useState } from "react";
-import Sidebar from "@components/user/common/Sidebar";
 
 export default function EditPaymentType() {
   const { register, handleSubmit, setValue } = useForm();
@@ -33,7 +32,7 @@ export default function EditPaymentType() {
       api.put("PaymentMethods/" + id, data).then((data) => {
         if (data.success) {
           alert("Chỉnh sửa thành công!");
-          navigate("/");
+          navigate("/admin/manage-payment-type");
         } else {
           alert("Chỉnh sửa thất bại!");
         }
@@ -45,32 +44,27 @@ export default function EditPaymentType() {
   };
 
   return (
-    <div>
-      <Sidebar />
-      <div className="content">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Chỉnh sửa phương thức thanh toán</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="form-group">
-                <label htmlFor="paymentMethodName">
-                  Tên phương thức thanh toán
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="paymentMethodName"
-                  name="paymentMethodName"
-                  {...register("paymentMethodName")}
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Chỉnh sửa
-              </button>
-            </form>
+    <>
+      <a className="back-button" href="/admin/manage-payment-type">
+        Back
+      </a>
+      <div className="updatepayment-container">
+        <h1 className="form-title">Update payment method</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className="updatepayment-form">
+          <div className="form-group">
+            <label htmlFor="paymentMethodName">Payment method name</label>
+            <input
+              type="text"
+              id="paymentMethodName"
+              name="paymentMethodName"
+              {...register("paymentMethodName")}
+            />
           </div>
-        </div>
+          <button type="submit" className="btn-update">
+            UPDATE
+          </button>
+        </form>
       </div>
-    </div>
+    </>
   );
 }

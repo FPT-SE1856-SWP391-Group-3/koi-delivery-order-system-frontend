@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import Sidebar from "../../user/common/Sidebar";
+import "../payment/ManagePaymentMethod.css";
 import ComponentPath from "routes/ComponentPath";
 
 export default function ManagePaymentMethod() {
@@ -43,22 +45,44 @@ export default function ManagePaymentMethod() {
 
   return (
     <div>
-      <h1>Payment Methods</h1>
-      <a href={ComponentPath.admin.payment.createPaymentType}>Add Payment Method</a>
-      {paymentMethods.map((paymentType) => (
-        <div key={paymentType.paymentMethodId}>
-          <h3>PaymentMethodId: {paymentType.paymentMethodId}</h3>
-          <h3>Name: {paymentType.paymentMethodName}</h3>
-          <button
-            onClick={() => deletePaymentMethod(paymentType.paymentMethodId)}
-          >
-            Delete
-          </button>
-          <a href={ComponentPath.admin.payment.editPaymentType + paymentType.paymentMethodId}>
-            Update
-          </a>
-        </div>
-      ))}
+      <Sidebar />
+      <div className="content-container">
+        <h1>Payment Methods</h1>
+        <a href={ComponentPath.admin.payment.createPaymentType} className="add-payment-btn">
+          Add Payment Method
+        </a>
+        <table className="payment-table">
+          <thead>
+            <th>PaymentMethodId</th>
+            <th>Name</th>
+            <th>Action</th>
+          </thead>
+          <tbody>
+            {paymentMethods.map((paymentType) => (
+              <tr key={paymentType.paymentMethodId}>
+                <td>{paymentType.paymentMethodId}</td>
+                <td>{paymentType.paymentMethodName}</td>
+                <td>
+                  <button
+                    onClick={() =>
+                      deletePaymentMethod(paymentType.paymentMethodId)
+                    }
+                    className="delete-btn"
+                  >
+                    Delete
+                  </button>
+                  <a
+                    href={ComponentPath.admin.payment.editPaymentType + paymentType.paymentMethodId}
+                    className="update-btn"
+                  >
+                    Update
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

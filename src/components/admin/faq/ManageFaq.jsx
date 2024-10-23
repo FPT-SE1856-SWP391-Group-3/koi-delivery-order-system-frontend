@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import Sidebar from "../../user/common/Sidebar";
+import "../faq/ManageFaq.css";
 import ComponentPath from "routes/ComponentPath";
-import Header from "@components/user/common/Header";
+
 
 export default function ManageFaq() {
   const [faqs, setFaqs] = useState([]);
@@ -42,18 +44,44 @@ export default function ManageFaq() {
 
   return (
     <div>
-      <Header/>
-      <h1>FAQs</h1>
-      <a href={ComponentPath.admin.faq.createFaq}>Add FAQ</a>
-      {faqs.map((faq) => (
-        <div key={faq.faqid}>
-          <h3>FaqId: {faq.faqid}</h3>
-          <h3>Question: {faq.question}</h3>
-          <h3>Answer: {faq.answer}</h3>
-          <button onClick={() => deleteFaq(faq.faqid)}>Delete</button>
-          <a href={ComponentPath.admin.faq.editFaq + faq.faqid}>Update</a>
-        </div>
-      ))}
+      <Sidebar />
+      <div className="content-container">
+        <h1>Manage FAQs</h1>
+        <a href={ComponentPath.admin.faq.createFaq} className="add-fag-btn">
+          Add FAQ
+        </a>
+        <table className="fag-table">
+          <thead>
+            <th>FAQId</th>
+            <th>Question</th>
+            <th>Answer</th>
+            <th>Action</th>
+          </thead>
+          <tbody>
+            {faqs.map((faq) => (
+              <tr key={faq.faqid}>
+                <td>{faq.faqid}</td>
+                <td>{faq.question}</td>
+                <td>{faq.answer}</td>
+                <td>
+                  <button
+                    onClick={() => deleteFaq(faq.faqid)}
+                    className="delete-btn"
+                  >
+                    Delete
+                  </button>
+                  <a
+                   href={ComponentPath.admin.faq.editFaq + faq.faqid}
+                    className="update-btn"
+                  >
+                    Update
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
