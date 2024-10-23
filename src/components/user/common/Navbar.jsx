@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../css/Navbar.css";
 import logo from "/Logo.png";
+import ComponentPath from "routes/ComponentPath";
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
@@ -48,10 +49,10 @@ const Navbar = () => {
         </li>
       </ul>
       <div className="navbar-right">
-        {token !== "null" ? (
+        {token !== null ? (
           user && user.roleId !== 2 ? (
             <>
-              <a href="/admin" style={{margin: "0 10px 0 0"}}>
+              <a href={ComponentPath.admin.dashboard} style={{margin: "0 10px 0 0"}}>
                 <button>Admin</button>
               </a>
               <a href="/logout">
@@ -59,9 +60,15 @@ const Navbar = () => {
               </a>
             </>
           ) : (
-            <a href="/user">
-              <button>User</button>
-            </a>
+            <>
+             <a href={ComponentPath.user.dashboard} style={{margin: "0 10px 0 0"}}>
+                <button>User</button>
+              </a>
+              <a href="/logout">
+                <button>Log Out</button>
+              </a>
+            </>
+
           )
         ) : (
           <a href="/login">

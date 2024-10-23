@@ -9,7 +9,7 @@ import UserAddress from "../components/user/address/UserAddress";
 import Login from "../components/user/auth/Login";
 import Logout from "../components/user/auth/Logout";
 import Register from "../components/user/auth/Register";
-import ViewProfile from "@user/profile/ViewProfile";
+import ViewProfile from "@components/user/profile/ViewProfile";
 import AdminRoute from "./AdminRoute";
 import ProtectedRoute from "./ProtectedRoute";
 import UserPayment from "../components/user/payment/UserPayment";
@@ -58,6 +58,8 @@ import ManageOrderDocument from "../components/admin/order/OrderDocument";
 import EditOrderDocument from "../components/admin/order/EditOrderDocument";
 import CreateOrderDocument from "../components/admin/order/CreateOrderDocument";
 import ComponentPath from "./ComponentPath";
+import UserDashboard from "@components/user/dashboard/UserDashboard";
+import AdminDashboard from "@components/admin/dashboard/AdminDashboard";
 // Function to get the access token from cookies
 var adminUrl = "/admin";
 
@@ -146,7 +148,7 @@ const router = createBrowserRouter([
         element: <UserAddress />,
       },
       {
-        path: ComponentPath.user.address.editAddress + "/:addressId",
+        path: ComponentPath.user.address.editAddress + ":addressId",
         element: <EditAddress />,
       },
       // Payment
@@ -159,7 +161,7 @@ const router = createBrowserRouter([
         element: <AddPayment />,
       },
       {
-        path: ComponentPath.user.payment.editPayment + "/:paymentId",
+        path: ComponentPath.user.payment.editPayment + ":paymentId",
         element: <EditPayment />,
       },
       {
@@ -206,7 +208,10 @@ const router = createBrowserRouter([
         path: ComponentPath.user.notification.getNotification,
         element: <GetNotification />,
       },
-
+      {
+        path: ComponentPath.user.dashboard,
+        element: <UserDashboard />,
+      },
       {
         element: <AdminRoute isAdmin={await isAdmin()} />,
         children: [
@@ -329,6 +334,10 @@ const router = createBrowserRouter([
           {
             path: ComponentPath.admin.order.document.editOrderDocument + ":orderId",
             element: <EditOrderDocument />,
+          },
+          {
+            path: ComponentPath.admin.dashboard,
+            element: <AdminDashboard/>,
           },
         ],
       },

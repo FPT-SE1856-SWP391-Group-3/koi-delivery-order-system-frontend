@@ -29,6 +29,7 @@ export default function Sidebar() {
         <a href={ComponentPath.admin.blogNews.manageBlogNews}>Manage Blog News</a>
         <a href={ComponentPath.admin.certification.manageCertification}>Manage Certification</a>
         <a href={ComponentPath.admin.order.document.manageOrderDocument}>Manage Order Document</a>
+        <a href={ComponentPath.user.profile.viewProfile}>View Profile</a>
       </div>
     </>
   );

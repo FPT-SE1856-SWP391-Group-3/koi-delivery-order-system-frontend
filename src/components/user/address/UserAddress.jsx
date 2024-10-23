@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import ComponentPath from "routes/ComponentPath";
+import Bootstrap from "../props/Bootstrap";
+import UserSidebar from "../common/UserSidebar";
 
 export default function UserAddress() {
   const [addresses, setAddresses] = useState([]);
@@ -44,26 +46,35 @@ export default function UserAddress() {
 
   return (
     <div>
+      <UserSidebar  />
+      <Bootstrap />
+      <div className="content">
       <h1>Address</h1>
-      <a href={ComponentPath.user.address.createAddress}>Add address</a>
-      {addresses.map((address) => (
-        <div key={address.addressId}>
-          <h3>AddressId: {address.addressId}</h3>
-          <h3>UserId: {address.userId}</h3>
-          <h3>Address: {address.address}</h3>
-          <h3>City: {address.city}</h3>
-          <h3>Country: {address.country}</h3>
-          <h3>ZipCode: {address.zipCode}</h3>
-          <h3>
-            <a href={ComponentPath.user.address.editAddress + address.addressId}>Update</a>
-          </h3>
-          <h3>
-            <button onClick={() => deleteAddress(address.addressId)}>
-              Delete
-            </button>
-          </h3>
-        </div>
-      ))}
+      <a href={ComponentPath.user.address.createAddress} className="btn btn-primary" style={{width : "10em"}}>Add address</a>
+      <table className="table table-hover" style={{marginTop : "1em"}}>
+        <thead>
+          <tr>
+            <th>AddressId</th>
+            <th>UserId</th>
+            <th>Address Line</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {addresses.map((address) => (
+            <tr key={address.addressId}>
+              <td>{address.addressId}</td>
+              <td>{address.userId}</td>
+              <td>{address.addressLine}</td>
+              <td>
+                <a href={ComponentPath.user.address.editAddress + address.addressId} className="btn btn-primary" style={{width : "30%", marginRight: "1em"}}>Update</a>
+                <button onClick={() => deleteAddress(address.addressId)} className="btn btn-secondary" style={{width : "30%"}}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      </div>
     </div>
   );
 }

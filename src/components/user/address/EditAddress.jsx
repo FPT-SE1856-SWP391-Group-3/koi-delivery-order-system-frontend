@@ -88,7 +88,6 @@ export default function EditAddress() {
 
   return (
     <div>
-      <Header />
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">
