@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
 import "../faq/ManageFaq.css";
+import ComponentPath from "routes/ComponentPath";
+
 
 export default function ManageFaq() {
   const [faqs, setFaqs] = useState([]);
@@ -45,7 +47,7 @@ export default function ManageFaq() {
       <Sidebar />
       <div className="content-container">
         <h1>Manage FAQs</h1>
-        <a href="/admin/new-faq/" className="add-fag-btn">
+        <a href={ComponentPath.admin.faq.createFaq} className="add-fag-btn">
           Add FAQ
         </a>
         <table className="fag-table">
@@ -69,7 +71,7 @@ export default function ManageFaq() {
                     Delete
                   </button>
                   <a
-                    href={"/admin/update-faq/" + faq.faqid}
+                   href={ComponentPath.admin.faq.editFaq + faq.faqid}
                     className="update-btn"
                   >
                     Update

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
 import "../payment/ManagePaymentMethod.css";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManagePaymentMethod() {
   const [paymentMethods, setPaymentMethods] = useState([]);
@@ -47,7 +48,7 @@ export default function ManagePaymentMethod() {
       <Sidebar />
       <div className="content-container">
         <h1>Payment Methods</h1>
-        <a href="/admin/add-payment-type/" className="add-payment-btn">
+        <a href={ComponentPath.admin.payment.createPaymentType} className="add-payment-btn">
           Add Payment Method
         </a>
         <table className="payment-table">
@@ -71,9 +72,7 @@ export default function ManagePaymentMethod() {
                     Delete
                   </button>
                   <a
-                    href={
-                      "/admin/edit-payment-type/" + paymentType.paymentMethodId
-                    }
+                    href={ComponentPath.admin.payment.editPaymentType + paymentType.paymentMethodId}
                     className="update-btn"
                   >
                     Update

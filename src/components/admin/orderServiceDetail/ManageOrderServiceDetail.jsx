@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import Sidebar from "../../user/common/Sidebar";
 import "../orderServiceDetail/OrderServiceDetail.css";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManageOrderServiceDetail() {
   const [orderServiceDetails, setOrderServiceDetails] = useState([]);
@@ -28,10 +29,10 @@ export default function ManageOrderServiceDetail() {
   async function deleteOrderService(orderServiceDetailId) {
     try {
       console.log(
-        url("OrderServices/deleteOrderServiceDetail/" + orderServiceDetailId)
+        ("OrderServices/deleteOrderServiceDetail/" + orderServiceDetailId)
       );
       const response = await fetch(
-        url("OrderServices/deleteOrderServiceDetail/" + orderServiceDetailId),
+      ("OrderServices/deleteOrderServiceDetail/" + orderServiceDetailId),
         {
           method: "DELETE",
           headers: {
@@ -63,7 +64,7 @@ export default function ManageOrderServiceDetail() {
         <div className="content-container">
           <h1>Manage Order Services</h1>
           <a
-            href="/admin/add-order-service-detail/"
+            href={ComponentPath.admin.order.service.createOrderService}
             className="add-service-btn"
           >
             Add Order Service
@@ -93,10 +94,10 @@ export default function ManageOrderServiceDetail() {
                       Delete
                     </button>
                     <a
-                      href={
-                        "/admin/update-order-service-detail/" +
-                        orderServiceDetail.orderServiceDetailId
-                      }
+                       href={
+              ComponentPath.admin.order.service.editOrderService +
+              orderServiceDetail.orderServiceDetailId
+            }
                       className="update-btn"
                     >
                       Update

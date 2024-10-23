@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
 import "../blogandnews/ManageBlogNews.css";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManageBlogNews() {
   const [posts, setPosts] = useState([]);
@@ -45,9 +46,7 @@ export default function ManageBlogNews() {
       <Sidebar />
       <div className="content-container">
         <h1>Blog and News</h1>
-        <a href="/admin/create-blog-news" className="add-blog-btn">
-          Add Post
-        </a>
+          <a href={ComponentPath.admin.blogNews.createBlogNews}>Add Post</a>
         <table className="blog-table">
           <thead>
             <tr>
@@ -77,7 +76,7 @@ export default function ManageBlogNews() {
                     Delete
                   </button>
                   <a
-                    href={"/admin/edit-blog-news/" + post.postId}
+                    href={ComponentPath.admin.blogNews.editBlogNews + post.postId}
                     className="update-btn"
                   >
                     Update

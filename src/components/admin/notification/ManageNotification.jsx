@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManageNotification() {
   const [notifications, setNotifications] = useState([]);
@@ -43,7 +44,7 @@ export default function ManageNotification() {
   return (
     <div>
       <h1>Notifications</h1>
-      <a href="/add-notification">Add Notification</a>
+      <a href={ComponentPath.admin.notification.createNotification}>Add Notification</a>
       {notifications.map((notification) => (
         <div key={notification.notificationId}>
           <h3>NotificationId: {notification.notificationId}</h3>
@@ -57,9 +58,9 @@ export default function ManageNotification() {
           >
             Delete
           </button>
-          <a href={"/admin/updateNotification/" + notification.notificationId}>
+          {/* <a href={ + notification.notificationId}>
             Update
-          </a>
+          </a> */}
         </div>
       ))}
     </div>

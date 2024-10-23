@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
 import "../certification/ManageCertification.css";
+import ComponentPath from "routes/ComponentPath";
+
 
 export default function ManageCertification() {
   const [certifications, setCertifications] = useState([]);
@@ -48,7 +50,7 @@ export default function ManageCertification() {
       <Sidebar />
       <div className="content-container">
         <h1>Manage Certifications</h1>
-        <a href="/admin/create-certification" className="add-certificate-btn">
+        <a href={ComponentPath.admin.certification.createCertification} className="add-certificate-btn">
           Add Certification
         </a>
         <table className="certificate-table">
@@ -84,10 +86,7 @@ export default function ManageCertification() {
                     Delete
                   </button>
                   <a
-                    href={
-                      "/admin/edit-certification/" +
-                      certification.certificationId
-                    }
+                    href={ComponentPath.admin.certification.editCertification + certification.certificationId}
                     className="update-btn"
                   >
                     Update

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
 import "../koi/ManageKoi.css";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManageKoi() {
   const [kois, setKois] = useState([]);
@@ -41,11 +42,12 @@ export default function ManageKoi() {
   }
   return (
     <>
+
       <div>
         <Sidebar />
         <div className="content-container">
           <h1>Manage Koi</h1>
-          <a href="/admin/add-koi" className="add-koi-btn">
+          <a href={ComponentPath.admin.koi.createKoi} className="add-koi-btn">
             Add Koi
           </a>
           <table className="koi-table">
@@ -75,7 +77,7 @@ export default function ManageKoi() {
                       Delete
                     </button>
                     <a
-                      href={"/admin/edit-koi/" + koi.koiId}
+                      href={ComponentPath.admin.koi.editKoi + koi.koiId}
                       className="update-btn"
                     >
                       Update

@@ -4,6 +4,7 @@ import api from "../../../api/CallAPI";
 import { useEffect, useState } from "react";
 import "../payment/EditPaymentMethod.css";
 
+
 export default function EditPaymentType() {
   const { register, handleSubmit, setValue } = useForm();
   const navigate = useNavigate();

@@ -1,9 +1,13 @@
-import { useState, useEffect } from "react";
+
+import { Component, useState } from "react";
+import { useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { set } from "react-hook-form";
 import Sidebar from "../../user/common/Sidebar";
 import "../order/ManageOrder.css";
+import ComponentPath from "routes/ComponentPath";
 
 export default function ManageOrder() {
   const navigate = useNavigate();
@@ -148,8 +152,10 @@ export default function ManageOrder() {
                     <button
                       className="detail-btn"
                       onClick={() =>
-                        navigate("/admin/manage-order-detail/" + order.orderId)
-                      }
+                            navigate(
+                              ComponentPath.admin.order.manageOrderDetail + order.orderId
+                            )
+                     }
                     >
                       Details
                     </button>
@@ -193,7 +199,7 @@ export default function ManageOrder() {
                     className="createdocument-btn"
                     onClick={() =>
                       navigate(
-                        "/admin/create-order-document/" +
+                        ComponentPath.admin.order.document.createOrderDocument  +
                           order.orderId +
                           "/" +
                           order.orderStatusId
@@ -204,10 +210,13 @@ export default function ManageOrder() {
                   </button>
                   <button
                     className="createtransportation-btn"
-                    onClick={() =>
-                      navigate(
-                        "/admin/create-transportation-report/" + order.orderId
-                      )
+                   onClick={() =>
+                          navigate(
+                            ComponentPath.admin.report.createReport +
+                              order.orderId +
+                              "/" +
+                              order.orderStatusId
+                       )
                     }
                   >
                     Transportation Report

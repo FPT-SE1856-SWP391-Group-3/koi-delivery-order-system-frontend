@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
 import "../report/ManageTransportationReportDetails.css";
+import ComponentPath from "routes/ComponentPath";
+
 
 export default function ManageTransportationReportDetails() {
   const [reports, setReports] = useState([]);
@@ -76,7 +78,7 @@ export default function ManageTransportationReportDetails() {
                   </button>
                   <Link
                     to={{
-                      pathname: `/admin/edit-transportation-report/${report.transReportDetailId}`,
+                      pathname: ComponentPath.admin.report.editReport + report.transReportDetailId,
                       state: report,
                     }}
                     className="change-btn"
