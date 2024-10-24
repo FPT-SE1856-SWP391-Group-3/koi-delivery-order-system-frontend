@@ -127,13 +127,6 @@ export default function ViewProfile() {
                       <a
                         className="btn btn-info "
                         target="__blank"
-                        href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills"
-                      >
-                        Edit
-                      </a>
-                      <a
-                        className="btn btn-info "
-                        target="__blank"
                         href={ComponentPath.user.address.viewAddress}
                       >
                         View Address

@@ -4,11 +4,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Header from "../../../components/user/common/Header";
 
-export default function CreateFeedback() {
+export default function CreateFeedback({orderId}) {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   let userId = JSON.parse(localStorage.getItem("userId"));
-  let { orderId } = useParams();
+  // let { orderId } = useParams();
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -29,7 +29,7 @@ export default function CreateFeedback() {
   return (
     <div>
       {/* <Header /> */}
-      <div className="container">
+      <div className="">
         <div className="row">
           <div className="col-md-6 offset-md-3">
             <h2 className="text-center">Thêm Phản hồi mới</h2>

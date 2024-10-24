@@ -3,7 +3,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
 
-export default function AddDocument() {
+export default function AddDocument({ orderId, userId }) {
   const { control, register, handleSubmit } = useForm();
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
     {
@@ -13,7 +13,7 @@ export default function AddDocument() {
   );
   const navigate = useNavigate();
   // const [customerDocumentFile, setCustomerDocumentFile] = useState([]);
-  let { orderId, userId } = useParams();
+  // let { orderId, userId } = useParams();
 
   // const handleFileChange = (e) => {
   //   setCustomerDocumentFile([...customerDocumentFile, e.target.files[0]]); //append the file list
@@ -51,9 +51,9 @@ export default function AddDocument() {
 
   return (
     <div>
-      <div className="container">
+      <div className="">
         <div className="row">
-          <div className="col-md-6 offset-md-3">
+          <div className="col-md-12">
             <h2 className="text-center">Thêm Tài liệu mới</h2>
             <div className="form-group">
               <label htmlFor={`orderId`}>Mã đơn hàng</label>
@@ -80,10 +80,8 @@ export default function AddDocument() {
             <form onSubmit={handleSubmit(onSubmit)}>
               {fields.map((field, index) => (
                 <>
+                <h5>Tài liều thứ {index + 1}</h5>
                   <div className="form-group">
-                    <label htmlFor={`customerDocuments.${index}.orderId`}>
-                      Mã đơn hàng
-                    </label>
                     <input
                       type="number"
                       className="form-control"
@@ -130,12 +128,12 @@ export default function AddDocument() {
                       {...register(`customerDocuments.${index}.description`)}
                     />
                   </div>
-                  <button type="button" onClick={() => remove(index)}>
+                  <button type="button" className="btn btn-danger" onClick={() => remove(index)}>
                     Delete
                   </button>
                 </>
               ))}
-              <button type="button" onClick={() => append({})}>
+              <button type="button" className="btn btn-secondary" onClick={() => append({})}>
                 Add document
               </button>
               <button type="submit" className="btn btn-primary">

@@ -32,6 +32,7 @@ export default function UserOrder() {
     });
   }, [userId]);
 
+  //-----------------Modal-----------------
   const handleShowDetailModal = (orderId) => {
     setSelectedOrderId(orderId);
     setShowDetailModal(true);
@@ -52,6 +53,7 @@ export default function UserOrder() {
     setShowFeedbackModal(false);
     setShowDocumentModal(false);
   };
+  //--------------------------------------
 
   return (
     <div>
@@ -122,40 +124,53 @@ export default function UserOrder() {
                         Document
                       </button>
                     </td>
+                    <div>
+                      <Modal
+                        show={showDetailModal}
+                        onHide={handleCloseModal}
+                        size="lg"
+                      >
+                        <Modal.Header closeButton>
+                          <Modal.Title>Chi tiết đơn hàng</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <UserOrderDetail orderId={selectedOrderId} />
+                        </Modal.Body>
+                      </Modal>
+
+                      {/* Modal Feedback */}
+                      <Modal
+                        show={showFeedbackModal}
+                        onHide={handleCloseModal}
+                        size="lg"
+                      >
+                        <Modal.Header closeButton>
+                          <Modal.Title>Thêm Feedback</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <CreateFeedback orderId={selectedOrderId} />
+                        </Modal.Body>
+                      </Modal>
+
+                      {/* Modal Document */}
+                      <Modal
+                        show={showDocumentModal}
+                        onHide={handleCloseModal}
+                        size="lg"
+                        scrollable={true}
+                      >
+                        <Modal.Header closeButton>
+                          <Modal.Title>Thêm Document</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <AddDocument orderId={selectedOrderId} userId={userId} />
+                        </Modal.Body>
+                      </Modal>
+                    </div>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-          <div>
-            <Modal show={showDetailModal} onHide={handleCloseModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Chi tiết đơn hàng</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <UserOrderDetail orderId={selectedOrderId} />
-              </Modal.Body>
-            </Modal>
-
-            {/* Modal Feedback */}
-            <Modal show={showFeedbackModal} onHide={handleCloseModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Thêm Feedback</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <CreateFeedback orderId={selectedOrderId} />
-              </Modal.Body>
-            </Modal>
-
-            {/* Modal Document */}
-            <Modal show={showDocumentModal} onHide={handleCloseModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Thêm Document</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <AddDocument orderId={selectedOrderId} />
-              </Modal.Body>
-            </Modal>
           </div>
         </div>
       </div>
