@@ -3,9 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { useEffect } from "react";
 
-export default function UserOrderDetail() {
+export default function UserOrderDetail({ orderId }) {
   const [UserOrderDetails, setUserOrderDetails] = useState([]);
-  const { orderId } = useParams();
+  // const { orderId } = useParams();
 
   useEffect(() => {
     api.get("OrderDetails/" + orderId).then((data) => {
@@ -22,9 +22,9 @@ export default function UserOrderDetail() {
 
   return (
     <div>
-      <div className="container">
+      <div className="">
         <div className="row">
-          <div className="col-md-6 offset-md-3">
+          <div className="col-md-12">
             <h2 className="text-center">Danh sách chi tiết đơn hàng</h2>
             <table className="table">
               <thead>

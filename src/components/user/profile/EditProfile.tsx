@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import api from '../../../api/CallAPI';
+import { Card, CardBody } from 'react-bootstrap';
+import Bootstrap from '../props/Bootstrap';
+import UserSidebar from '../common/UserSidebar';
 
 
 
@@ -37,32 +40,80 @@ export default function EditProfile() {
 
 
     return (
-        <div>
-            <h1>Update Profile</h1>
-            <form onSubmit={handleSubmit}>
+      <>
+        <Bootstrap />
+        <UserSidebar />
+        <div className="content">
+          <div className="card">
+            <div className="card-header">
+              <h1>Update Profile</h1>
+            </div>
+            <div className="card-body">
+              <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="username">Username</label>
-                    <input type="text" id="username" name="username" value={updateUser.userName} onChange={(e) => setUpdateUser({ ...updateUser, userName: e.target.value })} />
+                  <label htmlFor="username" className='form-group'>Username</label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value={updateUser.userName}
+                    className='form-control'
+                    onChange={(e) =>
+                      setUpdateUser({ ...updateUser, userName: e.target.value })
+                    }
+                  />
                 </div>
                 <div>
-                    <label htmlFor="fullname">Full Name</label>
-                    <input type="text" id="fullname" name="fullname" value={updateUser.fullName} onChange={(e) => setUpdateUser({ ...updateUser, fullName: e.target.value })} />
+                  <label htmlFor="fullname">Full Name</label>
+                  <input
+                    type="text"
+                    id="fullname"
+                    name="fullname"
+                    className='form-control'
+                    value={updateUser.fullName}
+                    onChange={(e) =>
+                      setUpdateUser({ ...updateUser, fullName: e.target.value })
+                    }
+                  />
                 </div>
                 <div>
-                    <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name="email" value={updateUser.email} onChange={(e) => setUpdateUser({ ...updateUser, email: e.target.value })} />
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    className='form-control'
+                    value={updateUser.email}
+                    onChange={(e) =>
+                      setUpdateUser({ ...updateUser, email: e.target.value })
+                    }
+                  />
                 </div>
                 <div>
-                    <label htmlFor="phoneNumber">Phone Number</label>
-                    <input type="tel" id="phoneNumber" name="phoneNumber" value={updateUser.phoneNumber} onChange={(e) => setUpdateUser({ ...updateUser, phoneNumber: e.target.value })} />
+                  <label htmlFor="phoneNumber">Phone Number</label>
+                  <input
+                    type="tel"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    className='form-control'
+                    value={updateUser.phoneNumber}
+                    onChange={(e) =>
+                      setUpdateUser({
+                        ...updateUser,
+                        phoneNumber: e.target.value,
+                      })
+                    }
+                  />
                 </div>
                 {/*<div>*/}
                 {/*    <label htmlFor="confirmPassword">Confirm Password</label>*/}
                 {/*    <input type="password" id="confirmPassword" name="confirmPassword" />*/}
                 {/*</div>*/}
-                <button type="submit">Update</button>
-            </form>
+                <button className="btn btn-primary" type="submit">Update</button>
+              </form>
+            </div>
+          </div>
         </div>
-
-    )
+      </>
+    );
 }

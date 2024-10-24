@@ -11,6 +11,7 @@ import home from "../../../assets/home.png";
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -18,14 +19,15 @@ export default function Login() {
     try {
       api.post("Users/login/jwt/", data).then((data) => {
         if (data.success) {
-          alert("Đăng nhập thành công!");
+          console.log("Đăng nhập thành công!");
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("userId", JSON.stringify(data.userId));
           localStorage.setItem("token", JSON.stringify(data.stringToken));
           navigate("/");
-        } else {
-          alert("Đăng nhập thất bại!");
         }
+      }).catch((error) => {
+        console.log("Đăng nhập thất bại!");
+        setError("Đăng nhập thất bại!");
       });
     } catch (error) {
       console.error("Lỗi đang nhập:", error);
@@ -93,6 +95,7 @@ export default function Login() {
               </p>
 
               <form onSubmit={handleSubmit(onSubmit)}>
+                <h3>{error}</h3>
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"

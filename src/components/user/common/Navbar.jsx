@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import "../css/Navbar.css";
 import logo from "/Logo.png";
+import ComponentPath from "routes/ComponentPath";
 
 const Navbar = () => {
   const [menu, setMenu] = useState("home");
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(localStorage.getItem("user"));
   return (
     <div className="navbar">
       <div className="logoicon">
@@ -46,9 +49,32 @@ const Navbar = () => {
         </li>
       </ul>
       <div className="navbar-right">
-        <a href="/login">
-          <button>Sign In</button>
-        </a>
+        {token !== null ? (
+          user && user.roleId !== 2 ? (
+            <>
+              <a href={ComponentPath.admin.dashboard} style={{margin: "0 10px 0 0"}}>
+                <button>Admin</button>
+              </a>
+              <a href="/logout">
+                <button>Log Out</button>
+              </a>
+            </>
+          ) : (
+            <>
+             <a href={ComponentPath.user.dashboard} style={{margin: "0 10px 0 0"}}>
+                <button>User</button>
+              </a>
+              <a href="/logout">
+                <button>Log Out</button>
+              </a>
+            </>
+
+          )
+        ) : (
+          <a href="/login">
+            <button>Sign In</button>
+          </a>
+        )}
       </div>
     </div>
   );

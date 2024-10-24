@@ -5,6 +5,8 @@ import api from "../../../api/CallAPI";
 import { set, useForm } from "react-hook-form";
 import axios from "axios";
 import ComponentPath from "routes/ComponentPath";
+import Bootstrap from "../props/Bootstrap";
+import UserSidebar from "../common/UserSidebar";
 
 export default function CreateOrder() {
   const customerId = JSON.parse(localStorage.getItem("userId"));
@@ -12,14 +14,19 @@ export default function CreateOrder() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [address, setAddress] = useState([]);
   const [koiList, setKoiList] = useState([
-    { koiId: "", amount: 0, koiCondition: "", weight: 0, totalPrice: 0 },
+    { koiId: "", koiName : "",amount: 0, koiCondition: "", weight: 0, totalPrice: 0 },
   ]);
-  const [totalOrderPrice, setTotalOrderPrice] = useState(0);
-  const [totalOrderWeight, setTotalOrderWeight] = useState(0);
-  const [kois, setKois] = useState();
+
+  const [totalOrderPrice, setTotalOrderPrice] = useState(0); // Tổng giá của đơn hàng
+  const [totalOrderWeight, setTotalOrderWeight] = useState(0); // Tổng khối lượng của đơn hàng
+  const [kois, setKois] = useState(); // Danh sách koi
+
+  //Lay thong tin koi
   const [orderServiceDetails, setOrderServiceDetails] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0); // Tổng giá của đơn hàng
   const navigate = useNavigate();
+
+  //Lay dia chi nguoi dung
   const [cityName, setCityName] = useState("");
   const [districtName, setDistrictName] = useState("");
   const [wardName, setWardName] = useState("");
@@ -76,7 +83,7 @@ export default function CreateOrder() {
   const handleAddKoi = () => {
     setKoiList([
       ...koiList,
-      { koiId: "", amount: "", koiCondition: "", weight: 0, totalPrice: 0 },
+      { koiId: "", koiName: "",amount: "", koiCondition: "", weight: 0, totalPrice: 0 },
     ]);
   };
 
@@ -125,11 +132,26 @@ export default function CreateOrder() {
 
   const handleChange = (e) => {
     console.log(e.target.value);
-    if (e.target.value != "") {
-      setFullAddress(
-        e.target.value + ", " + wardName + ", " + districtName + ", " + cityName
-      );
-      setPartAddress(wardName + ", " + districtName + ", " + cityName);
+    if (cityName != "" && districtName != "" && wardName != "") {
+      if (e.target.value != "") {
+        setFullAddress(
+          e.target.value +
+            ", " +
+            wardName +
+            ", " +
+            districtName +
+            ", " +
+            cityName
+        );
+        setPartAddress(wardName + ", " + districtName + ", " + cityName);
+      } else {
+        setFullAddress("");
+      }
+    } else {
+      alert("Vui lòng chọn địa chỉ!");
+      setFullAddress("");
+      setPartAddress("");
+      e.target.value = "";
     }
   };
 
@@ -169,212 +191,294 @@ export default function CreateOrder() {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h1>Nguoi gui </h1>
-        <h3>Ten: {user.userName}</h3>
-        <h3>SDT: {user.phoneNumber}</h3>
-        <h3>Email: {user.email}</h3>
-        <h1>Nguoi nhan</h1>
-        <input
-          type="hidden"
-          id="customerId"
-          name="customerId"
-          value={customerId}
-          {...register("customerId")}
-        />
-        <input
-          type="hidden"
-          id="startAddress"
-          name="startAddress"
-          value={
-            "Bãi cỏ KTX khu B, Phường Đông Hòa, Dĩ An, Tỉnh Bình Dương, Việt Nam"
-          }
-          {...register("startAddress")}
-        />
-        <input
-          type="text"
-          id="receiverName"
-          name="receiverName"
-          placeholder="Ten nguoi nhan"
-          {...register("receiverName")}
-        />
-        <input
-          type="text"
-          id="phone"
-          name="phone"
-          placeholder="So dien thoai nguoi nhan"
-          {...register("receiverPhoneNumber")}
-        />
-        <input
-          type="text"
-          id="receiverEmail"
-          name="receiverEmail"
-          placeholder="Email nguoi nhan"
-          {...register("receiverEmail")}
-        />
-        <div className="form-group">
-          <label htmlFor="city">Thành phố</label>
-          <select
-            onChange={(e) => {
-              setCityName(e.target.value);
-            }}
-          >
-            <option value="">Chọn thành phố</option>
-            {addresses.map((address) => (
-              <option key={address.Id} value={address.Name}>
-                {address.Name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="district">Huyện</label>
-          <select
-            onChange={(e) => {
-              setDistrictName(e.target.value);
-            }}
-          >
-            <option value="">Chọn huyện</option>
-            {addresses.map((address) => {
-              if (address.Name == cityName) {
-                return address.Districts.map((district) => (
-                  <option key={district.Id} value={district.Name}>
-                    {district.Name}
-                  </option>
-                ));
-              }
-            })}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="ward">Quận/Xã</label>
-          <select
-            onChange={(e) => {
-              setWardName(e.target.value);
-            }}
-          >
-            <option value="">Chọn quận/xã</option>
-            {addresses.map((address) => {
-              if (address.Name == cityName) {
-                return address.Districts.map((district) => {
-                  if (district.Name == districtName) {
-                    return district.Wards.map((ward) => (
-                      <option key={ward.Id} value={ward.Name}>
-                        {ward.Name}
-                      </option>
-                    ));
-                  }
-                });
-              }
-            })}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="specificAddress">Địa chỉ cụ thể</label>
-          <input
-            type="text"
-            className="form-control"
-            id="specificAddress"
-            name="specificAddress"
-            onChange={(e) => {
-              handleChange(e);
-            }}
-          />
-        </div>
-        <input
-          type="text"
-          id="receiverAddressLine"
-          name="receiverAddressLine"
-          placeholder="Dia chi nguoi nhan"
-          value={fullAddress}
-        />
+      <Bootstrap />
+      <UserSidebar />
+      <div className="content">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="row">
+            <div className="col-lg-6">
+              <div className="form-group">
+                <div className="card">
+                  <div className="card-header">
+                    <h2>Người gửi</h2>
+                  </div>
+                  <div className="card-body">
+                    <h3>Tên: {user.userName}</h3>
+                    <h3>SDT: {user.phoneNumber}</h3>
+                    <h3>Email: {user.email}</h3>
+                  </div>
+                </div>
+              </div>
+              <br />
+              <div className="form-group">
+                <div className="card">
+                  <div className="card-header">
+                    <h3>Người nhận</h3>
+                  </div>
+                  <div className="card-body">
+                    <input
+                      type="hidden"
+                      id="customerId"
+                      name="customerId"
+                      value={customerId}
+                      {...register("customerId")}
+                    />
+                    <input
+                      type="hidden"
+                      id="startAddress"
+                      name="startAddress"
+                      value={
+                        "Bãi cỏ KTX khu B, Phường Đông Hòa, Dĩ An, Tỉnh Bình Dương, Việt Nam"
+                      }
+                      {...register("startAddress")}
+                    />
+                    <input
+                      type="text"
+                      id="receiverName"
+                      name="receiverName"
+                      placeholder="Ten nguoi nhan"
+                      {...register("receiverName")}
+                    />
+                    <input
+                      type="text"
+                      id="phone"
+                      name="phone"
+                      placeholder="So dien thoai nguoi nhan"
+                      {...register("receiverPhoneNumber")}
+                    />
+                    <input
+                      type="text"
+                      id="receiverEmail"
+                      name="receiverEmail"
+                      placeholder="Email nguoi nhan"
+                      {...register("receiverEmail")}
+                    />
 
-        <h1>Thong tin loai hang</h1>
-        {koiList.map((koi, index) => (
-          <div
-            key={index}
-            style={{
-              marginBottom: "20px",
-              border: "1px solid #ccc",
-              padding: "10px",
-            }}
-          >
-            <input
-              type="number"
-              name="koiId"
-              placeholder="ID Koi"
-              value={koi.koiId}
-              onChange={(event) => handleKoiChange(index, event)}
-            />{" "}
-            Koi Id
-            <br />
-            <p>
-              Ten koi:{" "}
-              {kois?.find((k) => k.koiId === parseInt(koi.koiId))?.koiName ||
-                ""}
-            </p>
-            <input
-              type="number"
-              name="amount"
-              placeholder="So luong"
-              value={koi.amount}
-              onChange={(event) => handleKoiChange(index, event)}
-            />{" "}
-            So luong
-            <br />
-            <p>
-              Khoi luong:{" "}
-              {koi.amount *
-                (kois?.find((k) => k.koiId === parseInt(koi.koiId))?.weight ||
-                  0)}{" "}
-              g
-            </p>
-            <p>
-              Gia mot con:{" "}
-              {kois?.find((k) => k.koiId === parseInt(koi.koiId))?.price || 0}{" "}
-              VND
-            </p>
-            <p>
-              Tong gia:
-              {koi.amount *
-                (kois?.find((k) => k.koiId === parseInt(koi.koiId))?.price ||
-                  0)}{" "}
-              D
-            </p>
-            <input
-              type="text"
-              name="koiCondition"
-              placeholder="Tinh trang"
-              value={koi.koiCondition}
-              onChange={(event) => handleKoiChange(index, event)}
-            />{" "}
-            Tinh Trang
-            <button type="button" onClick={() => handleDeleteKoi(index)}>
-              Xoa
-            </button>
-          </div>
-        ))}
-        <button type="button" onClick={handleAddKoi}>
-          + Thêm hàng hóa
-        </button>
-        {/*
+                    <div className="form-group">
+                      <label htmlFor="city">Thành phố</label>
+                      <select
+                        className="form-control"
+                        onChange={(e) => {
+                          setCityName(e.target.value);
+                        }}
+                      >
+                        <option value="">Chọn thành phố</option>
+                        {addresses.map((address) => (
+                          <option key={address.Id} value={address.Name}>
+                            {address.Name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="district">Huyện</label>
+                      <select
+                        className="form-control"
+                        onChange={(e) => {
+                          setDistrictName(e.target.value);
+                        }}
+                      >
+                        <option value="">Chọn huyện</option>
+                        {addresses.map((address) => {
+                          if (address.Name == cityName) {
+                            return address.Districts.map((district) => (
+                              <option key={district.Id} value={district.Name}>
+                                {district.Name}
+                              </option>
+                            ));
+                          }
+                        })}
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="ward">Quận/Xã</label>
+                      <select
+                        className="form-control"
+                        onChange={(e) => {
+                          setWardName(e.target.value);
+                        }}
+                      >
+                        <option value="">Chọn quận/xã</option>
+                        {addresses.map((address) => {
+                          if (address.Name == cityName) {
+                            return address.Districts.map((district) => {
+                              if (district.Name == districtName) {
+                                return district.Wards.map((ward) => (
+                                  <option key={ward.Id} value={ward.Name}>
+                                    {ward.Name}
+                                  </option>
+                                ));
+                              }
+                            });
+                          }
+                        })}
+                      </select>
+                      <div className="form-group">
+                        <label htmlFor="specificAddress">Địa chỉ cụ thể</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="specificAddress"
+                          name="specificAddress"
+                          onChange={(e) => {
+                            handleChange(e);
+                          }}
+                        />
+                      </div>
+                      <br />
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="receiverAddressLine"
+                        name="receiverAddressLine"
+                        placeholder="Dia chi nguoi nhan"
+                        value={fullAddress}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6">
+              <div className="card">
+                <div className="card-header">
+                  <h3>Thông tin loại hàng</h3>
+                </div>
+                <div className="card-body">
+                  {koiList.map((koi, index) => (
+                    <div
+                      key={index}
+                      // style={{
+                      //   marginBottom: "20px",
+                      //   border: "1px solid #ccc",
+                      //   padding: "10px",
+                      // }}
+                    >
+                      <h3>Hàng hóa {index + 1}</h3>
+                      <br />
+                      Tên cá Koi
+                      <select
+                        name="koiId"
+                        className="form-control"
+                        value={koi.koiId}
+                        onChange={(event) => handleKoiChange(index, event)}
+                      >
+                        <option value="">Chọn cá Koi</option>
+                        {kois?.map((koi) => (
+                          <option key={koi.koiId} value={koi.koiId}>
+                            {koi.koiName}
+                          </option>
+                        ))}
+                      </select>
+                      {/* <input
+                        type="number"
+                        className="form-control"
+                        name="koiId"
+                        placeholder="ID Koi"
+                        value={koi.koiId}
+                        onChange={(event) => handleKoiChange(index, event)}
+                      /> */}{" "}
+                      <br />
+                      {/* <p>
+                        Ten koi:{" "}
+                        {kois?.find((k) => k.koiId === parseInt(koi.koiId))
+                          ?.koiName || ""}
+                      </p> */}
+                      Số lượng
+                      <input
+                        type="number"
+                        name="amount"
+                        className="form-control"
+                        placeholder="Số lượng"
+                        value={koi.amount}
+                        onChange={(event) => handleKoiChange(index, event)}
+                      />{" "}
+                      <br />
+                      <p>
+                        Khối lượng:{" "}
+                        {koi.amount *
+                          (kois?.find((k) => k.koiId === parseInt(koi.koiId))
+                            ?.weight || 0)}{" "}
+                        g
+                      </p>
+                      <p>
+                        Gía một con:{" "}
+                        {kois?.find((k) => k.koiId === parseInt(koi.koiId))
+                          ?.price || 0}{" "}
+                        VND
+                      </p>
+                      <p>
+                        Tổng giá:
+                        {koi.amount *
+                          (kois?.find((k) => k.koiId === parseInt(koi.koiId))
+                            ?.price || 0)}{" "}
+                        D
+                      </p>
+                      Tình trạng
+                      <input
+                        type="text"
+                        name="koiCondition"
+                        placeholder="Tinh trang"
+                        className="form-control"
+                        value={koi.koiCondition}
+                        onChange={(event) => handleKoiChange(index, event)}
+                      />{" "}
+                      <button
+                        type="button"
+                        className="btn btn-primary col-lg-3"
+                        onClick={() => handleDeleteKoi(index)}
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="btn btn-primary col-lg-3"
+                    onClick={handleAddKoi}
+                  >
+                    + Thêm hàng hóa
+                  </button>
+                  <h3 style={{ marginTop: "1em" }}>
+                    Tổng giá: {totalOrderPrice} VND
+                  </h3>
+                  <h3>Tổng khối lượng: {totalOrderWeight} g</h3>
+                </div>
+                {/*
           HandleAddKoi hoat dong bang cach tao ra mot array moi voi phan tu cu va them mot phan tu moi vao cuoi array
           Khi do koiList.map se chay lai va tao ra cac input moi
         */}
+              </div>
+              <br />
+              <div className="card">
+                <div className="card-header">
+                  <h3>Các dịch vụ</h3>
+                </div>
+                <div className="card-body">
+                  {orderServiceDetails.map((orderServiceDetail) => (
+                    <>
+                      <p>
+                        Giá dịch vụ: {orderServiceDetail.orderServiceDetailName}{" "}
+                      </p>
+                      <p>
+                        Giá cước: {orderServiceDetail.orderServiceDetailPrice}Đ{" "}
+                      </p>
+                    </>
+                  ))}
 
-        <h2>Tong gia: {totalOrderPrice} VND</h2>
-        <h2>Tong khoi luong: {totalOrderWeight} g</h2>
-        {orderServiceDetails.map((orderServiceDetail) => (
-          <>
-            <h1>Cac dich vu</h1>
-            <p>Gia dich vu: {orderServiceDetail.orderServiceDetailName} </p>
-            <p>Gia cuoc: {orderServiceDetail.orderServiceDetailPrice} </p>
-          </>
-        ))}
-
-        <h1>Tong tien: {totalPrice}</h1>
-        <input type="submit" value="Submit" />
-      </form>
+                  <h1>Tổng tiền: {totalPrice}</h1>
+                  <input
+                    type="submit"
+                    className="btn btn-primary"
+                    value="Submit"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </>
   );
 }

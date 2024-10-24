@@ -13,6 +13,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      "bootstrap": path.resolve(__dirname, "node_modules/bootstrap/dist/css/bootstrap.css"),
       "routes/ComponentPath" : path.resolve(__dirname, "src/routes/ComponentPath"),
       "@components": path.resolve(__dirname, "src/components"),
       "@admin": path.resolve(__dirname, "src/components/admin"),
