@@ -209,6 +209,7 @@ export default function CreateOrder() {
                   </div>
                 </div>
               </div>
+              <br />
               <div className="form-group">
                 <div className="card">
                   <div className="card-header">
@@ -338,10 +339,11 @@ export default function CreateOrder() {
                 </div>
               </div>
             </div>
+
             <div className="col-lg-6">
               <div className="card">
                 <div className="card-header">
-                  <h3>Thong tin loai hang</h3>
+                  <h3>Thông tin loại hàng</h3>
                 </div>
                 <div className="card-body">
                   {koiList.map((koi, index) => (
@@ -353,13 +355,15 @@ export default function CreateOrder() {
                       //   padding: "10px",
                       // }}
                     >
+                      <h3>Hàng hóa {index + 1}</h3>
+                      <br />
                       Tên cá Koi
                       <select
                         name="koiId"
                         className="form-control"
                         value={koi.koiId}
                         onChange={(event) => handleKoiChange(index, event)}
-                      > 
+                      >
                         <option value="">Chọn cá Koi</option>
                         {kois?.map((koi) => (
                           <option key={koi.koiId} value={koi.koiId}>
@@ -374,8 +378,7 @@ export default function CreateOrder() {
                         placeholder="ID Koi"
                         value={koi.koiId}
                         onChange={(event) => handleKoiChange(index, event)}
-                      /> */}
-                      {" "}
+                      /> */}{" "}
                       <br />
                       {/* <p>
                         Ten koi:{" "}
@@ -391,70 +394,86 @@ export default function CreateOrder() {
                         value={koi.amount}
                         onChange={(event) => handleKoiChange(index, event)}
                       />{" "}
-                      
                       <br />
                       <p>
-                        Khoi luong:{" "}
+                        Khối lượng:{" "}
                         {koi.amount *
                           (kois?.find((k) => k.koiId === parseInt(koi.koiId))
                             ?.weight || 0)}{" "}
                         g
                       </p>
                       <p>
-                        Gia mot con:{" "}
+                        Gía một con:{" "}
                         {kois?.find((k) => k.koiId === parseInt(koi.koiId))
                           ?.price || 0}{" "}
                         VND
                       </p>
                       <p>
-                        Tong gia:
+                        Tổng giá:
                         {koi.amount *
                           (kois?.find((k) => k.koiId === parseInt(koi.koiId))
                             ?.price || 0)}{" "}
                         D
                       </p>
+                      Tình trạng
                       <input
                         type="text"
                         name="koiCondition"
                         placeholder="Tinh trang"
+                        className="form-control"
                         value={koi.koiCondition}
                         onChange={(event) => handleKoiChange(index, event)}
                       />{" "}
-                      Tinh Trang
                       <button
                         type="button"
+                        className="btn btn-primary col-lg-3"
                         onClick={() => handleDeleteKoi(index)}
                       >
-                        Xoa
+                        Xóa
                       </button>
                     </div>
                   ))}
-                  <button type="button" onClick={handleAddKoi}>
+                  <button
+                    type="button"
+                    className="btn btn-primary col-lg-3"
+                    onClick={handleAddKoi}
+                  >
                     + Thêm hàng hóa
                   </button>
+                  <h3 style={{ marginTop: "1em" }}>
+                    Tổng giá: {totalOrderPrice} VND
+                  </h3>
+                  <h3>Tổng khối lượng: {totalOrderWeight} g</h3>
                 </div>
                 {/*
           HandleAddKoi hoat dong bang cach tao ra mot array moi voi phan tu cu va them mot phan tu moi vao cuoi array
           Khi do koiList.map se chay lai va tao ra cac input moi
         */}
               </div>
+              <br />
               <div className="card">
-                <h2>Tong gia: {totalOrderPrice} VND</h2>
-                <h2>Tong khoi luong: {totalOrderWeight} g</h2>
-                {orderServiceDetails.map((orderServiceDetail) => (
-                  <>
-                    <h1>Cac dich vu</h1>
-                    <p>
-                      Gia dich vu: {orderServiceDetail.orderServiceDetailName}{" "}
-                    </p>
-                    <p>
-                      Gia cuoc: {orderServiceDetail.orderServiceDetailPrice}{" "}
-                    </p>
-                  </>
-                ))}
+                <div className="card-header">
+                  <h3>Các dịch vụ</h3>
+                </div>
+                <div className="card-body">
+                  {orderServiceDetails.map((orderServiceDetail) => (
+                    <>
+                      <p>
+                        Giá dịch vụ: {orderServiceDetail.orderServiceDetailName}{" "}
+                      </p>
+                      <p>
+                        Giá cước: {orderServiceDetail.orderServiceDetailPrice}Đ{" "}
+                      </p>
+                    </>
+                  ))}
 
-                <h1>Tong tien: {totalPrice}</h1>
-                <input type="submit" value="Submit" />
+                  <h1>Tổng tiền: {totalPrice}</h1>
+                  <input
+                    type="submit"
+                    className="btn btn-primary"
+                    value="Submit"
+                  />
+                </div>
               </div>
             </div>
           </div>

@@ -205,12 +205,12 @@ const router = createBrowserRouter([
         element: <CreateNotification />,
       },
       {
-        path: ComponentPath.user.notification.getNotification,
-        element: <GetNotification />,
-      },
-      {
         path: ComponentPath.user.dashboard,
         element: <UserDashboard />,
+      },
+      {
+        path : ComponentPath.user.notification.viewNotification,
+        element : <GetNotification/>
       },
       {
         element: <AdminRoute isAdmin={await isAdmin()} />,
