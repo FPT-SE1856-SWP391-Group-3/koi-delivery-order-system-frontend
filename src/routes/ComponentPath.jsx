@@ -25,8 +25,7 @@ const ComponentPath = {
   user: {
     dashboard : dashboard,
     address: {
-      addressPath: address,
-      viewAddress: address + view,
+      viewAddress: user + address + view,
       editAddress: address + edit,
       createAddress: address + create,
       userAddress: address + "/user",

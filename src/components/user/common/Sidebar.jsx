@@ -5,6 +5,7 @@ import ComponentPath from "routes/ComponentPath";
 export default function Sidebar() {
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     window.location.href = "/"; // Redirect to home page
   };
 
