@@ -61,6 +61,7 @@ import ComponentPath from "./ComponentPath";
 import UserDashboard from "@components/user/dashboard/UserDashboard";
 import AdminDashboard from "@components/admin/dashboard/AdminDashboard";
 import { useEffect } from "react";
+
 // Function to get the access token from cookies
 var adminUrl = "/admin";
 
@@ -188,6 +189,10 @@ const router = createBrowserRouter([
       {
         path: ComponentPath.user.dashboard,
         element: <UserDashboard />,
+      },
+      {
+        path : ComponentPath.user.notification.viewNotification,
+        element : <GetNotification/>
       },
       {
         path : ComponentPath.user.notification.viewNotification,
