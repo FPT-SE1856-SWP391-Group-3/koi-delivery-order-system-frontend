@@ -60,42 +60,23 @@ import CreateOrderDocument from "../components/admin/order/CreateOrderDocument";
 import ComponentPath from "./ComponentPath";
 import UserDashboard from "@components/user/dashboard/UserDashboard";
 import AdminDashboard from "@components/admin/dashboard/AdminDashboard";
+import { useEffect } from "react";
 // Function to get the access token from cookies
 var adminUrl = "/admin";
 
-const getAccessToken = async () => {
-  if (!localStorage.getItem("token")) {
-    return false;
-  }
-  try {
-    const data = await api.post("Users/token/check", null);
 
-    if (data.success) {
-      console.log(data);
-      return localStorage.getItem("token");
-    } else {
-      localStorage.removeItem("token");
-      console.log(data);
-      return false;
-    }
-  } catch (error) {
-    localStorage.removeItem("token");
-    return false;
-  }
-};
 
-// Function to check if the user is authenticated
-const isAuthenticated = async () => {
-  const token = await getAccessToken();
-  return !!token; // !! la chuyen doi ve kieu boolean
-};
+// // Function to check if the user is authenticated
+// const isAuthenticated = async () => {
+//   const token = await getAccessToken();
+//   return !!token; // !! la chuyen doi ve kieu boolean
+// };
 
 // Function to check if the user is admin
-const isAdmin = () => {
+const isAdmin = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
   return user && user.roleId >= 3;
 };
-
 
 
 // Create the router configuration
@@ -123,7 +104,7 @@ const router = createBrowserRouter([
   //   index: true,
   // },
   {
-    element: <ProtectedRoute isAuthenticated={await isAuthenticated()} />,
+    element: <ProtectedRoute/>,
     children: [
       // Profile
       {
@@ -213,7 +194,7 @@ const router = createBrowserRouter([
         element : <GetNotification/>
       },
       {
-        element: <AdminRoute isAdmin={await isAdmin()} />,
+        element: <AdminRoute />,
         children: [
           {
             path: ComponentPath.admin.user.manageUser,

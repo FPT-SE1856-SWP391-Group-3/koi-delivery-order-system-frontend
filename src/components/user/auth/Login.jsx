@@ -8,6 +8,7 @@ import facebook from "../../../assets/facebook.png";
 import apple from "../../../assets/apple.png";
 import koiFish from "../../../assets/koi-fish.png";
 import home from "../../../assets/home.png";
+import ComponentPath from "routes/ComponentPath";
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
@@ -17,13 +18,32 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     try {
-      api.post("Users/login/jwt/", data).then((data) => {
+      await api.post("Users/login/jwt/", data).then((data) => {
         if (data.success) {
           console.log("Đăng nhập thành công!");
           localStorage.setItem("user", JSON.stringify(data.user));
           localStorage.setItem("userId", JSON.stringify(data.userId));
           localStorage.setItem("token", JSON.stringify(data.stringToken));
-          navigate("/");
+          console.log (data.user.roleId);
+          switch (data.user.roleId) {
+            case 5:
+              console.log("redirect to admin");
+              var admin = ComponentPath.admin.user.manageUser;
+             navigate(admin);
+             break;
+            case 2:
+              navigate("/user");
+              break;
+            case 3:
+              navigate("/staff");
+              break;
+            case 4:
+              navigate("/delivery");
+              break;
+            default:
+              alert("Không xác định được vai trò người dùng");
+              navigate("/");
+          }
         }
       }).catch((error) => {
         console.log("Đăng nhập thất bại!");
