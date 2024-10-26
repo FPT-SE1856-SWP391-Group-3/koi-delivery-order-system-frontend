@@ -1,0 +1,148 @@
+/* Container for the payment options */
+.payment-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading style */
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Payment methods section */
+.payment-methods div {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.payment-methods div:hover {
+    background-color: #f5f5f5;
+}
+
+/* Customize and enlarge radio button */
+.payment-methods div input[type="radio"] {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    outline: none;
+    margin-right: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.payment-methods div input[type="radio"]:checked::before {
+    content: '';
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #007bff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Label style for radio buttons */
+.payment-methods div label {
+    margin: 0;
+    font-size: 16px;
+    color: #555;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+/* Icon inside payment method label */
+.payment-methods div img {
+    width: 40px;
+    height: auto;
+    margin-right: 15px;
+}
+
+/* Footer for the pay button */
+.payment-footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Pay Now button */
+.pay-now-btn {
+    padding: 15px 30px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.pay-now-btn:hover {
+    background-color: #ff3333;
+}
+
+/* Customer info and order summary sections */
+.customer-info,
+.order-summary {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+}
+
+.customer-info h3,
+.order-summary h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.customer-info p,
+.order-summary p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.order-summary .total {
+    font-size: 18px;
+    color: #e74c3c;
+    font-weight: 600;
+}
+/* Back button styling */
+.back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+  
+  .back-btn .back-icon {
+    font-size: 24px;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+  
+  .back-btn .back-icon:hover {
+    color: #ff4d4d;
+  }
+  
