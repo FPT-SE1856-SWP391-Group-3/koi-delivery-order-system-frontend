@@ -61,6 +61,10 @@ import ComponentPath from "./ComponentPath";
 import UserDashboard from "@components/user/dashboard/UserDashboard";
 import AdminDashboard from "@components/admin/dashboard/AdminDashboard";
 import { useEffect } from "react";
+import CreateOrderInter from "../components/user/order/CreateOrderInter";
+import Profilemanage from "../components/user/profile/Profilemanage";
+import Updateinfo from "../components/user/profile/ProfileCom/Updateinfo";
+import ChoosePayment from "../components/user/payment/ChoosePayment";
 
 // Function to get the access token from cookies
 var adminUrl = "/admin";
@@ -82,6 +86,34 @@ const isAdmin = async () => {
 
 // Create the router configuration
 const router = createBrowserRouter([
+  {
+    path: "/ChoosePayment",
+    element: <ChoosePayment />,
+  },
+  {
+    path: "/AddPayment",
+    element: <AddPayment />,
+  },
+  {
+    path: "/UpdatePassword",
+    element: <UpdatePassword />,
+  },
+  {
+    path: "/Updateinfo",
+    element: <Updateinfo />,
+  },
+  {
+    path: "/Profilemanage",
+    element: <Profilemanage />,
+  },
+    {
+    path: "/CreateOrderInter",
+    element: <CreateOrderInter />,
+  },
+  {
+    path: "/CreateOrder",
+    element: <CreateOrder />,
+  },
   {
     path: "/login",
     element: <Login />,
