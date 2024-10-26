@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate for naviga
 import OrderSummary from "./COIC/OrderSummary";
 import ReceiverInfo from "./COIC/ReceiverInfo";
 import SenderInfo from "./COC/SenderInfo";
-import ServiceSelection from "./COC/ServiceSelection.JSX";
+import ServiceSelection from "./COC/ServiceSelection.jsx";
 import "../css/CreateOrder.css";
 
 function CreateOrderInter() {
