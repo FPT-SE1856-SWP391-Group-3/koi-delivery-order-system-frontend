@@ -1,13 +1,19 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "../css/ChoosePayment.css"; // Import custom CSS
 import ATMCard from "../../../assets/atm-icon.png";
 import VisaCard from "../../../assets/visa-icon.png";
 import COD from "../../../assets/COD-icon.png";
 import { FaTimes } from "react-icons/fa"; // Import the icon for "X"
+import api from "../../../api/CallAPI";
 
 function ChoosePayment() {
   const [selectedPayment, setSelectedPayment] = useState("COD");
+  const [searchParams] = useSearchParams();
+  const [email, setEmail] = useState(searchParams.get("email"));
+  const [orderId, setOrderId] = useState(searchParams.get("orderId"));
+  const [totalPrice, setTotalPrice] = useState(searchParams.get("totalPrice"))
+
   const navigate = useNavigate();
 
   const handlePaymentChange = (e) => {
@@ -15,8 +21,19 @@ function ChoosePayment() {
   };
 
   const handlePaymentSubmit = () => {
-    alert(`You have selected ${selectedPayment} as your payment method.`);
-    navigate("/payment-success");
+    // alert(`You have selected ${selectedPayment} as your payment method.`);
+    // navigate("/payment-success")
+      
+    const data = {
+      orderId: orderId,
+    };
+
+    console.log(data);
+    api.post("Payments/create-payment", data).then((data) =>{
+      console.log(data)
+      window.location.href  = data.paymentUrl;
+    })
+
   };
 
   // Function to handle back navigation
@@ -97,7 +114,7 @@ function ChoosePayment() {
         <div className="order-summary">
           <h3>Thông tin đơn hàng</h3>
           <p>1x koi</p>
-          <p className="total">Thành tiền: 197,400 đ</p>
+          <p className="total">Thành tiền: {totalPrice}đ</p>
         </div>
 
         <div className="payment-footer">
