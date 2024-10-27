@@ -47,7 +47,7 @@ export default function ManageUser() {
   return (
     <div>
       <Sidebar />
-      <div className="content">
+      <div className="content-container">
         <h1>Manage User</h1>
         <table className="table table-hover">
           <thead>
