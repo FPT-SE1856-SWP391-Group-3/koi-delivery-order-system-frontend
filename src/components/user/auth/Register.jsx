@@ -2,8 +2,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import google from "../../../assets/google.png";
-import facebook from "../../../assets/facebook.png";
-import apple from "../../../assets/apple.png";
 import koiFish from "../../../assets/koi-fish.png";
 import home from "../../../assets/home.png";
 import "../css/Register.css";
@@ -34,13 +32,11 @@ export default function Register() {
 
   return (
     <>
-      <div className="home-icon">
-        <a href="/">
-          <img src={home} alt="Home" />
-        </a>
-      </div>
+      <a href="/" className="registerhome-icon">
+        <img src={home} alt="Home" />
+      </a>
 
-      <div className="container">
+      <div className="register-container">
         <div className="content-box">
           <div className="image-side">
             <img src={koiFish} alt="Koi Fish" className="koi-fish" />
@@ -81,7 +77,7 @@ export default function Register() {
                 {errors.password && <span>This field is required</span>}
               </div>
 
-              <button type="submit" className="btn">
+              <button type="submit" className="signup-btn">
                 Sign Up
               </button>
             </form>
@@ -91,12 +87,6 @@ export default function Register() {
               <div className="social-icons">
                 <button className="social-btn google-btn">
                   <img src={google} alt="Google" />
-                </button>
-                <button className="social-btn facebook-btn">
-                  <img src={facebook} alt="Facebook" />
-                </button>
-                <button className="social-btn apple-btn">
-                  <img src={apple} alt="Apple" />
                 </button>
               </div>
             </div>

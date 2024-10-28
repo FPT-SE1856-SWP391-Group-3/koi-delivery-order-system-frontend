@@ -4,17 +4,15 @@ import api from "../../../api/CallAPI";
 import { useForm } from "react-hook-form";
 import "../koi/CreateKoi.css";
 
-export default function CreatKoi() {
+export default function CreatKoi({ onClose, onAddSuccess }) {
   const { register, handleSubmit } = useForm();
-  const navigate = useNavigate();
-  let userId = JSON.parse(localStorage.getItem("userId"));
   const [certificationId, setCertificationId] = useState([""]);
 
-  const addCertification = async () => {
+  const addCertification = () => {
     setCertificationId([...certificationId, ""]);
   };
 
-  const deleteCertification = async () => {
+  const deleteCertification = () => {
     const list = [...certificationId];
     list.pop();
     setCertificationId(list);
@@ -25,16 +23,15 @@ export default function CreatKoi() {
       data,
       certificationId,
     };
-    console.log(koiData);
     try {
-      api.post("Kois", koiData).then((data) => {
-        if (data.success) {
-          alert("Thêm thành công!");
-          navigate("/admin/manage-koi");
-        } else {
-          alert("Thêm thất bại!");
-        }
-      });
+      const response = await api.post("Kois", koiData);
+      if (response.success) {
+        alert("Thêm thành công!");
+        onAddSuccess(); // Gọi callback để cập nhật danh sách Koi
+        onClose(); // Đóng modal sau khi thêm thành công
+      } else {
+        alert("Thêm thất bại!");
+      }
     } catch (error) {
       console.error("Error:", error);
       alert("Error! Please try again.");
@@ -42,103 +39,89 @@ export default function CreatKoi() {
   };
 
   return (
-    <>
-      <a className="back-button" href="/admin/manage-koi">
-        Back
-      </a>
-      <div className="addkoi-container">
-        <h1 className="form-title">Add a new Koi</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="add-form">
-          <div>
+    <div className="addkoi-container">
+      <h1 className="form-title">Add a new Koi</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="add-form">
+        <div className="form-group">
+          <label htmlFor="koiTypeId">Koi Type</label>
+          <input
+            required
+            type="text"
+            className="form-control"
+            id="koiTypeId"
+            name="koiTypeId"
+            {...register("koiTypeId")}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="koiName">Koi Name</label>
+          <input
+            required
+            type="text"
+            className="form-control"
+            id="koiName"
+            name="koiName"
+            {...register("koiName")}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="weight">Weight(kg)</label>
+          <input
+            required
+            type="text"
+            className="form-control"
+            id="weight"
+            name="weight"
+            {...register("weight")}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="price">Price</label>
+          <input
+            required
+            type="text"
+            className="form-control"
+            id="price"
+            name="price"
+            {...register("price")}
+          />
+        </div>
+        <button
+          type="button"
+          className="btn-add-certificate"
+          onClick={addCertification}
+        >
+          Add Certificate [+]
+        </button>
+        <button
+          type="button"
+          className="btn-delete-certificate"
+          onClick={deleteCertification}
+        >
+          Delete Certificate [-]
+        </button>
+        {certificationId.map((koiCertification, index) => (
+          <div key={index} className="form-group">
+            <label htmlFor={`koiCertificationId${index}`}>
+              Certificate {index + 1}
+            </label>
             <input
-              type="hidden"
-              id="userId"
-              name="userId"
-              value={userId}
-              {...register("userId")}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="koiTypeId">Koi Type</label>
-            <input
-              required
               type="text"
               className="form-control"
-              id="koiTypeId"
-              name="koiTypeId"
-              {...register("koiTypeId")}
+              id={`koiCertificationId${index}`}
+              name="koiCertificationId"
+              onChange={(e) => {
+                const newCertifications = [...certificationId];
+                newCertifications[index] = e.target.value;
+                setCertificationId(newCertifications);
+              }}
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="koiName">Koi Name</label>
-            <input
-              required
-              type="text"
-              className="form-control"
-              id="koiName"
-              name="koiName"
-              {...register("koiName")}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="weight">Weight(kg)</label>
-            <input
-              required
-              type="text"
-              className="form-control"
-              id="weight"
-              name="weight"
-              {...register("weight")}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="price">Price</label>
-            <input
-              required
-              type="text"
-              className="form-control"
-              id="price"
-              name="price"
-              {...register("price")}
-            />
-          </div>
-          <button
-            type="button" // Prevent form submission
-            className="btn-add-certificate"
-            onClick={addCertification} // Call function directly
-          >
-            Add Certificate [+]
-          </button>{" "}
-          <button
-            type="button"
-            className="btn-delete-certificate"
-            onClick={deleteCertification}
-          >
-            Delete Certificate [-]
-          </button>
-          {certificationId.map((koiCertification, index) => (
-            <div key={index}>
-              <div className="form-group">
-                <label htmlFor="koiCertificationId">
-                  Certificate {index + 1}
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="koiCertificationId"
-                  name="koiCertificationId"
-                  onChange={(e) => {
-                    certificationId[index] = e.target.value;
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-          <button type="submit" className="btn-add">
-            ADD
-          </button>
-        </form>
-      </div>
-    </>
+        ))}
+        <button type="submit" className="btn-add">
+          ADD
+        </button>
+      </form>
+    </div>
   );
 }

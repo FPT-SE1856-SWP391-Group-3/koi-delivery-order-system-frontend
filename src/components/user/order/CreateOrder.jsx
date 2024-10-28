@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-
 import { set, useForm } from "react-hook-form";
 import axios from "axios";
 import ComponentPath from "routes/ComponentPath";
@@ -14,7 +13,14 @@ export default function CreateOrder() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [address, setAddress] = useState([]);
   const [koiList, setKoiList] = useState([
-    { koiId: "", koiName : "",amount: 0, koiCondition: "", weight: 0, totalPrice: 0 },
+    {
+      koiId: "",
+      koiName: "",
+      amount: 0,
+      koiCondition: "",
+      weight: 0,
+      totalPrice: 0,
+    },
   ]);
 
   const [totalOrderPrice, setTotalOrderPrice] = useState(0); // Tổng giá của đơn hàng
@@ -83,7 +89,14 @@ export default function CreateOrder() {
   const handleAddKoi = () => {
     setKoiList([
       ...koiList,
-      { koiId: "", koiName: "",amount: "", koiCondition: "", weight: 0, totalPrice: 0 },
+      {
+        koiId: "",
+        koiName: "",
+        amount: "",
+        koiCondition: "",
+        weight: 0,
+        totalPrice: 0,
+      },
     ]);
   };
 
@@ -176,7 +189,12 @@ export default function CreateOrder() {
       api.post("Orders/", fullOrderData).then((data) => {
         if (data.success) {
           alert("Thêm thành công!");
-          navigate(ComponentPath.user.document.createDocument + data.orderId + "/" + customerId);
+          navigate(
+            ComponentPath.user.document.createDocument +
+              data.orderId +
+              "/" +
+              customerId
+          );
         } else {
           alert("Thêm thất bại!");
         }
@@ -400,7 +418,7 @@ export default function CreateOrder() {
                         {koi.amount *
                           (kois?.find((k) => k.koiId === parseInt(koi.koiId))
                             ?.weight || 0)}{" "}
-                        g
+                        kg
                       </p>
                       <p>
                         Gía một con:{" "}

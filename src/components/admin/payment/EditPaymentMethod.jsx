@@ -1,42 +1,39 @@
 import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { useEffect, useState } from "react";
 import "../payment/EditPaymentMethod.css";
 
-
-export default function EditPaymentType() {
+export default function EditPaymentType({ id, onClose, onUpdateSuccess }) {
   const { register, handleSubmit, setValue } = useForm();
-  const navigate = useNavigate();
-  const { id } = useParams();
 
   useEffect(() => {
-    try {
-      api.get("PaymentMethods/" + id).then((data) => {
+    const fetchPaymentMethod = async () => {
+      try {
+        const data = await api.get("PaymentMethods/" + id);
         if (data.success) {
           setValue("paymentMethodName", data.paymentMethod.paymentMethodName);
-          console.log(data.paymentMethod.paymentMethodName);
         } else {
           console.log("Không có phương thức thanh toán!");
         }
-      });
-    } catch (error) {
-      alert("An error has occurred. Please try again.");
-    }
+      } catch (error) {
+        alert("An error has occurred. Please try again.");
+      }
+    };
+
+    if (id) fetchPaymentMethod();
   }, [id, setValue]);
 
-  // Chỉnh sửa phương thức thanh toán
+  // Chỉnh sửa Payment Method
   const onSubmit = async (data) => {
-    console.log(data);
     try {
-      api.put("PaymentMethods/" + id, data).then((data) => {
-        if (data.success) {
-          alert("Chỉnh sửa thành công!");
-          navigate("/admin/manage-payment-type");
-        } else {
-          alert("Chỉnh sửa thất bại!");
-        }
-      });
+      const response = await api.put("PaymentMethods/" + id, data);
+      if (response.success) {
+        alert("Cập nhật thành công!");
+        onUpdateSuccess(); // Gọi callback để cập nhật bảng phương thức thanh toán
+        onClose(); // Đóng modal sau khi cập nhật thành công
+      } else {
+        alert("Cập nhật thất bại!");
+      }
     } catch (error) {
       console.error("Error during update:", error);
       alert("An error occurred during update. Please try again.");
@@ -44,27 +41,21 @@ export default function EditPaymentType() {
   };
 
   return (
-    <>
-      <a className="back-button" href="/admin/manage-payment-type">
-        Back
-      </a>
-      <div className="updatepayment-container">
-        <h1 className="form-title">Update payment method</h1>
-        <form onSubmit={handleSubmit(onSubmit)} className="updatepayment-form">
-          <div className="form-group">
-            <label htmlFor="paymentMethodName">Payment method name</label>
-            <input
-              type="text"
-              id="paymentMethodName"
-              name="paymentMethodName"
-              {...register("paymentMethodName")}
-            />
-          </div>
-          <button type="submit" className="btn-update">
-            UPDATE
-          </button>
-        </form>
-      </div>
-    </>
+    <div className="updatepayment-container">
+      <h1 className="form-title">Update Payment Method</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="updatepayment-form">
+        <div className="form-group">
+          <label htmlFor="paymentMethodName">Payment Method Name</label>
+          <input
+            type="text"
+            id="paymentMethodName"
+            {...register("paymentMethodName")}
+          />
+        </div>
+        <button type="submit" className="btn-update">
+          UPDATE
+        </button>
+      </form>
+    </div>
   );
 }

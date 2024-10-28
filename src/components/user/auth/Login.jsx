@@ -4,8 +4,6 @@ import { useForm } from "react-hook-form";
 import api from "../../../api/CallAPI";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import "../css/Login.css";
-import facebook from "../../../assets/facebook.png";
-import apple from "../../../assets/apple.png";
 import koiFish from "../../../assets/koi-fish.png";
 import home from "../../../assets/home.png";
 import ComponentPath from "routes/ComponentPath";
@@ -18,37 +16,40 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     try {
-      await api.post("Users/login/jwt/", data).then((data) => {
-        if (data.success) {
-          console.log("Đăng nhập thành công!");
-          localStorage.setItem("user", JSON.stringify(data.user));
-          localStorage.setItem("userId", JSON.stringify(data.userId));
-          localStorage.setItem("token", JSON.stringify(data.stringToken));
-          console.log (data.user.roleId);
-          switch (data.user.roleId) {
-            case 5:
-              console.log("redirect to admin");
-              var admin = ComponentPath.admin.user.manageUser;
-             navigate(admin);
-             break;
-            case 2:
-              navigate("/user");
-              break;
-            case 3:
-              navigate("/staff");
-              break;
-            case 4:
-              navigate("/delivery");
-              break;
-            default:
-              alert("Không xác định được vai trò người dùng");
-              navigate("/");
+      await api
+        .post("Users/login/jwt/", data)
+        .then((data) => {
+          if (data.success) {
+            console.log("Đăng nhập thành công!");
+            localStorage.setItem("user", JSON.stringify(data.user));
+            localStorage.setItem("userId", JSON.stringify(data.userId));
+            localStorage.setItem("token", JSON.stringify(data.stringToken));
+            console.log(data.user.roleId);
+            switch (data.user.roleId) {
+              case 5:
+                console.log("redirect to admin");
+                var admin = ComponentPath.admin.dashboard;
+                navigate(admin);
+                break;
+              case 2:
+                navigate(ComponentPath.user.dashboard);
+                break;
+              case 3:
+                navigate(ComponentPath.admin.dashboard);
+                break;
+              case 4:
+                navigate(ComponentPath.admin.dashboard);
+                break;
+              default:
+                alert("Không xác định được vai trò người dùng");
+                navigate("/");
+            }
           }
-        }
-      }).catch((error) => {
-        console.log("Đăng nhập thất bại!");
-        setError("Đăng nhập thất bại!");
-      });
+        })
+        .catch((error) => {
+          console.log("Đăng nhập thất bại!");
+          setError("Đăng nhập thất bại!");
+        });
     } catch (error) {
       console.error("Lỗi đang nhập:", error);
       alert("Lỗi đang nhập, vui lòng thử lại.");
@@ -81,7 +82,7 @@ export default function Login() {
       if (data.success) {
         alert("Đăng nhập bằng Google thành công!");
         localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/");
+        navigate(ComponentPath.user.dashboard);
       } else {
         alert("Đăng nhập bằng Google thất bại!");
       }
@@ -100,13 +101,10 @@ export default function Login() {
   return (
     <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
       <div>
-        <div className="home-icon">
-          <a href="/">
-            <img src={home} />
-          </a>
-        </div>
-
-        <div className="container">
+        <a href="/" className="loginhome-icon">
+          <img src={home} />
+        </a>
+        <div className="login-container">
           <div className="login-box">
             <div className="login-left">
               <h1>Sign In</h1>
@@ -138,7 +136,7 @@ export default function Login() {
                   <span className="password-icon"></span>
                 </div>
 
-                <button type="submit" className="btn">
+                <button type="submit" className="signin-btn">
                   Sign In
                 </button>
               </form>
@@ -152,12 +150,6 @@ export default function Login() {
                       onError={handleGoogleFailure}
                       useOneTap // Hiển thị nút đăng nhập Google
                     />
-                  </button>
-                  <button className="facebook-btn">
-                    <img src={facebook} alt="facebook" className="icon" />
-                  </button>
-                  <button className="apple-btn">
-                    <img src={apple} alt="apple" className="icon" />
                   </button>
                 </div>
               </div>

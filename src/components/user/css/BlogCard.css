@@ -44,10 +44,6 @@
   text-decoration: none;
 }
 
-.arrow-icon {
-  /* Add arrow icon styling */
-}
-
 .side-cards {
   width: 35%;
   height: 100%;
@@ -89,8 +85,4 @@
 
 .arrow-link {
   margin-left: 10px;
-}
-
-.arrow-icon {
-  /* Add arrow icon styling */
 }

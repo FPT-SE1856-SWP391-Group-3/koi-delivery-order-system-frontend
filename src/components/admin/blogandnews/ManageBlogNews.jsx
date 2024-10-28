@@ -1,52 +1,96 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
 import "../blogandnews/ManageBlogNews.css";
-import ComponentPath from "routes/ComponentPath";
+import Modal from "react-modal";
+import EditBlogNews from "./EditBlogNews";
+import CreateBlogNews from "./CreateBlogNews";
 
 export default function ManageBlogNews() {
   const [posts, setPosts] = useState([]);
-  const navigate = useNavigate();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
 
   useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const fetchPosts = async () => {
     try {
-      api.get("BlogNews/").then((data) => {
-        if (data.success) {
-          setPosts(data.blogNews);
-          console.log(data.blogNews);
-        } else {
-          console.log("Không có bài viết!");
-        }
-      });
+      const data = await api.get("BlogNews/");
+      if (data.success) {
+        setPosts(data.blogNews);
+      } else {
+        console.log("Không có bài viết!");
+      }
     } catch (error) {
       alert("An error has occurred. Please try again.");
     }
-  }, []);
+  };
 
-  async function deletePost(postId) {
+  // Mở popup xác nhận xóa
+  const openDeleteModal = (postId) => {
+    setSelectedPostId(postId);
+    setIsDeleteModalOpen(true);
+  };
+
+  // Đóng popup xác nhận xóa
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedPostId(null);
+  };
+
+  // Xác nhận xóa bài viết
+  const confirmDeletePost = async () => {
     try {
-      api.del("BlogNews/" + postId).then((data) => {
-        if (data.success) {
-          alert("Xóa thành công!");
-          const newPosts = posts.filter((post) => post.postId !== postId);
-          setPosts(newPosts);
-        } else {
-          alert("Xóa thất bại!");
-        }
-      });
+      const data = await api.del("BlogNews/" + selectedPostId);
+      if (data.success) {
+        alert("Xóa thành công!");
+        setPosts((prevPosts) =>
+          prevPosts.filter((post) => post.postId !== selectedPostId)
+        );
+      } else {
+        alert("Xóa thất bại!");
+      }
     } catch (error) {
       console.error("Error during deletion:", error);
       alert("An error occurred during deletion. Please try again.");
     }
-  }
+    closeDeleteModal();
+  };
+
+  // Mở popup update Blog
+  const openEditModal = (postId) => {
+    setSelectedPostId(postId);
+    setIsEditModalOpen(true);
+  };
+
+  // Đóng popup update Blog
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedPostId(null);
+  };
+
+  // Hiện popup add  Blog
+  const openAddModal = () => {
+    setIsAddModalOpen(true);
+  };
+
+  // Đóng popup add  Blog
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
+  };
 
   return (
     <>
       <Sidebar />
       <div className="content-container">
         <h1>Blog and News</h1>
-          <a href={ComponentPath.admin.blogNews.createBlogNews}>Add Post</a>
+        <button onClick={openAddModal} className="add-blog-btn">
+          Add Blog/News
+        </button>
         <table className="blog-table">
           <thead>
             <tr>
@@ -69,23 +113,75 @@ export default function ManageBlogNews() {
                 <td>{post.postDate}</td>
                 <td>{post.category}</td>
                 <td>
-                  <button
-                    onClick={() => deletePost(post.postId)}
-                    className="delete-btn"
-                  >
-                    Delete
-                  </button>
-                  <a
-                    href={ComponentPath.admin.blogNews.editBlogNews + post.postId}
-                    className="update-btn"
-                  >
-                    Update
-                  </a>
+                  <div className="action-buttons">
+                    <button
+                      onClick={() => openDeleteModal(post.postId)}
+                      className="delete-btn"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => openEditModal(post.postId)}
+                      className="update-btn"
+                    >
+                      Update
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        {/* Modal xác nhận xóa */}
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onRequestClose={closeDeleteModal}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <h2>Confirm Deletion</h2>
+          <p>Are you sure you want to delete this post?</p>
+          <div className="modal-buttons">
+            <button onClick={confirmDeletePost} className="confirm-btn">
+              Yes
+            </button>
+            <button onClick={closeDeleteModal} className="cancel-btn">
+              No
+            </button>
+          </div>
+        </Modal>
+
+        {/* Modal for Update */}
+        <Modal
+          isOpen={isEditModalOpen}
+          onRequestClose={closeEditModal}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <button className="btn-close" onClick={closeEditModal}>
+            X
+          </button>
+          {selectedPostId && (
+            <EditBlogNews
+              postId={selectedPostId}
+              onClose={closeEditModal}
+              onUpdateSuccess={fetchPosts}
+            />
+          )}
+        </Modal>
+
+        {/* Modal for Add Blog/News */}
+        <Modal
+          isOpen={isAddModalOpen}
+          onRequestClose={closeAddModal}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <button className="btn-close" onClick={closeAddModal}>
+            X
+          </button>
+          <CreateBlogNews onClose={closeAddModal} onAddSuccess={fetchPosts} />
+        </Modal>
       </div>
     </>
   );

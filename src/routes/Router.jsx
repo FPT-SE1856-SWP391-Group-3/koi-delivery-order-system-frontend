@@ -65,8 +65,6 @@ import { useEffect } from "react";
 // Function to get the access token from cookies
 var adminUrl = "/admin";
 
-
-
 // // Function to check if the user is authenticated
 // const isAuthenticated = async () => {
 //   const token = await getAccessToken();
@@ -78,7 +76,6 @@ const isAdmin = async () => {
   const user = JSON.parse(localStorage.getItem("user"));
   return user && user.roleId >= 3;
 };
-
 
 // Create the router configuration
 const router = createBrowserRouter([
@@ -105,7 +102,7 @@ const router = createBrowserRouter([
   //   index: true,
   // },
   {
-    element: <ProtectedRoute/>,
+    element: <ProtectedRoute />,
     children: [
       // Profile
       {
@@ -191,12 +188,12 @@ const router = createBrowserRouter([
         element: <UserDashboard />,
       },
       {
-        path : ComponentPath.user.notification.viewNotification,
-        element : <GetNotification/>
+        path: ComponentPath.user.notification.viewNotification,
+        element: <GetNotification />,
       },
       {
-        path : ComponentPath.user.notification.viewNotification,
-        element : <GetNotification/>
+        path: ComponentPath.user.notification.viewNotification,
+        element: <GetNotification />,
       },
       {
         element: <AdminRoute />,
@@ -294,7 +291,9 @@ const router = createBrowserRouter([
             element: <CreateBlogNews />,
           },
           {
-            path: ComponentPath.admin.certification.editCertification + ":certificationId",
+            path:
+              ComponentPath.admin.certification.editCertification +
+              ":certificationId",
             element: <EditCertification />,
           },
           {
@@ -314,16 +313,19 @@ const router = createBrowserRouter([
             element: <ManageOrderDocument />,
           },
           {
-            path: ComponentPath.admin.order.document.createOrderDocument + ":orderId/:orderStatusId",
+            path:
+              ComponentPath.admin.order.document.createOrderDocument +
+              ":orderId/:orderStatusId",
             element: <CreateOrderDocument />,
           },
           {
-            path: ComponentPath.admin.order.document.editOrderDocument + ":orderId",
+            path:
+              ComponentPath.admin.order.document.editOrderDocument + ":orderId",
             element: <EditOrderDocument />,
           },
           {
             path: ComponentPath.admin.dashboard,
-            element: <AdminDashboard/>,
+            element: <AdminDashboard />,
           },
         ],
       },
