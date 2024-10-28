@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import "../address/ManageUserAddress.css";
+import ComponentPath from "../../../routes/ComponentPath";
 
 export default function ManageUserAddress() {
   const [addresses, setAddresses] = useState([]);
@@ -25,7 +26,7 @@ export default function ManageUserAddress() {
 
   return (
     <>
-      <a className="back-button" href="/admin/manage-user">
+      <a className="back-button" href={ComponentPath.admin.user.manageUser}>
         Back
       </a>
       <div className="address-container">

@@ -1,9 +1,9 @@
 import axios from "axios";
 
-// Địa chỉ API cơ bản
-const API_BASE_URL = "https://localhost:7160/api";
+const BASE_URL = import.meta.env.VITE_API_ENDPOINT;
 
-const BASE_URL = "https://localhost:7160/";
+// Địa chỉ API cơ bản
+const API_BASE_URL = BASE_URL + "api";
 
 // Hàm cấu hình URL đầy đủ
 const buildUrl = (url: string) => `${API_BASE_URL}/${url}`;
@@ -24,6 +24,7 @@ const apiInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
+    'Access-Control-Allow-Origin': '*',
   },
 });
 

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { useForm } from "react-hook-form";
 import "../koi/CreateKoi.css";
+import ComponentPath from "../../../routes/ComponentPath";
 
 export default function CreatKoi() {
   const { register, handleSubmit } = useForm();
@@ -30,7 +31,7 @@ export default function CreatKoi() {
       api.post("Kois", koiData).then((data) => {
         if (data.success) {
           alert("Thêm thành công!");
-          navigate("/admin/manage-koi");
+          navigate(ComponentPath.admin.koi.manageKoi);
         } else {
           alert("Thêm thất bại!");
         }
@@ -43,21 +44,12 @@ export default function CreatKoi() {
 
   return (
     <>
-      <a className="back-button" href="/admin/manage-koi">
+      <a className="back-button" href={ComponentPath.admin.koi.manageKoi}>
         Back
       </a>
       <div className="addkoi-container">
         <h1 className="form-title">Add a new Koi</h1>
         <form onSubmit={handleSubmit(onSubmit)} className="add-form">
-          <div>
-            <input
-              type="hidden"
-              id="userId"
-              name="userId"
-              value={userId}
-              {...register("userId")}
-            />
-          </div>
           <div className="form-group">
             <label htmlFor="koiTypeId">Koi Type</label>
             <input

@@ -18,7 +18,7 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     try {
-      await api.post("Users/login/jwt/", data).then((data) => {
+      await api.post("Users/login/jwt", data).then((data) => {
         if (data.success) {
           console.log("Đăng nhập thành công!");
           localStorage.setItem("user", JSON.stringify(data.user));
