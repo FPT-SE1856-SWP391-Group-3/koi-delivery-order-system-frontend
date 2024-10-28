@@ -7,10 +7,7 @@ const ServiceSelection = () => {
       <h2>Service Selection</h2>
       <div className="sectionCompo">
         <label>Package Type</label>
-        <select>
-          <option value="document">Document</option>
-          <option value="poscal">Postal</option>
-        </select>
+        <input type="text" placeholder="Enter package type" />
         <label>Dimensions</label>
         <div className="dimensions">
           <input type="text" placeholder="Length (cm)" />
@@ -20,6 +17,7 @@ const ServiceSelection = () => {
         <div className="special-item-properties">
           <h3>
             <i className="icon-cart"></i> Tính Chất Hàng Hóa Đặc Biệt{" "}
+       
           </h3>
           <div className="checkbox-grid">
             <label>
@@ -57,7 +55,7 @@ const ServiceSelection = () => {
         <input type="text" placeholder="0 kg" />
         <label>Value</label>
         <input type="text" placeholder="0đ" />
-        <button className="add-package-btn">Add Package</button>
+        <button>Add Package</button>
       </div>
     </div>
   );

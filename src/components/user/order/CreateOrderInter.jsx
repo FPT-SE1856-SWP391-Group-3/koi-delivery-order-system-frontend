@@ -1,31 +1,95 @@
-import React, { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
+import React, { useState, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import OrderSummary from "./COIC/OrderSummary";
 import ReceiverInfo from "./COIC/ReceiverInfo";
 import SenderInfo from "./COC/SenderInfo";
 import ServiceSelection from "./COC/ServiceSelection.jsx";
+import api from "../../../api/CallAPI"; // Adjust the import path for your API calls
 import "../css/CreateOrder.css";
 
 function CreateOrderInter() {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const navigate = useNavigate(); // Add useNavigate for redirection
+  const [userData, setUserData] = useState({});
+  const [senderInfo, setSenderInfo] = useState({});
+  const [receiverInfo, setReceiverInfo] = useState({});
+  const [serviceSelection, setServiceSelection] = useState({});
+  const [additionalNotes, setAdditionalNotes] = useState("");
+  
+  const navigate = useNavigate();
+
+  // Fetch userId from localStorage
+  const userId = JSON.parse(localStorage.getItem("user"))?.userId;
+
+  // Fetch user data using userId
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const data = await api.get("Users/" + userId);
+        if (data.success) {
+          setUserData(data.user || {});
+        } else {
+          alert("Failed to retrieve user information!");
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        alert("An error occurred while fetching user data. Please try again.");
+      }
+    };
+    if (userId) fetchUser();
+  }, [userId]);
 
   const handleCheckboxChange = useCallback(() => {
     setIsCheckboxChecked((prevChecked) => !prevChecked);
   }, []);
 
-  const username = "đăng khoa";
-  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-    username
-  )}&background=0D8ABC&color=fff`;
+  // Dynamic username for display
+  const username = userData.fullName || "User";
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=0D8ABC&color=fff`;
 
-  // Redirect to payment page on submit
   const handleSubmitClick = useCallback(() => {
-    navigate("/ChoosePayment"); // Redirect to the payment selection page
-  }, [isCheckboxChecked, navigate]);
+    const formData = new FormData();
 
-  // Function to toggle the dropdown visibility
+    // Map sender info
+    formData.append("CustomerId", userData.customerId || null);
+    formData.append("OrderStatusId", senderInfo.orderStatusId || null);
+    formData.append("ShippingMethodId", senderInfo.shippingMethodId || null);
+    formData.append("PaymentHistoryId", senderInfo.paymentHistoryId || null);
+    formData.append("OrderDate", senderInfo.orderDate || null);
+    formData.append("DeliveryDate", senderInfo.deliveryDate || null);
+    formData.append("StartAddress", senderInfo.startAddress || "Default address");
+
+    // Map receiver info
+    formData.append("ReceiverName", receiverInfo.fullName);
+    formData.append("ReceiverPhoneNumber", receiverInfo.phoneNumber);
+    formData.append("ReceiverEmail", receiverInfo.email || "");
+    formData.append("ReceiverPartAddressLine", receiverInfo.addressLine || "");
+    formData.append("ReceiverFullAddressLine", `${receiverInfo.city}, ${receiverInfo.district}, ${receiverInfo.ward}, ${receiverInfo.address}`);
+
+    // Map service selection data
+    serviceSelection.packages.forEach((pkg, index) => {
+      formData.append(`KoiId[${index}]`, pkg.koiId || "");
+      formData.append(`Amount[${index}]`, pkg.amount || "");
+      formData.append(`KoiCondition[${index}]`, pkg.condition || "");
+    });
+
+    // Map customer documents
+    serviceSelection.documents.forEach((doc, index) => {
+      formData.append(`UploadDate[${index}]`, doc.uploadDate || "");
+      formData.append(`Description[${index}]`, doc.description || "");
+      formData.append(`CustomerDocumentFile[${index}]`, doc.file);
+    });
+
+    // Map additional notes from OrderSummary
+    formData.append("AdditionalNotes", additionalNotes);
+
+    // Save to localStorage
+    localStorage.setItem("orderFormData", JSON.stringify(Object.fromEntries(formData)));
+
+    // Navigate to ChoosePayment page
+    navigate("/ChoosePayment");
+  }, [userData, senderInfo, receiverInfo, serviceSelection, additionalNotes, navigate]);
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prevOpen) => !prevOpen);
   };
@@ -35,27 +99,17 @@ function CreateOrderInter() {
       <div>
         <nav className="Orsidebar">
           <ul>
-            <li>
-              <a href="/">Home</a>
-            </li>
-            <li>
-              <a href="/CreateOrder">Create Order</a>
-            </li>
-            <li>
-              <a href="/Profilemanage">Manage Account</a>
-            </li>
-            <li>
-              <a href="/AddPayment">Add Payment</a>
-            </li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/CreateOrder">Create Order</a></li>
+            <li><a href="/Profilemanage">Manage Account</a></li>
+            <li><a href="/AddPayment">Add Payment</a></li>
           </ul>
         </nav>
       </div>
 
-      {/* Navbar section */}
       <nav className="navbar-create">
         <h1>KOI DELIVERY</h1>
 
-        {/* Username with dropdown */}
         <div className="username" onClick={toggleDropdown}>
           {username}
           <img src={avatarUrl} alt="User Avatar" className="user-avatar" />
@@ -70,64 +124,52 @@ function CreateOrderInter() {
         </div>
       </nav>
 
-      <div>
-        <div className="main-content">
-          <header>
-            <a className="order-btn" href="/CreateOrder">
-              Create Domestic Order
-            </a>
-            <a className="order-btn-In" href="/CreateOrderInter">
-              Create International Order
-            </a>
-          </header>
+      <div className="main-content">
+        <header>
+          <a className="order-btn" href="/CreateOrder">Create Domestic Order</a>
+          <a className="order-btn-In" href="/CreateOrderInter">Create International Order</a>
+        </header>
 
-          <div className="form-sections">
-            <SenderInfo />
-            <ReceiverInfo />
-            <ServiceSelection />
-            <OrderSummary />
-          </div>
+        <div className="form-sections">
+          <SenderInfo onChange={setSenderInfo} />
+          <ReceiverInfo onChange={setReceiverInfo} />
+          <ServiceSelection onChange={setServiceSelection} />
+          <OrderSummary onChange={(notes) => setAdditionalNotes(notes)} />
+        </div>
 
-          <footer>
-            <div className="footer-content">
-              <div className="footer-summary">
-                <span>Total Freight: 0 đ</span>
-                <span>Total cost: 0 đ</span>
-                <span>Estimated Delivery: Same Day</span>
+        <footer>
+          <div className="footer-content">
+            <div className="footer-summary">
+              <span>Total Freight: 0 đ</span>
+              <span>Total cost: 0 đ</span>
+              <span>Estimated Delivery: Same Day</span>
+            </div>
+            <div className="buttonNprivacy">
+              <div className="privacy">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={isCheckboxChecked}
+                    onChange={handleCheckboxChange}
+                  />
+                  Tôi đã đọc và đồng ý với{" "}
+                  <strong className="Confirm-privacy">Điều khoản quy định</strong>
+                </label>
               </div>
-              <div className="buttonNprivacy">
-                <div className="privacy">
-                  <div>
-                    <label className="checkbox-label">
-                      <input
-                        type="checkbox"
-                        checked={isCheckboxChecked}
-                        onChange={handleCheckboxChange}
-                      />
-                    </label>
-                  </div>
-                  <div className="privacy">
-                    Tôi đã đọc và đồng ý với{" "}
-                    <strong className="Confirm-privacy">
-                      Điều khoản quy định
-                    </strong>
-                  </div>
-                </div>
-                <div className="footer-actions">
-                  <button
-                    className="submit-btn"
-                    disabled={!isCheckboxChecked}
-                    onClick={handleSubmitClick}
-                  >
-                    Submit
-                  </button>
-                  <button className="save-btn">Save</button>
-                  <button className="reset-btn">Reset</button>
-                </div>
+              <div className="footer-actions">
+                <button
+                  className="submit-btn"
+                  disabled={!isCheckboxChecked}
+                  onClick={handleSubmitClick}
+                >
+                  Submit
+                </button>
+                <button className="save-btn">Save</button>
+                <button className="reset-btn">Reset</button>
               </div>
             </div>
-          </footer>
-        </div>
+          </div>
+        </footer>
       </div>
     </div>
   );

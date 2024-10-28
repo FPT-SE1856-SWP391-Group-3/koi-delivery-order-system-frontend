@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProfileSidebar from "./ProfileCom/ProfileSidebar";
 import "../css/Profilemanage.css";
-import api from "../../../api/CallAPI"; // Ensure your API helper is set up correctly
+import api from "../../../api/CallAPI";
 
 function Profilemanage() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -15,35 +15,32 @@ function Profilemanage() {
     serviceType: "domestic",
   });
 
-  const userId = JSON.parse(localStorage.getItem("userId")); // Assuming the userId is stored in localStorage
+  // Fetch userId from localStorage only for API calls
+  const userId = JSON.parse(localStorage.getItem("user"))?.userId;
 
-  // Fetch user profile data on component mount
+  // Fetch user data using userId
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUser = async () => {
       try {
-        const response = await api.get(`/Users/${userId}`);
-        setUserData({
-          fullName: response.data.fullName || "",
-          email: response.data.email || "",
-          phoneNumber: response.data.phoneNumber || "",
-          birthDate: response.data.birthDate || "",
-          idNumber: response.data.idNumber || "",
-          address: response.data.address || "",
-          serviceType: response.data.serviceType || "domestic",
-        });
+        const data = await api.get("Users/" + userId);
+        if (data.success) {
+          setUserData(data.user || {});
+        } else {
+          alert("Lấy thông tin người dùng thất bại!");
+        }
       } catch (error) {
-        console.error("Failed to fetch user data:", error);
+        console.error("Error fetching user:", error);
+        alert("An error occurred while fetching user data. Please try again.");
       }
     };
-
-    fetchUserData();
+    if (userId) fetchUser();
   }, [userId]);
 
   // Handle input changes
-  const handleInputChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setUserData((prevData) => ({
-      ...prevData,
+    setUserData((prev) => ({
+      ...prev,
       [name]: value,
     }));
   };
@@ -52,23 +49,25 @@ function Profilemanage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.put(`/Users/${userId}`, userData);
-      if (response.status === 200) {
-        alert("Thông tin đã được cập nhật!");
+      const data = await api.put("Users/" + userId, userData);
+      if (data.success) {
+        alert("Cập nhật thành công!");
+      } else {
+        alert("Cập nhật thất bại!");
       }
     } catch (error) {
-      console.error("Failed to update user data:", error);
-      alert("Đã xảy ra lỗi. Vui lòng thử lại.");
+      console.error("Error updating user:", error);
+      alert("An error occurred while updating. Please try again.");
     }
   };
 
-  // Function to toggle dropdown visibility
+  // Toggle dropdown visibility
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // User name to generate avatar
-  const username = "Nguyễn Hồ Trường Thành";
+  // Static username for display (replace with userData.fullName if dynamic is needed)
+  const username = userData.fullName || "User";
   const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=0D8ABC&color=fff`;
 
   return (
@@ -76,18 +75,10 @@ function Profilemanage() {
       <div className="Orsidebar">
         <nav>
           <ul>
-            <li>
-              <a href="#home">Home</a>
-            </li>
-            <li>
-              <a href="/CreateOrder">Create Order</a>
-            </li>
-            <li>
-              <a href="/Profilemanage">Manage Account</a>
-            </li>
-            <li>
-              <a href="/AddPayment">Add Payment</a>
-            </li>
+            <li><a href="#home">Home</a></li>
+            <li><a href="/CreateOrder">Create Order</a></li>
+            <li><a href="/Profilemanage">Manage Account</a></li>
+            <li><a href="/AddPayment">Add Payment</a></li>
           </ul>
         </nav>
       </div>
@@ -95,10 +86,13 @@ function Profilemanage() {
       {/* Navbar section */}
       <nav className="navbar-create">
         <h1>KOI DELIVERY</h1>
+
+        {/* Username section with dropdown */}
         <div className="username" onClick={toggleDropdown}>
           {username}
           <img src={avatarUrl} alt="User Avatar" className="user-avatar" />
           <span className="dropdown-icon">&#9662;</span>
+
           {isDropdownOpen && (
             <div className="dropdown-menu">
               <a href="/Profilemanage">Cài đặt tài khoản</a>
@@ -118,32 +112,32 @@ function Profilemanage() {
               <input
                 type="text"
                 name="fullName"
-                value={userData.fullName}
-                onChange={handleInputChange}
+                value={userData.fullName || ""}
+                onChange={handleChange}
               />
             </div>
             <div>
               <label>Email</label>
-              <input type="email" value={userData.email} readOnly />
-              <a href="#">Thay đổi</a>
+              <input type="email" value={userData.email || ""} readOnly />
+              <a href="#" onClick={() => alert("Change email functionality")}>Thay đổi</a>
             </div>
             <div>
               <label>Số điện thoại</label>
               <input
                 type="text"
                 name="phoneNumber"
-                value={userData.phoneNumber}
-                onChange={handleInputChange}
+                value={userData.phoneNumber || ""}
+                onChange={handleChange}
               />
-              <a href="#">Thay đổi</a>
+              <a href="#" onClick={() => alert("Change phone number functionality")}>Thay đổi</a>
             </div>
             <div>
               <label>Ngày sinh</label>
               <input
                 type="date"
                 name="birthDate"
-                value={userData.birthDate}
-                onChange={handleInputChange}
+                value={userData.birthDate || ""}
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -151,8 +145,8 @@ function Profilemanage() {
               <input
                 type="text"
                 name="idNumber"
-                value={userData.idNumber}
-                onChange={handleInputChange}
+                value={userData.idNumber || ""}
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -160,20 +154,18 @@ function Profilemanage() {
               <input
                 type="text"
                 name="address"
-                value={userData.address}
-                onChange={handleInputChange}
+                value={userData.address || ""}
+                onChange={handleChange}
               />
             </div>
             <div>
               <label>Chuyển đổi loại dịch vụ</label>
               <select
                 name="serviceType"
-                value={userData.serviceType}
-                onChange={handleInputChange}
+                value={userData.serviceType || "domestic"}
+                onChange={handleChange}
               >
-                <option value="domestic">
-                  Chuyển phát trong nước (Miễn phí thu hộ)
-                </option>
+                <option value="domestic">Chuyển phát trong nước (Miễn phí thu hộ)</option>
               </select>
             </div>
             <button type="submit" className="save-button">

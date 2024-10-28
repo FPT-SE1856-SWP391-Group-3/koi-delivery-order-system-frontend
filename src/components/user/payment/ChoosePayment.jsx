@@ -8,12 +8,14 @@ import { FaTimes } from "react-icons/fa"; // Import the icon for "X"
 import api from "../../../api/CallAPI";
 
 function ChoosePayment() {
+  const orderData = JSON.parse(localStorage.getItem("orderData"));
   const [selectedPayment, setSelectedPayment] = useState("COD");
   const [searchParams] = useSearchParams();
   const [email, setEmail] = useState(searchParams.get("email"));
   const [orderId, setOrderId] = useState(searchParams.get("orderId"));
   const [totalPrice, setTotalPrice] = useState(searchParams.get("totalPrice"))
-
+   const { senderInfo, serviceSelection } = orderData;
+  
   const navigate = useNavigate();
 
   const handlePaymentChange = (e) => {
@@ -33,7 +35,6 @@ function ChoosePayment() {
       console.log(data)
       window.location.href  = data.paymentUrl;
     })
-
   };
 
   // Function to handle back navigation
@@ -105,20 +106,29 @@ function ChoosePayment() {
         <div className="customer-info">
           <h3>Thông tin khách hàng</h3>
           <p>
-            <strong>Thanh Thanh</strong> | 0988813131
+            <strong>{senderInfo.fullName}</strong> | {senderInfo.phoneNumber}
           </p>
-          <p>Email: thanhrobb111@gmail.com</p>
+          <p>Email: {senderInfo.email}</p>
+
         </div>
 
         {/* Order Summary Box */}
         <div className="order-summary">
           <h3>Thông tin đơn hàng</h3>
-          <p>1x koi</p>
-          <p className="total">Thành tiền: {totalPrice}đ</p>
+          {serviceSelection.map((pkg, index) => (
+            <p key={index}>
+              {pkg.type} - {pkg.weight} kg - {pkg.length} x {pkg.width} x {pkg.height} cm
+            </p>
+          ))}
+          <p className="total">Thành tiền: 197,400 đ</p>
         </div>
 
         <div className="payment-footer">
-          <button type="button" className="pay-now-btn" onClick={handlePaymentSubmit}>
+          <button
+            type="button"
+            className="pay-now-btn"
+            onClick={handlePaymentSubmit}
+          >
             Thanh toán
           </button>
         </div>
