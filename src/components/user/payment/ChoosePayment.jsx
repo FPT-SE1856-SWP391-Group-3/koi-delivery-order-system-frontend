@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/ChoosePayment.css"; // Import custom CSS
+import "../css/ChoosePayment.css";
 import ATMCard from "../../../assets/atm-icon.png";
 import VisaCard from "../../../assets/visa-icon.png";
 import COD from "../../../assets/COD-icon.png";
 import { FaTimes } from "react-icons/fa"; // Import the icon for "X"
 
 function ChoosePayment() {
+  const orderData = JSON.parse(localStorage.getItem("orderData"));
   const [selectedPayment, setSelectedPayment] = useState("COD");
   const navigate = useNavigate();
+
+  // Extract sender and service information from orderData
+  const { senderInfo, serviceSelection } = orderData;
 
   const handlePaymentChange = (e) => {
     setSelectedPayment(e.target.value);
@@ -88,20 +92,28 @@ function ChoosePayment() {
         <div className="customer-info">
           <h3>Thông tin khách hàng</h3>
           <p>
-            <strong>Thanh Thanh</strong> | 0988813131
+            <strong>{senderInfo.fullName}</strong> | {senderInfo.phoneNumber}
           </p>
-          <p>Email: thanhrobb111@gmail.com</p>
+          <p>Email: {senderInfo.email}</p>
         </div>
 
         {/* Order Summary Box */}
         <div className="order-summary">
           <h3>Thông tin đơn hàng</h3>
-          <p>1x koi</p>
+          {serviceSelection.map((pkg, index) => (
+            <p key={index}>
+              {pkg.type} - {pkg.weight} kg - {pkg.length} x {pkg.width} x {pkg.height} cm
+            </p>
+          ))}
           <p className="total">Thành tiền: 197,400 đ</p>
         </div>
 
         <div className="payment-footer">
-          <button type="button" className="pay-now-btn" onClick={handlePaymentSubmit}>
+          <button
+            type="button"
+            className="pay-now-btn"
+            onClick={handlePaymentSubmit}
+          >
             Thanh toán
           </button>
         </div>

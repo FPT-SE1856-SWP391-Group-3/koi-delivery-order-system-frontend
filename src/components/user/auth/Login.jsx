@@ -31,13 +31,13 @@ export default function Login() {
               var admin = ComponentPath.admin.user.manageUser;
              navigate(admin);
              break;
+            case 1:
+              navigate("/CreateOrder");
+              break;
             case 2:
               navigate("/CreateOrder");
               break;
             case 3:
-              navigate("/staff");
-              break;
-            case 4:
               navigate("/delivery");
               break;
             default:

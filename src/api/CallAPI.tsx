@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Địa chỉ API cơ bản
 const API_BASE_URL = "https://localhost:7160/api";
@@ -73,9 +73,10 @@ apiInstance.interceptors.request.use(
 const getFile = (url: string, path: any = {}) => {
   const fullUrl = buildUrl(url);
   const params = { path: path };
-  return apiFileInstance.get(fullUrl, { params, responseType: 'blob' })
-    .then(response => response.data)
-    .catch(error => {
+  return apiFileInstance
+    .get(fullUrl, { params, responseType: "blob" })
+    .then((response) => response.data)
+    .catch((error) => {
       console.error(`GET ${fullUrl} failed:`, error);
       throw error;
     });
@@ -83,9 +84,10 @@ const getFile = (url: string, path: any = {}) => {
 
 const get = async (url: string, params: any = {}) => {
   const fullUrl = buildUrl(url);
-  return apiInstance.get(fullUrl, { params })
-    .then(response => response.data)
-    .catch(error => {
+  return apiInstance
+    .get(fullUrl, { params })
+    .then((response) => response.data)
+    .catch((error) => {
       console.error(`GET ${fullUrl} failed:`, error);
       throw error;
     });
@@ -94,9 +96,10 @@ const get = async (url: string, params: any = {}) => {
 // Hàm POST
 const post = async (url: string, data: any) => {
   const fullUrl = buildUrl(url);
-  return apiInstance.post(fullUrl, data)
-    .then(response => response.data)
-    .catch(error => {
+  return apiInstance
+    .post(fullUrl, data)
+    .then((response) => response.data)
+    .catch((error) => {
       console.error(`POST ${fullUrl} failed:`, error);
       throw error;
     });
@@ -105,30 +108,36 @@ const post = async (url: string, data: any) => {
 // Hàm POST file
 const postForm = async (url: string, data: any) => {
   const fullUrl = buildUrl(url);
-  return formApiInstance.post(fullUrl, data)
-    .then(response => response.data)
-    .catch(error => {
+  return formApiInstance
+    .post(fullUrl, data)
+    .then((response) => response.data)
+    .catch((error) => {
       console.error(`POST ${fullUrl} failed:`, error);
       throw error;
     });
 };
 
 // Hàm PUT
-const put = async (url: string, data: any) => {
+const put = async (url, data) => {
   const fullUrl = buildUrl(url);
-  return apiInstance.put(fullUrl, data)
-    .then(response => response.data)
-    .catch(error => {
-      console.error(`PUT ${fullUrl} failed:`, error);
+  console.log("Attempting PUT request to:", fullUrl, "with data:", data);
+  return apiInstance
+    .put(fullUrl, data)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error(
+        `PUT ${fullUrl} failed with status ${error.response?.status}:`,
+        error
+      );
       throw error;
     });
 };
-
 const putForm = async (url: string, data: any) => {
   const fullUrl = buildUrl(url);
-  return formApiInstance.put(fullUrl, data)
-    .then(response => response.data)
-    .catch(error => {
+  return formApiInstance
+    .put(fullUrl, data)
+    .then((response) => response.data)
+    .catch((error) => {
       console.error(`POST ${fullUrl} failed:`, error);
       throw error;
     });
@@ -137,9 +146,10 @@ const putForm = async (url: string, data: any) => {
 // Hàm DELETE
 const del = async (url: string) => {
   const fullUrl = buildUrl(url);
-  return apiInstance.delete(fullUrl)
-    .then(response => response.data)
-    .catch(error => {
+  return apiInstance
+    .delete(fullUrl)
+    .then((response) => response.data)
+    .catch((error) => {
       console.error(`DELETE ${fullUrl} failed:`, error);
       throw error;
     });
@@ -155,5 +165,5 @@ export default {
   getFile,
   buildUrl,
   imageBuildUrl,
-  putForm
+  putForm,
 };
