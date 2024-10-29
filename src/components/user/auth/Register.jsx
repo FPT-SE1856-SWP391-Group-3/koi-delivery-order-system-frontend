@@ -31,7 +31,7 @@ export default function Register() {
   };
 
   return (
-    <>
+    <div className="register">
       <a href="/" className="registerhome-icon">
         <img src={home} alt="Home" />
       </a>
@@ -93,6 +93,6 @@ export default function Register() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

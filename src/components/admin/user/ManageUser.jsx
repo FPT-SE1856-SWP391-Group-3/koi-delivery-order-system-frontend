@@ -101,9 +101,9 @@ export default function ManageUser() {
   return (
     <>
       <Sidebar />
-      <div className="container">
+      <div className="manage-container">
         <h1>Manage User</h1>
-        <table className="table table-hover">
+        <table className="managetable managetable-hover">
           <thead>
             <tr>
               <th>Username</th>
@@ -121,6 +121,7 @@ export default function ManageUser() {
                 <td>{user.phoneNumber}</td>
                 <td>{user.roleName}</td>
                 <td>
+                  <div className="action-buttons"></div>
                   <button
                     className="btn_delete"
                     onClick={() => openDeleteModal(user.userId)} // Mở modal xác nhận xóa

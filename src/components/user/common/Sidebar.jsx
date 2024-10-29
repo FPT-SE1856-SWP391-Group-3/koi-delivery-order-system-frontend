@@ -6,8 +6,8 @@ export default function Sidebar() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   return (
     <>
-      <div className="sidebar">
-        <div className="header">
+      <div className="sidebar-container">
+        <div className="sidebar-head">
           <h2>{user.roleName}</h2>
           <a href="/logout" className="logout-btn">
             Log Out

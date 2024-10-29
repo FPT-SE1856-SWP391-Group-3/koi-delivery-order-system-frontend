@@ -4,7 +4,7 @@ import logo from "/Logo.png";
 import ComponentPath from "routes/ComponentPath";
 
 const Navbar = () => {
-  const [menu, setMenu] = useState("home");
+  const [menu, setMenu] = useState();
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState(localStorage.getItem("user"));
   return (

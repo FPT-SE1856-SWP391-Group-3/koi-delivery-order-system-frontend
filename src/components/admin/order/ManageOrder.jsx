@@ -20,7 +20,7 @@ export default function ManageOrder() {
   const fetchOrders = async () => {
     try {
       // Kiểm tra nếu roleId === 4 thì lấy đơn hàng theo userId
-      const endpoint = user.roleId === 4 ? "Orders/delivery-staff" : "Orders/";
+      const endpoint = user.roleId === 4 ? `Orders/${user.userId}` : "Orders/";
       console.log(user.userId);
       const data = await api.get(endpoint);
       if (data.success) {
@@ -165,7 +165,7 @@ export default function ManageOrder() {
   return (
     <div>
       <Sidebar />
-      <div className="content-container">
+      <div className="manage-container">
         <h1>Manage Order</h1>
         <table className="order-table">
           <thead>
