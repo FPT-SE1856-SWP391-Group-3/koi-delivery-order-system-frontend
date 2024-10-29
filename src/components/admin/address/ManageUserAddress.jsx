@@ -60,6 +60,5 @@ export default function ManageUserAddress({ userId }) {
           )}
         </div>
       </div>
-    </div>
   );
 }
