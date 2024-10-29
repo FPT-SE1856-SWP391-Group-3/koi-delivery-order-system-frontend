@@ -100,7 +100,7 @@ export default function Login() {
 
   return (
     <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
-      <div>
+      <div className="login">
         <a href="/" className="loginhome-icon">
           <img src={home} />
         </a>

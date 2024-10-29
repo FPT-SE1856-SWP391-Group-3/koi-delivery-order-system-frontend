@@ -1,108 +1,85 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Poppins", sans-serif;
-  background-color: #fafafa;
-}
-
-.container {
+.manage-container {
   margin-left: 260px; /* Phù hợp với kích thước sidebar */
   padding: 20px;
 }
 
 h1 {
   font-size: 28px;
-  color: #34495e;
+  color: #2c3e50;
   margin-bottom: 20px;
 }
 
-.table {
+.managetable {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.table th,
-.table td {
-  padding: 15px;
+.managetable th,
+.managetable td {
+  padding: 12px 15px;
   text-align: center;
   border-bottom: 1px solid #ddd;
 }
 
-.table th {
+.managetable th {
   background-color: #34495e;
   color: #ecf0f1;
-  font-size: 16px;
-  font-weight: bold;
 }
 
-.table td {
-  color: #333;
-  font-size: 15px;
-  border: 1px solid #ddd;
+.managetable td {
+  color: #2c3e50;
 }
 
-.table-hover tbody tr:hover {
-  background-color: #f8f8f8;
+.managetable-hover tbody tr:hover {
+  background-color: #f1f1f1;
 }
 
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.table td button {
-  padding: 10px 15px;
+.managetable td button {
+  padding: 8px 12px;
   border: none;
-  border-radius: 5px;
-  margin-right: 10px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 500;
-  transition: background-color 0.3s ease, transform 0.2s;
-}
-
-.table td button:hover {
-  transform: scale(1.05);
+  text-decoration: none;
+  font-size: 18px;
+  margin-right: 8px;
 }
 
 .btn_delete {
-  background-color: #d9534f;
+  background-color: #c0392b;
   color: white;
 }
 
 .btn_delete:hover {
-  background-color: #c9302c;
+  background-color: #861f14;
 }
 
 .btn_update {
-  background-color: #5cb85c;
+  background-color: forestgreen;
   color: white;
 }
 
 .btn_update:hover {
-  background-color: #4cae4c;
+  background-color: rgb(17, 88, 17);
 }
 
 .btn_address {
-  background-color: #f0ad4e;
+  background-color: rgb(234, 152, 51);
   color: white;
 }
 
 .btn_address:hover {
-  background-color: #eea236;
+  background-color: rgb(162, 107, 39);
 }
 
-/* Modal overlay styling */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Nền mờ cho overlay */
 .overlay {
   position: fixed;
   top: 0;
@@ -118,17 +95,16 @@ h1 {
 
 .modal {
   background: white;
-  padding: 25px;
+  padding: 20px;
   border-radius: 8px;
   width: 400px;
   max-width: 90%;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  animation: slide-down 0.3s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .modal h2 {
-  font-size: 22px;
+  font-size: 24px;
   color: #333;
   margin-bottom: 10px;
 }
@@ -153,42 +129,49 @@ h1 {
 }
 
 .btn-close:hover {
-  color: #e74c3c; /* Color change on hover */
+  color: #e74c3c; /* Đổi màu khi hover */
 }
 
+/* Căn giữa và khoảng cách cho nút */
 .confirm-delete-buttons {
   display: flex;
   justify-content: center;
   gap: 10px;
 }
 
-.btn_confirm_yes,
-.btn_confirm_no {
+/* Nút "Yes" */
+.btn_confirm_yes {
   padding: 10px 20px;
   font-size: 1em;
   border-radius: 6px;
+  background-color: #d9534f;
   color: white;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.btn_confirm_yes {
-  background-color: #d9534f;
-}
-
 .btn_confirm_yes:hover {
   background-color: #c9302c;
 }
 
+/* Nút "No" */
 .btn_confirm_no {
+  padding: 10px 20px;
+  font-size: 1em;
+  border-radius: 6px;
   background-color: #6c757d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .btn_confirm_no:hover {
   background-color: #5a6268;
 }
 
+/* Hiệu ứng slide-down cho modal */
 @keyframes slide-down {
   from {
     opacity: 0;

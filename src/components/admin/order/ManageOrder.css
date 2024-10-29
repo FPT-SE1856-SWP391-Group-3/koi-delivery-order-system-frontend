@@ -9,13 +9,13 @@ body {
   background-color: #f5f5f5;
 }
 
-.content-container {
+.manage-container {
   margin-left: 260px; /* Phù hợp với kích thước sidebar */
   padding: 20px;
   background-color: #f9f9f9;
 }
 
-.content-container h1 {
+.manage-container h1 {
   font-size: 28px;
   margin-bottom: 20px;
   color: #2c3e50;

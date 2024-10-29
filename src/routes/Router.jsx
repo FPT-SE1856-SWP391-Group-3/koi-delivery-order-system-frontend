@@ -3,6 +3,10 @@ import ManageUserAddress from "../components/admin/address/ManageUserAddress";
 import ManageUser from "../components/admin/user/ManageUser";
 import UpdateUser from "../components/admin/user/UpdateUser";
 import HomePage from "../components/HomePage";
+import BlogNews from "../components/BlogNews";
+import CustomerSupport from "../components/CustomerSupport";
+import Service from "../components/Service";
+import Recruitment from "../components/Recruitment";
 import AddAddress from "../components/user/address/AddAddress";
 import EditAddress from "../components/user/address/EditAddress";
 import UserAddress from "../components/user/address/UserAddress";
@@ -108,7 +112,7 @@ const router = createBrowserRouter([
     path: "/Profilemanage",
     element: <Profilemanage />,
   },
-    {
+  {
     path: "/CreateOrderInter",
     element: <CreateOrderInter />,
   },
@@ -131,6 +135,26 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+    index: true,
+  },
+  {
+    path: "/news",
+    element: <BlogNews />,
+    index: true,
+  },
+  {
+    path: "/customer-support",
+    element: <CustomerSupport />,
+    index: true,
+  },
+  {
+    path: "/services",
+    element: <Service />,
+    index: true,
+  },
+  {
+    path: "/recruitment",
+    element: <Recruitment />,
     index: true,
   },
   // {

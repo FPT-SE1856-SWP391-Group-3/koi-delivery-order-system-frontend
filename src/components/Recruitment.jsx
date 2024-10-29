@@ -1,16 +1,17 @@
 import React from "react";
 import Navbar from "./user/common/Navbar";
 import Footer from "./user/common/Footer";
-import BlogCard from "./user/common/BlogCard";
 
-const BlogNews = () => {
+const Recruitment = () => {
   return (
-    <>
+    <div>
       <Navbar />
-      <BlogCard />
+      <p>
+        <h1>Thong tin Recruiment bo sung sau</h1>
+      </p>
       <Footer />
-    </>
+    </div>
   );
 };
 
-export default BlogNews;
+export default Recruitment;

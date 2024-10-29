@@ -1,5 +1,5 @@
 /* Sidebar container */
-.sidebar {
+.sidebar-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -14,24 +14,24 @@
 }
 
 /* Sidebar header */
-.header {
+.sidebar-head {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
+  align-items: center; /* Canh giữa theo chiều dọc */
+  justify-content: space-between; /* Canh giữa theo chiều ngang */
+  padding: 10px 20px; /* Thêm khoảng đệm nếu cần */
   color: #ffffff;
   background-color: #0d1a26; /* Màu nền đậm hơn cho header */
   border-bottom: 1px solid #334455;
 }
 
-.header h2 {
+.sidebar-head h2 {
   font-size: 18px;
   font-weight: 600;
   color: #ffd700; /* Màu vàng sang trọng */
 }
 
 /* Links in sidebar */
-.sidebar a {
+.sidebar-container a {
   display: block;
   padding: 15px 20px;
   color: #cdd4da; /* Màu chữ xám nhạt */
@@ -40,7 +40,7 @@
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-.sidebar a:hover {
+.sidebar-container a:hover {
   background-color: #2e3b4e; /* Màu nền khi hover */
   color: #ffffff; /* Màu chữ khi hover */
 }
@@ -61,12 +61,4 @@
 
 .logout-btn:hover {
   background-color: #c0392b;
-}
-
-/* Content container styling */
-.content-container {
-  margin-left: 260px; /* Để tạo khoảng trống cho sidebar */
-  padding: 20px;
-  background-color: #f5f5f5;
-  min-height: 100vh;
 }
