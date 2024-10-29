@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { useForm } from "react-hook-form";
 import "../koi/CreateKoi.css";
+import ComponentPath from "../../../routes/ComponentPath";
 
 export default function CreatKoi({ onClose, onAddSuccess }) {
   const { register, handleSubmit } = useForm();

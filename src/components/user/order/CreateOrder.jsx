@@ -1,502 +1,173 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../../api/CallAPI";
-import { set, useForm } from "react-hook-form";
-import axios from "axios";
-import ComponentPath from "routes/ComponentPath";
-import Bootstrap from "../props/Bootstrap";
-import UserSidebar from "../common/UserSidebar";
+import OrderSummary from "./COC/OrderSummary";
+import ReceiverInfo from "./COC/ReceiverInfo";
+import SenderInfo from "./COC/SenderInfo";
+import ServiceSelection from "./COC/ServiceSelection";
+import "../css/CreateOrder.css";
 
-export default function CreateOrder() {
-  const customerId = JSON.parse(localStorage.getItem("userId"));
-  const { register, handleSubmit, setValue } = useForm();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  const [address, setAddress] = useState([]);
-  const [koiList, setKoiList] = useState([
-    {
-      koiId: "",
-      koiName: "",
-      amount: 0,
-      koiCondition: "",
-      weight: 0,
-      totalPrice: 0,
-    },
-  ]);
+function CreateOrder() {
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [senderInfo, setSenderInfo] = useState({});
+  const [receiverInfo, setReceiverInfo] = useState({});
+  const [serviceSelection, setServiceSelection] = useState({});
+  const [additionalNotes, setAdditionalNotes] = useState("");
 
-  const [totalOrderPrice, setTotalOrderPrice] = useState(0); // Tổng giá của đơn hàng
-  const [totalOrderWeight, setTotalOrderWeight] = useState(0); // Tổng khối lượng của đơn hàng
-  const [kois, setKois] = useState(); // Danh sách koi
-
-  //Lay thong tin koi
-  const [orderServiceDetails, setOrderServiceDetails] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0); // Tổng giá của đơn hàng
   const navigate = useNavigate();
 
-  //Lay dia chi nguoi dung
-  const [cityName, setCityName] = useState("");
-  const [districtName, setDistrictName] = useState("");
-  const [wardName, setWardName] = useState("");
-  const [addresses, setAddresses] = useState([]);
-
-  //Lay dia chi nguoi dung
   useEffect(() => {
-    api.get("Addresses/user/" + customerId).then((data) => {
-      if (data.success) {
-        setAddress(data.address);
-        var userAddress = (
-          Array.isArray(data.address) ? data.address : []
-        ).filter((address) => address.userId == customerId)[0];
-        if (userAddress) {
-          console.log(userAddress);
-          setAddress(userAddress);
-        } else {
-          console.log("Address not found for userId:", customerId);
-        }
-        console.log(data.address);
-      } else {
-        console.log("Không có địa chỉ!");
-      }
-    });
-
-    api.get("Kois/").then((data) => {
-      if (data.success) {
-        console.log(data.kois);
-        setKois(data.kois);
-      } else {
-        console.log("Không có koi!");
-      }
-    });
-
-    api.get("OrderServiceDetails/").then((data) => {
-      if (data.success) {
-        console.log(data.orderServiceDetails);
-        setOrderServiceDetails(data.orderServiceDetails);
-      } else {
-        console.log("Không có dịch vụ!");
-      }
-    });
-    axios
-      .get(
-        "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-      )
-      .then((response) => response.data)
-      .then((data) => {
-        setAddresses(data);
-      });
+    const savedOrderData = JSON.parse(localStorage.getItem("orderData"));
+    if (savedOrderData) {
+      setSenderInfo(savedOrderData.senderInfo || {});
+      setReceiverInfo(savedOrderData.receiverInfo || {});
+      setServiceSelection(savedOrderData.serviceSelection || {});
+      setAdditionalNotes(savedOrderData.additionalNotes || "");
+    }
   }, []);
 
-  //Them koi
-  const handleAddKoi = () => {
-    setKoiList([
-      ...koiList,
-      {
-        koiId: "",
-        koiName: "",
-        amount: "",
-        koiCondition: "",
-        weight: 0,
-        totalPrice: 0,
-      },
-    ]);
-  };
+  const handleCheckboxChange = useCallback(() => {
+    setIsCheckboxChecked((prevChecked) => !prevChecked);
+  }, []);
 
-  //Cap nhat koi
-  const handleKoiChange = (index, event) => {
-    const { name, value } = event.target; // Lay gia tri cua input
-    const updatedKoiList = [...koiList]; // Tao ra mot array moi
-    updatedKoiList[index][name] = value; // Cap nhat gia tri cua input
-    setKoiList(updatedKoiList); // Cap nhat lai koiList
-    calculateTotalPrice(updatedKoiList);
-  };
+  const username = "đăng khoa";
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+    username
+  )}&background=0D8ABC&color=fff`;
 
-  const handleDeleteKoi = (index) => {
-    koiList.splice(index, 1);
-    setKoiList([...koiList]);
-    calculateTotalPrice(koiList);
-  };
-
-  const calculateTotalPrice = (koiList) => {
-    let totalOrderPrice = 0;
-    let totalWeight = 0;
-    let totalPrice = 0;
-    koiList.forEach((koi) => {
-      const koiData = kois.find((k) => k.koiId === parseInt(koi.koiId));
-      if (koiData) {
-        const koiPrice = koiData.price || 0;
-        const koiWeight = koiData.weight || 0;
-        totalOrderPrice += koi.amount * koiPrice; // Tính tổng giá
-        totalWeight += koi.amount * koiWeight; // Tính tổng khối lượng
-      }
-    });
-    setTotalOrderPrice(totalOrderPrice);
-    setTotalOrderWeight(totalWeight);
-    console.log(totalOrderPrice);
-    if (totalOrderPrice > 0) {
-      orderServiceDetails.forEach((orderServiceDetail) => {
-        totalPrice += orderServiceDetail.orderServiceDetailPrice;
-      });
-      setTotalPrice(totalPrice + totalOrderPrice);
-    } else {
-      setTotalPrice(0);
-    }
-  };
-  const [fullAddress, setFullAddress] = useState();
-  const [partAddress, setPartAddress] = useState();
-
-  const handleChange = (e) => {
-    console.log(e.target.value);
-    if (cityName != "" && districtName != "" && wardName != "") {
-      if (e.target.value != "") {
-        setFullAddress(
-          e.target.value +
-            ", " +
-            wardName +
-            ", " +
-            districtName +
-            ", " +
-            cityName
-        );
-        setPartAddress(wardName + ", " + districtName + ", " + cityName);
-      } else {
-        setFullAddress("");
-      }
-    } else {
-      alert("Vui lòng chọn địa chỉ!");
-      setFullAddress("");
-      setPartAddress("");
-      e.target.value = "";
-    }
-  };
-
-  //Tao don hang
-  const onSubmit = async (data) => {
-    console.log(data);
-    const koiIds = koiList.map((koi) => koi.koiId);
-    const amounts = koiList.map((koi) => koi.amount);
-    const koiConditions = koiList.map((koi) => koi.koiCondition);
-
-    const fullOrderData = {
-      ...data, // Lấy các dữ liệu từ form người nhận
-      koiId: koiIds,
-      amount: amounts,
-      koiCondition: koiConditions,
-      totalPrice: totalPrice,
-      receiverPartAddressLine: partAddress,
-      receiverFullAddressLine: fullAddress,
+  const handleSubmitClick = useCallback(() => {
+    const formData = {
+      senderInfo,
+      receiverInfo,
+      serviceSelection,
+      additionalNotes,
     };
-    console.log(fullOrderData);
-    try {
-      api.post("Orders/", fullOrderData).then((data) => {
-        if (data.success) {
-          alert("Thêm thành công!");
-          navigate(
-            ComponentPath.user.document.createDocument +
-              data.orderId +
-              "/" +
-              customerId
-          );
-        } else {
-          alert("Thêm thất bại!");
-        }
-      });
-    } catch (error) {
-      console.error("Error during registration:", error);
-      alert("An error occurred during registration. Please try again.");
-    }
-  };
+    localStorage.setItem("orderData", JSON.stringify(formData));
+    navigate("/ChoosePayment");
+  }, [senderInfo, receiverInfo, serviceSelection, additionalNotes, navigate]);
 
-  console.log(fullAddress);
+  const handleSaveClick = useCallback(() => {
+    const formData = {
+      senderInfo,
+      receiverInfo,
+      serviceSelection,
+      additionalNotes,
+    };
+    localStorage.setItem("orderData", JSON.stringify(formData));
+    alert("Thông tin đơn hàng đã được lưu!");
+  }, [senderInfo, receiverInfo, serviceSelection, additionalNotes]);
+
+  const handleResetClick = useCallback(() => {
+    localStorage.removeItem("orderData");
+    setSenderInfo({});
+    setReceiverInfo({});
+    setServiceSelection({});
+    setAdditionalNotes("");
+    setIsCheckboxChecked(false);
+    alert("Form đã được đặt lại!");
+  }, []);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prevOpen) => !prevOpen);
+  };
 
   return (
-    <>
-      <Bootstrap />
-      <UserSidebar />
-      <div className="content">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="row">
-            <div className="col-lg-6">
-              <div className="form-group">
-                <div className="card">
-                  <div className="card-header">
-                    <h2>Người gửi</h2>
-                  </div>
-                  <div className="card-body">
-                    <h3>Tên: {user.userName}</h3>
-                    <h3>SDT: {user.phoneNumber}</h3>
-                    <h3>Email: {user.email}</h3>
-                  </div>
-                </div>
-              </div>
-              <br />
-              <div className="form-group">
-                <div className="card">
-                  <div className="card-header">
-                    <h3>Người nhận</h3>
-                  </div>
-                  <div className="card-body">
-                    <input
-                      type="hidden"
-                      id="customerId"
-                      name="customerId"
-                      value={customerId}
-                      {...register("customerId")}
-                    />
-                    <input
-                      type="hidden"
-                      id="startAddress"
-                      name="startAddress"
-                      value={
-                        "Bãi cỏ KTX khu B, Phường Đông Hòa, Dĩ An, Tỉnh Bình Dương, Việt Nam"
-                      }
-                      {...register("startAddress")}
-                    />
-                    <input
-                      type="text"
-                      id="receiverName"
-                      name="receiverName"
-                      placeholder="Ten nguoi nhan"
-                      {...register("receiverName")}
-                    />
-                    <input
-                      type="text"
-                      id="phone"
-                      name="phone"
-                      placeholder="So dien thoai nguoi nhan"
-                      {...register("receiverPhoneNumber")}
-                    />
-                    <input
-                      type="text"
-                      id="receiverEmail"
-                      name="receiverEmail"
-                      placeholder="Email nguoi nhan"
-                      {...register("receiverEmail")}
-                    />
-
-                    <div className="form-group">
-                      <label htmlFor="city">Thành phố</label>
-                      <select
-                        className="form-control"
-                        onChange={(e) => {
-                          setCityName(e.target.value);
-                        }}
-                      >
-                        <option value="">Chọn thành phố</option>
-                        {addresses.map((address) => (
-                          <option key={address.Id} value={address.Name}>
-                            {address.Name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="district">Huyện</label>
-                      <select
-                        className="form-control"
-                        onChange={(e) => {
-                          setDistrictName(e.target.value);
-                        }}
-                      >
-                        <option value="">Chọn huyện</option>
-                        {addresses.map((address) => {
-                          if (address.Name == cityName) {
-                            return address.Districts.map((district) => (
-                              <option key={district.Id} value={district.Name}>
-                                {district.Name}
-                              </option>
-                            ));
-                          }
-                        })}
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="ward">Quận/Xã</label>
-                      <select
-                        className="form-control"
-                        onChange={(e) => {
-                          setWardName(e.target.value);
-                        }}
-                      >
-                        <option value="">Chọn quận/xã</option>
-                        {addresses.map((address) => {
-                          if (address.Name == cityName) {
-                            return address.Districts.map((district) => {
-                              if (district.Name == districtName) {
-                                return district.Wards.map((ward) => (
-                                  <option key={ward.Id} value={ward.Name}>
-                                    {ward.Name}
-                                  </option>
-                                ));
-                              }
-                            });
-                          }
-                        })}
-                      </select>
-                      <div className="form-group">
-                        <label htmlFor="specificAddress">Địa chỉ cụ thể</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="specificAddress"
-                          name="specificAddress"
-                          onChange={(e) => {
-                            handleChange(e);
-                          }}
-                        />
-                      </div>
-                      <br />
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="receiverAddressLine"
-                        name="receiverAddressLine"
-                        placeholder="Dia chi nguoi nhan"
-                        value={fullAddress}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <div className="app-container">
+      {/* Navbar */}
+      <nav className="navbar-create">
+        <h1>KOI DELIVERY</h1>
+        <div className="username" onClick={toggleDropdown}>
+          {username}
+          <img src={avatarUrl} alt="User Avatar" className="user-avatar" />
+          <span className="dropdown-icon">&#9662;</span>
+          {isDropdownOpen && (
+            <div className="dropdown-menu">
+              <a href="/Profilemanage">Cài đặt tài khoản</a>
+              <a href="/UpdatePassword">Reset Password</a>
+              <a href="/logout">Đăng xuất</a>
             </div>
+          )}
+        </div>
+      </nav>
 
-            <div className="col-lg-6">
-              <div className="card">
-                <div className="card-header">
-                  <h3>Thông tin loại hàng</h3>
-                </div>
-                <div className="card-body">
-                  {koiList.map((koi, index) => (
-                    <div
-                      key={index}
-                      // style={{
-                      //   marginBottom: "20px",
-                      //   border: "1px solid #ccc",
-                      //   padding: "10px",
-                      // }}
-                    >
-                      <h3>Hàng hóa {index + 1}</h3>
-                      <br />
-                      Tên cá Koi
-                      <select
-                        name="koiId"
-                        className="form-control"
-                        value={koi.koiId}
-                        onChange={(event) => handleKoiChange(index, event)}
-                      >
-                        <option value="">Chọn cá Koi</option>
-                        {kois?.map((koi) => (
-                          <option key={koi.koiId} value={koi.koiId}>
-                            {koi.koiName}
-                          </option>
-                        ))}
-                      </select>
-                      {/* <input
-                        type="number"
-                        className="form-control"
-                        name="koiId"
-                        placeholder="ID Koi"
-                        value={koi.koiId}
-                        onChange={(event) => handleKoiChange(index, event)}
-                      /> */}{" "}
-                      <br />
-                      {/* <p>
-                        Ten koi:{" "}
-                        {kois?.find((k) => k.koiId === parseInt(koi.koiId))
-                          ?.koiName || ""}
-                      </p> */}
-                      Số lượng
-                      <input
-                        type="number"
-                        name="amount"
-                        className="form-control"
-                        placeholder="Số lượng"
-                        value={koi.amount}
-                        onChange={(event) => handleKoiChange(index, event)}
-                      />{" "}
-                      <br />
-                      <p>
-                        Khối lượng:{" "}
-                        {koi.amount *
-                          (kois?.find((k) => k.koiId === parseInt(koi.koiId))
-                            ?.weight || 0)}{" "}
-                        kg
-                      </p>
-                      <p>
-                        Gía một con:{" "}
-                        {kois?.find((k) => k.koiId === parseInt(koi.koiId))
-                          ?.price || 0}{" "}
-                        VND
-                      </p>
-                      <p>
-                        Tổng giá:
-                        {koi.amount *
-                          (kois?.find((k) => k.koiId === parseInt(koi.koiId))
-                            ?.price || 0)}{" "}
-                        D
-                      </p>
-                      Tình trạng
-                      <input
-                        type="text"
-                        name="koiCondition"
-                        placeholder="Tinh trang"
-                        className="form-control"
-                        value={koi.koiCondition}
-                        onChange={(event) => handleKoiChange(index, event)}
-                      />{" "}
-                      <button
-                        type="button"
-                        className="btn btn-primary col-lg-3"
-                        onClick={() => handleDeleteKoi(index)}
-                      >
-                        Xóa
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    className="btn btn-primary col-lg-3"
-                    onClick={handleAddKoi}
-                  >
-                    + Thêm hàng hóa
-                  </button>
-                  <h3 style={{ marginTop: "1em" }}>
-                    Tổng giá: {totalOrderPrice} VND
-                  </h3>
-                  <h3>Tổng khối lượng: {totalOrderWeight} g</h3>
-                </div>
-                {/*
-          HandleAddKoi hoat dong bang cach tao ra mot array moi voi phan tu cu va them mot phan tu moi vao cuoi array
-          Khi do koiList.map se chay lai va tao ra cac input moi
-        */}
-              </div>
-              <br />
-              <div className="card">
-                <div className="card-header">
-                  <h3>Các dịch vụ</h3>
-                </div>
-                <div className="card-body">
-                  {orderServiceDetails.map((orderServiceDetail) => (
-                    <>
-                      <p>
-                        Giá dịch vụ: {orderServiceDetail.orderServiceDetailName}{" "}
-                      </p>
-                      <p>
-                        Giá cước: {orderServiceDetail.orderServiceDetailPrice}Đ{" "}
-                      </p>
-                    </>
-                  ))}
+      {/* Sidebar */}
+      <div>
+        <nav className="Orsidebar">
+          <ul>
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/CreateOrder">Create Order</a>
+            </li>
+            <li>
+              <a href="/Profilemanage">Manage Account</a>
+            </li>
+            <li>
+              <a href="/AddPayment">Add Payment</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
 
-                  <h1>Tổng tiền: {totalPrice}</h1>
+      <div className="main-content">
+        <header>
+          <a className="order-btn-Do" href="/CreateOrder">
+            Create Domestic Order
+          </a>
+          <a className="order-btn" href="/CreateOrderInter">
+            Create International Order
+          </a>
+        </header>
+
+        {/* Form Sections */}
+        <div className="form-sections">
+          <SenderInfo onChange={setSenderInfo} />
+          <ReceiverInfo onChange={setReceiverInfo} />
+          <ServiceSelection onChange={setServiceSelection} />
+          <OrderSummary onChange={(notes) => setAdditionalNotes(notes)} />
+        </div>
+
+        {/* Footer */}
+        <footer>
+          <div className="footer-content">
+            <div className="footer-summary">
+              <span>Total Freight: 0 đ</span>
+              <span>Total Cost: 0 đ</span>
+              <span>Estimated Delivery: Same Day</span>
+            </div>
+            <div className="buttonNprivacy">
+              <div className="privacy">
+                <label className="checkbox-label">
                   <input
-                    type="submit"
-                    className="btn btn-primary"
-                    value="Submit"
+                    type="checkbox"
+                    checked={isCheckboxChecked}
+                    onChange={handleCheckboxChange}
                   />
-                </div>
+                  Tôi đã đọc và đồng ý với Điều khoản quy định
+                </label>
+              </div>
+              <div className="footer-actions">
+                <button
+                  className="submit-btn"
+                  disabled={!isCheckboxChecked}
+                  onClick={handleSubmitClick}
+                >
+                  Submit
+                </button>
+                <button className="save-btn" onClick={handleSaveClick}>
+                  Save
+                </button>
+                <button className="reset-btn" onClick={handleResetClick}>
+                  Reset
+                </button>
               </div>
             </div>
           </div>
-        </form>
+        </footer>
       </div>
-    </>
+    </div>
   );
 }
+
+export default CreateOrder;
