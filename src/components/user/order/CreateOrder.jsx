@@ -1,11 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import OrderSummary from "./COC/OrderSummary";
 import ReceiverInfo from "./COC/ReceiverInfo";
 import SenderInfo from "./COC/SenderInfo";
 import ServiceSelection from "./COC/ServiceSelection";
 import "../css/CreateOrder.css";
 import api from "../../../api/CallAPI";
+import CustomerDocumentInfo from "./COC/CustomerDocumentInfo";
 
 function CreateOrder() {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -33,6 +33,14 @@ function CreateOrder() {
   function handleServiceSelectionChange() {
     setServiceSelectionState(!serviceSelectionState);
   }
+
+  useEffect(() => {
+    let total = 0;
+    serviceSelection.map((service) => {
+      total += service.price * service.amount;
+    });
+    setTotalPrice(total);
+  }, [serviceSelection]);
 
 
 
@@ -73,8 +81,10 @@ function CreateOrder() {
     });
 
     customerDocument.map((doc, index) => {
-      formData.append(`CustomerDocumentFile[${index}]`, doc.customerDocumentFile);
-      formData.append(`Description[${index}]`, doc.description);   
+      if (doc.customerDocumentFile) {
+        formData.append(`CustomerDocumentFile`, doc.customerDocumentFile);
+        formData.append(`Description[${index}]`, doc.description);   
+      }
     });
 
     api.postForm("Orders", formData).then((data) => {
@@ -163,7 +173,7 @@ function CreateOrder() {
           <SenderInfo onChange={setSenderInfo} />
           <ReceiverInfo onChange={setReceiverInfo} />
           <ServiceSelection onChange={setServiceSelection} stateChange={handleServiceSelectionChange} />
-          <OrderSummary onChange={setCustomerDocument} />
+          <CustomerDocumentInfo onChange={setCustomerDocument} />
         </div>
 
         {/* Footer */}

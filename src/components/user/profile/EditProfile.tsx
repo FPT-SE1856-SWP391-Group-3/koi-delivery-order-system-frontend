@@ -43,7 +43,7 @@ export default function EditProfile() {
       <>
         <Bootstrap />
         <UserSidebar />
-        <div className="content">
+        <div className="content-container">
           <div className="card">
             <div className="card-header">
               <h1>Update Profile</h1>
