@@ -14,6 +14,7 @@ const ReceiverInfo = ({ onChange }) => {
   const [receiverFullAddressLine, setReceiverFullAddressLine] = useState("");
   const [receiverPartAddressLine, setReceiverPartAddressLine] = useState("");
 
+
   useEffect(() => {
     const fetchAddressData = async () => {
       try {
@@ -52,6 +53,7 @@ const ReceiverInfo = ({ onChange }) => {
   };
 
   useEffect(updateReceiverInfo, [cityName, districtName, wardName, phoneNumber, fullName, receiverFullAddressLine, receiverPartAddressLine]);
+
 
   return (
     <div className="section">

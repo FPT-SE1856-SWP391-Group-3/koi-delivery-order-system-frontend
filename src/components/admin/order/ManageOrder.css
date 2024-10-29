@@ -58,10 +58,46 @@ body {
 
 .update-status-btn {
   background-color: forestgreen;
+  color: white;
+  padding: 12px 18px; /* Tăng padding để mở rộng nút */
+  font-size: 16px; /* Tăng kích thước chữ */
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  width: 180px; /* Đảm bảo nút đủ rộng để hiển thị nội dung */
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .update-status-btn:hover {
   background-color: rgb(17, 88, 17);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* CSS phần chọn trạng thái cập nhật */
+.update-status-select {
+  width: 180px; /* Đảm bảo chiều rộng để nội dung hiển thị đầy đủ */
+  padding: 10px 12px; /* Đệm thêm cho nội dung */
+  font-size: 16px; /* Đồng nhất cỡ chữ */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.update-status-select:hover {
+  border-color: #888;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.update-status-select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0px 0px 4px #3498db;
 }
 
 .createdocument-btn,

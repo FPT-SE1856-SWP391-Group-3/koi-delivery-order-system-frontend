@@ -13,14 +13,16 @@ export default function UserSidebar() {
       <div className="sidebar">
         <div className="header">
           <h2>User</h2>
-          <button className="logout" onClick={handleLogout}>
+          <a href="/logout" className="logout-btn">
             Log Out
-          </button> 
+          </a>
         </div>
         <a href={ComponentPath.user.profile.viewProfile}>My Profile</a>
         <a href={ComponentPath.user.order.createOrder}>Create Order</a>
         <a href={ComponentPath.user.order.viewOrder}>View Order</a>
-        <a href={ComponentPath.user.notification.viewNotification}>View Notification</a>
+        <a href={ComponentPath.user.notification.viewNotification}>
+          View Notification
+        </a>
       </div>
     </>
   );

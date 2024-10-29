@@ -19,7 +19,7 @@ const Footer = () => {
             care and expertise.
           </p>
           <div className="footer-social-icons">
-            <a href="https://facebook.com">
+            <a href="https://www.facebook.com/groups/1138143253898041">
               <img src={facebookicon} alt="Facebook" />
             </a>
             <a href="https://google.com">
@@ -33,7 +33,9 @@ const Footer = () => {
         <div className="footer-content-center">
           <h2>COMPANY</h2>
           <ul>
-            <li>Home</li>
+            <li>
+              <a href="/">Home</a>
+            </li>
             <li>About Us</li>
             <li>Privacy Policy</li>
           </ul>

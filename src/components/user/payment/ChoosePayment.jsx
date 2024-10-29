@@ -43,7 +43,6 @@ function ChoosePayment() {
   };
 
   console.log("Order Data:", orderData);
-
   return (
     <div className="payment-container">
       {/* Back button with X icon */}
@@ -117,6 +116,7 @@ function ChoosePayment() {
         {/* Order Summary Box */}
         <div className="order-summary">
           <h3>Thông tin đơn hàng</h3>
+
           {/* {serviceSelection.map((pkg, index) => (
             <p key={index}>
               {pkg.type} - {pkg.weight} kg - {pkg.length} x {pkg.width} x {pkg.height} cm

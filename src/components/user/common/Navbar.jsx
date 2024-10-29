@@ -49,10 +49,13 @@ const Navbar = () => {
         </li>
       </ul>
       <div className="navbar-right">
-        {token !== null ? (
-          user && user.roleId !== 2 ? (
+        {/* {token !== null ? (
+          user && user.roleId !== 1 ? (
             <>
-              <a href={ComponentPath.admin.dashboard} style={{margin: "0 10px 0 0"}}>
+              <a
+                href={ComponentPath.admin.dashboard}
+                style={{ margin: "0 10px 0 0" }}
+              >
                 <button>Admin</button>
               </a>
               <a href="/logout">
@@ -61,20 +64,25 @@ const Navbar = () => {
             </>
           ) : (
             <>
-             <a href={ComponentPath.user.dashboard} style={{margin: "0 10px 0 0"}}>
+              <a
+                href={ComponentPath.user.dashboard}
+                style={{ margin: "0 10px 0 0" }}
+              >
                 <button>User</button>
               </a>
               <a href="/logout">
                 <button>Log Out</button>
               </a>
             </>
-
           )
         ) : (
           <a href="/login">
             <button>Sign In</button>
           </a>
-        )}
+        )} */}
+        <a href="/login">
+          <button>Sign In</button>
+        </a>
       </div>
     </div>
   );

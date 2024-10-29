@@ -30,6 +30,7 @@ const SenderInfo = ({ onChange }) => {
             phoneNumber: userResponse.user?.phoneNumber || "",
             birthDate: userResponse.user?.birthDate || "",
             userId: userResponse.user?.userId || "",
+
             serviceType: userResponse.user?.serviceType || "domestic",
           }));
         } else {

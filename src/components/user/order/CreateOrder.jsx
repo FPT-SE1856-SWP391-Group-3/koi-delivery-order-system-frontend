@@ -4,6 +4,7 @@ import ReceiverInfo from "./COC/ReceiverInfo";
 import SenderInfo from "./COC/SenderInfo";
 import ServiceSelection from "./COC/ServiceSelection";
 import "../css/CreateOrder.css";
+
 import api from "../../../api/CallAPI";
 import CustomerDocumentInfo from "./COC/CustomerDocumentInfo";
 
@@ -209,5 +210,4 @@ function CreateOrder() {
     </div>
   );
 }
-
 export default CreateOrder;
