@@ -31,7 +31,9 @@ function CreateOrder() {
   }, []);
 
   const username = "đăng khoa";
-  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=0D8ABC&color=fff`;
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+    username
+  )}&background=0D8ABC&color=fff`;
 
   const handleSubmitClick = useCallback(() => {
     const formData = {
@@ -92,18 +94,30 @@ function CreateOrder() {
       <div>
         <nav className="Orsidebar">
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/CreateOrder">Create Order</a></li>
-            <li><a href="/Profilemanage">Manage Account</a></li>
-            <li><a href="/AddPayment">Add Payment</a></li>
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/CreateOrder">Create Order</a>
+            </li>
+            <li>
+              <a href="/Profilemanage">Manage Account</a>
+            </li>
+            <li>
+              <a href="/AddPayment">Add Payment</a>
+            </li>
           </ul>
         </nav>
       </div>
 
       <div className="main-content">
         <header>
-          <a className="order-btn-Do" href="/CreateOrder">Create Domestic Order</a>
-          <a className="order-btn" href="/CreateOrderInter">Create International Order</a>
+          <a className="order-btn-Do" href="/CreateOrder">
+            Create Domestic Order
+          </a>
+          <a className="order-btn" href="/CreateOrderInter">
+            Create International Order
+          </a>
         </header>
 
         {/* Form Sections */}
@@ -134,11 +148,19 @@ function CreateOrder() {
                 </label>
               </div>
               <div className="footer-actions">
-                <button className="submit-btn" disabled={!isCheckboxChecked} onClick={handleSubmitClick}>
+                <button
+                  className="submit-btn"
+                  disabled={!isCheckboxChecked}
+                  onClick={handleSubmitClick}
+                >
                   Submit
                 </button>
-                <button className="save-btn" onClick={handleSaveClick}>Save</button>
-                <button className="reset-btn" onClick={handleResetClick}>Reset</button>
+                <button className="save-btn" onClick={handleSaveClick}>
+                  Save
+                </button>
+                <button className="reset-btn" onClick={handleResetClick}>
+                  Reset
+                </button>
               </div>
             </div>
           </div>

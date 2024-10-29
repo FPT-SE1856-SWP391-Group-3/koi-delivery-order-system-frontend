@@ -1,49 +1,79 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
 import "../report/ManageTransportationReportDetails.css";
-import ComponentPath from "routes/ComponentPath";
-
+import EditTransportationReportDetails from "./EditTransportationReportDetails";
+import Modal from "react-modal";
 
 export default function ManageTransportationReportDetails() {
   const [reports, setReports] = useState([]);
-  const navigate = useNavigate();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedReportId, setSelectedReportId] = useState(null);
   const id = localStorage.getItem("userId");
 
   useEffect(() => {
+    fetchReports();
+  }, [id]);
+
+  const fetchReports = async () => {
     try {
-      api.get("TransportationReportDetails/").then((data) => {
-        if (data.success) {
-          setReports(data.transportReports);
-          console.log(data.transportReports);
-        } else {
-          alert("Không có báo cáo vận chuyển!");
-        }
-      });
+      const data = await api.get("TransportationReportDetails/");
+      if (data.success) {
+        setReports(data.transportReports);
+      } else {
+        alert("Không có báo cáo vận chuyển!");
+      }
     } catch (error) {
       alert("An error has occurred. Please try again.");
     }
-  }, [id]);
+  };
+  // Mở modal xác nhận xóa
+  const openDeleteModal = (reportId) => {
+    setSelectedReportId(reportId);
+    setIsDeleteModalOpen(true);
+  };
 
-  async function deleteReport(reportId) {
+  // Đóng modal xác nhận xóa
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedReportId(null);
+  };
+
+  // Xác nhận xóa báo cáo
+  async function confirmDeleteReport() {
     try {
-      api.del("TransportationReportDetails/" + reportId).then((data) => {
-        if (data.success) {
-          alert("Xóa thành công!");
-          const newReports = reports.filter(
-            (report) => report.transReportDetailId !== reportId
-          );
-          setReports(newReports);
-        } else {
-          alert("Xóa thất bại!");
-        }
-      });
+      api
+        .del("TransportationReportDetails/" + selectedReportId)
+        .then((data) => {
+          if (data.success) {
+            alert("Xóa thành công!");
+            const newReports = reports.filter(
+              (report) => report.transReportDetailId !== selectedReportId
+            );
+            setReports(newReports);
+          } else {
+            alert("Xóa thất bại!");
+          }
+        });
     } catch (error) {
       console.error("Error during deletion:", error);
       alert("An error occurred during deletion. Please try again.");
     }
+    closeDeleteModal();
   }
+
+  // Mở modal cập nhật báo cáo
+  const openUpdateModal = (reportId) => {
+    setSelectedReportId(reportId);
+    setIsUpdateModalOpen(true);
+  };
+
+  // Đóng modal cập nhật báo cáo
+  const closeUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+    setSelectedReportId(null);
+  };
 
   return (
     <div>
@@ -72,24 +102,58 @@ export default function ManageTransportationReportDetails() {
                 <td>
                   <button
                     className="delete-btn"
-                    onClick={() => deleteReport(report.transReportDetailId)}
+                    onClick={() => openDeleteModal(report.transReportDetailId)}
                   >
                     Delete
                   </button>
-                  <Link
-                    to={{
-                      pathname: ComponentPath.admin.report.editReport + report.transReportDetailId,
-                      state: report,
-                    }}
+                  <button
+                    onClick={() => openUpdateModal(report.transReportDetailId)}
                     className="change-btn"
                   >
-                    Update{" "}
-                  </Link>
+                    Update
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        {/* Modal xác nhận xóa */}
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onRequestClose={closeDeleteModal}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <h2>Confirm Deletion</h2>
+          <p>Are you sure you want to delete this report?</p>
+          <div className="modal-buttons">
+            <button onClick={confirmDeleteReport} className="confirm-btn">
+              Yes
+            </button>
+            <button onClick={closeDeleteModal} className="cancel-btn">
+              No
+            </button>
+          </div>
+        </Modal>
+
+        {/* Modal cập nhật báo cáo */}
+        <Modal
+          isOpen={isUpdateModalOpen}
+          onRequestClose={closeUpdateModal}
+          className="modal"
+          overlayClassName="overlay"
+        >
+          <button className="btn-close" onClick={closeUpdateModal}>
+            X
+          </button>
+          {selectedReportId && (
+            <EditTransportationReportDetails
+              reportId={selectedReportId}
+              onClose={closeUpdateModal}
+              onUpdateSuccess={fetchReports} // Cập nhật lại bảng khi thành công
+            />
+          )}
+        </Modal>
       </div>
     </div>
   );
