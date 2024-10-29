@@ -1,32 +1,48 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../css/ChoosePayment.css";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import "../css/ChoosePayment.css"; // Import custom CSS
 import ATMCard from "../../../assets/atm-icon.png";
 import VisaCard from "../../../assets/visa-icon.png";
 import COD from "../../../assets/COD-icon.png";
 import { FaTimes } from "react-icons/fa"; // Import the icon for "X"
+import api from "../../../api/CallAPI";
 
 function ChoosePayment() {
   const orderData = JSON.parse(localStorage.getItem("orderData"));
   const [selectedPayment, setSelectedPayment] = useState("COD");
+  const [searchParams] = useSearchParams();
+  const [email, setEmail] = useState(searchParams.get("email"));
+  const [orderId, setOrderId] = useState(searchParams.get("orderId"));
+  const [totalPrice, setTotalPrice] = useState(searchParams.get("totalPrice"))
+  //  const { senderInfo, serviceSelection } = orderData;
+  
   const navigate = useNavigate();
-
-  // Extract sender and service information from orderData
-  const { senderInfo, serviceSelection } = orderData;
 
   const handlePaymentChange = (e) => {
     setSelectedPayment(e.target.value);
   };
 
   const handlePaymentSubmit = () => {
-    alert(`You have selected ${selectedPayment} as your payment method.`);
-    navigate("/payment-success");
+    // alert(`You have selected ${selectedPayment} as your payment method.`);
+    // navigate("/payment-success")
+      
+    const data = {
+      orderId: orderId,
+    };
+
+    console.log(data);
+    api.post("Payments/create-payment", data).then((data) =>{
+      console.log(data)
+      window.location.href  = data.paymentUrl;
+    })
   };
 
   // Function to handle back navigation
   const handleBackClick = () => {
     navigate(-1); // Go back to the previous page
   };
+
+  console.log("Order Data:", orderData);
 
   return (
     <div className="payment-container">
@@ -91,20 +107,21 @@ function ChoosePayment() {
         {/* Customer Information Box */}
         <div className="customer-info">
           <h3>Thông tin khách hàng</h3>
-          <p>
+          {/* <p>
             <strong>{senderInfo.fullName}</strong> | {senderInfo.phoneNumber}
-          </p>
-          <p>Email: {senderInfo.email}</p>
+          </p> */}
+          {/* <p>Email: {senderInfo.email}</p> */}
+          <p>Email: {email}</p>
         </div>
 
         {/* Order Summary Box */}
         <div className="order-summary">
           <h3>Thông tin đơn hàng</h3>
-          {serviceSelection.map((pkg, index) => (
+          {/* {serviceSelection.map((pkg, index) => (
             <p key={index}>
               {pkg.type} - {pkg.weight} kg - {pkg.length} x {pkg.width} x {pkg.height} cm
             </p>
-          ))}
+          ))} */} 
           <p className="total">Thành tiền: 197,400 đ</p>
         </div>
 

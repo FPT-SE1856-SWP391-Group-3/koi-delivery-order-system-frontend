@@ -1,87 +1,110 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import "../../css/CreateOrder.css";
+import api from "../../../../api/CallAPI";
+import PropTypes from "prop-types";
 
 const ServiceSelection = ({ onChange }) => {
-  const [packages, setPackages] = useState([{ id: 1, type: "document", length: "", width: "", height: "", weight: "" }]);
-
-  const addPackage = () => {
-    setPackages([...packages, { id: packages.length + 1, type: "document", length: "", width: "", height: "", weight: "" }]);
-  };
-
-  const deletePackage = (id) => {
-    setPackages(packages.filter((pkg) => pkg.id !== id));
-  };
-
-  const updatePackage = (id, field, value) => {
-    setPackages((prevPackages) =>
-      prevPackages.map((pkg) => (pkg.id === id ? { ...pkg, [field]: value } : pkg))
-    );
-  };
+  const [orderServiceDetails, setOrderServiceDetails] = useState([]);
+  const [itemList, setItemList] = useState([
+    { koiName: "", weight: "", price: "", amount: "", koiCondition: "" },
+  ]);
 
   useEffect(() => {
-    onChange(packages);
-  }, [packages, onChange]);
+    api.get("OrderServiceDetails/").then((data) => {
+      if (data.success) {
+        console.log(data.orderServiceDetails);
+        setOrderServiceDetails(data.orderServiceDetails);
+      } else {
+        console.log("Không có dịch vụ!");
+      }
+    });
+  }, []);
+
+  const handleInputChange = (index, field, value) => {
+    const updatedItemList = [...itemList];
+    updatedItemList[index][field] = value;
+    setItemList(updatedItemList);
+    onChange(updatedItemList);
+  };
+
+  const handleAddItem = () => {
+    setItemList([
+      ...itemList,
+      { koiName: "", weight: "", price: "", amount: "", koiCondition: "" },
+    ]);
+  };
+
+  const handleRemoveItem = (index) => {
+    if (itemList.length === 1) return;
+    const updatedItemList = itemList.filter((_, i) => i !== index);
+    setItemList(updatedItemList);
+    onChange(updatedItemList);
+  };
 
   return (
     <div className="section">
       <h2>Service Selection</h2>
-      {packages.map((pkg, index) => (
-        <div className="sectionCompo" key={pkg.id}>
-          <label>Package Type</label>
-          <select
-            value={pkg.type}
-            onChange={(e) => updatePackage(pkg.id, "type", e.target.value)}
-          >
-            <option value="document">Document</option>
-            <option value="postal">Postal</option>
-          </select>
-
-          <label>Dimensions</label>
-          <div className="dimensions">
+      <div className="sectionCompo">
+        {itemList.map((item, index) => (
+          <div id="item" key={index}>
+            <label>Package Type {index + 1}</label>
             <input
               type="text"
-              placeholder="Length (cm)"
-              value={pkg.length}
-              onChange={(e) => updatePackage(pkg.id, "length", e.target.value)}
+              placeholder="Enter package type."
+              value={item.koiName}
+              onChange={(e) => handleInputChange(index, "koiName", e.target.value)}
             />
+            <label>Weight</label>
             <input
               type="text"
-              placeholder="Width (cm)"
-              value={pkg.width}
-              onChange={(e) => updatePackage(pkg.id, "width", e.target.value)}
+              placeholder="gram"
+              value={item.weight}
+              onChange={(e) => handleInputChange(index, "weight", e.target.value)}
             />
+            <label>Price</label>
             <input
               type="text"
-              placeholder="Height (cm)"
-              value={pkg.height}
-              onChange={(e) => updatePackage(pkg.id, "height", e.target.value)}
+              placeholder="0đ"
+              value={item.price}
+              onChange={(e) => handleInputChange(index, "price", e.target.value)}
             />
+            <label>Amount</label>
+            <input
+              type="text"
+              placeholder="0"
+              value={item.amount}
+              onChange={(e) => handleInputChange(index, "amount", e.target.value)}
+            />
+            <label>Condition</label>
+            <input
+              type="text"
+              placeholder="Enter condition"
+              value={item.koiCondition}
+              onChange={(e) => handleInputChange(index, "koiCondition", e.target.value)}
+            />
+            <button type="button" onClick={() => handleRemoveItem(index)}>
+              Xóa
+            </button>
           </div>
-
-          <label>Total Weight</label>
-          <input
-            type="text"
-            placeholder="0 kg"
-            value={pkg.weight}
-            onChange={(e) => updatePackage(pkg.id, "weight", e.target.value)}
-          />
-
-          <div className="button-row">
-            <button className="add-package-btn" onClick={addPackage}>Add Package</button>
-            {index > 0 && (
-              <button className="delete-package-btn" onClick={() => deletePackage(pkg.id)}>Delete Package</button>
-            )}
+        ))}
+        <button type="button" onClick={handleAddItem}>
+          Add Package
+        </button>
+        {orderServiceDetails.map((orderServiceDetail, idx) => (
+          <div key={idx}>
+            <h1>Các dịch vụ</h1>
+            <p>Gía dịch vụ: {orderServiceDetail.orderServiceDetailName} </p>
+            <p>Giá cước: {orderServiceDetail.orderServiceDetailPrice} </p>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
 
-// Xác nhận prop types
 ServiceSelection.propTypes = {
   onChange: PropTypes.func.isRequired,
+  stateChange: PropTypes.func.isRequired,
 };
 
 export default ServiceSelection;
