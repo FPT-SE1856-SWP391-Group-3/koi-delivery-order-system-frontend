@@ -36,7 +36,7 @@ export default function ViewProfile() {
     <>
       <Bootstrap/>
       <UserSidebar/>
-      <div className="content">
+      <div className="content-container">
         {/* <h1>View Profile</h1>
         <table>
           <tbody>

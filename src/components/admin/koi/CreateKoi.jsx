@@ -41,6 +41,9 @@ export default function CreatKoi({ onClose, onAddSuccess }) {
 
   return (
     <div className="addkoi-container">
+      <a className="back-button" href={ComponentPath.admin.koi.manageKoi}>
+        Back
+      </a>
       <h1 className="form-title">Add a new Koi</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="add-form">
         <div className="form-group">
