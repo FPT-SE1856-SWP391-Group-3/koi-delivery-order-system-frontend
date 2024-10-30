@@ -25,36 +25,40 @@ export default function ManageUserAddress({ userId }) {
   }, [userId]);
 
   return (
+
     <div className="address-container">
-      <h1 className="address-title">Address List</h1>
-      <div className="address-list">
-        {addresses.length > 0 ? (
-          addresses.map((address) => (
-            <div className="address-card" key={address.addressId}>
-              <p>
-                <strong>AddressId:</strong> {address.addressId}
-              </p>
-              <p>
-                <strong>UserId:</strong> {address.userId}
-              </p>
-              <p>
-                <strong>Address:</strong> {address.address}
-              </p>
-              <p>
-                <strong>City:</strong> {address.city}
-              </p>
-              <p>
-                <strong>Country:</strong> {address.country}
-              </p>
-              <p>
-                <strong>Postal Code:</strong> {address.postalCode}
-              </p>
-            </div>
-          ))
-        ) : (
-          <p>No addresses found.</p>
-        )}
+      <a className="back-button" href={ComponentPath.admin.user.manageUser}>
+        Back
+      </a>
+        <h1 className="address-title">Address List</h1>
+        <div className="address-list">
+          {addresses.length > 0 ? (
+            addresses.map((address) => (
+              <div className="address-card" key={address.addressId}>
+                <p>
+                  <strong>AddressId:</strong> {address.addressId}
+                </p>
+                <p>
+                  <strong>UserId:</strong> {address.userId}
+                </p>
+                <p>
+                  <strong>Address:</strong> {address.address}
+                </p>
+                <p>
+                  <strong>City:</strong> {address.city}
+                </p>
+                <p>
+                  <strong>Country:</strong> {address.country}
+                </p>
+                <p>
+                  <strong>Postal Code:</strong> {address.postalCode}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p>No addresses found.</p>
+          )}
+        </div>
       </div>
-    </div>
   );
 }

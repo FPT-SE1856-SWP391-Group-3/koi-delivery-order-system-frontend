@@ -9,7 +9,7 @@ const SenderInfo = ({ onChange }) => {
     email: "",
     phoneNumber: "",
     birthDate: "",
-    idNumber: "",
+    userId: "",
     addressLine: "",
     city: "",       
     country: "",    
@@ -29,7 +29,8 @@ const SenderInfo = ({ onChange }) => {
             email: userResponse.user?.email || "",
             phoneNumber: userResponse.user?.phoneNumber || "",
             birthDate: userResponse.user?.birthDate || "",
-            idNumber: userResponse.user?.idNumber || "",
+            userId: userResponse.user?.userId || "",
+
             serviceType: userResponse.user?.serviceType || "domestic",
           }));
         } else {

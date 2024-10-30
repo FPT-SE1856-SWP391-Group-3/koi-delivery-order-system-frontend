@@ -10,6 +10,10 @@ const ReceiverInfo = ({ onChange }) => {
   const [wardName, setWardName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [receiverFullAddressLine, setReceiverFullAddressLine] = useState("");
+  const [receiverPartAddressLine, setReceiverPartAddressLine] = useState("");
+
 
   useEffect(() => {
     const fetchAddressData = async () => {
@@ -35,10 +39,21 @@ const ReceiverInfo = ({ onChange }) => {
       wardName,
       phoneNumber,
       fullName,
+      email,
+      receiverFullAddressLine,
+      receiverPartAddressLine,
     });
   };
 
-  useEffect(updateReceiverInfo, [cityName, districtName, wardName, phoneNumber, fullName]);
+  const updateReceiverFullAddress = (e) => {
+    if (!!wardName && !!districtName && !!cityName) {
+      setReceiverFullAddressLine(`${e.target.value}, ${wardName}, ${districtName}, ${cityName}`);
+      setReceiverPartAddressLine(`${wardName}, ${districtName}, ${cityName}`)
+    }
+  };
+
+  useEffect(updateReceiverInfo, [cityName, districtName, wardName, phoneNumber, fullName, receiverFullAddressLine, receiverPartAddressLine]);
+
 
   return (
     <div className="section">
@@ -59,7 +74,13 @@ const ReceiverInfo = ({ onChange }) => {
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
         />
-
+        <label>Email</label>
+        <input
+          type="text"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
         <label htmlFor="city">City/Province</label>
         <select
           value={cityName}
@@ -107,6 +128,14 @@ const ReceiverInfo = ({ onChange }) => {
             </option>
           ))}
         </select>
+        <label>Specific Address</label>
+        <input
+          type="text"
+          placeholder="Enter specific address"
+          onChange={(e) => updateReceiverFullAddress(e)}
+        />
+        <label>Full Address</label>
+        <input type="text" value={receiverFullAddressLine} readOnly />
       </div>
     </div>
   );
