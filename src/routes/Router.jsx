@@ -70,6 +70,7 @@ import Profilemanage from "../components/user/profile/Profilemanage";
 import Updateinfo from "../components/user/profile/ProfileCom/Updateinfo";
 import ChoosePayment from "../components/user/payment/ChoosePayment";
 import CallBackPayment from "../components/user/payment/CallBackPayment";
+import Dashboard from "../components/user/dashboard/Dashboard";
 
 // Function to get the access token from cookies
 var adminUrl = "/admin";
@@ -88,6 +89,10 @@ const isAdmin = async () => {
 
 // Create the router configuration
 const router = createBrowserRouter([
+  {
+    path: "/dashboard",
+    element: <Dashboard />,
+  },
   {
     path: "/ChoosePayment",
     element: <ChoosePayment />,

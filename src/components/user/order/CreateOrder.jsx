@@ -155,7 +155,7 @@ function CreateOrder() {
       <div>
         <nav className="Orsidebar">
           <ul>
-            <li><a href="/">Home</a></li>
+            <li><a href="/dashboard">Home</a></li>
             <li><a href="/CreateOrder">Create Order</a></li>
             <li><a href="/Profilemanage">Manage Account</a></li>
           </ul>
