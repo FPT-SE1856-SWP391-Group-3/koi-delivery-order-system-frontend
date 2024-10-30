@@ -70,7 +70,7 @@ import Profilemanage from "../components/user/profile/Profilemanage";
 import Updateinfo from "../components/user/profile/ProfileCom/Updateinfo";
 import ChoosePayment from "../components/user/payment/ChoosePayment";
 import CallBackPayment from "../components/user/payment/CallBackPayment";
-import Dashboard from "../dashboard/Dashboard";
+import Dashboard from "../components/user/dashboard/Dashboard";
 
 // Function to get the access token from cookies
 var adminUrl = "/admin";
