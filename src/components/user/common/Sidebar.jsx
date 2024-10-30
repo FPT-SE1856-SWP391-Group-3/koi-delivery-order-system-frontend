@@ -53,6 +53,7 @@ export default function Sidebar() {
                   View Profile
                 </a>
                 <a>View Sales Report</a>
+                <a href={ComponentPath.admin.order.manageOrder}>Manage Order</a>
                 <a href={ComponentPath.admin.report.manageReport}>
                   Manage Report
                 </a>
