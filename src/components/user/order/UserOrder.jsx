@@ -10,6 +10,9 @@ import Header from "../common/Header";
 import AddDocument from "../document/AddDocument";
 import CreateFeedback from "../feedback/CreateFeedback";
 import UserOrderDetail from "./UserOrderDetail";
+import AppNavbar from '../components/AppNavbar';
+import SideMenu from '../components/SideMenu';
+import Box from '@mui/material/Box';
 
 export default function UserOrder() {
   const navigate = useNavigate();
@@ -56,9 +59,10 @@ export default function UserOrder() {
   //--------------------------------------
 
   return (
-    <div>
+    <Box sx={{ display: 'flex' }}>
+      <SideMenu />
+      <AppNavbar />
       <Bootstrap />
-      <UserSidebar />
       <div className="content">
         <div className="row">
           <div className="col-md-12">
@@ -124,6 +128,7 @@ export default function UserOrder() {
                         Document
                       </button>
                     </td>
+                    <td>
                     <div>
                       <Modal
                         show={showDetailModal}
@@ -167,6 +172,7 @@ export default function UserOrder() {
                         </Modal.Body>
                       </Modal>
                     </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -174,6 +180,6 @@ export default function UserOrder() {
           </div>
         </div>
       </div>
-    </div>
+    </Box>
   );
 }
