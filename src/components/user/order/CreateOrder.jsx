@@ -158,7 +158,6 @@ function CreateOrder() {
             <li><a href="/">Home</a></li>
             <li><a href="/CreateOrder">Create Order</a></li>
             <li><a href="/Profilemanage">Manage Account</a></li>
-            <li><a href="/AddPayment">Add Payment</a></li>
           </ul>
         </nav>
       </div>

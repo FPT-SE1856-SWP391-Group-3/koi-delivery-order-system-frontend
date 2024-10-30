@@ -32,7 +32,7 @@ export default function Login() {
                 navigate(admin);
                 break;
               case 2:
-                navigate(ComponentPath.user.dashboard);
+                navigate("/CreateOrder");
                 break;
               case 3:
                 navigate(ComponentPath.admin.dashboard);

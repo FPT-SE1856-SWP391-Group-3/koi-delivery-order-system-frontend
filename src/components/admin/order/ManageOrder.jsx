@@ -20,10 +20,14 @@ export default function ManageOrder() {
   const fetchOrders = async () => {
     try {
       // Kiểm tra nếu roleId === 4 thì lấy đơn hàng theo userId
-      const endpoint = user.roleId === 4 ? `Orders/${user.userId}` : "Orders/";
+      const endpoint = "Orders/"
+        // user.roleId === 4 || user.roleId === 3
+        //   ? `Orders/${user.userId}`
+        //   : "Orders/";
       console.log(user.userId);
       const data = await api.get(endpoint);
       if (data.success) {
+        console.log(data.order);
         setOrder(data.order);
       } else {
         console.log("Không có đơn hàng!");
@@ -71,8 +75,6 @@ export default function ManageOrder() {
                   : order
               )
             );
-          } else {
-            alert("Cập nhật trạng thái thất bại!");
           }
         });
     } catch (error) {
@@ -115,8 +117,8 @@ export default function ManageOrder() {
               : order
           )
         );
-      } else {
-        alert("Cập nhật trạng thái thất bại!");
+      } else if (response.success === false) {
+        alert(response.msg);
       }
     } catch (error) {
       console.error("Error during update:", error);
@@ -173,6 +175,7 @@ export default function ManageOrder() {
               <th>OrderID</th>
               <th>CustomerID</th>
               <th>Order date</th>
+              <th>Is Payment</th>
               <th>Delivery date</th>
               <th>Pick up address</th>
               <th>Shipping address</th>
@@ -188,90 +191,98 @@ export default function ManageOrder() {
             </tr>
           </thead>
           <tbody>
-            {order.map((order) => (
-              <tr key={order.orderId}>
-                <td>{order.orderId}</td>
-                <td>{order.customerId}</td>
-                <td>{order.orderDate}</td>
-                <td>{order.deliveryDate}</td>
-                <td>{order.startAddress?.addressLine || ""}</td>
-                <td>{order.endAddress?.addressLine || ""}</td>
-                <td>{order.distance}</td>
-                <td>{order.duration}</td>
-                <td>{order.totalPrice}</td>
-                <td>{order.orderStatus.orderStatusName}</td>
-                <td>
-                  {user.roleId === 5 ? (
-                    <select
-                      className="update-status-select"
-                      onChange={(event) => {
-                        updateOrderStatusBySelect(
-                          event,
-                          order.orderId,
-                          order.orderStatusId
-                        );
-                      }}
-                    >
-                      {orderStatus
-                        .filter(
-                          (status) =>
-                            status.orderStatusId >= order.orderStatusId
-                        )
-                        .map((status) => (
-                          <option
-                            key={status.orderStatusId}
-                            value={status.orderStatusId}
-                            selected={
-                              status.orderStatusId === order.orderStatusId
-                            }
-                          >
-                            {status.orderStatusName}
-                          </option>
-                        ))}
-                    </select>
-                  ) : (
-                    <button
-                      className="update-status-btn"
-                      onClick={() =>
-                        updateOrderStatusByClick(
-                          order.orderId,
-                          order.orderStatusId
-                        )
-                      }
-                    >
-                      {order.orderStatus.orderStatusName}
-                    </button>
-                  )}
-                </td>
-                <td>
-                  <button
-                    onClick={() => openDetailModal(order.orderId)}
-                    className="detail-btn"
-                  >
-                    Detail
-                  </button>
-                </td>
-                <td>
-                  <button
-                    onClick={() =>
-                      openDocumentModal(order.orderId, order.orderStatusId)
-                    }
-                    className="createdocument-btn"
-                  >
-                    Add Document
-                  </button>
-                </td>
-                <td>
-                  <button
-                    onClick={() => openReportModal(order.orderId)}
-                    className="createtransportation-btn"
-                  >
-                    Transportation Report
-                  </button>
-                </td>
-                <td>{order.deliveryStaffId}</td>
-              </tr>
-            ))}
+            {order.map((order) => {
+              if (
+                (user.roleId === 3 && order.orderStatusId <= 6) ||
+                user.roleId != 3
+              ) {
+                return (
+                  <tr key={order.orderId}>
+                    <td>{order.orderId}</td>
+                    <td>{order.customerId}</td>
+                    <td>{order.orderDate}</td>
+                    <td>{order.paymentHistoryId == null ? "False" : "True"}</td>
+                    <td>{order.deliveryDate}</td>
+                    <td>{order.startAddress?.addressLine || ""}</td>
+                    <td>{order.endAddress?.addressLine || ""}</td>
+                    <td>{order.distance}</td>
+                    <td>{order.duration}</td>
+                    <td>{order.totalPrice}</td>
+                    <td>{order.orderStatus.orderStatusName}</td>
+                    <td>
+                      {user.roleId === 5 ? (
+                        <select
+                          className="update-status-select"
+                          onChange={(event) => {
+                            updateOrderStatusBySelect(
+                              event,
+                              order.orderId,
+                              order.orderStatusId
+                            );
+                          }}
+                        >
+                          {orderStatus
+                            .filter(
+                              (status) =>
+                                status.orderStatusId >= order.orderStatusId
+                            )
+                            .map((status) => (
+                              <option
+                                key={status.orderStatusId}
+                                value={status.orderStatusId}
+                                selected={
+                                  status.orderStatusId === order.orderStatusId
+                                }
+                              >
+                                {status.orderStatusName}
+                              </option>
+                            ))}
+                        </select>
+                      ) : (
+                        <button
+                          className="update-status-btn"
+                          onClick={() =>
+                            updateOrderStatusByClick(
+                              order.orderId,
+                              order.orderStatusId
+                            )
+                          }
+                        >
+                          {order.orderStatus.orderStatusName}
+                        </button>
+                      )}
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => openDetailModal(order.orderId)}
+                        className="detail-btn"
+                      >
+                        Detail
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() =>
+                          openDocumentModal(order.orderId, order.orderStatusId)
+                        }
+                        className="createdocument-btn"
+                      >
+                        Add Document
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        onClick={() => openReportModal(order.orderId)}
+                        className="createtransportation-btn"
+                      >
+                        Transportation Report
+                      </button>
+                    </td>
+                    <td>{order.deliveryStaffId}</td>
+                  </tr>
+                );
+              }
+            })}
           </tbody>
         </table>
         {/* Modal chi tiết đơn hàng */}
