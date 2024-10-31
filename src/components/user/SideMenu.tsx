@@ -8,8 +8,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import SelectContent from './SelectContent';
 import MenuContent from './MenuContent';
-import CardAlert from './CardAlert';
 import OptionsMenu from './OptionsMenu';
+import logo from "/Logo.png";
+
 
 
 const drawerWidth = 240;
@@ -43,6 +44,26 @@ export default function SideMenu() {
         },
       }}
     >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+          mt: "calc(var(--template-frame-height, 0px) + 4px)",
+          p: 1.5,
+        }}
+      >
+        <Avatar
+          sizes="small"
+          alt="avatar"
+          src={logo}
+          sx={{ width: 56, height: 56 }}
+        />
+        <Typography variant="h5" sx={{ color: "#e65a5a;" }}>
+          KOI Delivery
+        </Typography>
+      </Box>
       <Divider />
       <MenuContent />
       <Stack
