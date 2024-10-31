@@ -6,6 +6,7 @@ import SenderInfo from "./COC/SenderInfo";
 import ServiceSelection from "./COC/ServiceSelection.jsx";
 import api from "../../../api/CallAPI"; // Adjust the import path for your API calls
 import "../css/CreateOrder.css";
+import UserSideNav from "../UserSideNav";
 
 function CreateOrderInter() {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -95,18 +96,7 @@ function CreateOrderInter() {
   };
 
   return (
-    <div className="app-container">
-      <div>
-        <nav className="Orsidebar">
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/CreateOrder">Create Order</a></li>
-            <li><a href="/Profilemanage">Manage Account</a></li>
-            <li><a href="/AddPayment">Add Payment</a></li>
-          </ul>
-        </nav>
-      </div>
-
+    <UserSideNav>
       <nav className="navbar-create">
         <h1>KOI DELIVERY</h1>
 
@@ -126,8 +116,12 @@ function CreateOrderInter() {
 
       <div className="main-content">
         <header>
-          <a className="order-btn" href="/CreateOrder">Create Domestic Order</a>
-          <a className="order-btn-In" href="/CreateOrderInter">Create International Order</a>
+          <a className="order-btn" href="/CreateOrder">
+            Create Domestic Order
+          </a>
+          <a className="order-btn-In" href="/CreateOrderInter">
+            Create International Order
+          </a>
         </header>
 
         <div className="form-sections">
@@ -153,7 +147,9 @@ function CreateOrderInter() {
                     onChange={handleCheckboxChange}
                   />
                   Tôi đã đọc và đồng ý với{" "}
-                  <strong className="Confirm-privacy">Điều khoản quy định</strong>
+                  <strong className="Confirm-privacy">
+                    Điều khoản quy định
+                  </strong>
                 </label>
               </div>
               <div className="footer-actions">
@@ -171,7 +167,7 @@ function CreateOrderInter() {
           </div>
         </footer>
       </div>
-    </div>
+    </UserSideNav>
   );
 }
 

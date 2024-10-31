@@ -118,19 +118,22 @@ const ServiceSelection = ({ onChange }) => {
                 </Button>
               </Grid>
             </Grid>
-            <Divider sx={{m : "1em 0"}}/>
+            <Divider sx={{ m: "1em 0" }} />
           </div>
         ))}
         <Button variant="contained" onClick={handleAddItem}>
           Add Package
         </Button>
         <Grid>
+          <h1>Các dịch vụ</h1>
           {orderServiceDetails.map((orderServiceDetail, idx) => (
-            <div key={idx}>
-              <h1>Các dịch vụ</h1>
-              <p>Gía dịch vụ: {orderServiceDetail.orderServiceDetailName} </p>
-              <p>Giá cước: {orderServiceDetail.orderServiceDetailPrice} </p>
-            </div>
+            <>
+              <div key={idx}>
+                <p>Gía dịch vụ: {orderServiceDetail.orderServiceDetailName} </p>
+                <p>Giá cước: {orderServiceDetail.orderServiceDetailPrice} </p>
+              </div>
+              <Divider sx={{ m: "1em 0" }} />
+            </>
           ))}
         </Grid>
       </div>

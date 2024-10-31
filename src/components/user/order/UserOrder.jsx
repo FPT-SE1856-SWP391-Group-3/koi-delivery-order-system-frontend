@@ -35,8 +35,8 @@ export default function UserOrder() {
   useEffect(() => {
     api.get("Orders/" + userId).then((data) => {
       if (data.success) {
-        setOrder(data.order);
-        console.log(data.order);
+        setOrder(data.orders);
+        console.log(data.orders);
       } else {
         console.log("Không có đơn hàng!");
       }

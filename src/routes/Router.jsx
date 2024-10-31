@@ -222,7 +222,7 @@ const router = createBrowserRouter([
         element: <CreateFeedback />,
       },
       {
-        path: ComponentPath.user.feedback.manageFeedback,
+        path: ComponentPath.user.feedback.viewFeedback,
         element: <ManageFeedBack />,
       },
       {

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import Header from "../../../components/user/common/Header";
+import { Box, Button, Container, Paper, TextField, Typography } from "@mui/material";
 
 export default function CreateFeedback({orderId}) {
   const { register, handleSubmit } = useForm();
@@ -16,7 +17,7 @@ export default function CreateFeedback({orderId}) {
       api.post("CustomerFeedbacks/", data).then((data) => {
         if (data.success) {
           alert("Thêm thành công!");
-        } else {
+        } else if (data.success === false) {
           alert("Thêm thất bại!");
         }
       });
@@ -27,50 +28,46 @@ export default function CreateFeedback({orderId}) {
   };
 
   return (
-    <div>
-      {/* <Header /> */}
-      <div className="">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Thêm Phản hồi mới</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div>
-                <input
-                  type="hidden"
-                  id="userId"
-                  name="userId"
-                  value={userId}
-                  {...register("customerId")}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="orderId">Mã đơn hàng</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  id="orderId"
-                  name="orderId"
-                  value={orderId}
-                  readOnly
-                  {...register("orderId")}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="comment">Bình luận</label>
-                <textarea
-                  className="form-control"
-                  id="comment"
-                  name="comment"
-                  {...register("comment")}
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
+    <Box sx={{ p: 2 }}>
+      <Container maxWidth="md">
+        <Box sx={{ textAlign: 'center', mb: 4 }}>
+          <Typography variant="h4">Thêm Phản hồi mới</Typography>
+        </Box>
+        <Paper elevation={3} sx={{ p: 3 }}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <input
+              type="hidden"
+              {...register("customerId")}
+              value={userId}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Mã đơn hàng"
+              type="number"
+              value={orderId}
+              {...register("orderId")}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Bình luận"
+              multiline
+              rows={4}
+              {...register("comment")}
+            />
+            <Box sx={{ mt: 3 }}>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+              >
                 Thêm
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+              </Button>
+            </Box>
+          </form>
+        </Paper>
+      </Container>
+    </Box>
   );
 }
