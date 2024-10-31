@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
+
 import {
   Box,
   Table,
@@ -342,11 +342,7 @@ export default function ManageOrder() {
     <div>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box display="flex" justifyContent="center" marginBottom={2}>
-          <DateRangePicker
-            value={dateRange}
-            onChange={(newValue) => setDateRange(newValue)}
-            localeText={{ start: "Order Start Date", end: "Order End Date" }}
-          />
+
         </Box>
       </LocalizationProvider>
 
