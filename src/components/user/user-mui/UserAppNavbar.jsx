@@ -16,6 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import ComponentPath from '../../../routes/ComponentPath';
+import { Link } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -163,23 +164,20 @@ export default function UserAppNavbar() {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
+            sx={{ display: { xs: "none", sm: "block" } }}
           >
             Koi Delivery System
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              component={Link}
+              to={ComponentPath.user.notification.viewNotification}  
             >
-              <Badge badgeContent={17} color="error">
+              <Badge color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -195,7 +193,7 @@ export default function UserAppNavbar() {
               <AccountCircle />
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="show more"

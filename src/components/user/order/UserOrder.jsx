@@ -59,7 +59,7 @@ export default function UserOrder() {
     <Box sx={{ display: "flex" }}>
       <UserSideNav>
       <Bootstrap />
-      <div className="content">
+      <div style={{marginInline: "1em"}}>
         <div className="row">
         <div className="col-md-12">
           <h2 className="text-center">Danh sách đơn hàng</h2>

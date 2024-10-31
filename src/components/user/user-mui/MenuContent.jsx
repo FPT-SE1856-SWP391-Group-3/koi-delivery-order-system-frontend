@@ -19,10 +19,11 @@ import AppsIcon from '@mui/icons-material/Apps';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import { Link } from 'react-router-dom';
 
 const mainListItems = [
-  { text: 'Home', icon: <HomeRoundedIcon />, href: '/' },
-  { text: 'Create Order', icon: <InventoryIcon />, href: '/CreateOrder' },
+  { text: 'Home', icon: <HomeRoundedIcon />, href: ComponentPath.user.dashboard },
+  { text: 'Create Order', icon: <InventoryIcon />, href: ComponentPath.user.order.createOrder },
   { text: 'View Order', icon: <AppsIcon />, href: ComponentPath.user.order.viewOrder },
   { text: 'Dashboard', icon: <DashboardIcon /> },
   { text: 'Notification', icon: <NotificationsActiveIcon />, href: ComponentPath.user.notification.viewNotification },
@@ -36,13 +37,15 @@ const secondaryListItems = [
 
 export default function MenuContent() {
   return (
-    <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
+    <Stack sx={{ flexGrow: 1, p: 1, justifyContent: "space-between" }}>
       <List dense>
         {mainListItems.map((item, index) => (
-          <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton selected={index === 0} href={item.href}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
+          <ListItem key={index} disablePadding sx={{ display: "block" }}>
+            <ListItemButton selected={index === 0}>
+              <Link to={item.href}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </Link>
             </ListItemButton>
           </ListItem>
         ))}
@@ -50,10 +53,12 @@ export default function MenuContent() {
 
       <List dense>
         {secondaryListItems.map((item, index) => (
-          <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton href={item.href}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
+          <ListItem key={index} disablePadding sx={{ display: "block" }}>
+            <ListItemButton>
+              <Link to={item.href}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </Link>
             </ListItemButton>
           </ListItem>
         ))}
