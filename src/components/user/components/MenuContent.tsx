@@ -12,12 +12,15 @@ import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
+import { Link } from "react-router-dom";
+import ComponentPath from "routes/ComponentPath";
 
 const mainListItems = [
-  { text: 'Home', icon: <HomeRoundedIcon /> },
-  { text: 'Analytics', icon: <AnalyticsRoundedIcon /> },
-  { text: 'Clients', icon: <PeopleRoundedIcon /> },
-  { text: 'Tasks', icon: <AssignmentRoundedIcon /> },
+  { text: 'Home', icon: <HomeRoundedIcon />, link: "/" },
+  { text: 'Profile', icon: <AnalyticsRoundedIcon />, link: ComponentPath.user.profile.viewProfile },
+  { text: 'Create Order', icon: <PeopleRoundedIcon />, link: ComponentPath.user.order.createOrder },
+  { text: 'View Order', icon: <AssignmentRoundedIcon />, link: ComponentPath.user.order.viewOrder },
+  { text: 'View Notification', icon: <AssignmentRoundedIcon />, link: ComponentPath.user.notification.viewNotification },
 ];
 
 const secondaryListItems = [
@@ -32,10 +35,12 @@ export default function MenuContent() {
       <List dense>
         {mainListItems.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton selected={index === 0}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
+            <Link to={item.link}>
+              <ListItemButton selected={index === 0}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItemButton>
+            </Link>
           </ListItem>
         ))}
       </List>
