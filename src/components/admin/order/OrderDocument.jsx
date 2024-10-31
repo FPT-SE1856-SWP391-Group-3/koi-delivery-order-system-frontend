@@ -3,9 +3,8 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { set } from "react-hook-form";
-import Sidebar from "../../user/common/Sidebar";
+import AdminSideMenu from "../components/AdminSideMenu";
 import ComponentPath from "routes/ComponentPath";
-
 
 export default function ManageOrderDocument() {
   const [orderDocuments, setOrderDocuments] = useState([{}]);
@@ -58,7 +57,7 @@ export default function ManageOrderDocument() {
 
   return (
     <div>
-      <Sidebar />
+      <AdminSideMenu />
       <div className="content-container">
         <h1>Documents</h1>
         {orderIds.map((orderId) => {
@@ -111,7 +110,8 @@ export default function ManageOrderDocument() {
                       </button>
                       <a
                         href={
-                          ComponentPath.admin.order.document.editOrderDocment + document.orderDocumentId
+                          ComponentPath.admin.order.document.editOrderDocment +
+                          document.orderDocumentId
                         }
                       >
                         Update

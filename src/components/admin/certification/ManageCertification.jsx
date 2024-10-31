@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../../../api/CallAPI";
-import Sidebar from "../../user/common/Sidebar";
+
 import "../certification/ManageCertification.css";
 import Modal from "react-modal";
 import ComponentPath from "routes/ComponentPath";
+import AdminSideMenu from "../components/AdminSideMenu";
 
 export default function ManageCertification() {
   const [certifications, setCertifications] = useState([]);
@@ -61,7 +62,7 @@ export default function ManageCertification() {
 
   return (
     <div>
-      <Sidebar />
+      <AdminSideMenu />
       <div className="content-container">
         <h1>Manage Certifications</h1>
         <a

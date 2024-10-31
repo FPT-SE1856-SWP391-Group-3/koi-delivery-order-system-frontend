@@ -9,7 +9,18 @@ import api from "../../../api/CallAPI";
 import CustomerDocumentInfo from "./COC/CustomerDocumentInfo";
 import SideMenu from "../SideMenu";
 import NavbarBreadcrumbs from "../NavbarBreadcrumbs";
-import { AppBar, Box, Button, ButtonGroup, ButtonGroupContext, Card, CardContent, Checkbox, FormControlLabel, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  ButtonGroup,
+  ButtonGroupContext,
+  Card,
+  CardContent,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+} from "@mui/material";
 import UserAppBar from "../UserAppNavbar";
 import { Grid } from "@mui/joy";
 
@@ -31,8 +42,8 @@ function CreateOrder() {
     if (savedOrderData) {
       setSenderInfo(savedOrderData.senderInfo || {});
       setReceiverInfo(savedOrderData.receiverInfo || {});
-      setServiceSelection(savedOrderData.serviceSelection || {});
-      setCustomerDocument(savedOrderData.customerDocument || {});
+      setServiceSelection(savedOrderData.serviceSelection || [{}]);
+      setCustomerDocument(savedOrderData.customerDocument || [{}]);
     }
   }, []);
 
@@ -46,9 +57,7 @@ function CreateOrder() {
       total += service.price * service.amount;
     });
     setTotalPrice(total);
-  }, [serviceSelection]);
-
-
+  }, []);
 
   const handleCheckboxChange = useCallback(() => {
     setIsCheckboxChecked((prevChecked) => !prevChecked);
@@ -71,9 +80,18 @@ function CreateOrder() {
     formData.append("CustomerId", senderInfo.userId || null);
     formData.append("OrderStatusId", 1);
     formData.append("ShippingMethodId", 1);
-    formData.append("StartAddress", "Bãi cỏ KTX khu B, Phường Đông Hòa, Dĩ An, Tỉnh Bình Dương, Việt Nam");
-    formData.append("ReceiverPartAddressLine", receiverInfo.receiverPartAddressLine);
-    formData.append("ReceiverFullAddressLine", receiverInfo.receiverFullAddressLine);
+    formData.append(
+      "StartAddress",
+      "Bãi cỏ KTX khu B, Phường Đông Hòa, Dĩ An, Tỉnh Bình Dương, Việt Nam"
+    );
+    formData.append(
+      "ReceiverPartAddressLine",
+      receiverInfo.receiverPartAddressLine
+    );
+    formData.append(
+      "ReceiverFullAddressLine",
+      receiverInfo.receiverFullAddressLine
+    );
     formData.append("ReceiverName", receiverInfo.fullName);
     formData.append("ReceiverPhoneNumber", receiverInfo.phoneNumber);
     formData.append("ReceiverEmail", receiverInfo.email);
@@ -89,7 +107,7 @@ function CreateOrder() {
     customerDocument.map((doc, index) => {
       if (doc.customerDocumentFile) {
         formData.append(`CustomerDocumentFile`, doc.customerDocumentFile);
-        formData.append(`Description[${index}]`, doc.description);   
+        formData.append(`Description[${index}]`, doc.description);
       }
     });
 
@@ -99,10 +117,7 @@ function CreateOrder() {
       } else {
         alert("Đơn hàng chưa được tạo, vui lòng thử lại!");
       }
-    }); 
-
-
-
+    });
   }, [senderInfo, receiverInfo, serviceSelection, customerDocument, navigate]);
 
   const handleSaveClick = useCallback(() => {
@@ -135,7 +150,6 @@ function CreateOrder() {
   console.log(totalPrice);
   console.log(serviceSelectionState);
   console.log(customerDocument);
-  
 
   return (
     <Box sx={{ display: "flex" }}>

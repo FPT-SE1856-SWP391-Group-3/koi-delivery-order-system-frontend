@@ -5,6 +5,7 @@ import "../blogandnews/ManageBlogNews.css";
 import Modal from "react-modal";
 import EditBlogNews from "./EditBlogNews";
 import CreateBlogNews from "./CreateBlogNews";
+import AdminSideMenu from "../components/AdminSideMenu";
 
 export default function ManageBlogNews() {
   const [posts, setPosts] = useState([]);
@@ -85,7 +86,7 @@ export default function ManageBlogNews() {
 
   return (
     <>
-      <Sidebar />
+      <AdminSideMenu />
       <div className="content-container">
         <h1>Blog and News</h1>
         <button onClick={openAddModal} className="add-blog-btn">

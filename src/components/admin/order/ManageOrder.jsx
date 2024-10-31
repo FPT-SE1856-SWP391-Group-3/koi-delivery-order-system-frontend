@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-
+import AdminSideMenu from "../components/AdminSideMenu";
 import {
   Box,
   Table,
@@ -42,7 +42,9 @@ function OrderRow({
 
   const fetchKoiDetails = async (orderId) => {
     try {
-      const data = await api.get(`OrderDetails/OrderDetailsByOrderId/${orderId}`);
+      const data = await api.get(
+        `OrderDetails/OrderDetailsByOrderId/${orderId}`
+      );
       if (data.success) {
         setKoiDetails(data.koiDetails || []);
       } else {
@@ -76,7 +78,9 @@ function OrderRow({
         <TableCell>{row.orderStatus.orderStatusName}</TableCell>
         <TableCell>
           <select
-            onChange={(event) => updateOrderStatusBySelect(event, row.orderId, row.orderStatusId)}
+            onChange={(event) =>
+              updateOrderStatusBySelect(event, row.orderId, row.orderStatusId)
+            }
             value={row.orderStatusId}
           >
             {orderStatus.map((status) => (
@@ -88,13 +92,21 @@ function OrderRow({
         </TableCell>
         <TableCell>
           <Box display="flex" flexDirection="column" gap={1}>
-            <Button onClick={() => updateOrderStatusByClick(row.orderId, row.orderStatusId)}>
+            <Button
+              onClick={() =>
+                updateOrderStatusByClick(row.orderId, row.orderStatusId)
+              }
+            >
               Update Status
             </Button>
-            <Button onClick={() => openDocumentModal(row.orderId, row.orderStatusId)}>
+            <Button
+              onClick={() => openDocumentModal(row.orderId, row.orderStatusId)}
+            >
               Order Document
             </Button>
-            <Button onClick={() => openReportModal(row.orderId)}>Transportation Report</Button>
+            <Button onClick={() => openReportModal(row.orderId)}>
+              Transportation Report
+            </Button>
             <Button onClick={() => cancelOrder(row.orderId)} color="error">
               Cancel
             </Button>
@@ -188,7 +200,9 @@ export default function ManageOrder() {
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [orderStatus, setOrderStatus] = useState([]);
   const [dateRange, setDateRange] = useState([null, null]);
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")));
+  const [user, setUser] = useState(() =>
+    JSON.parse(localStorage.getItem("user"))
+  );
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
@@ -340,10 +354,9 @@ export default function ManageOrder() {
 
   return (
     <div>
+      <AdminSideMenu />
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Box display="flex" justifyContent="center" marginBottom={2}>
-
-        </Box>
+        <Box display="flex" justifyContent="center" marginBottom={2}></Box>
       </LocalizationProvider>
 
       <TableContainer component={Paper}>
