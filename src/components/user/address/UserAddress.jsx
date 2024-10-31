@@ -5,7 +5,7 @@ import ComponentPath from "routes/ComponentPath";
 import Bootstrap from "../props/Bootstrap";
 import UserSidebar from "../common/UserSidebar";
 import EditAddress from "./EditAddress";
-import UserSideNav from "../user-mui/UserSideNav";
+import UserSideNav from "../UserSideNav";
 import AddAddress from "./AddAddress";
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Box, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 

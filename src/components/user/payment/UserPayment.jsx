@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import ComponentPath from "routes/ComponentPath";
-import UserSideNav from "../user-mui/UserSideNav";
+import UserSideNav from "../UserSideNav";
 import { Button, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Box, Modal } from "@mui/material";
 import { Grid } from "@mui/joy";
 import EditPayment from "./EditPayment";

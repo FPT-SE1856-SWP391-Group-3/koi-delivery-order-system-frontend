@@ -7,7 +7,7 @@ import AddDocument from "../document/AddDocument";
 import CreateFeedback from "../feedback/CreateFeedback";
 import UserOrderDetail from "./UserOrderDetail";
 import Box from '@mui/material/Box';
-import UserSideNav from "../user-mui/UserSideNav";
+import UserSideNav from "../UserSideNav";
 import { Button, Modal } from "@mui/material";
 import { ModalFooter } from "react-bootstrap";
 

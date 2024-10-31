@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import api from '../../../api/CallAPI';
-import UserSideNav from '../user-mui/UserSideNav';
+import UserSideNav from '../UserSideNav';
 import { Button, Card, CardContent } from '@mui/material';
 
 

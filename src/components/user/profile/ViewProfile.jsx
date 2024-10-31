@@ -5,9 +5,9 @@ import api from "../../../api/CallAPI";
 import ComponentPath from "routes/ComponentPath";
 import InforColumn from "../props/InforColumn";
 import { Avatar, Box, Button, Card, CardContent, Divider, Stack, Typography } from "@mui/material";
-import SideMenu from "../user-mui/SideMenu";
+import SideMenu from "../SideMenu";
 import { Grid } from "@mui/joy";
-import UserAppNavbar from "../user-mui/UserAppNavbar";
+import UserAppNavbar from "../UserAppNavbar";
 export default function ViewProfile() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const navigate = useNavigate();
