@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import api from "../../../api/CallAPI";
@@ -7,10 +7,13 @@ import "../css/Login.css";
 import koiFish from "../../../assets/koi-fish.png";
 import home from "../../../assets/home.png";
 import ComponentPath from "routes/ComponentPath";
+import { Alert } from "@mui/material";
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
+  const [token , setToken] = useState(JSON.parse(localStorage.getItem("token")));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   const navigate = useNavigate();
 
@@ -31,7 +34,7 @@ export default function Login() {
                 navigate("/admindashboard");
                 break;
               case 2:
-                navigate("/dashboard");
+                navigate(ComponentPath.user.profile.viewProfile);
                 break;
               case 3:
                 navigate("/admindashboard");
@@ -49,9 +52,38 @@ export default function Login() {
           console.log("Đăng nhập thất bại!");
           setError("Đăng nhập thất bại!");
         });
-    } catch (error) {
+      }  catch (error) {
       console.error("Lỗi đang nhập:", error);
       alert("Lỗi đang nhập, vui lòng thử lại.");
+    }
+  };
+
+  useEffect(() => {
+    handleNavigateIfLoggedIn();
+  },[]);
+
+  const handleNavigateIfLoggedIn = () => {
+    console.log(user);
+    switch (user.roleId) {
+      case 5:
+        console.log("redirect to admin");
+        var admin = ComponentPath.admin.dashboard;
+        navigate(admin);
+        break;
+      case 2:
+        navigate(ComponentPath.user.profile.viewProfile);
+        break;
+      case 3:
+        navigate(ComponentPath.admin.dashboard);
+        break;
+      case 4:
+        navigate(ComponentPath.admin.dashboard);
+        break;
+      default:
+        <Alert variant="filled" severity="error">
+          This is a filled error Alert.
+        </Alert>;
+        navigate("/");
     }
   };
 
@@ -81,7 +113,7 @@ export default function Login() {
       if (data.success) {
         alert("Đăng nhập bằng Google thành công!");
         localStorage.setItem("user", JSON.stringify(data.user));
-        navigate(ComponentPath.user.dashboard);
+        navigate(ComponentPath.user.profile.viewProfile);
       } else {
         alert("Đăng nhập bằng Google thất bại!");
       }
@@ -96,8 +128,7 @@ export default function Login() {
     console.error("Google Login Failure:", error);
     alert("Đăng nhập bằng Google thất bại!");
   };
-
-  return (
+  return !token ? (
     <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
       <div className="login">
         <a href="/" className="loginhome-icon">
@@ -161,7 +192,7 @@ export default function Login() {
         </div>
       </div>
     </GoogleOAuthProvider>
-  );
+  ) : handleNavigateIfLoggedIn();
 }
 /* {/* <h1>Login</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
