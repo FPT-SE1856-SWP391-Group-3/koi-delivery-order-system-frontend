@@ -30,7 +30,8 @@ const CustomerDocumentInfo = ({ onChange }) => {
   };
 
   return (
-    <div className="section">
+    <div>
+      {" "}
       <h2>Additional Notes</h2>
       <div className="sectionCompo">
         <textarea
@@ -45,7 +46,11 @@ const CustomerDocumentInfo = ({ onChange }) => {
             <input
               type="file"
               onChange={(e) =>
-                handleInputChange(index, "customerDocumentFile", e.target.files[0])
+                handleInputChange(
+                  index,
+                  "customerDocumentFile",
+                  e.target.files[0]
+                )
               }
             />
             <label>Description</label>

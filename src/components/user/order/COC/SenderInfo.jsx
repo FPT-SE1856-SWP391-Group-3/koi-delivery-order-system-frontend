@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import api from "../../../../api/CallAPI";
 import "../../css/CreateOrder.css";
+import { Grid } from "@mui/joy";
 
 const SenderInfo = ({ onChange }) => {
   const [senderInfo, setSenderInfo] = useState({
@@ -45,7 +46,7 @@ const SenderInfo = ({ onChange }) => {
             addressLine: addressLine || "", 
           }));
         } else {
-          alert("Failed to retrieve address information!");
+          // alert("Failed to retrieve address information!");
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -61,7 +62,7 @@ const SenderInfo = ({ onChange }) => {
   }, [senderInfo, onChange]);
 
   return (
-    <div className="section">
+    <div>
       <h2>Sender Information</h2>
       <div className="sectionCompo">
         <label>Sender Name</label>

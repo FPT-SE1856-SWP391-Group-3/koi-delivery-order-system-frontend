@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import "../../css/CreateOrder.css";
 import api from "../../../../api/CallAPI";
 import PropTypes from "prop-types";
+import { Grid } from "@mui/joy";
+import TextField from '@mui/material/TextField';
+import { Button, Divider, Typography } from "@mui/material";
 
 const ServiceSelection = ({ onChange }) => {
   const [orderServiceDetails, setOrderServiceDetails] = useState([]);
@@ -42,63 +45,94 @@ const ServiceSelection = ({ onChange }) => {
     onChange(updatedItemList);
   };
 
+
+
   return (
-    <div className="section">
+    <div>
       <h2>Service Selection</h2>
       <div className="sectionCompo">
         {itemList.map((item, index) => (
           <div id="item" key={index}>
-            <label>Package Type {index + 1}</label>
-            <input
-              type="text"
-              placeholder="Enter package type."
-              value={item.koiName}
-              onChange={(e) => handleInputChange(index, "koiName", e.target.value)}
-            />
-            <label>Weight</label>
-            <input
-              type="text"
-              placeholder="gram"
-              value={item.weight}
-              onChange={(e) => handleInputChange(index, "weight", e.target.value)}
-            />
-            <label>Price</label>
-            <input
-              type="text"
-              placeholder="0đ"
-              value={item.price}
-              onChange={(e) => handleInputChange(index, "price", e.target.value)}
-            />
-            <label>Amount</label>
-            <input
-              type="text"
-              placeholder="0"
-              value={item.amount}
-              onChange={(e) => handleInputChange(index, "amount", e.target.value)}
-            />
-            <label>Condition</label>
-            <input
-              type="text"
-              placeholder="Enter condition"
-              value={item.koiCondition}
-              onChange={(e) => handleInputChange(index, "koiCondition", e.target.value)}
-            />
-            <button type="button" onClick={() => handleRemoveItem(index)}>
-              Xóa
-            </button>
-          </div>
-        ))}
-        <button type="button" onClick={handleAddItem}>
-          Add Package
-        </button>
-        {orderServiceDetails.map((orderServiceDetail, idx) => (
-          <div key={idx}>
-            <h1>Các dịch vụ</h1>
-            <p>Gía dịch vụ: {orderServiceDetail.orderServiceDetailName} </p>
-            <p>Giá cước: {orderServiceDetail.orderServiceDetailPrice} </p>
-          </div>
-        ))}
+            <Grid container spacing={2}>
+              <Grid xs={12}>
+                <Typography level="h6">Package Type {index + 1}</Typography>
+              </Grid>
+              <Grid xs={12}>
+                <TextField
+                  fullWidth
+                  placeholder="Enter package type."
+                  value={item.koiName}
+                  onChange={(e) =>
+                    handleInputChange(index, "koiName", e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid xs={4}>
+                <TextField
+                  fullWidth
+                  placeholder="Weight (gram)"
+                  value={item.weight}
+                  onChange={(e) =>
+                    handleInputChange(index, "weight", e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid xs={4}>
+                <TextField
+                  fullWidth
+                  placeholder="Price (đ)"
+                  value={item.price}
+                  onChange={(e) =>
+                    handleInputChange(index, "price", e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid xs={4}>
+                <TextField
+                  fullWidth
+                  placeholder="Amount"
+                  value={item.amount}
+                  onChange={(e) =>
+                    handleInputChange(index, "amount", e.target.value)
+                  }
+                />
+              </Grid>
+              <Grid xs={12}>
+                <TextField
+                  fullWidth
+                  placeholder="Enter condition"
+                  value={item.koiCondition}
+                  onChange={(e) =>
+                    handleInputChange(index, "koiCondition", e.target.value)
+                  }
+                />
+              </Grid>
 
+              <Grid xs={12}>
+                <Button
+                  variant="outlined"
+                  color="danger"
+                  onClick={() => handleRemoveItem(index)}
+                >
+                  Xóa
+                </Button>
+              </Grid>
+            </Grid>
+            <Divider sx={{m : "1em 0"}}/>
+          </div>
+        ))}
+        <Button variant="contained" onClick={handleAddItem}>
+          Add Package
+        </Button>
+        <Grid>
+          {orderServiceDetails.map((orderServiceDetail, idx) => (
+            <div key={idx}>
+              <h1>Các dịch vụ</h1>
+              <p>Gía dịch vụ: {orderServiceDetail.orderServiceDetailName} </p>
+              <p>Giá cước: {orderServiceDetail.orderServiceDetailPrice} </p>
+            </div>
+          ))}
+        </Grid>
       </div>
     </div>
   );

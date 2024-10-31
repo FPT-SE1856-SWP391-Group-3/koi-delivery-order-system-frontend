@@ -3,10 +3,11 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import ComponentPath from "routes/ComponentPath";
-import styled from "styled-components";
 import InforColumn from "../props/InforColumn";
-import UserSidebar from "../common/UserSidebar";
-import Bootstrap from "../props/Bootstrap";
+import { Avatar, Box, Button, Card, CardContent, Divider, Stack, Typography } from "@mui/material";
+import SideMenu from "../user-mui/SideMenu";
+import { Grid } from "@mui/joy";
+import UserAppNavbar from "../user-mui/UserAppNavbar";
 export default function ViewProfile() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const navigate = useNavigate();
@@ -33,112 +34,80 @@ export default function ViewProfile() {
   };
 
   return (
-    <>
-      <Bootstrap/>
-      <UserSidebar/>
-      <div className="content-container">
-        {/* <h1>View Profile</h1>
-        <table>
-          <tbody>
-            <tr>
-              <td>Username:</td>
-              <td>{user.userName}</td>
-            </tr>
-            <tr>
-              <td>UserId:</td>
-              <td>{user.userId}</td>
-            </tr>
-            <tr>
-              <td>PhoneNumber:</td>
-              <td>{user.phoneNumber}</td>
-            </tr>
-            <tr>
-              <td>Role:</td>
-              <td>{user.roleName}</td>
-            </tr>
-            <tr>
-              <td>Update:</td>
-              <td>
-                <td>
-                  <a>Update</a>
-                </td>
-              </td>
-            </tr>
-            <tr>
-              <td>Delete:</td>
-              <td>
-                <button >Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>View Address:</td>
-              <td>
-                <a >
+    <Box sx={{ display: "flex" }}>
+      <SideMenu />
+      <Box sx={{ flexGrow: 1 }}>
+      <UserAppNavbar />
+        <Grid container spacing={3} paddingInline={3}>
+          <Grid item xs={12} md={4}>
+            <Card>
+              <CardContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <Avatar
+                    src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                    alt="Admin"
+                    sx={{ width: 150, height: 150 }}
+                  />
+                  <Typography variant="h4" sx={{ mt: 2 }}>
+                    {user.fullName}
+                  </Typography>
+                  <Stack spacing={2} sx={{ mt: 2 }}>
+                    <Button
+                      variant="contained"
+                      href={ComponentPath.user.payment.viewPayment}
+                    >
+                      View Payment
+                    </Button>
+                    <Button
+                      variant="contained"
+                      href={ComponentPath.user.profile.editProfile}
+                    >
+                      Update Profile
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      // href={ComponentPath.user.profile.updatePassword}
+                      href="/UpdatePassword"
+                    >
+                      Update Password
+                    </Button>
+                    <Button variant="outlined" onClick={deleteUser}>
+                      Delete Account
+                    </Button>
+                  </Stack>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+          {/* Right Side */}
+          <Grid item xs={12} md={8}>
+            <Card>
+              <CardContent>
+                <InforColumn element="Full Name" value={user.fullName} />
+                <Divider sx={{ my: 2 }} />
+                <InforColumn element="User Name" value={user.userName} />
+                <Divider sx={{ my: 2 }} />
+                <InforColumn element="Phone" value={user.phoneNumber} />
+                <Divider sx={{ my: 2 }} />
+                <Button
+                  variant="contained"
+                  color="info"
+                  href={ComponentPath.user.address.viewAddress}
+                >
                   View Address
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table> */}
-        <div>
-          <div className="row gutters-sm">
-            <div className="col-md-4 mb-3">
-              <div className="card">
-                <div className="card-body">
-                  <div className="d-flex flex-column align-items-center text-center">
-                    <img
-                      src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                      alt="Admin"
-                      className="rounded-circle"
-                      width={150}
-                    />
-                    <div className="mt-3">
-                      <h4>John Doe</h4>
-                      <p className="text-secondary mb-1">
-                        Full Stack Developer
-                      </p>
-                      <p className="text-muted font-size-sm">
-                        Bay Area, San Francisco, CA
-                      </p>
-                      <a className="btn btn-primary"  href={ComponentPath.user.payment.viewPayment} >View Payment</a>
-                      <a className="btn btn-primary"  href={ComponentPath.user.profile.editProfile} >Update Profile</a>
-                      <button className="btn btn-outline-primary"  href={ComponentPath.user.profile.updatePassword}>
-                        Update Password
-                      </button>
-                      <button className="btn btn-outline-primary"  onClick={deleteUser}>
-                        Delete Account
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-8">
-              <div className="card mb-3">
-                <div className="card-body">
-                  <InforColumn element="Full Name" value={user.fullName} />
-                  <hr />
-                  <InforColumn element="User Name" value={user.userName} />
-                  <hr />
-                  <InforColumn element="Phone" value={user.phoneNumber} />
-                  <hr />
-                  <div className="row">
-                    <div className="col-sm-12">
-                      <a
-                        className="btn btn-info "
-                        target="__blank"
-                        href={ComponentPath.user.address.viewAddress}
-                      >
-                        View Address
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </Box>
+    </Box>
   );
 }
