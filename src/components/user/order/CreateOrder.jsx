@@ -7,6 +7,11 @@ import "../css/CreateOrder.css";
 
 import api from "../../../api/CallAPI";
 import CustomerDocumentInfo from "./COC/CustomerDocumentInfo";
+import SideMenu from "../user-mui/SideMenu";
+import NavbarBreadcrumbs from "../user-mui/NavbarBreadcrumbs";
+import { AppBar, Box, Button, ButtonGroup, ButtonGroupContext, Card, CardContent, Checkbox, FormControlLabel, Typography } from "@mui/material";
+import UserAppBar from "../user-mui/UserAppNavbar";
+import { Grid } from "@mui/joy";
 
 function CreateOrder() {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -133,80 +138,94 @@ function CreateOrder() {
   
 
   return (
-    <div className="app-container">
-      {/* Navbar */}
-      <nav className="navbar-create">
-        <h1>KOI DELIVERY</h1>
-        <div className="username" onClick={toggleDropdown}>
-          {username}
-          <img src={avatarUrl} alt="User Avatar" className="user-avatar" />
-          <span className="dropdown-icon">&#9662;</span>
-          {isDropdownOpen && (
-            <div className="dropdown-menu">
-              <a href="/Profilemanage">Cài đặt tài khoản</a>
-              <a href="/UpdatePassword">Reset Password</a>
-              <a href="/logout">Đăng xuất</a>
-            </div>
-          )}
-        </div>
-      </nav>
+    <Box sx={{ display: "flex" }}>
+      <SideMenu />
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        <UserAppBar />
+        <Box sx={{ p: 2 }}>
+          <Box component="header" sx={{ mb: 2 }}>
+            <ButtonGroup variant="contained">
+              <Button color="primary" href="/CreateOrder">
+                Create Domestic Order
+              </Button>
+              <Button color="secondary" href="/CreateOrderInter">
+                Create International Order
+              </Button>
+            </ButtonGroup>
+          </Box>
 
-      {/* Sidebar */}
-      <div>
-        <nav className="Orsidebar">
-          <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/CreateOrder">Create Order</a></li>
-            <li><a href="/Profilemanage">Manage Account</a></li>
-          </ul>
-        </nav>
-      </div>
-
-      <div className="main-content">
-        <header>
-          <a className="order-btn-Do" href="/CreateOrder">Create Domestic Order</a>
-          <a className="order-btn" href="/CreateOrderInter">Create International Order</a>
-        </header>
-
-        {/* Form Sections */}
-        <div className="form-sections">
-          <SenderInfo onChange={setSenderInfo} />
-          <ReceiverInfo onChange={setReceiverInfo} />
-          <ServiceSelection onChange={setServiceSelection} stateChange={handleServiceSelectionChange} />
-          <CustomerDocumentInfo onChange={setCustomerDocument} />
-        </div>
-
-        {/* Footer */}
-        <footer>
-          <div className="footer-content">
-            <div className="footer-summary">
-              <span>Total Freight: 0 đ</span>
-              <span>Total Cost: {totalPrice} đ</span>
-              <span>Estimated Delivery: Same Day</span>
-            </div>
-            <div className="buttonNprivacy">
-              <div className="privacy">
-                <label className="checkbox-label">
-                  <input
-                    type="checkbox"
-                    checked={isCheckboxChecked}
-                    onChange={handleCheckboxChange}
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Card sx={{ mb: 2 }}>
+                <CardContent>
+                  <SenderInfo onChange={setSenderInfo} />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent>
+                  <ReceiverInfo onChange={setReceiverInfo} />
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Card sx={{ mb: 2 }}>
+                <CardContent>
+                  <ServiceSelection
+                    onChange={setServiceSelection}
+                    stateChange={handleServiceSelectionChange}
                   />
-                  Tôi đã đọc và đồng ý với Điều khoản quy định
-                </label>
-              </div>
-              <div className="footer-actions">
-                <button className="submit-btn" disabled={!isCheckboxChecked} onClick={handleSubmitClick}>
-                  Submit
-                </button>
-                <button className="save-btn" onClick={handleSaveClick}>Save</button>
-                <button className="reset-btn" onClick={handleResetClick}>Reset</button>
-              </div>
-            </div>
-          </div>
-        </footer>
-      </div>
-    </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent>
+                  <CustomerDocumentInfo onChange={setCustomerDocument} />
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+
+          <Box component="footer" sx={{ mt: 4 }}>
+            <Card>
+              <CardContent>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item xs={12} md={8}>
+                    <Typography variant="body1">Total Freight: 0 đ</Typography>
+                    <Typography variant="body1">
+                      Total Cost: {totalPrice} đ
+                    </Typography>
+                    <Typography variant="body1">
+                      Estimated Delivery: Same Day
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={isCheckboxChecked}
+                          onChange={handleCheckboxChange}
+                        />
+                      }
+                      label="Tôi đã đọc và đồng ý với Điều khoản quy định"
+                    />
+                    <ButtonGroup variant="contained">
+                      <Button
+                        color="primary"
+                        disabled={!isCheckboxChecked}
+                        onClick={handleSubmitClick}
+                      >
+                        Submit
+                      </Button>
+                      <Button onClick={handleSaveClick}>Save</Button>
+                      <Button onClick={handleResetClick}>Reset</Button>
+                    </ButtonGroup>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 export default CreateOrder;

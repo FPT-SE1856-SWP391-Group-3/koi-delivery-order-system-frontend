@@ -23,7 +23,7 @@ const admin = "/admin";
 
 const ComponentPath = {
   user: {
-    dashboard : dashboard,
+    dashboard : user + dashboard,
     address: {
       viewAddress: user + address + view,
       editAddress: address + edit,

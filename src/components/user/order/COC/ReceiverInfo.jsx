@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import "../../css/CreateOrder.css";
+import { Grid } from "@mui/joy";
 
 const ReceiverInfo = ({ onChange }) => {
   const [addresses, setAddresses] = useState([]);
@@ -56,7 +57,7 @@ const ReceiverInfo = ({ onChange }) => {
 
 
   return (
-    <div className="section">
+    <div>
       <h2>Receiver Information</h2>
       <div className="sectionCompo">
         <label>Phone Number</label>

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import { Box,Card, CardContent, Container, TextField, Typography, Button } from "@mui/material";
+import { Grid } from "@mui/joy";
+import UserAppNavbar from "../user-mui/UserAppNavbar";
 
 export default function UpdatePassword() {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -31,35 +34,60 @@ export default function UpdatePassword() {
   };
 
   return (
-    <div>
-      <h1>Update Password</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="oldPassword">Old Password</label>
-          <input
-            type="password"
-            id="oldPassword"
-            name="oldPassword"
-            onChange={(e) =>
-              setPasswordData({ ...passwordData, oldPassword: e.target.value })
-            }
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="newPassword">New Password</label>
-          <input
-            type="password"
-            id="newPassword"
-            name="newPassword"
-            onChange={(e) =>
-              setPasswordData({ ...passwordData, newPassword: e.target.value })
-            }
-            required
-          />
-        </div>
-        <button type="submit">Update Password</button>
-      </form>
-    </div>
+    <UserAppNavbar>
+      <Box sx={{ marginInline: "2em" }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h4" component="h1" gutterBottom>
+              Update Password
+            </Typography>
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Old Password"
+                    type="password"
+                    fullWidth
+                    variant="outlined"
+                    onChange={(e) =>
+                      setPasswordData({
+                        ...passwordData,
+                        oldPassword: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="New Password"
+                    type="password"
+                    fullWidth
+                    variant="outlined"
+                    onChange={(e) =>
+                      setPasswordData({
+                        ...passwordData,
+                        newPassword: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    Update Password
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </CardContent>
+        </Card>
+      </Box>
+    </UserAppNavbar>
   );
 }

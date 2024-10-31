@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import { useParams } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { 
+  Container,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Box
+} from '@mui/material';
 
-export default function EditPayment() {
+export default function EditPayment({ id }) {
   const [payment, setPayment] = useState();
   const navigate = useNavigate();
   let userId = JSON.parse(localStorage.getItem("userId"));
-  let { id } = useParams();
 
-  //Set gia tri cho payment
+  const [showEditPaymentModal, setShowEditPaymentModal] = useState(false);
 
-  //Goi API de lay thong tin payment
   useEffect(() => {
     try {
       api.get("Payments/" + userId).then((data) => {
@@ -29,10 +32,12 @@ export default function EditPayment() {
     }
   }, [id]);
 
-  //Them dia chi
+
+  
+
   const handleSubmit = async (e) => {
     try {
-      e.preventDefault(); //Ngan form tu chuyen tiep
+      e.preventDefault();
       api.put("Payments/" + id, payment).then((data) => {
         if (data.success) {
           alert("Sửa thành công!");
@@ -48,56 +53,48 @@ export default function EditPayment() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Sửa Thanh toán mới</h2>
-            <form onSubmit={handleSubmit}>
-              <div>
-                <input
-                  type="hidden"
-                  id="userId"
-                  name="userId"
-                  value={userId}
-                  onChange={(e) =>
-                    setPayment({ ...payment, userId: e.target.value })
-                  }
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="paymentMethodId">Kiểu thanh toán</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="paymentMethodId"
-                  name="paymentMethodId"
-                  value={payment?.paymentMethodId}
-                  onChange={(e) =>
-                    setPayment({ ...payment, paymentMethodId: e.target.value })
-                  }
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="paymentNumber">Sô tài khoản</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="paymentNumber"
-                  name="paymentNumber"
-                  value={payment?.paymentNumber}
-                  onChange={(e) =>
-                    setPayment({ ...payment, paymentNumber: e.target.value })
-                  }
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Thêm
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container maxWidth="sm">
+      <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          Sửa Thanh toán mới
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+          <input
+            type="hidden"
+            value={userId}
+            onChange={(e) =>
+              setPayment({ ...payment, userId: e.target.value })
+            }
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Kiểu thanh toán"
+            value={payment?.paymentMethodId || ''}
+            onChange={(e) =>
+              setPayment({ ...payment, paymentMethodId: e.target.value })
+            }
+          />
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Số tài khoản"
+            value={payment?.paymentNumber || ''}
+            onChange={(e) =>
+              setPayment({ ...payment, paymentNumber: e.target.value })
+            }
+          />
+          <Button 
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 3 }}
+          >
+            Thêm
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
   );
 }
