@@ -69,6 +69,7 @@ import CreateOrderInter from "../components/user/order/CreateOrderInter";
 import ChoosePayment from "../components/user/payment/ChoosePayment";
 import CallBackPayment from "../components/user/payment/CallBackPayment";
 import Dashboard from "../components/user/dashboard/Dashboard";
+import ViewOrders from "../components/user/profile/ViewOrders";
 
 // Function to get the access token from cookies
 var adminUrl = "/admin";
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: "/ViewOrders",
+    element: <ViewOrders />,
   },
   {
     path: "/ChoosePayment",
