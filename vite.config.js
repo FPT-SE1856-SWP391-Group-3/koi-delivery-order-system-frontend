@@ -6,9 +6,16 @@ import path from 'path'
 export default defineConfig({
   build: {
     target: "esnext",
-    // rollupOptions: {
-    //   external: ["routes/ComponentPath"], // externalize module này nếu cần
-    // },
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.indexOf("react") !== -1) return;
+          if (id.includes('node_modules')) return 'vendor';
+          if (id.includes('user')) return 'user';
+          if (id.includes('admin')) return 'admin';
+        }
+      }
+    }
   },
   plugins: [react()],
   resolve: {
