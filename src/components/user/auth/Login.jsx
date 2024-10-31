@@ -63,27 +63,29 @@ export default function Login() {
   },[]);
 
   const handleNavigateIfLoggedIn = () => {
-    console.log(user);
-    switch (user.roleId) {
-      case 5:
-        console.log("redirect to admin");
-        var admin = ComponentPath.admin.dashboard;
-        navigate(admin);
-        break;
-      case 2:
-        navigate(ComponentPath.user.profile.viewProfile);
-        break;
-      case 3:
-        navigate(ComponentPath.admin.dashboard);
-        break;
-      case 4:
-        navigate(ComponentPath.admin.dashboard);
-        break;
-      default:
-        <Alert variant="filled" severity="error">
-          This is a filled error Alert.
-        </Alert>;
-        navigate("/");
+    if (user != null) {
+      console.log(user);
+      switch (user.roleId) {
+        case 5:
+          console.log("redirect to admin");
+          var admin = ComponentPath.admin.dashboard;
+          navigate(admin);
+          break;
+        case 2:
+          navigate(ComponentPath.user.profile.viewProfile);
+          break;
+        case 3:
+          navigate(ComponentPath.admin.dashboard);
+          break;
+        case 4:
+          navigate(ComponentPath.admin.dashboard);
+          break;
+        default:
+          <Alert variant="filled" severity="error">
+            This is a filled error Alert.
+          </Alert>;
+          navigate("/");
+      }
     }
   };
 

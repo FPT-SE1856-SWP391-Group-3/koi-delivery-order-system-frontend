@@ -19,6 +19,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const mainListItems = [
@@ -31,17 +32,19 @@ const mainListItems = [
 const secondaryListItems = [
   { text: 'Profile', icon: <AccountBoxIcon />, href: ComponentPath.user.profile.viewProfile },
   { text: 'About', icon: <InfoRoundedIcon /> },
-  { text: 'Feedback', icon: <HelpRoundedIcon /> },
+  { text: 'Feedback', icon: <HelpRoundedIcon />, href: ComponentPath.user.feedback.viewFeedback },
 ];
 
 export default function MenuContent() {
+
+
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: "space-between" }}>
       <List dense>
         {mainListItems.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: "block" }}>
             <Link to={item.href}>
-              <ListItemButton selected={index === 0}>
+              <ListItemButton>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItemButton>

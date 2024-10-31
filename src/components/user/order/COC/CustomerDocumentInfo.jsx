@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "../../css/CreateOrder.css";
 import api from "../../../../api/CallAPI";
+import { Button, Divider } from "@mui/material";
 
 const CustomerDocumentInfo = ({ onChange }) => {
   const [customerDocument, setCustomerDocument] = useState([
@@ -31,45 +32,53 @@ const CustomerDocumentInfo = ({ onChange }) => {
 
   return (
     <div>
-      {" "}
-      <h2>Additional Notes</h2>
-      <div className="sectionCompo">
-        <textarea
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="Enter any additional notes"
-        />
-      </div>
+      <h2>Customer Document</h2>
+      <div className="sectionCompo"></div>
       <div>
         {customerDocument.map((item, index) => (
-          <div key={index}>
-            <label>Customer Document</label>
-            <input
-              type="file"
-              onChange={(e) =>
-                handleInputChange(
-                  index,
-                  "customerDocumentFile",
-                  e.target.files[0]
-                )
-              }
-            />
-            <label>Description</label>
-            <input
-              type="text"
-              placeholder="Enter description"
-              value={item.description}
-              onChange={(e) =>
-                handleInputChange(index, "description", e.target.value)
-              }
-            />
-            <button type="button" onClick={() => handleRemoveDocument(index)}>
-              Xóa
-            </button>
-          </div>
+          <>
+            <div key={index}>
+              <Divider sx={{marginBlock: "1em"}}/>
+              <label>Document {index + 1}</label>
+              <input
+                type="file"
+                onChange={(e) =>
+                  handleInputChange(
+                    index,
+                    "customerDocumentFile",
+                    e.target.files[0]
+                  )
+                }
+              />
+              <label>Description</label>
+              <input
+                type="text"
+                placeholder="Enter description"
+                value={item.description}
+                onChange={(e) =>
+                  handleInputChange(index, "description", e.target.value)
+                }
+              />
+              <Button
+                type="button"
+                variant="contained"
+                color="error"
+                onClick={() => handleRemoveDocument(index)}
+              >
+                Xóa
+              </Button>
+            </div>
+          </>
         ))}
-        <button type="button" onClick={handleAddDocument}>
+        <Button
+          type="button"
+          variant="contained"
+          color="primary"
+          onClick={handleAddDocument}
+          sx={{ mt: "1em" }}
+        >
           Thêm
-        </button>
+        </Button>
       </div>
     </div>
   );
