@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import api from "../../../api/CallAPI"; // Assuming this is your axios instance
+import api from "../../../api/CallAPI";
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Button,
+} from "@mui/material";
 
 export default function AddPayment() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-  const userId = JSON.parse(localStorage.getItem("userId")) || null; // Getting user ID from local storage
+  const userId = JSON.parse(localStorage.getItem("userId")) || null;
 
-  // Function to handle form submission
   const onSubmit = async (data) => {
     try {
-      // Add userId to form data
       data.userId = userId;
-
-      // Call the API to add payment
       const response = await api.post("Payments/", data);
 
       if (response.data.success) {
@@ -30,54 +37,55 @@ export default function AddPayment() {
   };
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-6 offset-md-3">
-          <h2 className="text-center">Thêm Thanh toán mới</h2>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {/* Hidden input for userId */}
-            <input
-              type="hidden"
-              id="userId"
-              name="userId"
-              value={userId}
-              {...register("userId")}
-            />
+    <Container maxWidth="sm">
+      <Box sx={{ mt: 4, mb: 4 }}>
+        <Typography variant="h4" component="h2" align="center" gutterBottom>
+          Thêm Thanh toán mới
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
+          <input
+            type="hidden"
+            id="userId"
+            name="userId"
+            value={userId}
+            {...register("userId")}
+          />
 
-            {/* Payment Method Input */}
-            <div className="form-group">
-              <label htmlFor="paymentMethod">Kiểu thanh toán</label>
-              <select
-                className="form-control"
-                id="paymentMethod"
-                name="paymentMethod"
-                {...register("paymentMethod", { required: true })}
-              >
-                <option value="credit-card">Thẻ tín dụng</option>
-                <option value="paypal">PayPal</option>
-                <option value="bank-transfer">Chuyển khoản ngân hàng</option>
-              </select>
-            </div>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel id="payment-method-label">Kiểu thanh toán</InputLabel>
+            <Select
+              labelId="payment-method-label"
+              id="paymentMethod"
+              label="Kiểu thanh toán"
+              defaultValue=""
+              {...register("paymentMethod", { required: true })}
+            >
+              <MenuItem value="credit-card">Thẻ tín dụng</MenuItem>
+              <MenuItem value="paypal">PayPal</MenuItem>
+              <MenuItem value="bank-transfer">Chuyển khoản ngân hàng</MenuItem>
+            </Select>
+          </FormControl>
 
-            {/* Payment Number Input */}
-            <div className="form-group">
-              <label htmlFor="paymentNumber">Số tài khoản / Số thẻ</label>
-              <input
-                type="text"
-                className="form-control"
-                id="paymentNumber"
-                name="paymentNumber"
-                {...register("paymentNumber", { required: true })}
-              />
-            </div>
+          <TextField
+            fullWidth
+            id="paymentNumber"
+            label="Số tài khoản / Số thẻ"
+            variant="outlined"
+            sx={{ mb: 2 }}
+            {...register("paymentNumber", { required: true })}
+          />
 
-            {/* Submit Button */}
-            <button type="submit" className="btn btn-primary">
-              Thêm
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
+          >
+            Thêm
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 }

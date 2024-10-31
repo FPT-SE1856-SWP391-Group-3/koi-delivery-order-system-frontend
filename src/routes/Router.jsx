@@ -66,8 +66,6 @@ import UserDashboard from "@components/user/dashboard/UserDashboard";
 import AdminDashboard from "@components/admin/dashboard/AdminDashboard";
 import { useEffect } from "react";
 import CreateOrderInter from "../components/user/order/CreateOrderInter";
-import Profilemanage from "../components/user/profile/Profilemanage";
-import Updateinfo from "../components/user/profile/ProfileCom/Updateinfo";
 import ChoosePayment from "../components/user/payment/ChoosePayment";
 import CallBackPayment from "../components/user/payment/CallBackPayment";
 import Dashboard from "../components/user/dashboard/Dashboard";
@@ -100,30 +98,6 @@ const router = createBrowserRouter([
   {
     path: "/CallBackPayment",
     element: <CallBackPayment />,
-  },
-  {
-    path: "/AddPayment",
-    element: <AddPayment />,
-  },
-  {
-    path: "/UpdatePassword",
-    element: <UpdatePassword />,
-  },
-  {
-    path: "/Updateinfo",
-    element: <Updateinfo />,
-  },
-  {
-    path: "/Profilemanage",
-    element: <Profilemanage />,
-  },
-  {
-    path: "/CreateOrderInter",
-    element: <CreateOrderInter />,
-  },
-  {
-    path: "/CreateOrder",
-    element: <CreateOrder />,
   },
   {
     path: "/login",
@@ -170,7 +144,26 @@ const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
-      // Profile
+      {
+        path: ComponentPath.user.dashboard,
+        element: <UserDashboard />,
+      },
+      {
+        path: ComponentPath.user.payment.createPayment,
+        element: <AddPayment />,
+      },
+      {
+        path: ComponentPath.user.user.updatePassword,
+        element: <UpdatePassword />,
+      },
+      {
+        path: "/CreateOrderInter",
+        element: <CreateOrderInter />,
+      },
+      {
+        path: ComponentPath.user.order.createOrder,
+        element: <CreateOrder />,
+      },
       {
         path: ComponentPath.user.profile.viewProfile,
         element: <ViewProfile />,
@@ -183,7 +176,6 @@ const router = createBrowserRouter([
         path: ComponentPath.user.profile.updatePassword,
         element: <UpdatePassword />,
       },
-      // Address
       {
         path: ComponentPath.user.address.createAddress,
         element: <AddAddress />,
@@ -196,7 +188,6 @@ const router = createBrowserRouter([
         path: ComponentPath.user.address.editAddress + ":addressId",
         element: <EditAddress />,
       },
-      // Payment
       {
         path: ComponentPath.user.payment.viewPayment,
         element: <UserPayment />,

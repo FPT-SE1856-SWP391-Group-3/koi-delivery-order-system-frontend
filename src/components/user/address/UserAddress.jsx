@@ -5,6 +5,10 @@ import ComponentPath from "routes/ComponentPath";
 import Bootstrap from "../props/Bootstrap";
 import UserSidebar from "../common/UserSidebar";
 import EditAddress from "./EditAddress";
+import UserSideNav from "../user-mui/UserSideNav";
+import AddAddress from "./AddAddress";
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Box, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+
 
 export default function UserAddress() {
   const [addresses, setAddresses] = useState([]);
@@ -13,6 +17,7 @@ export default function UserAddress() {
 
   const [showModal, setShowModal] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
 
 
   useEffect(() => {
@@ -53,95 +58,98 @@ export default function UserAddress() {
     setSelectedAddressId(addressId);
     setShowModal(true);
   };
-
+  
+  const handleOpenAddModal = () => setShowAddModal(true);
   const handleCloseModal = () => setShowModal(false);
 
   return (
     <div>
-      <UserSidebar />
-      <Bootstrap />
-      <div className="content">
-        <h1>Address</h1>
-        <a
-          href={ComponentPath.user.address.createAddress}
-          className="btn btn-primary"
-          style={{ width: "10em" }}
-        >
-          Add address
-        </a>
-        <table className="table table-hover" style={{ marginTop: "1em" }}>
-          <thead>
-            <tr>
-              <th>AddressId</th>
-              <th>UserId</th>
-              <th>Address Line</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {addresses.map((address) => (
-              <tr key={address.addressId}>
-                <td>{address.addressId}</td>
-                <td>{address.userId}</td>
-                <td>{address.addressLine}</td>
-                <td>
-                  <a
-                    // href={
-                    //   ComponentPath.user.address.editAddress + address.addressId
-                    // }
-                    className="btn btn-primary"
-                    style={{ width: "30%", marginRight: "1em" }}
-                    onClick={() => handleOpenModal(address.addressId)}
-                  >
-                    Update
-                  </a>
-                  <button
-                    onClick={() => deleteAddress(address.addressId)}
-                    className="btn btn-secondary"
-                    style={{ width: "30%" }}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div>
-        {/* Modal */}
-        <div
-          className={`modal fade ${showModal ? "show d-block" : ""}`}
-          tabIndex="1"
-          role="dialog"
-        >
-          <div className="modal-dialog  modal-lg" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Cập nhật địa chỉ</h5>
-              </div>
-              <div className="modal-body">
-                <EditAddress
-                  addressId={selectedAddressId}
-                  closeModal={handleCloseModal}
-                />
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={handleCloseModal}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+      <UserSideNav>
+        <Box sx={{ p: 3 }}>
+          <Typography variant="h4" gutterBottom>
+            Address
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => setShowAddModal(true)}
+            sx={{ mb: 2 }}
+          >
+            Add Address
+          </Button>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>AddressId</TableCell>
+                  <TableCell>UserId</TableCell>
+                  <TableCell>Address Line</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {addresses.map((address) => (
+                  <TableRow key={address.addressId}>
+                    <TableCell>{address.addressId}</TableCell>
+                    <TableCell>{address.userId}</TableCell>
+                    <TableCell>{address.addressLine}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleOpenModal(address.addressId)}
+                        sx={{ mr: 1 }}
+                      >
+                        Update
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => deleteAddress(address.addressId)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
 
-        {/* Backdrop */}
-        {showModal && <div className="modal-backdrop fade show"></div>}
-      </div>
+          {/* Edit Address Modal */}
+          <Dialog
+            open={showModal}
+            onClose={handleCloseModal}
+            maxWidth="md"
+            fullWidth
+          >
+            <DialogTitle>Update Address</DialogTitle>
+            <DialogContent>
+              <EditAddress
+                addressId={selectedAddressId}
+                closeModal={handleCloseModal}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseModal}>Close</Button>
+            </DialogActions>
+          </Dialog>
+
+          {/* Add Address Modal */}
+          <Dialog
+            open={showAddModal}
+            onClose={() => setShowAddModal(false)}
+            maxWidth="md"
+            fullWidth
+          >
+            <DialogTitle>Add New Address</DialogTitle>
+            <DialogContent>
+              <AddAddress closeModal={() => setShowAddModal(false)} />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setShowAddModal(false)}>Close</Button>
+            </DialogActions>
+          </Dialog>
+        </Box>
+      </UserSideNav>
     </div>
   );
 }
