@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import ComponentPath from "routes/ComponentPath";
 import InforColumn from "../props/InforColumn";
@@ -37,7 +37,7 @@ export default function ViewProfile() {
     <Box sx={{ display: "flex" }}>
       <SideMenu />
       <Box sx={{ flexGrow: 1 }}>
-      <UserAppNavbar />
+        <UserAppNavbar />
         <Grid container spacing={3} paddingInline={3}>
           <Grid item xs={12} md={4}>
             <Card>
@@ -59,28 +59,27 @@ export default function ViewProfile() {
                     {user.fullName}
                   </Typography>
                   <Stack spacing={2} sx={{ mt: 2 }}>
-                    <Button
-                      variant="contained"
-                      href={ComponentPath.user.payment.viewPayment}
-                    >
-                      View Payment
+                    <Button variant="contained">
+                      <Link to={ComponentPath.user.payment.viewPayment}>
+                        View Payment
+                      </Link>
                     </Button>
-                    <Button
-                      variant="contained"
-                      href={ComponentPath.user.profile.editProfile}
-                    >
-                      Update Profile
+                    <Button variant="contained">
+                      <Link to={ComponentPath.user.payment.editPayment}>
+                        Edit Payment
+                      </Link>
                     </Button>
                     <Button
                       variant="outlined"
                       // href={ComponentPath.user.profile.updatePassword}
-                      href="/UpdatePassword"
                     >
-                      Update Password
+                      <Link to={ComponentPath.user.user.updatePassword}>
+                        Update Password
+                      </Link>
                     </Button>
-                    <Button variant="outlined" onClick={deleteUser}>
-                      Delete Account
-                    </Button>
+                    {/* <Button variant="outlined" onClick={deleteUser}>
+                    <Link to={ComponentPath.user.payment.editPayment}>Edit Payment</Link>
+                    </Button> */}
                   </Stack>
                 </Box>
               </CardContent>

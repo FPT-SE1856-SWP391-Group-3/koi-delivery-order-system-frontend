@@ -1,19 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import { useEffect } from "react";
-import Bootstrap from "../props/Bootstrap";
 import AddDocument from "../document/AddDocument";
 import CreateFeedback from "../feedback/CreateFeedback";
 import UserOrderDetail from "./UserOrderDetail";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 import UserSideNav from "../UserSideNav";
-import { Button, Modal } from "@mui/material";
-import { ModalFooter } from "react-bootstrap";
+import {
+  Button,
+  Modal,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
+
+import { Grid } from "@mui/joy"; 
+
 
 export default function UserOrder() {
   const navigate = useNavigate();
-  const [order, setOrder] = useState([{}]);
+  const [order, setOrder] = useState([]);
   const userId = JSON.parse(localStorage.getItem("userId"));
 
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -32,7 +43,6 @@ export default function UserOrder() {
     });
   }, [userId]);
 
-  //-----------------Modal-----------------
   const handleShowDetailModal = (orderId) => {
     setSelectedOrderId(orderId);
     setShowDetailModal(true);
@@ -53,176 +63,199 @@ export default function UserOrder() {
     setShowFeedbackModal(false);
     setShowDocumentModal(false);
   };
-  //--------------------------------------
 
   return (
     <Box sx={{ display: "flex" }}>
       <UserSideNav>
-      <Bootstrap />
-      <div style={{marginInline: "1em"}}>
-        <div className="row">
-        <div className="col-md-12">
-          <h2 className="text-center">Danh sách đơn hàng</h2>
-          <table className="table">
-          <thead>
-            <tr>
-            <th scope="col">Mã đơn hàng</th>
-            <th scope="col">Ngày đặt hàng</th>
-            <th scope="col">Ngày giao hàng</th>
-            <th scope="col">Địa chỉ lấy hàng</th>
-            <th scope="col">Địa chỉ giao hàng</th>
-            <th scope="col">Tổng tiền</th>
-            <th scope="col">Trạng thái</th>
-            <th scope="col">Chi tiết</th>
-            <th scope="col">FeedBack</th>
-            <th scope="col">Document</th>
-            </tr>
-          </thead>
-          <tbody>
-            {order.map((order) => (
-            <tr key={order.orderId}>
-              <td>{order.orderId}</td>
-              <td>{order.orderDate}</td>
-              <td>{order.deliveryDate}</td>
-              <td>
-              {order.startAddress == null
-                ? ""
-                : order.startAddress.addressLine}
-              </td>
-              <td>
-              {order.endAddress == null
-                ? ""
-                : order.endAddress.addressLine}
-              </td>
-              <td>{order.totalPrice}</td>
-              <td>
-              {order.orderStatus == null
-                ? ""
-                : order.orderStatus.orderStatusName}
-              </td>
-              <td>
-              <button
-                className="btn btn-primary"
-                onClick={() => handleShowDetailModal(order.orderId)}
-              >
-                Chi tiết
-              </button>
-              </td>
-              <td>
-              <button
-                className="btn btn-primary"
-                onClick={() => handleShowFeedbackModal(order.orderId)}
-              >
-                Feedback
-              </button>
-              </td>
-              <td>
-              <button
-                className="btn btn-primary"
-                onClick={() => handleShowDocumentModal(order.orderId)}
-              >
-                Document
-              </button>
-              </td>
-              <div>
-              <Modal
-                open={showDetailModal}
-                onClose={handleCloseModal}
-                aria-labelledby="detail-modal-title"
-              >
-                <Box
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: "80%",
-                  bgcolor: "background.paper",
-                  boxShadow: 24,
-                  p: 4,
-                  maxHeight: "90vh",
-                  overflow: "auto",
-                }}
-                >
-                <h2 id="detail-modal-title">Chi tiết đơn hàng</h2>
-                <UserOrderDetail orderId={selectedOrderId} />
-                <ModalFooter>
-                  <Button variant="contained" color="error" onClick={handleCloseModal}>
-                  Đóng
-                  </Button>
-                </ModalFooter>
-                </Box>
-              </Modal>
+        <Box sx={{ marginInline: "1em" }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="h4" align="center">
+                Danh sách đơn hàng
+              </Typography>
+              <TableContainer component={Paper} sx={{ marginTop: 2 }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Mã đơn hàng</TableCell>
+                      <TableCell>Ngày đặt hàng</TableCell>
+                      <TableCell>Ngày giao hàng</TableCell>
+                      <TableCell>Địa chỉ lấy hàng</TableCell>
+                      <TableCell>Địa chỉ giao hàng</TableCell>
+                      <TableCell>Tổng tiền</TableCell>
+                      <TableCell>Trạng thái</TableCell>
+                      <TableCell>Chi tiết</TableCell>
+                      <TableCell>FeedBack</TableCell>
+                      <TableCell>Document</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {order.map((order) => (
+                      <TableRow key={order.orderId}>
+                        <TableCell>{order.orderId}</TableCell>
+                        <TableCell>{order.orderDate}</TableCell>
+                        <TableCell>{order.deliveryDate}</TableCell>
+                        <TableCell>
+                          {order.startAddress == null
+                            ? ""
+                            : order.startAddress.addressLine}
+                        </TableCell>
+                        <TableCell>
+                          {order.endAddress == null
+                            ? ""
+                            : order.endAddress.addressLine}
+                        </TableCell>
+                        <TableCell>{order.totalPrice}</TableCell>
+                        <TableCell>
+                          {order.orderStatus == null
+                            ? ""
+                            : order.orderStatus.orderStatusName}
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            onClick={() => handleShowDetailModal(order.orderId)}
+                          >
+                            Chi tiết
+                          </Button>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            onClick={() =>
+                              handleShowFeedbackModal(order.orderId)
+                            }
+                          >
+                            Feedback
+                          </Button>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="contained"
+                            onClick={() =>
+                              handleShowDocumentModal(order.orderId)
+                            }
+                          >
+                            Document
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Grid>
+          </Grid>
+        </Box>
 
-              <Modal
-                open={showFeedbackModal}
-                onClose={handleCloseModal}
-                aria-labelledby="feedback-modal-title"
+        {/* Detail Modal */}
+        <Modal
+          open={showDetailModal}
+          onClose={handleCloseModal}
+          aria-labelledby="detail-modal-title"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "80%",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              maxHeight: "90vh",
+              overflow: "auto",
+            }}
+          >
+            <Typography id="detail-modal-title" variant="h6" component="h2">
+              Chi tiết đơn hàng
+            </Typography>
+            <UserOrderDetail orderId={selectedOrderId} />
+            <Box display="flex" justifyContent="flex-end" mt={2}>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleCloseModal}
               >
-                <Box
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: "80%",
-                  bgcolor: "background.paper",
-                  boxShadow: 24,
-                  p: 4,
-                  maxHeight: "90vh",
-                  overflow: "auto",
-                }}
-                >
-                <h2 id="feedback-modal-title">Thêm Feedback</h2>
-                <CreateFeedback orderId={selectedOrderId} />
-                <ModalFooter>
-                  <Button variant="contained" color="error" onClick={handleCloseModal}>
-                  Đóng
-                  </Button>
-                </ModalFooter>
-                </Box>
-              </Modal>
+                Đóng
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
 
-              <Modal
-                open={showDocumentModal}
-                onClose={handleCloseModal}
-                aria-labelledby="document-modal-title"
+        {/* Feedback Modal */}
+        <Modal
+          open={showFeedbackModal}
+          onClose={handleCloseModal}
+          aria-labelledby="feedback-modal-title"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "80%",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              maxHeight: "90vh",
+              overflow: "auto",
+            }}
+          >
+            <Typography id="feedback-modal-title" variant="h6" component="h2">
+              Thêm Feedback
+            </Typography>
+            <CreateFeedback orderId={selectedOrderId} />
+            <Box display="flex" justifyContent="flex-end" mt={2}>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleCloseModal}
               >
-                <Box
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: "80%",
-                  bgcolor: "background.paper",
-                  boxShadow: 24,
-                  p: 4,
-                  maxHeight: "90vh",
-                  overflow: "auto",
-                }}
-                >
-                <h2 id="document-modal-title">Thêm Document</h2>
-                <AddDocument
-                  orderId={selectedOrderId}
-                  userId={userId}
-                />
-                <ModalFooter>
-                  <Button variant="contained" color="error" onClick={handleCloseModal}>
-                  Đóng
-                  </Button>
-                </ModalFooter>
-                </Box>
-              </Modal>
-              </div>
-            </tr>
-            ))}
-          </tbody>
-          </table>
-        </div>
-        </div>
-      </div>
+                Đóng
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+
+        {/* Document Modal */}
+        <Modal
+          open={showDocumentModal}
+          onClose={handleCloseModal}
+          aria-labelledby="document-modal-title"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: "80%",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              maxHeight: "90vh",
+              overflow: "auto",
+            }}
+          >
+            <Typography id="document-modal-title" variant="h6" component="h2">
+              Thêm Document
+            </Typography>
+            <AddDocument orderId={selectedOrderId} userId={userId} />
+            <Box display="flex" justifyContent="flex-end" mt={2}>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleCloseModal}
+              >
+                Đóng
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
       </UserSideNav>
     </Box>
-    );
+  );
 }
