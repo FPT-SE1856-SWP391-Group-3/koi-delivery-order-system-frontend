@@ -12,7 +12,7 @@ import OptionsMenu from './OptionsMenu';
 import MenuContent from './MenuContent';
 import { useState} from "react";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const Drawer = styled(MuiDrawer)({
   width: drawerWidth,

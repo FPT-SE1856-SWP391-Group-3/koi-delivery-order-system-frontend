@@ -4,6 +4,7 @@ import Sidebar from "../../user/common/Sidebar";
 import "../report/ManageTransportationReportDetails.css";
 import EditTransportationReportDetails from "./EditTransportationReportDetails";
 import Modal from "react-modal";
+import AdminSideMenu from "../components/AdminSideMenu";
 
 export default function ManageTransportationReportDetails() {
   const [reports, setReports] = useState([]);
@@ -77,7 +78,7 @@ export default function ManageTransportationReportDetails() {
 
   return (
     <div>
-      <Sidebar />
+      <AdminSideMenu />
       <div className="content-container">
         <h1>Manage Transportation Report</h1>
         <table className="report-table">

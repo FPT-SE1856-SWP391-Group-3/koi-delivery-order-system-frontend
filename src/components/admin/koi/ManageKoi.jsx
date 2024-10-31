@@ -7,6 +7,7 @@ import CreateKoi from "./CreateKoi";
 import EditKoi from "./EditKoi";
 import Modal from "react-modal";
 import ComponentPath from "routes/ComponentPath";
+import AdminSideMenu from "../components/AdminSideMenu";
 
 Modal.setAppElement("#root");
 
@@ -91,7 +92,7 @@ export default function ManageKoi() {
   return (
     <>
       <div>
-        <Sidebar />
+        <AdminSideMenu />
         <div className="content-container">
           <h1>Manage Koi</h1>
           <button onClick={openCreateModal} className="add-koi-btn">

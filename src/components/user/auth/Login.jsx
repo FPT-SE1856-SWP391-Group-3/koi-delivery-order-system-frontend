@@ -12,7 +12,7 @@ import { Alert } from "@mui/material";
 export default function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
-  const [token , setToken] = useState(JSON.parse(localStorage.getItem("token")));
+  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   const navigate = useNavigate();
@@ -52,15 +52,15 @@ export default function Login() {
           console.log("Đăng nhập thất bại!");
           setError("Đăng nhập thất bại!");
         });
-      }  catch (error) {
+    } catch (error) {
       console.error("Lỗi đang nhập:", error);
       alert("Lỗi đang nhập, vui lòng thử lại.");
     }
   };
 
-  useEffect(() => {
-    handleNavigateIfLoggedIn();
-  },[]);
+  // useEffect(() => {
+  //   handleNavigateIfLoggedIn();
+  // }, []);
 
   const handleNavigateIfLoggedIn = () => {
     if (user != null) {
@@ -130,8 +130,8 @@ export default function Login() {
     console.error("Google Login Failure:", error);
     alert("Đăng nhập bằng Google thất bại!");
   };
-  return !token ? (
-    <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
+  return (
+    /*!token ? */ <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
       <div className="login">
         <a href="/" className="loginhome-icon">
           <img src={home} />
@@ -194,7 +194,9 @@ export default function Login() {
         </div>
       </div>
     </GoogleOAuthProvider>
-  ) : handleNavigateIfLoggedIn();
+    /* ) : (
+    handleNavigateIfLoggedIn()*/
+  );
 }
 /* {/* <h1>Login</h1>
       <form onSubmit={handleSubmit(onSubmit)}>

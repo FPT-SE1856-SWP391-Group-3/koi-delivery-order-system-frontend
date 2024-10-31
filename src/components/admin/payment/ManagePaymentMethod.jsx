@@ -5,6 +5,7 @@ import "../payment/ManagePaymentMethod.css";
 import AddPaymentType from "./AddPaymentMethod";
 import EditPaymentType from "./EditPaymentMethod";
 import Modal from "react-modal";
+import AdminSideMenu from "../components/AdminSideMenu";
 
 Modal.setAppElement("#root");
 
@@ -89,7 +90,7 @@ export default function ManagePaymentMethod() {
 
   return (
     <div>
-      <Sidebar />
+      <AdminSideMenu />
       <div className="content-container">
         <h1>Payment Methods</h1>
         <button onClick={openAddModal} className="add-payment-btn">

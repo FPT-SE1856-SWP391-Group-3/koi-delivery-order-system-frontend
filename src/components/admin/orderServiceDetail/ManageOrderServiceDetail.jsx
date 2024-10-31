@@ -5,7 +5,7 @@ import "../orderServiceDetail/OrderServiceDetail.css";
 import AddOrderServiceDetail from "./AddOrderServiceDetail";
 import EditOrderServiceDetail from "./EditOrderServiceDetail";
 import Modal from "react-modal";
-import ComponentPath from "routes/ComponentPath";
+import AdminSideMenu from "../components/AdminSideMenu";
 
 Modal.setAppElement("#root");
 
@@ -99,7 +99,7 @@ export default function ManageOrderServiceDetail() {
   };
   return (
     <div>
-      <Sidebar />
+      <AdminSideMenu />
       <div className="content-container">
         <h1>Manage Order Services</h1>
         <button onClick={openAddModal} className="add-service-btn">

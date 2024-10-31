@@ -5,6 +5,7 @@ import "../faq/ManageFaq.css";
 import Modal from "react-modal";
 import NewFaq from "./NewFaq";
 import UpdateFaq from "./UpdateFaq";
+import AdminSideMenu from "../components/AdminSideMenu";
 
 Modal.setAppElement("#root");
 
@@ -88,7 +89,7 @@ export default function ManageFaq() {
 
   return (
     <div>
-      <Sidebar />
+      <AdminSideMenu />
       <div className="content-container">
         <h1>Manage FAQs</h1>
         <button onClick={openAddModal} className="add-fag-btn">
