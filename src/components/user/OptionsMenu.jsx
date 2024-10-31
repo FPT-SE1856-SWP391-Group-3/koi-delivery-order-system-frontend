@@ -11,7 +11,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from './MenuButton';
 import { Link } from "react-router-dom";
-import ComponentPath from '../../../routes/ComponentPath';
+import ComponentPath from '../../routes/ComponentPath';
 
 
 const MenuItem = styled(MuiMenuItem)({

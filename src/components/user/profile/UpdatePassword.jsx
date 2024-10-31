@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { Box,Card, CardContent, Container, TextField, Typography, Button } from "@mui/material";
 import { Grid } from "@mui/joy";
-import UserAppNavbar from "../user-mui/UserAppNavbar";
+import UserAppNavbar from "../UserAppNavbar";
 
 export default function UpdatePassword() {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
