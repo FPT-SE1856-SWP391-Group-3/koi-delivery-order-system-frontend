@@ -1,11 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import { useEffect } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  Container,
+} from "@mui/material";
 
 export default function UserOrderDetail({ orderId }) {
   const [UserOrderDetails, setUserOrderDetails] = useState([]);
-  // const { orderId } = useParams();
 
   useEffect(() => {
     api.get("OrderDetails/OrderDetailsByOrderId/" + orderId).then((data) => {
@@ -18,45 +27,48 @@ export default function UserOrderDetail({ orderId }) {
     });
   }, [orderId]);
 
-  console.log(UserOrderDetails);
-
   return (
-    <div>
-      <div className="">
-        <div className="row">
-          <div className="col-md-12">
-            <h2 className="text-center">Danh sách chi tiết đơn hàng</h2>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">Mã chi tiết đơn hàng</th>
-                  <th scope="col">Tên cá koi </th>
-                  <th scope="col">Trọng lượng</th>
-                  <th scope="col">Giá</th>
-                  <th scope="col">Loại</th>
-                </tr>
-              </thead>
-              <tbody>
-                {UserOrderDetails.length > 0 ? (
-                  UserOrderDetails.map((UserOrderDetail) => (
-                    <tr key={UserOrderDetail.orderDetailId}>
-                      <td>{UserOrderDetail.orderDetailId}</td>
-                      <td>{UserOrderDetail.koi.koiName}</td>
-                      <td>{UserOrderDetail.koi.weight}</td>
-                      <td>{UserOrderDetail.koi.price}</td>
-                      <td>{UserOrderDetail.koi.koiType != null ? UserOrderDetail.koi.koiType.koiTypeName : "" }</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5">Không có dữ liệu</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+    <>
+      {" "}
+      <Typography variant="h4" align="center" sx={{ mb: 3 }}>
+        Danh sách chi tiết đơn hàng
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="order details table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Mã chi tiết đơn hàng</TableCell>
+              <TableCell>Tên cá koi</TableCell>
+              <TableCell>Trọng lượng</TableCell>
+              <TableCell>Giá</TableCell>
+              <TableCell>Loại</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {UserOrderDetails.length > 0 ? (
+              UserOrderDetails.map((UserOrderDetail) => (
+                <TableRow key={UserOrderDetail.orderDetailId}>
+                  <TableCell>{UserOrderDetail.orderDetailId}</TableCell>
+                  <TableCell>{UserOrderDetail.koi.koiName}</TableCell>
+                  <TableCell>{UserOrderDetail.koi.weight}</TableCell>
+                  <TableCell>{UserOrderDetail.koi.price}</TableCell>
+                  <TableCell>
+                    {UserOrderDetail.koi.koiType != null
+                      ? UserOrderDetail.koi.koiType.koiTypeName
+                      : ""}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  Không có dữ liệu
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }
