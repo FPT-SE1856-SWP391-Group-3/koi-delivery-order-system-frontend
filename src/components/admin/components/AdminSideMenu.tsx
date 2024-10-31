@@ -6,12 +6,11 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import SelectContent from './SelectContent';
-import MenuContent from './MenuContent';
-import CardAlert from './CardAlert';
-import OptionsMenu from './OptionsMenu';
-import { useState} from "react";
 import avatar from "../../../assets/avatar.png";
+import logo from "/Logo.png";
+import OptionsMenu from './OptionsMenu';
+import MenuContent from './MenuContent';
+import { useState} from "react";
 
 const drawerWidth = 240;
 
@@ -26,33 +25,40 @@ const Drawer = styled(MuiDrawer)({
   },
 });
 
-
-
-
-export default function SideMenu() {
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-  return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        display: { xs: 'none', md: 'block' },
-        [`& .${drawerClasses.paper}`]: {
-          backgroundColor: 'background.paper',
-        },
-      }}
-    >
-      <Box
+export default function AdminSideMenu(){
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+    return(
+        <Drawer
+        variant="permanent"
         sx={{
-          display: 'flex',
-          mt: 'calc(var(--template-frame-height, 0px) + 4px)',
-          p: 1.5,
+          display: { xs: 'none', md: 'block' },
+          [`& .${drawerClasses.paper}`]: {
+            backgroundColor: 'background.paper',
+          },
         }}
       >
-      <SelectContent />
-      </Box>
-      <Divider />
-      <MenuContent />
-      {/* <CardAlert /> */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            mt: 'calc(var(--template-frame-height, 0px) + 4px)',
+            p: 1.5,
+          }}
+        >
+          <Avatar
+          sizes="small"
+          alt="avatar"
+          src={logo}
+          sx={{ width: 56, height: 56 }}
+        />
+          <Typography variant="h5" sx={{ color: '#e65a5a;' }}>
+            KOI Delivery
+          </Typography>
+        </Box>
+        <Divider />
+        <MenuContent/>
       <Stack
         direction="row"
         sx={{
@@ -65,7 +71,7 @@ export default function SideMenu() {
       >
         <Avatar
           sizes="small"
-          alt="Riley Carter"
+          alt="avatar"
           src={avatar}
           sx={{ width: 36, height: 36 }}
         />
@@ -77,8 +83,8 @@ export default function SideMenu() {
             {user.email}
           </Typography>
         </Box>
-        <OptionsMenu />
+        <OptionsMenu/>
       </Stack>
-    </Drawer>
-  );
+        </Drawer>
+    );
 }

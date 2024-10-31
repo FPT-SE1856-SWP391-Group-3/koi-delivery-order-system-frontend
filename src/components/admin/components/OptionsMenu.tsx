@@ -9,20 +9,17 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon, { listItemIconClasses } from '@mui/material/ListItemIcon';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-import MenuButton from './MenuButton';
-import { Link } from "react-router-dom";
-import ComponentPath from '../../../routes/ComponentPath';
-
+import MenuButton from "../components/MenuButton";
 
 const MenuItem = styled(MuiMenuItem)({
   margin: '2px 0',
 });
 
 export default function OptionsMenu() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (e) => {
-    setAnchorEl(e.currentTarget);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -32,7 +29,7 @@ export default function OptionsMenu() {
       <MenuButton
         aria-label="Open menu"
         onClick={handleClick}
-        sx={{ borderColor: "transparent" }}
+        sx={{ borderColor: 'transparent' }}
       >
         <MoreVertRoundedIcon />
       </MenuButton>
@@ -42,39 +39,39 @@ export default function OptionsMenu() {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        transformOrigin={{ horizontal: "right", vertical: "top" }}
-        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         sx={{
           [`& .${listClasses.root}`]: {
-            padding: "4px",
+            padding: '4px',
           },
           [`& .${paperClasses.root}`]: {
             padding: 0,
           },
           [`& .${dividerClasses.root}`]: {
-            margin: "4px -4px",
+            margin: '4px -4px',
           },
         }}
       >
-        <MenuItem>
-          <Link to={ComponentPath.user.profile.viewProfile}>Profile</Link>
-        </MenuItem>
+        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <Divider />
         <Divider />
         <MenuItem
           onClick={handleClose}
           sx={{
             [`& .${listItemIconClasses.root}`]: {
-              ml: "auto",
+              ml: 'auto',
               minWidth: 0,
             },
           }}
         >
-          <ListItemText>
-            <Link to="/logout">Logout</Link>
-          </ListItemText>
+
+         <ListItemText><a href="/logout">Logout</a> </ListItemText>
           <ListItemIcon>
             <LogoutRoundedIcon fontSize="small" />
           </ListItemIcon>
+
+          
         </MenuItem>
       </Menu>
     </React.Fragment>

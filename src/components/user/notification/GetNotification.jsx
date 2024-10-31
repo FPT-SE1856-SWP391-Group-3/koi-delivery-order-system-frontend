@@ -17,8 +17,8 @@ import {
 } from "@mui/material";
 import api from "../../../api/CallAPI";
 
-import SideMenu from "../user-mui/SideMenu";
-import UserAppBar from "../user-mui/UserAppNavbar";
+import SideMenu from "../SideMenu";
+import UserAppBar from "../UserAppNavbar";
 
 
 export default function GetNotification() {
