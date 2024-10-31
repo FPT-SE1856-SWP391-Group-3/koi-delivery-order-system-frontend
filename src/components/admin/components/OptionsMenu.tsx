@@ -9,7 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon, { listItemIconClasses } from '@mui/material/ListItemIcon';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
-import MenuButton from './MenuButton';
+import MenuButton from "../components/MenuButton";
 
 const MenuItem = styled(MuiMenuItem)({
   margin: '2px 0',
@@ -54,10 +54,7 @@ export default function OptionsMenu() {
         }}
       >
         <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>Add another account</MenuItem>
-        <MenuItem onClick={handleClose}>Settings</MenuItem>
         <Divider />
         <MenuItem
           onClick={handleClose}
@@ -68,10 +65,13 @@ export default function OptionsMenu() {
             },
           }}
         >
-          <ListItemText><a href="/logout">Logout</a></ListItemText>
+
+         <ListItemText><a href="/logout">Logout</a> </ListItemText>
           <ListItemIcon>
             <LogoutRoundedIcon fontSize="small" />
           </ListItemIcon>
+
+          
         </MenuItem>
       </Menu>
     </React.Fragment>
