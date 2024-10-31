@@ -256,6 +256,10 @@ const router = createBrowserRouter([
         element: <AdminRoute />,
         children: [
           {
+            path: "/admindashboard",
+            element: <AdminDashboard />,
+          },
+          {
             path: ComponentPath.admin.user.manageUser,
             element: <ManageUser />,
           },

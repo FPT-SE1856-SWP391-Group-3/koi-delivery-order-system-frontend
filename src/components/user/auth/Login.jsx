@@ -28,17 +28,16 @@ export default function Login() {
             switch (data.user.roleId) {
               case 5:
                 console.log("redirect to admin");
-                var admin = ComponentPath.admin.dashboard;
-                navigate(admin);
+                navigate("/admindashboard");
                 break;
               case 2:
-                navigate("/CreateOrder");
+                navigate("/dashboard");
                 break;
               case 3:
-                navigate(ComponentPath.admin.dashboard);
+                navigate("/admindashboard");
                 break;
               case 4:
-                navigate(ComponentPath.admin.dashboard);
+                navigate("/admindashboard");
                 break;
               default:
                 alert("Không xác định được vai trò người dùng");
