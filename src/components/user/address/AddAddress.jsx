@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import ComponentPath from "../../../routes/ComponentPath";
+import UserAlert from "../alert/UserAlert";
 
 export default function AddAddress() {
   const { register, handleSubmit, setValue } = useForm();
@@ -13,15 +15,20 @@ export default function AddAddress() {
   const [wardName, setWardName] = useState("");
   const [addressLine, setAddressLine] = useState();
   const [addresses, setAddresses] = useState([]);
+  const [isOpened, setIsOpened] = useState(false);
 
   //Them dia chi
   const onSubmit = async (data) => {
-    console.log(data);
+    const requestData = {
+      userId : data.userId,
+      addressLine: addressLine,
+    };
     try {
-      await api.post("Addresses/", data).then((data) => {
+      await api.post("Addresses/", requestData).then((data) => {
         if (data.success) {
-          alert("Thêm thành công!");
-          navigate("/");
+          setIsOpened(true);
+          // navigate(ComponentPath.user.address.viewAddress);
+          window.location.reload();
         } else {
           alert("Thêm thất bại!");
         }
@@ -65,6 +72,7 @@ export default function AddAddress() {
   console.log(addresses);
   return (
     <div>
+      <UserAlert msg="Thêm địa chỉ thành công!" isOpened={isOpened} />
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">
@@ -157,8 +165,6 @@ export default function AddAddress() {
                   name="addressLine"
                   readOnly
                   value={addressLine}
-                  onChange={(e) => setValue("addressLine", addressLine)}
-                  {...register("addressLine")}
                 />
               </div>
               <button type="submit" className="btn btn-primary">

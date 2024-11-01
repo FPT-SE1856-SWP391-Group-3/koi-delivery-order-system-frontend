@@ -8,12 +8,14 @@ import koiFish from "../../../assets/koi-fish.png";
 import home from "../../../assets/home.png";
 import ComponentPath from "routes/ComponentPath";
 import { Alert } from "@mui/material";
+import UserAlert from "../alert/UserAlert";
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [isOpened, setIsOpened] = useState(false);
 
   const navigate = useNavigate();
 
@@ -51,6 +53,7 @@ export default function Login() {
         .catch((error) => {
           console.log("Đăng nhập thất bại!");
           setError("Đăng nhập thất bại!");
+          setIsOpened(true);
         });
     } catch (error) {
       console.error("Lỗi đang nhập:", error);
@@ -58,9 +61,9 @@ export default function Login() {
     }
   };
 
-  // useEffect(() => {
-  //   handleNavigateIfLoggedIn();
-  // }, []);
+  useEffect(() => {
+    handleNavigateIfLoggedIn();
+  }, []);
 
   const handleNavigateIfLoggedIn = () => {
     if (user != null) {
@@ -132,6 +135,7 @@ export default function Login() {
   };
   return (
     /*!token ? */ <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
+      <UserAlert msg={error} type="error" isOpen={isOpened} />
       <div className="login">
         <a href="/" className="loginhome-icon">
           <img src={home} />

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import api from "../../../api/CallAPI";
-import Header from "../common/Header";
 import Bootstrap from "../props/Bootstrap";
 
 export default function EditAddress({ addressId, closeModal }) {
@@ -12,6 +11,7 @@ export default function EditAddress({ addressId, closeModal }) {
   const [cityName, setCityName] = useState("");
   const [districtName, setDistrictName] = useState("");
   const [wardName, setWardName] = useState("");
+
   // const { addressId } = useParams(); // Lấy addressId từ URL params
   const navigate = useNavigate();
   console.log(addressId);
