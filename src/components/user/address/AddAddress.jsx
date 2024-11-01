@@ -4,7 +4,8 @@ import api from "../../../api/CallAPI";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ComponentPath from "../../../routes/ComponentPath";
-import UserAlert from "../alert/UserAlert";
+import UserToast from "../alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 export default function AddAddress() {
   const { register, handleSubmit, setValue } = useForm();
@@ -16,10 +17,6 @@ export default function AddAddress() {
   const [addressLine, setAddressLine] = useState();
   const [addresses, setAddresses] = useState([]);
 
-  const [isOpened, setIsOpened] = useState(false);
-  const [msg, setMsg] = useState("");
-  const [type, setType] = useState("success");
-
   //Them dia chi
   const onSubmit = async (data) => {
     const requestData = {
@@ -29,18 +26,17 @@ export default function AddAddress() {
     try {
       await api.post("Addresses/", requestData).then((data) => {
         if (data.success) {
-          setIsOpened(true);
-          setMsg("Thêm địa chỉ thành công!");
-          setType("success");
+          UserToast("success", "Thêm thành công!");
           // navigate(ComponentPath.user.address.viewAddress);
           window.location.reload();
         } else {
-          alert("Thêm thất bại!");
+          UserToast("error", "Thêm thất bại!");
         }
       });
     } catch (error) {
       console.error("Error during registration:", error);
-      alert("An error occurred during registration. Please try again.");
+      UserToast("error", "Thêm thất bại!");
+
     }
   };
 
@@ -77,7 +73,7 @@ export default function AddAddress() {
   console.log(addresses);
   return (
     <div>
-      { msg == "" ? null : <UserAlert msg={msg} type={type} isOpen={isOpened} /> }
+       <ToastContainer/>
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">
