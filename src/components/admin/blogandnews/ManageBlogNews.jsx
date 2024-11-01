@@ -23,7 +23,7 @@ import Sidebar from "../../user/common/Sidebar";
 import EditBlogNews from "./EditBlogNews";
 import CreateBlogNews from "./CreateBlogNews";
 import "../blogandnews/ManageBlogNews.css";
-import AdminSideMenu from "../components/AdminSideMenu";import AdminSideMenu from "../components/AdminSideMenu";
+import AdminSideMenu from "../components/AdminSideMenu";
 
 export default function ManageBlogNews() {
   const [posts, setPosts] = useState([]);
