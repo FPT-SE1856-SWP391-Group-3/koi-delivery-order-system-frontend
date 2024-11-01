@@ -11,18 +11,19 @@ export default function BarChart() {
 
     ChartJS.register(ArcElement, Tooltip, Legend);
 
-    const [order, setOrder] = useState([]);
+    const [orders, setOrders] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
     useEffect(() => {
         api.get("Orders/" + user.userId).then((response) => {
-            console.log(response.orders);
-            setOrder(response.orders);
+            console.log(response.order);
+            setOrders(response.order);
         });
     }, [user]);
 
     const orderByStatus = (status) => {
-        return order.filter((order) => order.orderStatusId === status).length;
+        if (!orders) return 0;
+        return orders.filter((order) => order.orderStatusId === status).length;
     };
 
     const data = {

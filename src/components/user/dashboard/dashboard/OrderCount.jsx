@@ -3,18 +3,18 @@ import api from "../../../../api/CallAPI";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper } from '@mui/material';
 
 export default function OrderCount() {
-    const [order, setOrder] = useState([]);
+    const [orders, setOrders] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
     useEffect(() => {
         api.get("Orders/" + user.userId).then((response) => {
-            console.log(response.orders);
-            setOrder(response.orders);
+            console.log(response.order);
+            setOrders(response.order);
         });
     }, [user]);
 
     const orderByStatus = (status) => {
-        return order.filter((order) => order.orderStatusId === status).length;
+        return orders.filter((order) => order.orderStatusId === status).length;
     };
 
     const statuses = [
