@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import axios from "axios";
@@ -15,7 +15,10 @@ export default function AddAddress() {
   const [wardName, setWardName] = useState("");
   const [addressLine, setAddressLine] = useState();
   const [addresses, setAddresses] = useState([]);
+
   const [isOpened, setIsOpened] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [type, setType] = useState("success");
 
   //Them dia chi
   const onSubmit = async (data) => {
@@ -27,6 +30,8 @@ export default function AddAddress() {
       await api.post("Addresses/", requestData).then((data) => {
         if (data.success) {
           setIsOpened(true);
+          setMsg("Thêm địa chỉ thành công!");
+          setType("success");
           // navigate(ComponentPath.user.address.viewAddress);
           window.location.reload();
         } else {
@@ -72,7 +77,7 @@ export default function AddAddress() {
   console.log(addresses);
   return (
     <div>
-      <UserAlert msg="Thêm địa chỉ thành công!" isOpened={isOpened} />
+      { msg == "" ? null : <UserAlert msg={msg} type={type} isOpen={isOpened} /> }
       <div className="container">
         <div className="row">
           <div className="col-md-6 offset-md-3">

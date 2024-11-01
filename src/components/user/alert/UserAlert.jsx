@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
-import { Alert, Button, Snackbar } from "@mui/material";
+import { Alert, Snackbar } from "@mui/material";
 
 
-export default function UserAlert({ msg, type, isOpen }) {
+export default function UserAlert({ msg = '', type = 'info', isOpen = false }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -15,24 +15,21 @@ export default function UserAlert({ msg, type, isOpen }) {
   };
 
   return (
-    <div>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={open}
-        autoHideDuration={5000}
-        onClose={handleClose}
-        message={msg}
-      >
-        <Alert onClose={handleClose} severity={type} sx={{ width: "100%" }}>
-          {msg}
-        </Alert>
-      </Snackbar>
-    </div>
+    <Snackbar
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      open={open}
+      autoHideDuration={5000}
+      onClose={handleClose}
+    >
+      <Alert onClose={handleClose} severity={type} sx={{ width: "100%" }}>
+        {msg}
+      </Alert>
+    </Snackbar>
   );
 }
 
 UserAlert.propTypes = {
   msg: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(['error', 'warning', 'info', 'success']).isRequired,
   isOpen: PropTypes.bool.isRequired,
 };
