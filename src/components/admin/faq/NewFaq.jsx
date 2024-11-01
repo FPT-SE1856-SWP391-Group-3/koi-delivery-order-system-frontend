@@ -1,21 +1,21 @@
-import { useNavigate } from "react-router-dom";
-import api from "../../../api/CallAPI";
 import { useForm } from "react-hook-form";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import api from "../../../api/CallAPI";
 import "../faq/NewFaq.css";
 
 export default function NewFaq({ onClose, onAddSuccess }) {
   const { register, handleSubmit } = useForm();
 
-  // Thêm FAQ
+  // Handle form submission
   const onSubmit = async (data) => {
     try {
       const response = await api.post("Faqs/", data);
       if (response.success) {
-        alert("Thêm thành công!");
-        onAddSuccess(); // Gọi callback để cập nhật danh sách trong ManageFaq
-        onClose(); // Đóng modal sau khi thêm mới thành công
+        alert("FAQ added successfully!");
+        onAddSuccess(); // Callback to update the FAQ list in ManageFaq
+        onClose(); // Close modal on successful addition
       } else {
-        alert("Thêm thất bại!");
+        alert("Failed to add FAQ!");
       }
     } catch (error) {
       console.error("Error during registration:", error);
@@ -24,26 +24,39 @@ export default function NewFaq({ onClose, onAddSuccess }) {
   };
 
   return (
-    <div className="addfaq-container">
-      <h1 className="form-title">Add new FAQ</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="addfaq-form">
-        <div className="form-group">
-          <label htmlFor="question">Question</label>
-          <input
-            type="text"
-            id="question"
-            name="question"
-            {...register("question")}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="answer">Answer</label>
-          <textarea id="answer" name="answer" {...register("answer")} />
-        </div>
-        <button type="submit" className="btn-add">
-          ADD
-        </button>
-      </form>
-    </div>
+    <Box className="addfaq-container" padding={3} component="form" onSubmit={handleSubmit(onSubmit)}>
+      <Typography variant="h5" className="form-title" gutterBottom>
+        Add New FAQ
+      </Typography>
+      
+      <TextField
+        label="Question"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        {...register("question")}
+      />
+
+      <TextField
+        label="Answer"
+        variant="outlined"
+        multiline
+        rows={4}
+        fullWidth
+        margin="normal"
+        {...register("answer")}
+      />
+
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
+        className="btn-add"
+        sx={{ marginTop: 2 }}
+      >
+        Add
+      </Button>
+    </Box>
   );
 }

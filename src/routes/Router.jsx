@@ -70,6 +70,7 @@ import ChoosePayment from "../components/user/payment/ChoosePayment";
 import CallBackPayment from "../components/user/payment/CallBackPayment";
 import Dashboard from "../components/user/dashboard/Dashboard";
 import ViewOrders from "../components/user/profile/ViewOrders";
+import ManageRoute from "../components/admin/order/ManageRoute";
 
 // Function to get the access token from cookies
 var adminUrl = "/admin";
@@ -88,6 +89,7 @@ const isAdmin = async () => {
 
 // Create the router configuration
 const router = createBrowserRouter([
+
   {
     path: "/dashboard",
     element: <Dashboard />,
@@ -149,6 +151,11 @@ const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
+      // {
+      //   path: ComponentPath.admin.route.manageroute,
+      //   element: <ManageRoute />,
+      // },
+
       {
         path: ComponentPath.user.dashboard,
         element: <UserDashboard />,
@@ -264,6 +271,14 @@ const router = createBrowserRouter([
             path: "/admindashboard",
             element: <AdminDashboard />,
           },
+          {
+            path: "/manangeroute",
+            element: <ManageRoute />,
+          },
+          // {
+          //   path: ComponentPath.admin.manage.manageroute,
+          //   element: <ManageRoute />,
+          // },
           {
             path: ComponentPath.admin.user.manageUser,
             element: <ManageUser />,

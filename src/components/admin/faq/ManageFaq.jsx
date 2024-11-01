@@ -1,32 +1,48 @@
 import { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Fab,
+} from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 import api from "../../../api/CallAPI";
 import Sidebar from "../../user/common/Sidebar";
-import "../faq/ManageFaq.css";
-import Modal from "react-modal";
 import NewFaq from "./NewFaq";
 import UpdateFaq from "./UpdateFaq";
+import "../faq/ManageFaq.css";
 import AdminSideMenu from "../components/AdminSideMenu";
-
-Modal.setAppElement("#root");
 
 export default function ManageFaq() {
   const [faqs, setFaqs] = useState([]);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [selectedFaqId, setSelectedFaqId] = useState(null);
 
-  // Hàm tải lại danh sách FAQs
+  // Fetch FAQs from API
   const fetchFaqs = async () => {
     try {
       const data = await api.get("Faqs/");
       if (data.success) {
         setFaqs(data.faqs);
       } else {
-        console.log("Không có địa chỉ!");
+        console.log("No FAQs found.");
       }
     } catch (error) {
-      alert("An error has occurred. Please try again.");
+      alert("An error occurred while fetching FAQs. Please try again.");
     }
   };
 
@@ -34,147 +50,172 @@ export default function ManageFaq() {
     fetchFaqs();
   }, []);
 
-  // Xác nhận xóa FAQ
+  // Confirm deletion of FAQ
   const confirmDeleteFaq = async () => {
     try {
-      const data = await api.del("Faqs/" + selectedFaqId);
+      const data = await api.del(`Faqs/${selectedFaqId}`);
       if (data.success) {
-        alert("Xóa thành công!");
-        setFaqs((prevFaqs) =>
-          prevFaqs.filter((faq) => faq.faqid !== selectedFaqId)
-        );
+        alert("FAQ deleted successfully!");
+        setFaqs((prevFaqs) => prevFaqs.filter((faq) => faq.faqid !== selectedFaqId));
       } else {
-        alert("Xóa thất bại!");
+        alert("Failed to delete FAQ.");
       }
     } catch (error) {
       console.error("Error during deletion:", error);
       alert("An error occurred during deletion. Please try again.");
     }
-    closeDeleteModal();
+    closeDeleteDialog();
   };
 
-  // Mở modal xác nhận xóa và lưu lại faqId cần xóa
-  const openDeleteModal = (faqId) => {
+  // Open and close dialog functions
+  const openDeleteDialog = (faqId) => {
     setSelectedFaqId(faqId);
-    setIsDeleteModalOpen(true);
+    setIsDeleteDialogOpen(true);
   };
 
-  // Đóng modal xác nhận xóa
-  const closeDeleteModal = () => {
-    setIsDeleteModalOpen(false);
+  const closeDeleteDialog = () => {
+    setIsDeleteDialogOpen(false);
     setSelectedFaqId(null);
   };
 
-  // Mở modal thêm FAQ
-  const openAddModal = () => {
-    setIsAddModalOpen(true);
+  const openAddDialog = () => {
+    setIsAddDialogOpen(true);
   };
 
-  // Đóng modal thêm FAQ
-  const closeAddModal = () => {
-    setIsAddModalOpen(false);
+  const closeAddDialog = () => {
+    setIsAddDialogOpen(false);
   };
 
-  // Mở modal cập nhật FAQ
-  const openUpdateModal = (faqId) => {
+  const openUpdateDialog = (faqId) => {
     setSelectedFaqId(faqId);
-    setIsUpdateModalOpen(true);
+    setIsUpdateDialogOpen(true);
   };
 
-  // Đóng modal cập nhật FAQ
-  const closeUpdateModal = () => {
-    setIsUpdateModalOpen(false);
+  const closeUpdateDialog = () => {
+    setIsUpdateDialogOpen(false);
     setSelectedFaqId(null);
   };
 
   return (
-    <div>
+    <Box display="flex">
       <AdminSideMenu />
-      <div className="content-container">
-        <h1>Manage FAQs</h1>
-        <button onClick={openAddModal} className="add-fag-btn">
-          Add FAQ
-        </button>
-        <table className="fag-table">
-          <thead>
-            <th>FAQId</th>
-            <th>Question</th>
-            <th>Answer</th>
-            <th>Action</th>
-          </thead>
-          <tbody>
-            {faqs.map((faq) => (
-              <tr key={faq.faqid}>
-                <td>{faq.faqid}</td>
-                <td>{faq.question}</td>
-                <td>{faq.answer}</td>
-                <td>
-                  <button
-                    onClick={() => openDeleteModal(faq.faqid)}
-                    className="delete-btn"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => openUpdateModal(faq.faqid)}
-                    className="update-btn"
-                  >
-                    Update
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {/* Modal xác nhận xóa */}
-        <Modal
-          isOpen={isDeleteModalOpen}
-          onRequestClose={closeDeleteModal}
-          className="modal"
-          overlayClassName="overlay"
+      <Box flex={1} padding={3}>
+        <Typography variant="h4" gutterBottom>
+          Manage FAQs
+        </Typography>
+        
+        <TableContainer component={Paper}>
+          <Table aria-label="faq table">
+            <TableHead>
+              <TableRow>
+                <TableCell>FAQId</TableCell>
+                <TableCell>Question</TableCell>
+                <TableCell>Answer</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {faqs.map((faq) => (
+                <TableRow key={faq.faqid}>
+                  <TableCell>{faq.faqid}</TableCell>
+                  <TableCell>{faq.question}</TableCell>
+                  <TableCell>{faq.answer}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => openDeleteDialog(faq.faqid)}
+                      sx={{ marginRight: 1 }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => openUpdateDialog(faq.faqid)}
+                    >
+                      Update
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* Floating Action Button for Adding FAQ */}
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{ position: "fixed", bottom: 16, right: 16 }}
+          onClick={openAddDialog}
         >
-          <h2>Confirm Deletion</h2>
-          <p>Are you sure you want to delete this FAQ?</p>
-          <div className="modal-buttons">
-            <button className="confirm-btn" onClick={confirmDeleteFaq}>
+          <AddIcon />
+        </Fab>
+
+        {/* Delete Confirmation Dialog */}
+        <Dialog
+          open={isDeleteDialogOpen}
+          onClose={closeDeleteDialog}
+          aria-labelledby="delete-dialog-title"
+          aria-describedby="delete-dialog-description"
+        >
+          <DialogTitle id="delete-dialog-title">Confirm Deletion</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="delete-dialog-description">
+              Are you sure you want to delete this FAQ?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={confirmDeleteFaq} color="error">
               Yes
-            </button>
-            <button className="cancel-btn" onClick={closeDeleteModal}>
+            </Button>
+            <Button onClick={closeDeleteDialog} color="primary" autoFocus>
               No
-            </button>
-          </div>
-        </Modal>
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-        {/* Modal thêm mới FAQ */}
-        <Modal
-          isOpen={isAddModalOpen}
-          onRequestClose={closeAddModal}
-          className="modal"
-          overlayClassName="overlay"
+        {/* Add FAQ Dialog */}
+        <Dialog
+          open={isAddDialogOpen}
+          onClose={closeAddDialog}
+          maxWidth="sm"
+          fullWidth
         >
-          <button className="btn-close" onClick={closeAddModal}>
-            X
-          </button>
-          <NewFaq onClose={closeAddModal} onAddSuccess={fetchFaqs} />
-        </Modal>
+          <DialogTitle>Add New FAQ</DialogTitle>
+          <DialogContent>
+            <NewFaq onClose={closeAddDialog} onAddSuccess={fetchFaqs} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeAddDialog} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-        {/* Modal cập nhật FAQ */}
-        <Modal
-          isOpen={isUpdateModalOpen}
-          onRequestClose={closeUpdateModal}
-          className="modal"
-          overlayClassName="overlay"
+        {/* Update FAQ Dialog */}
+        <Dialog
+          open={isUpdateDialogOpen}
+          onClose={closeUpdateDialog}
+          maxWidth="sm"
+          fullWidth
         >
-          <button className="btn-close" onClick={closeUpdateModal}>
-            X
-          </button>
-          <UpdateFaq
-            faqId={selectedFaqId}
-            onClose={closeUpdateModal}
-            onUpdateSuccess={fetchFaqs}
-          />
-        </Modal>
-      </div>
-    </div>
+          <DialogTitle>Update FAQ</DialogTitle>
+          <DialogContent>
+            <UpdateFaq
+              faqId={selectedFaqId}
+              onClose={closeUpdateDialog}
+              onUpdateSuccess={fetchFaqs}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeUpdateDialog} color="primary">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
+    </Box>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import api from "../../../api/CallAPI";
-import "../faq/UpdateFag.css";
+
 
 export default function UpdateFaq({ faqId, onClose, onUpdateSuccess }) {
   const [updateFaq, setUpdateFaq] = useState({
@@ -10,14 +10,14 @@ export default function UpdateFaq({ faqId, onClose, onUpdateSuccess }) {
   });
 
   useEffect(() => {
-    // Gọi API để lấy thông tin FAQ dựa trên faqId
+    // Fetch FAQ information based on faqId
     const fetchFaq = async () => {
       try {
-        const data = await api.get("Faqs/" + faqId);
+        const data = await api.get(`Faqs/${faqId}`);
         if (data.success) {
           setUpdateFaq(data.faq);
         } else {
-          alert("Không tìm thấy FAQ!");
+          alert("FAQ not found!");
         }
       } catch (error) {
         console.error("Error fetching FAQ:", error);
@@ -28,53 +28,60 @@ export default function UpdateFaq({ faqId, onClose, onUpdateSuccess }) {
     if (faqId) fetchFaq();
   }, [faqId]);
 
-  // Cập nhật FAQ
+  // Update FAQ handler
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Ngăn chặn reload trang
+    e.preventDefault();
     try {
-      const data = await api.put("Faqs/" + faqId, updateFaq);
+      const data = await api.put(`Faqs/${faqId}`, updateFaq);
       if (data.success) {
-        alert("Cập nhật thành công!");
-        onUpdateSuccess(); // Gọi callback để cập nhật danh sách FAQ
-        onClose(); // Đóng modal sau khi cập nhật thành công
+        alert("FAQ updated successfully!");
+        onUpdateSuccess(); // Callback to refresh FAQ list
+        onClose(); // Close modal on successful update
       } else {
-        alert("Cập nhật thất bại!");
+        alert("Failed to update FAQ!");
       }
     } catch (error) {
       console.error("Error during update:", error);
-      alert("An error occurred during update. Please try again.");
+      alert("An error occurred during the update. Please try again.");
     }
   };
 
   return (
-    <div className="updatefaq-container">
-      <h2 className="form-title">Update FAQ</h2>
-      <form onSubmit={handleSubmit} className="updatefaq-form">
-        <div className="form-group">
-          <label htmlFor="question">Question</label>
-          <input
-            type="text"
-            id="question"
-            value={updateFaq.question}
-            onChange={(e) =>
-              setUpdateFaq({ ...updateFaq, question: e.target.value })
-            }
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="answer">Answer</label>
-          <textarea
-            id="answer"
-            value={updateFaq.answer}
-            onChange={(e) =>
-              setUpdateFaq({ ...updateFaq, answer: e.target.value })
-            }
-          />
-        </div>
-        <button type="submit" className="btn-update">
-          UPDATE
-        </button>
-      </form>
-    </div>
+    <Box className="updatefaq-container" padding={3} component="form" onSubmit={handleSubmit}>
+      <Typography variant="h5" className="form-title" gutterBottom>
+        Update FAQ
+      </Typography>
+
+      <TextField
+        label="Question"
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        value={updateFaq.question}
+        onChange={(e) => setUpdateFaq({ ...updateFaq, question: e.target.value })}
+      />
+
+      <TextField
+        label="Answer"
+        variant="outlined"
+        multiline
+        rows={4}
+        fullWidth
+        margin="normal"
+        value={updateFaq.answer}
+        onChange={(e) => setUpdateFaq({ ...updateFaq, answer: e.target.value })}
+      />
+
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        fullWidth
+        className="btn-update"
+        sx={{ marginTop: 2 }}
+      >
+        Update
+      </Button>
+    </Box>
   );
 }

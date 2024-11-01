@@ -6,6 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import ReportIcon from '@mui/icons-material/Report';
 import SetMealIcon from '@mui/icons-material/SetMeal';
 import LocalAtmIcon from '@mui/icons-material/LocalAtm';
@@ -30,6 +31,7 @@ const mainListItems = [
   { text: 'Manage Payment Type', icon: <PaymentIcon />, link: ComponentPath.admin.payment.managePaymentType },
   { text: 'Manage Blog News', icon: <NewspaperIcon />, link: ComponentPath.admin.blogNews.manageBlogNews },
   { text: 'Manage Certification', icon: <GppGoodIcon />, link: ComponentPath.admin.certification.manageCertification },
+  { text: 'Manage route', icon: <AssignmentRoundedIcon />, link: "/manangeroute" },
   { text: 'Manage Document', icon: <FolderIcon />, link: ComponentPath.admin.order.document.manageOrderDocument },
 ];
 

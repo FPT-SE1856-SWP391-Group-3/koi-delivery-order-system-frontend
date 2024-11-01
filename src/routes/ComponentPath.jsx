@@ -15,7 +15,7 @@ const koi = "/koi";
 const report = "/report/transporation";
 const type = "/type";
 const dashboard = "/dashboard";
-
+const manangeroute ="/manangeroute";
 const view = "/view/";
 const edit = "/edit/";
 const create = "/create/";
