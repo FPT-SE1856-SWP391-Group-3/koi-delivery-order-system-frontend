@@ -65,7 +65,7 @@ export default function UserOrder() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box>
       <UserSideNav>
         <Box sx={{ marginInline: "1em" }}>
           <Grid container spacing={2}>
