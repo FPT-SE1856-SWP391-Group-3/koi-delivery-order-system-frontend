@@ -24,7 +24,7 @@ import { Grid } from "@mui/joy";
 
 export default function UserOrder() {
   const navigate = useNavigate();
-  const [order, setOrder] = useState([]);
+  const [orders, setOrders] = useState([]);
   const userId = JSON.parse(localStorage.getItem("userId"));
 
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -35,8 +35,8 @@ export default function UserOrder() {
   useEffect(() => {
     api.get("Orders/" + userId).then((data) => {
       if (data.success) {
-        setOrder(data.orders);
-        console.log(data.orders);
+        setOrders(data.order);
+        console.log(data.order);
       } else {
         console.log("Không có đơn hàng!");
       }
@@ -90,7 +90,7 @@ export default function UserOrder() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {order.map((order) => (
+                    {orders.map((order) => (
                       <TableRow key={order.orderId}>
                         <TableCell>{order.orderId}</TableCell>
                         <TableCell>{order.orderDate}</TableCell>
