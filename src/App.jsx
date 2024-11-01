@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
@@ -13,7 +13,9 @@ function App() {
     //    <Route path="/register" element={<Register />} />
     //</Routes>
     <div className="app">
-      <RouterProvider router={router} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <RouterProvider router={router} />
+      </Suspense>
     </div>
   );
 }
