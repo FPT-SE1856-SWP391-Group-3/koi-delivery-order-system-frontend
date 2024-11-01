@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import dayjs from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AdminSideMenu from "../components/AdminSideMenu";
 import {
   Box,
@@ -17,6 +18,8 @@ import {
   IconButton,
   Typography,
   Collapse,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   KeyboardArrowDown as KeyboardArrowDownIcon,
@@ -207,6 +210,9 @@ export default function ManageOrder() {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [selectedOrderStatusId, setSelectedOrderStatusId] = useState(null);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("success");
 
   useEffect(() => {
     fetchOrders();
@@ -238,7 +244,9 @@ export default function ManageOrder() {
         console.log("No orders found!");
       }
     } catch (error) {
-      alert("An error occurred while fetching orders.");
+      setAlertMessage("An error occurred while fetching orders.");
+      setAlertSeverity("error");
+      setAlertOpen(true);
     }
   };
 
@@ -251,14 +259,18 @@ export default function ManageOrder() {
         console.log("Error fetching order statuses.");
       }
     } catch (error) {
-      alert("An error occurred while fetching order statuses.");
+      setAlertMessage("An error occurred while fetching order statuses.");
+      setAlertSeverity("error");
+      setAlertOpen(true);
     }
   };
 
   const updateOrderStatusBySelect = async (event, orderId, currentStatusId) => {
     const selectedStatusId = parseInt(event.target.value);
     if (selectedStatusId <= currentStatusId) {
-      alert("Please select the next status only.");
+      setAlertMessage("Please select the next status only.");
+      setAlertSeverity("warning");
+      setAlertOpen(true);
       return;
     }
     try {
@@ -272,10 +284,13 @@ export default function ManageOrder() {
             : order
         )
       );
-      alert("Order status updated successfully!");
+      setAlertMessage("Order status updated successfully!");
+      setAlertSeverity("success");
+      setAlertOpen(true);
     } catch (error) {
-      console.error("Error during update:", error);
-      alert("An error occurred during status update.");
+      setAlertMessage("An error occurred during status update.");
+      setAlertSeverity("error");
+      setAlertOpen(true);
     }
   };
 
@@ -284,7 +299,9 @@ export default function ManageOrder() {
       (status) => status.orderStatusId === currentStatusId
     );
     if (currentIndex === -1 || currentIndex === orderStatus.length - 1) {
-      alert("Order is already complete or status not found.");
+      setAlertMessage("Order is already complete or status not found.");
+      setAlertSeverity("warning");
+      setAlertOpen(true);
       return;
     }
     const nextStatusId = orderStatus[currentIndex + 1].orderStatusId;
@@ -299,17 +316,22 @@ export default function ManageOrder() {
             : order
         )
       );
-      alert("Order status updated successfully!");
+      setAlertMessage("Order status updated successfully!");
+      setAlertSeverity("success");
+      setAlertOpen(true);
     } catch (error) {
-      console.error("Error during update:", error);
-      alert("An error occurred during status update.");
+      setAlertMessage("An error occurred during status update.");
+      setAlertSeverity("error");
+      setAlertOpen(true);
     }
   };
 
   const cancelOrder = async (orderId) => {
     const finalStatusId = orderStatus[orderStatus.length - 1]?.orderStatusId;
     if (!finalStatusId) {
-      alert("Final status not found.");
+      setAlertMessage("Final status not found.");
+      setAlertSeverity("error");
+      setAlertOpen(true);
       return;
     }
     try {
@@ -323,11 +345,18 @@ export default function ManageOrder() {
             : order
         )
       );
-      alert("Order canceled successfully!");
+      setAlertMessage("Order canceled successfully!");
+      setAlertSeverity("success");
+      setAlertOpen(true);
     } catch (error) {
-      console.error("Error canceling order:", error);
-      alert("An error occurred while canceling the order.");
+      setAlertMessage("An error occurred while canceling the order.");
+      setAlertSeverity("error");
+      setAlertOpen(true);
     }
+  };
+
+  const handleAlertClose = () => {
+    setAlertOpen(false);
   };
 
   const openDocumentModal = (orderId, orderStatusId) => {
@@ -353,48 +382,107 @@ export default function ManageOrder() {
   };
 
   return (
-    <div>
-      <AdminSideMenu />
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Box display="flex" justifyContent="center" marginBottom={2}></Box>
-      </LocalizationProvider>
+    <Box display="flex">
+      {/* Admin Side Menu */}
+      
+        <AdminSideMenu />
+      
 
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell>Order ID</TableCell>
-              <TableCell>Customer ID</TableCell>
-              <TableCell>Order Date</TableCell>
-              <TableCell>Is Payment</TableCell>
-              <TableCell>Delivery Date</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Edit Status</TableCell>
-              <TableCell>Action</TableCell>
-              <TableCell>Delivering Staff</TableCell>
-            </TableRow>
-          </TableHead>
+      {/* Main Table Area */}
+      <Box width="100%" padding={2}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Box display="flex" gap={2} marginBottom={2}>
+            <DatePicker
+              label="Start Date"
+              value={dateRange[0]}
+              onChange={(newValue) => setDateRange([newValue, dateRange[1]])}
+            />
+            <DatePicker
+              label="End Date"
+              value={dateRange[1]}
+              onChange={(newValue) => setDateRange([dateRange[0], newValue])}
+            />
+          </Box>
+        </LocalizationProvider>
 
-          <TableBody>
-            {filteredOrders.map((order) => (
-              <OrderRow
-                key={order.orderId}
-                row={order}
-                orderStatus={orderStatus}
-                updateOrderStatusBySelect={updateOrderStatusBySelect}
-                updateOrderStatusByClick={updateOrderStatusByClick}
-                openDocumentModal={openDocumentModal}
-                openReportModal={openReportModal}
-                cancelOrder={cancelOrder}
-              />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>Order ID</TableCell>
+                <TableCell>Customer ID</TableCell>
+                <TableCell>Order Date</TableCell>
+                <TableCell>Is Payment</TableCell>
+                <TableCell>Delivery Date</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Edit Status</TableCell>
+                <TableCell>Action</TableCell>
+                <TableCell>Delivering Staff</TableCell>
+              </TableRow>
+            </TableHead>
 
-      <Modal isOpen={isDocumentModalOpen} onRequestClose={closeDocumentModal}>
-        <button onClick={closeDocumentModal}>Close</button>
+            <TableBody>
+              {filteredOrders.map((order) => (
+                <OrderRow
+                  key={order.orderId}
+                  row={order}
+                  orderStatus={orderStatus}
+                  updateOrderStatusBySelect={updateOrderStatusBySelect}
+                  updateOrderStatusByClick={updateOrderStatusByClick}
+                  openDocumentModal={openDocumentModal}
+                  openReportModal={openReportModal}
+                  cancelOrder={cancelOrder}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+
+      <Snackbar
+        open={alertOpen}
+        autoHideDuration={6000}
+        onClose={handleAlertClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleAlertClose}
+          severity={alertSeverity}
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Modal
+        isOpen={isDocumentModalOpen}
+        onRequestClose={closeDocumentModal}
+        style={{
+          content: {
+            width: "500px",     
+            maxHeight: "80vh",
+            margin: "auto",
+            padding: "15px",
+            borderRadius: "8px",
+            overflow: "auto",
+          },
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          },
+        }}
+      >
+        <Button
+          onClick={closeDocumentModal}
+          variant="contained"
+          color="primary"
+          sx={{ marginBottom: "10px" }} // Optional: Adds space below the button
+        >
+          Close
+        </Button>
+
         {selectedOrderId && selectedOrderStatusId && (
           <CreateOrderDocument
             orderId={selectedOrderId}
@@ -404,8 +492,35 @@ export default function ManageOrder() {
         )}
       </Modal>
 
-      <Modal isOpen={isReportModalOpen} onRequestClose={closeReportModal}>
-        <button onClick={closeReportModal}>Close</button>
+      <Modal
+        isOpen={isReportModalOpen}
+        onRequestClose={closeReportModal}
+        style={{
+          content: {
+            width: "500px",
+            maxHeight: "80vh",
+            margin: "auto",
+            padding: "15px",
+            borderRadius: "8px",
+            overflow: "auto",
+          },
+          overlay: {
+            backgroundColor: "rgba(0, 0, 0, 0.4)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          },
+        }}
+      >
+        <Button
+          onClick={closeReportModal}
+          variant="contained"
+          color="primary"
+          sx={{ marginBottom: "10px" }} // Add spacing below the button
+        >
+          Close
+        </Button>
+
         {selectedOrderId && (
           <CreateTransportationReportDetails
             orderId={selectedOrderId}
@@ -413,6 +528,6 @@ export default function ManageOrder() {
           />
         )}
       </Modal>
-    </div>
+    </Box>
   );
 }

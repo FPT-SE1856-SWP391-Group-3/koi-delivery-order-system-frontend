@@ -1,5 +1,11 @@
 import { useForm } from "react-hook-form";
 import api from "../../../api/CallAPI";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+} from "@mui/material";
 import "../report/CreateTransportationReportDetails.css";
 
 export default function CreateTransportationReportDetails({
@@ -27,45 +33,51 @@ export default function CreateTransportationReportDetails({
       alert("An error occurred during registration. Please try again.");
     }
   };
+
   return (
-    <div className="transportation-container">
-      <h1 className="form-title">Add New Transportation Report</h1>
+    <Box className="transportation-container" sx={{ padding: 1.5 }}>
+      <Typography variant="h6" className="form-title" gutterBottom>
+        Add New Transportation Report
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)} className="transportation-form">
-        <div className="form-group">
-          <label htmlFor="orderId">OrderId</label>
-          <input
-            type="number"
-            className="form-control"
-            id="orderId"
-            name="orderId"
-            value={orderId}
-            readOnly
-            {...register("orderId")}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="issueTypeId">Type of Problem</label>
-          <input
-            type="number"
-            className="form-control"
-            id="issueTypeId"
-            name="issueTypeId"
-            {...register("issueTypeId")}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="description">Description</label>
-          <textarea
-            className="form-control"
-            id="description"
-            name="description"
-            {...register("description")}
-          />
-        </div>
-        <button type="submit" className="btn-add">
+        <TextField
+          label="Order ID"
+          variant="outlined"
+          type="number"
+          value={orderId}
+          InputProps={{ readOnly: true }}
+          fullWidth
+          margin="dense"
+          {...register("orderId")}
+        />
+        <TextField
+          label="Type of Problem"
+          variant="outlined"
+          type="number"
+          fullWidth
+          margin="dense"
+          {...register("issueTypeId")}
+        />
+        <TextField
+          label="Description"
+          variant="outlined"
+          multiline
+          rows={3}
+          fullWidth
+          margin="dense"
+          {...register("description")}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className="btn-add"
+          fullWidth
+          sx={{ mt: 1.5 }}
+        >
           ADD
-        </button>
+        </Button>
       </form>
-    </div>
+    </Box>
   );
 }

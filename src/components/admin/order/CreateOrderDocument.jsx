@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import api from "../../../api/CallAPI";
 import "../order/CreateOrderDocument.css";
 
@@ -32,8 +33,8 @@ export default function CreateOrderDocument({
         }
       });
       alert("All documents added successfully!");
-      onAddSuccess(); // Cập nhật danh sách sau khi thêm thành công
-      onClose(); // Đóng modal
+      onAddSuccess(); // Update list after successful addition
+      onClose(); // Close modal
     } catch (error) {
       console.error("Error:", error);
       alert("Error! Please try again.");
@@ -41,52 +42,90 @@ export default function CreateOrderDocument({
   };
 
   return (
-    <div className="adddocument-container">
-      <h1 className="form-title">Add New Document</h1>
+    <Box className="adddocument-container" p={3}>
+      <Typography variant="h5" component="h1" className="form-title" gutterBottom>
+        Add New Document
+      </Typography>
       <form onSubmit={handleSubmit(onSubmit)} className="add-form">
-        <div className="form-group">
-          <label>OrderId</label>
-          <input type="number" value={orderId} readOnly />
-        </div>
-        <div className="form-group">
-          <label>OrderStatusId</label>
-          <input type="number" value={orderStatusId} readOnly />
-        </div>
+        <Box mb={2}>
+          <TextField
+            label="Order ID"
+            type="number"
+            value={orderId}
+            InputProps={{ readOnly: true }}
+            fullWidth
+            variant="outlined"
+            margin="dense"
+          />
+        </Box>
+        <Box mb={2}>
+          <TextField
+            label="Order Status ID"
+            type="number"
+            value={orderStatusId}
+            InputProps={{ readOnly: true }}
+            fullWidth
+            variant="outlined"
+            margin="dense"
+          />
+        </Box>
+
         {fields.map((field, index) => (
-          <div key={field.id} className="document-entry">
-            <div className="form-group">
+          <Box key={field.id} className="document-entry" mb={2}>
+            <Box mb={2}>
               <input
                 id="filePath"
                 name="filePath"
                 type="file"
                 accept="multipart/form-data"
                 {...register(`orderDocuments.${index}.filePath`)}
+                style={{ display: "block", width: "100%" }}
               />
-            </div>
-            <div className="form-group">
-              <label>Description</label>
-              <textarea {...register(`orderDocuments.${index}.description`)} />
-            </div>
-            <button
+            </Box>
+            <Box mb={2}>
+              <TextField
+                label="Description"
+                multiline
+                rows={3}
+                fullWidth
+                variant="outlined"
+                {...register(`orderDocuments.${index}.description`)}
+              />
+            </Box>
+            <Button
               type="button"
               onClick={() => remove(index)}
-              className="btn-delete"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              sx={{ mb: 2 }}
             >
               Delete
-            </button>
-          </div>
+            </Button>
+          </Box>
         ))}
-        <button
+
+        <Button
           type="button"
           onClick={() => append({})}
-          className="btn-add-document"
+          variant="outlined"
+          color="primary"
+          fullWidth
+          sx={{ mb: 2 }}
         >
           Add Document
-        </button>
-        <button type="submit" className="btn-submit">
+        </Button>
+
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 2 }}
+        >
           ADD
-        </button>
+        </Button>
       </form>
-    </div>
+    </Box>
   );
 }
