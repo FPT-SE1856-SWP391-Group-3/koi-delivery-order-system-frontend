@@ -236,9 +236,8 @@ export default function ManageOrder() {
 
   const fetchOrders = async () => {
     try {
-      const data = await api.get(
-        user.roleId != 5 ? `Orders/${user.userId}` : `Orders/`
-      );
+      const endpoint = user.roleId === 4 ? `Orders/${user.userId}` : "Orders/";
+      const data = await api.get(endpoint);
       if (data.success) {
         setOrder(data.order);
         setFilteredOrders(data.order);
