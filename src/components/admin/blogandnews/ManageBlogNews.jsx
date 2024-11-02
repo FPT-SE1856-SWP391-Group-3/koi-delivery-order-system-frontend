@@ -17,12 +17,10 @@ import {
   Typography,
   Fab,
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import api from "../../../api/CallAPI";
-import Sidebar from "../../user/common/Sidebar";
 import EditBlogNews from "./EditBlogNews";
 import CreateBlogNews from "./CreateBlogNews";
-import "../blogandnews/ManageBlogNews.css";
 import AdminSideMenu from "../components/AdminSideMenu";
 
 export default function ManageBlogNews() {
@@ -67,7 +65,9 @@ export default function ManageBlogNews() {
       const data = await api.del(`BlogNews/${selectedPostId}`);
       if (data.success) {
         alert("Post deleted successfully!");
-        setPosts((prevPosts) => prevPosts.filter((post) => post.postId !== selectedPostId));
+        setPosts((prevPosts) =>
+          prevPosts.filter((post) => post.postId !== selectedPostId)
+        );
       } else {
         alert("Failed to delete post!");
       }
@@ -112,25 +112,53 @@ export default function ManageBlogNews() {
           <Table aria-label="blog and news table">
             <TableHead>
               <TableRow>
-                <TableCell>PostId</TableCell>
-                <TableCell>UserId</TableCell>
-                <TableCell>Title</TableCell>
-                <TableCell>Content</TableCell>
-                <TableCell>PostDate</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    PostId
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    UserId
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Title
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Content
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    PostDate
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Category
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Actions
+                  </Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {posts.map((post) => (
                 <TableRow key={post.postId}>
-                  <TableCell>{post.postId}</TableCell>
-                  <TableCell>{post.userId}</TableCell>
-                  <TableCell>{post.title}</TableCell>
+                  <TableCell align="center">{post.postId}</TableCell>
+                  <TableCell align="center">{post.userId}</TableCell>
+                  <TableCell align="center">{post.title}</TableCell>
                   <TableCell>{post.content}</TableCell>
-                  <TableCell>{post.postDate}</TableCell>
-                  <TableCell>{post.category}</TableCell>
-                  <TableCell>
+                  <TableCell align="center">{post.postDate}</TableCell>
+                  <TableCell align="center">{post.category}</TableCell>
+                  <TableCell align="center">
                     <Button
                       variant="contained"
                       color="error"
@@ -195,7 +223,10 @@ export default function ManageBlogNews() {
         >
           <DialogTitle>Add New Blog/News</DialogTitle>
           <DialogContent>
-            <CreateBlogNews onClose={closeAddDialog} onAddSuccess={fetchPosts} />
+            <CreateBlogNews
+              onClose={closeAddDialog}
+              onAddSuccess={fetchPosts}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={closeAddDialog} color="primary">
