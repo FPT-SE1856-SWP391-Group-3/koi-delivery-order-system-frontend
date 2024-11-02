@@ -4,10 +4,15 @@ import 'react-toastify/dist/ReactToastify.css';
 
   const UserToast = (type, message) =>{
 
-  if (!message) {
-        console.warn('Toast message is required');
-        return;
-      }
+    const validTypes = ['success', 'error', 'info', 'warning'];
+    if (!validTypes.includes(type)) {
+      console.warn(`Invalid toast type: ${type}. Using default toast.`);
+    }
+
+    if (!message) {
+      console.warn("Toast message is required");
+      return;
+    }
     
       const toastConfig = {
         position: "top-right",
@@ -35,6 +40,8 @@ import 'react-toastify/dist/ReactToastify.css';
       default:
         toast(message,toastConfig);
     }
+    
 };
+
 
 export default UserToast;
