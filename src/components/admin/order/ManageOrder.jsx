@@ -288,6 +288,7 @@ export default function ManageOrder() {
       setAlertMessage("Order status updated successfully!");
       setAlertSeverity("success");
       setAlertOpen(true);
+      fetchOrders();
     } catch (error) {
       setAlertMessage("An error occurred during status update.");
       setAlertSeverity("error");
@@ -307,26 +308,13 @@ export default function ManageOrder() {
     }
     const nextStatusId = orderStatus[currentIndex + 1].orderStatusId;
     try {
-      const response = await api.put(`Orders/update-status/${orderId}`, {
+      await api.put(`Orders/update-status/${orderId}`, {
         updateOrderStatusId: nextStatusId,
       });
-
-      if (response.success) {
-        setOrder((orders) =>
-          orders.map((order) =>
-            order.orderId === orderId
-              ? { ...order, orderStatusId: nextStatusId }
-              : order
-          )
-        );
-        setAlertMessage("Order status updated successfully!");
-        setAlertSeverity("success");
-        setAlertOpen(true);
-      } else if (!response.success) {
-        setAlertMessage("Order status update failed.");
-        setAlertSeverity("error");
-        setAlertOpen(true);
-      }
+      setAlertMessage("Order status updated successfully!");
+      setAlertSeverity("success");
+      setAlertOpen(true);
+      fetchOrders(); // Fetch updated orders without page reload
     } catch (error) {
       setAlertMessage("An error occurred during status update.");
       setAlertSeverity("error");
