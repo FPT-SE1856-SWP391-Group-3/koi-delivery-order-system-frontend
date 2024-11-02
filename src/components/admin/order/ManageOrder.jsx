@@ -236,7 +236,9 @@ export default function ManageOrder() {
 
   const fetchOrders = async () => {
     try {
-      const data = await api.get(`Orders/${user.userId}`);
+      const data = await api.get(
+        user.roleId != 5 ? `Orders/${user.userId}` : `Orders/`
+      );
       if (data.success) {
         setOrder(data.order);
         setFilteredOrders(data.order);
@@ -306,19 +308,26 @@ export default function ManageOrder() {
     }
     const nextStatusId = orderStatus[currentIndex + 1].orderStatusId;
     try {
-      await api.put(`Orders/update-status/${orderId}`, {
+      const response = await api.put(`Orders/update-status/${orderId}`, {
         updateOrderStatusId: nextStatusId,
       });
-      setOrder((orders) =>
-        orders.map((order) =>
-          order.orderId === orderId
-            ? { ...order, orderStatusId: nextStatusId }
-            : order
-        )
-      );
-      setAlertMessage("Order status updated successfully!");
-      setAlertSeverity("success");
-      setAlertOpen(true);
+
+      if (response.success) {
+        setOrder((orders) =>
+          orders.map((order) =>
+            order.orderId === orderId
+              ? { ...order, orderStatusId: nextStatusId }
+              : order
+          )
+        );
+        setAlertMessage("Order status updated successfully!");
+        setAlertSeverity("success");
+        setAlertOpen(true);
+      } else if (!response.success) {
+        setAlertMessage("Order status update failed.");
+        setAlertSeverity("error");
+        setAlertOpen(true);
+      }
     } catch (error) {
       setAlertMessage("An error occurred during status update.");
       setAlertSeverity("error");
