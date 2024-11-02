@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import api from "../../../api/CallAPI";
-import Header from "../common/Header";
 import Bootstrap from "../props/Bootstrap";
+import UserToast from "../alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 export default function EditAddress({ addressId, closeModal }) {
   const [updateAddress, setUpdateAddress] = useState([{ addressLine: "" }]);
@@ -12,6 +13,8 @@ export default function EditAddress({ addressId, closeModal }) {
   const [cityName, setCityName] = useState("");
   const [districtName, setDistrictName] = useState("");
   const [wardName, setWardName] = useState("");
+
+
   // const { addressId } = useParams(); // Lấy addressId từ URL params
   const navigate = useNavigate();
   console.log(addressId);
@@ -42,9 +45,9 @@ export default function EditAddress({ addressId, closeModal }) {
     try {
       await api.put("Addresses/" + addressId, updateAddress).then((data) => {
         if (data.success) {
-          alert("Cập nhật thành công!");
+          UserToast("success", "Cập nhật thành công!");
           closeModal();
-          navigate(0);
+          window.location.reload();
         } else {
           alert("Cập nhật thất bại!");
         }
@@ -90,6 +93,7 @@ export default function EditAddress({ addressId, closeModal }) {
 
   return (
     <div>
+      <ToastContainer />
       <Bootstrap />
       <div className="">
         <div className="row">
