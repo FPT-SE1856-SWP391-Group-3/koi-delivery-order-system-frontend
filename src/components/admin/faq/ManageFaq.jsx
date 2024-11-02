@@ -17,12 +17,10 @@ import {
   Typography,
   Fab,
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import api from "../../../api/CallAPI";
-import Sidebar from "../../user/common/Sidebar";
 import NewFaq from "./NewFaq";
 import UpdateFaq from "./UpdateFaq";
-import "../faq/ManageFaq.css";
 import AdminSideMenu from "../components/AdminSideMenu";
 
 export default function ManageFaq() {
@@ -56,7 +54,9 @@ export default function ManageFaq() {
       const data = await api.del(`Faqs/${selectedFaqId}`);
       if (data.success) {
         alert("FAQ deleted successfully!");
-        setFaqs((prevFaqs) => prevFaqs.filter((faq) => faq.faqid !== selectedFaqId));
+        setFaqs((prevFaqs) =>
+          prevFaqs.filter((faq) => faq.faqid !== selectedFaqId)
+        );
       } else {
         alert("Failed to delete FAQ.");
       }
@@ -103,24 +103,40 @@ export default function ManageFaq() {
         <Typography variant="h4" gutterBottom>
           Manage FAQs
         </Typography>
-        
+
         <TableContainer component={Paper}>
           <Table aria-label="faq table">
             <TableHead>
               <TableRow>
-                <TableCell>FAQId</TableCell>
-                <TableCell>Question</TableCell>
-                <TableCell>Answer</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    FAQId
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Question
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Answer
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Actions
+                  </Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {faqs.map((faq) => (
                 <TableRow key={faq.faqid}>
-                  <TableCell>{faq.faqid}</TableCell>
-                  <TableCell>{faq.question}</TableCell>
-                  <TableCell>{faq.answer}</TableCell>
-                  <TableCell>
+                  <TableCell align="center">{faq.faqid}</TableCell>
+                  <TableCell align="center">{faq.question}</TableCell>
+                  <TableCell align="center">{faq.answer}</TableCell>
+                  <TableCell align="center">
                     <Button
                       variant="contained"
                       color="error"
