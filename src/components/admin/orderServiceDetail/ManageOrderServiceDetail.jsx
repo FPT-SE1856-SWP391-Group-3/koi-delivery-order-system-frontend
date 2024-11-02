@@ -1,13 +1,28 @@
 import { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Fab,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import api from "../../../api/CallAPI";
-import Sidebar from "../../user/common/Sidebar";
-import "../orderServiceDetail/OrderServiceDetail.css";
 import AddOrderServiceDetail from "./AddOrderServiceDetail";
 import EditOrderServiceDetail from "./EditOrderServiceDetail";
 import Modal from "react-modal";
 import AdminSideMenu from "../components/AdminSideMenu";
-
-Modal.setAppElement("#root");
 
 export default function ManageOrderServiceDetail() {
   const [orderServiceDetails, setOrderServiceDetails] = useState([]);
@@ -98,50 +113,87 @@ export default function ManageOrderServiceDetail() {
     setSelectedOrderServiceId(null);
   };
   return (
-    <div>
+    <Box display="flex">
       <AdminSideMenu />
-      <div className="content-container">
-        <h1>Manage Order Services</h1>
-        <button onClick={openAddModal} className="add-service-btn">
-          Add Order Service
-        </button>
-        <table className="orderservice-table">
-          <thead>
-            <tr>
-              <th>OrderServiceId</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orderServiceDetails.map((orderServiceDetail) => (
-              <tr key={orderServiceDetail.orderServiceDetailId}>
-                <td>{orderServiceDetail.orderServiceDetailId}</td>
-                <td>{orderServiceDetail.orderServiceDetailName}</td>
-                <td>{orderServiceDetail.orderServiceDetailPrice}</td>
-                <td>
-                  <button
-                    onClick={() =>
-                      openDeleteModal(orderServiceDetail.orderServiceDetailId)
-                    }
-                    className="delete-btn"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() =>
-                      openEditModal(orderServiceDetail.orderServiceDetailId)
-                    }
-                    className="update-btn"
-                  >
-                    Update
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <Box flex={1} padding={3}>
+        <Typography variant="h4" gutterBottom>
+          Manage Order Services
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table aria-label="faq table">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    OrderServiceId
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Name
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Price
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Action
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {orderServiceDetails.map((orderServiceDetail) => (
+                <TableRow key={orderServiceDetail.orderServiceDetailId}>
+                  <TableCell align="center">
+                    {orderServiceDetail.orderServiceDetailId}
+                  </TableCell>
+                  <TableCell align="center">
+                    {orderServiceDetail.orderServiceDetailName}
+                  </TableCell>
+                  <TableCell align="center">
+                    {orderServiceDetail.orderServiceDetailPrice}
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() =>
+                        openDeleteModal(orderServiceDetail.orderServiceDetailId)
+                      }
+                      sx={{ marginRight: 1 }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() =>
+                        openEditModal(orderServiceDetail.orderServiceDetailId)
+                      }
+                      className="update-btn"
+                    >
+                      Update
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* Floating Action Button for Adding FAQ */}
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{ position: "fixed", bottom: 16, right: 16 }}
+          onClick={openAddModal}
+        >
+          <AddIcon />
+        </Fab>
 
         {/* Modal xác nhận xóa */}
         <Modal
@@ -192,7 +244,7 @@ export default function ManageOrderServiceDetail() {
             onUpdateSuccess={fetchOrderServiceDetails}
           />
         </Modal>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

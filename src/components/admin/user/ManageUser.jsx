@@ -20,7 +20,6 @@ import {
   Typography,
   Menu,
 } from "@mui/material";
-import "../user/ManageUser.css";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SearchIcon from "@mui/icons-material/Search";
@@ -214,7 +213,7 @@ export default function ManageUser() {
                 <TableRow>
                   <TableCell colSpan={7} align="center">
                     <Typography variant="body1" color="text.secondary">
-                      No results found for <strong>"{searchQuery}"</strong>.
+                      No results found for <strong>`{searchQuery}`</strong>.
                       <br />
                       Try checking for typos or using complete words.
                     </Typography>

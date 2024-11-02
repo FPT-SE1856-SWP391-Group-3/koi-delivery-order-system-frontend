@@ -392,10 +392,7 @@ export default function ManageOrder() {
   return (
     <Box display="flex">
       {/* Admin Side Menu */}
-      
-        <AdminSideMenu />
-      
-
+      <AdminSideMenu />
       {/* Main Table Area */}
       <Box width="100%" padding={2}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -418,15 +415,51 @@ export default function ManageOrder() {
             <TableHead>
               <TableRow>
                 <TableCell />
-                <TableCell>Order ID</TableCell>
-                <TableCell>Customer ID</TableCell>
-                <TableCell>Order Date</TableCell>
-                <TableCell>Is Payment</TableCell>
-                <TableCell>Delivery Date</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Edit Status</TableCell>
-                <TableCell>Action</TableCell>
-                <TableCell>Delivering Staff</TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Order ID
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Customer ID
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Order Date
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Is Payment
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Delivery Date
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Status
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Edit Status
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Action
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Delivering Staff
+                  </Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
 
@@ -467,7 +500,7 @@ export default function ManageOrder() {
         onRequestClose={closeDocumentModal}
         style={{
           content: {
-            width: "500px",     
+            width: "500px",
             maxHeight: "80vh",
             margin: "auto",
             padding: "15px",

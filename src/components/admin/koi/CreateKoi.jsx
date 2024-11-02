@@ -1,13 +1,26 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import api from "../../../api/CallAPI";
+import { TextField, Button, Box, Typography, IconButton } from "@mui/material";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import { useForm } from "react-hook-form";
-import "../koi/CreateKoi.css";
-import ComponentPath from "../../../routes/ComponentPath";
 
-export default function CreatKoi({ onClose, onAddSuccess }) {
-  const { register, handleSubmit } = useForm();
-  const [certificationId, setCertificationId] = useState([""]);
+export default function CreatKoi({ koiData, onClose, onAddOrEditSuccess }) {
+  const { register, handleSubmit, setValue } = useForm();
+  const [certificationId, setCertificationId] = useState(
+    koiData?.certificationId || [""]
+  );
+
+  useEffect(() => {
+    // If we're editing, set form fields to existing koi data
+    if (koiData) {
+      setValue("koiTypeId", koiData.koiTypeId);
+      setValue("koiName", koiData.koiName);
+      setValue("weight", koiData.weight);
+      setValue("price", koiData.price);
+      setCertificationId(koiData.certificationId || [""]);
+    }
+  }, [koiData, setValue]);
 
   const addCertification = () => {
     setCertificationId([...certificationId, ""]);
@@ -20,112 +33,108 @@ export default function CreatKoi({ onClose, onAddSuccess }) {
   };
 
   const onSubmit = async (data) => {
-    const koiData = {
+    const koiPayload = {
       data,
       certificationId,
     };
     try {
-      const response = await api.post("Kois", koiData);
-      if (response.success) {
-        alert("Thêm thành công!");
-        onAddSuccess(); // Gọi callback để cập nhật danh sách Koi
-        onClose(); // Đóng modal sau khi thêm thành công
+      let response;
+      if (koiData) {
+        // Update Koi
+        response = await api.put(`Kois/${koiData.koiId}`, koiPayload);
       } else {
-        alert("Thêm thất bại!");
+        // Create New Koi
+        response = await api.post("Kois", koiPayload);
+      }
+      if (response.success) {
+        alert(
+          koiData ? "Koi updated successfully!" : "Koi added successfully!"
+        );
+        onAddOrEditSuccess(); // Refresh list and close modal
+      } else {
+        alert(koiData ? "Failed to update koi!" : "Failed to add koi!");
       }
     } catch (error) {
       console.error("Error:", error);
       alert("Error! Please try again.");
     }
   };
-
   return (
-    <div className="addkoi-container">
-      <a className="back-button" href={ComponentPath.admin.koi.manageKoi}>
-        Back
-      </a>
-      <h1 className="form-title">Add a new Koi</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="add-form">
-        <div className="form-group">
-          <label htmlFor="koiTypeId">Koi Type</label>
-          <input
-            required
-            type="text"
-            className="form-control"
-            id="koiTypeId"
-            name="koiTypeId"
-            {...register("koiTypeId")}
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ p: 3 }}>
+      <Typography variant="h5" sx={{ mb: 3, textAlign: "center" }}>
+        {koiData ? "Edit Koi" : "Add New Koi"}
+      </Typography>
+      <Box sx={{ mb: 2 }}>
+        <TextField
+          label="Koi Type"
+          fullWidth
+          required
+          {...register("koiTypeId")}
+          variant="outlined"
+          sx={{ mb: 2 }}
+        />
+        <TextField
+          label="Koi Name"
+          fullWidth
+          required
+          {...register("koiName")}
+          variant="outlined"
+          sx={{ mb: 2 }}
+        />
+        <TextField
+          label="Weight (kg)"
+          fullWidth
+          required
+          {...register("weight")}
+          variant="outlined"
+          sx={{ mb: 2 }}
+        />
+        <TextField
+          label="Price"
+          fullWidth
+          required
+          {...register("price")}
+          variant="outlined"
+          sx={{ mb: 2 }}
+        />
+      </Box>
+
+      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+        <Typography variant="h6" sx={{ mr: 2 }}>
+          Certifications
+        </Typography>
+        <IconButton color="primary" onClick={addCertification}>
+          <AddCircleOutlineIcon />
+        </IconButton>
+        <IconButton color="secondary" onClick={deleteCertification}>
+          <RemoveCircleOutlineIcon />
+        </IconButton>
+      </Box>
+
+      {certificationId.map((cert, index) => (
+        <Box key={index} sx={{ mb: 2 }}>
+          <TextField
+            label={`Certificate ${index + 1}`}
+            fullWidth
+            variant="outlined"
+            value={cert}
+            onChange={(e) => {
+              const newCertifications = [...certificationId];
+              newCertifications[index] = e.target.value;
+              setCertificationId(newCertifications);
+            }}
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor="koiName">Koi Name</label>
-          <input
-            required
-            type="text"
-            className="form-control"
-            id="koiName"
-            name="koiName"
-            {...register("koiName")}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="weight">Weight(kg)</label>
-          <input
-            required
-            type="text"
-            className="form-control"
-            id="weight"
-            name="weight"
-            {...register("weight")}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="price">Price</label>
-          <input
-            required
-            type="text"
-            className="form-control"
-            id="price"
-            name="price"
-            {...register("price")}
-          />
-        </div>
-        <button
-          type="button"
-          className="btn-add-certificate"
-          onClick={addCertification}
-        >
-          Add Certificate [+]
-        </button>
-        <button
-          type="button"
-          className="btn-delete-certificate"
-          onClick={deleteCertification}
-        >
-          Delete Certificate [-]
-        </button>
-        {certificationId.map((koiCertification, index) => (
-          <div key={index} className="form-group">
-            <label htmlFor={`koiCertificationId${index}`}>
-              Certificate {index + 1}
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id={`koiCertificationId${index}`}
-              name="koiCertificationId"
-              onChange={(e) => {
-                const newCertifications = [...certificationId];
-                newCertifications[index] = e.target.value;
-                setCertificationId(newCertifications);
-              }}
-            />
-          </div>
-        ))}
-        <button type="submit" className="btn-add">
-          ADD
-        </button>
-      </form>
-    </div>
+        </Box>
+      ))}
+
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}>
+        <Button variant="contained" color="primary" type="submit">
+          {koiData ? "Update" : "Add"}
+        </Button>
+        <Button variant="outlined" color="secondary" onClick={onClose}>
+          Cancel
+        </Button>
+      </Box>
+    </Box>
   );
 }
