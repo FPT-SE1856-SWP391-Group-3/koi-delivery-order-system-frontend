@@ -22,6 +22,8 @@ import {
 } from "@mui/material";
 import UserAppBar from "../UserAppNavbar";
 import { Grid } from "@mui/joy";
+import UserToast from "../alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 function CreateOrder() {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -112,9 +114,9 @@ function CreateOrder() {
 
     api.postForm("Orders", formData).then((data) => {
       if (data.success) {
-        alert("Đơn hàng đã được tạo thành công!");
+        UserToast("success", "Đơn hàng đã được tạo!");
       } else {
-        alert("Đơn hàng chưa được tạo, vui lòng thử lại!");
+        UserToast("error", "Đơn hàng tạo thất bại!");
       }
     });
   }, [senderInfo, receiverInfo, serviceSelection, customerDocument, navigate]);
@@ -153,6 +155,7 @@ function CreateOrder() {
   return (
     <Box sx={{ display: "flex" }}>
       <SideMenu />
+      <ToastContainer />
       <Box component="main" sx={{ flexGrow: 1 }}>
         <UserAppBar />
         <Box sx={{ p: 2 }}>
