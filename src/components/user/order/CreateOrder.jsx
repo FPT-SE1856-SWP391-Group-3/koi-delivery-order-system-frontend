@@ -22,6 +22,7 @@ import { Grid } from "@mui/joy";
 import UserToast from "../alert/UserToast";
 import { ToastContainer } from "react-toastify";
 import SenderPackage from "./COC/SenderPackage";
+import { LoadingOverlay } from '@achmadk/react-loading-overlay';
 
 function CreateOrder() {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -33,6 +34,8 @@ function CreateOrder() {
 
   const [serviceSelectionState, setServiceSelectionState] = useState(true);
   const [totalPrice, setTotalPrice] = useState(0);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -68,6 +71,7 @@ function CreateOrder() {
     // };
     // localStorage.setItem("orderData", JSON.stringify(formData));
     // navigate("/ChoosePayment");
+    setIsLoading(true);
     const formData = new FormData();
 
     formData.append("CustomerId", senderInfo.userId || null);
@@ -110,8 +114,13 @@ function CreateOrder() {
       } else {
         UserToast("error", "Đơn hàng tạo thất bại!");
       }
+      setIsLoading(false);
     });
-  }, [senderInfo, receiverInfo, senderPackage, customerDocument, navigate]);
+  }, [senderInfo, receiverInfo, senderPackage, customerDocument, setIsLoading]);
+
+  useEffect(() => {
+    console.log("Is Loading " + isLoading);
+  }, [isLoading]);
 
   const handleSaveClick = useCallback(() => {
     const formData = {
@@ -145,96 +154,101 @@ function CreateOrder() {
   console.log(customerDocument);
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <SideMenu />
-      <ToastContainer />
-      <Box component="main" sx={{ flexGrow: 1 }}>
-        <UserAppBar />
-        <Box sx={{ p: 2 }}>
-          <Box component="header" sx={{ mb: 2 }}>
-            <ButtonGroup variant="contained">
-              <Button color="primary" href="/CreateOrder">
-                Create Domestic Order
-              </Button>
-              <Button color="secondary" href="/CreateOrderInter">
-                Create International Order
-              </Button>
-            </ButtonGroup>
-          </Box>
+    <LoadingOverlay active={isLoading} spinner text="Creating Order....">
+      <Box sx={{ display: "flex" }}>
+        <SideMenu />
 
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-              <Card sx={{ mb: 2 }}>
-                <CardContent>
-                  <SenderInfo onChange={setSenderInfo} />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <ReceiverInfo onChange={setReceiverInfo} />
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Card sx={{ mb: 2 }}>
-                <CardContent>
-                  <SenderPackage
-                    onChange={setSenderPackage}
-                    stateChange={handleServiceSelectionChange}
-                    setTotalPrice={setTotalPrice}
-                  />
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent>
-                  <CustomerDocumentInfo onChange={setCustomerDocument} />
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
+        <ToastContainer />
+        <Box component="main" sx={{ flexGrow: 1 }}>
+          <UserAppBar />
+          <Box sx={{ p: 2 }}>
+            <Box component="header" sx={{ mb: 2 }}>
+              <ButtonGroup variant="contained">
+                <Button color="primary" href="/CreateOrder">
+                  Create Domestic Order
+                </Button>
+                <Button color="secondary" href="/CreateOrderInter">
+                  Create International Order
+                </Button>
+              </ButtonGroup>
+            </Box>
 
-          <Box component="footer" sx={{ mt: 4 }}>
-            <Card>
-              <CardContent>
-                <Grid container spacing={2} alignItems="center">
-                  <Grid item xs={12} md={8}>
-                    <Typography variant="body1">Total Freight: 0 đ</Typography>
-                    <Typography variant="body1">
-                      Total Cost: {totalPrice} đ
-                    </Typography>
-                    <Typography variant="body1">
-                      Estimated Delivery: Same Day
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={4}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={isCheckboxChecked}
-                          onChange={handleCheckboxChange}
-                        />
-                      }
-                      label="Tôi đã đọc và đồng ý với Điều khoản quy định"
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={6}>
+                <Card sx={{ mb: 2 }}>
+                  <CardContent>
+                    <SenderInfo onChange={setSenderInfo} />
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent>
+                    <ReceiverInfo onChange={setReceiverInfo} />
+                  </CardContent>
+                </Card>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Card sx={{ mb: 2 }}>
+                  <CardContent>
+                    <SenderPackage
+                      onChange={setSenderPackage}
+                      stateChange={handleServiceSelectionChange}
+                      setTotalPrice={setTotalPrice}
                     />
-                    <ButtonGroup variant="contained">
-                      <Button
-                        color="primary"
-                        disabled={!isCheckboxChecked}
-                        onClick={handleSubmitClick}
-                      >
-                        Submit
-                      </Button>
-                      <Button onClick={handleSaveClick}>Save</Button>
-                      <Button onClick={handleResetClick}>Reset</Button>
-                    </ButtonGroup>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent>
+                    <CustomerDocumentInfo onChange={setCustomerDocument} />
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+
+            <Box component="footer" sx={{ mt: 4 }}>
+              <Card>
+                <CardContent>
+                  <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12} md={8}>
+                      <Typography variant="body1">
+                        Total Freight: 0 đ
+                      </Typography>
+                      <Typography variant="body1">
+                        Total Cost: {totalPrice} đ
+                      </Typography>
+                      <Typography variant="body1">
+                        Estimated Delivery: Same Day
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={isCheckboxChecked}
+                            onChange={handleCheckboxChange}
+                          />
+                        }
+                        label="Tôi đã đọc và đồng ý với Điều khoản quy định"
+                      />
+                      <ButtonGroup variant="contained">
+                        <Button
+                          color="primary"
+                          disabled={!isCheckboxChecked}
+                          onClick={handleSubmitClick}
+                        >
+                          Submit
+                        </Button>
+                        <Button onClick={handleSaveClick}>Save</Button>
+                        <Button onClick={handleResetClick}>Reset</Button>
+                      </ButtonGroup>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
+    </LoadingOverlay>
   );
 }
 export default CreateOrder;

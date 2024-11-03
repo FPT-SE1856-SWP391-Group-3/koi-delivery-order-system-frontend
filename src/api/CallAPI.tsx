@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useApiLoader } from "./APILoader";
 
 const BASE_URL = import.meta.env.VITE_API_ENDPOINT;
 
@@ -69,6 +70,33 @@ apiInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// // Thêm một interceptor tạo loading
+// const setupInterceptors = (setIsLoading) => {
+//   apiInstance.interceptors.request.use(
+//       (config) => {
+//           setIsLoading(true); // Bắt đầu loading khi có request
+//           return config;
+//       },
+//       (error) => {
+//           setIsLoading(false);
+//           return Promise.reject(error);
+//       }
+//   );
+
+//   apiInstance.interceptors.response.use(
+//       (response) => {
+//           setIsLoading(false); // Dừng loading khi request hoàn tất
+//           return response;
+//       },
+//       (error) => {
+//           setIsLoading(false);
+//           return Promise.reject(error);
+//       }
+//   );
+// };
+
+
 
 // Hàm GET
 const getFile = (url: string, path: any = {}) => {

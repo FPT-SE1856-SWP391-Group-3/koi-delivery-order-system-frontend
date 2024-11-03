@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@achmadk/react-loading-overlay": "^3.0.3",
+    "@emotion/css": "^11.13.4",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fontsource/roboto": "^5.1.0",
@@ -40,6 +42,7 @@
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.26.2",
     "react-toastify": "^10.0.6",
+    "react-transition-group": "^4.4.5",
     "sass": "^1.80.3",
     "sass-embedded": "^1.80.3",
     "styled-components": "^6.1.13"
