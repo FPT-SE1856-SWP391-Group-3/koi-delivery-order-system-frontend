@@ -56,7 +56,6 @@ function CallBackPayment() {
   const apiOneTimePayment = () => {
     api.post(`Payments/payment-callback?${query}`).then((data) => {
       console.log(data);
-      setResponseCode(data.vnp_ResponseCode);
     });
   };
 
