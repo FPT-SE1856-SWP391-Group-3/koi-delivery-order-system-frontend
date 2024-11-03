@@ -20,16 +20,21 @@ import {
   Collapse,
   Snackbar,
   Alert,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
 } from "@mui/material";
 import {
   KeyboardArrowDown as KeyboardArrowDownIcon,
   KeyboardArrowUp as KeyboardArrowUpIcon,
 } from "@mui/icons-material";
-import api from "../../../api/CallAPI";
 import Modal from "react-modal";
+import api from "../../../api/CallAPI";
 import CreateOrderDocument from "./CreateOrderDocument";
 import CreateTransportationReportDetails from "../report/CreateTransportationReportDetails";
-import "../order/ManageOrder.css";
 
 function OrderRow({
   row,
@@ -42,6 +47,9 @@ function OrderRow({
 }) {
   const [open, setOpen] = useState(false);
   const [koiDetails, setKoiDetails] = useState([]);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedOrderDetailId, setSelectedOrderDetailId] = useState(null);
+  const [newKoiCondition, setNewKoiCondition] = useState("");
 
   const fetchKoiDetails = async (orderId) => {
     try {
@@ -49,7 +57,7 @@ function OrderRow({
         `OrderDetails/OrderDetailsByOrderId/${orderId}`
       );
       if (data.success) {
-        setKoiDetails(data.koiDetails || []);
+        setKoiDetails(data.orderDetails || []);
       } else {
         console.log("No koi details found!");
       }
@@ -62,6 +70,37 @@ function OrderRow({
     setOpen(!open);
     if (!open && koiDetails.length === 0) {
       fetchKoiDetails(row.orderId);
+    }
+  };
+
+  const openUpdateModal = (orderDetailId, currentCondition) => {
+    setSelectedOrderDetailId(orderDetailId);
+    setNewKoiCondition(currentCondition); // Prefill with current condition
+    setIsUpdateModalOpen(true);
+  };
+
+  const closeUpdateModal = () => {
+    setIsUpdateModalOpen(false);
+    setSelectedOrderDetailId(null);
+    setNewKoiCondition("");
+  };
+
+  const updateKoiCondition = async () => {
+    try {
+      const response = await api.put(
+        `OrderDetails/${selectedOrderDetailId}/update-condition`,
+        {
+          koiCondition: newKoiCondition,
+        }
+      );
+      if (response.success) {
+        fetchKoiDetails(row.orderId); // Refresh koi details without page reload
+        closeUpdateModal();
+      } else {
+        console.error("Failed to update koi condition.");
+      }
+    } catch (error) {
+      console.error("Error updating koi condition:", error);
     }
   };
 
@@ -118,6 +157,8 @@ function OrderRow({
         </TableCell>
         <TableCell>{row.deliveryStaffId}</TableCell>
       </TableRow>
+
+      {/* Order Details */}
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -132,7 +173,7 @@ function OrderRow({
                     <TableCell>Shipping Address</TableCell>
                     <TableCell>Distance</TableCell>
                     <TableCell>Delivery Time</TableCell>
-                    <TableCell>Total Amount</TableCell>
+                    <TableCell>Total Price</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -153,22 +194,37 @@ function OrderRow({
                 <Table size="small" aria-label="koi details">
                   <TableHead>
                     <TableRow>
-                      <TableCell>OrderDetailId</TableCell>
+                      <TableCell>Koi ID</TableCell>
                       <TableCell>Koi Name</TableCell>
                       <TableCell>Weight (kg)</TableCell>
+                      <TableCell>Koi Condition</TableCell>
                       <TableCell>Price ($)</TableCell>
-                      <TableCell>Koi Type</TableCell>
+                      <TableCell align="center">Actions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {Array.isArray(koiDetails) && koiDetails.length > 0 ? (
-                      koiDetails.map((koi) => (
-                        <TableRow key={koi.orderDetailId}>
-                          <TableCell>{koi.orderDetailId}</TableCell>
-                          <TableCell>{koi.koiName}</TableCell>
-                          <TableCell>{koi.weight}</TableCell>
-                          <TableCell>{koi.price}</TableCell>
-                          <TableCell>{koi.koiType}</TableCell>
+                      koiDetails.map((koiDetail) => (
+                        <TableRow key={koiDetail.orderDetailId}>
+                          <TableCell>{koiDetail.koi.koiId}</TableCell>
+                          <TableCell>{koiDetail.koi.koiName}</TableCell>
+                          <TableCell>{koiDetail.koi.weight}</TableCell>
+                          <TableCell>{koiDetail.koiCondition}</TableCell>
+                          <TableCell>{koiDetail.koi.price}</TableCell>
+                          <TableCell align="center">
+                            <Button
+                              variant="contained"
+                              size="small"
+                              onClick={() =>
+                                openUpdateModal(
+                                  koiDetail.orderDetailId,
+                                  koiDetail.koiCondition
+                                )
+                              }
+                            >
+                              Update Condition
+                            </Button>
+                          </TableCell>
                         </TableRow>
                       ))
                     ) : (
@@ -185,6 +241,32 @@ function OrderRow({
           </Collapse>
         </TableCell>
       </TableRow>
+      {/* Update Condition Modal */}
+      <Dialog open={isUpdateModalOpen} onClose={closeUpdateModal}>
+        <DialogTitle>Update Koi Condition</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Enter a new condition for this koi:
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Koi Condition"
+            fullWidth
+            variant="outlined"
+            value={newKoiCondition}
+            onChange={(e) => setNewKoiCondition(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeUpdateModal} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={updateKoiCondition} color="primary">
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   );
 }

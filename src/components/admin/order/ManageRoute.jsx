@@ -26,7 +26,6 @@ import api from "../../../api/CallAPI";
 import Modal from "react-modal";
 import CreateOrderDocument from "./CreateOrderDocument";
 import CreateTransportationReportDetails from "../report/CreateTransportationReportDetails";
-import "../order/ManageOrder.css";
 
 function OrderRow({
   row,
@@ -42,7 +41,10 @@ function OrderRow({
 
   const fetchKoiDetails = async (orderId) => {
     try {
-      const data = await api.get(`OrderDetails/OrderDetailsByOrderId/${orderId}`);
+      const data = await api.get(
+        `OrderDetails/OrderDetailsByOrderId/${orderId}`
+      );
+
       if (data.success) {
         setKoiDetails(data.koiDetails || []);
       } else {
@@ -57,6 +59,7 @@ function OrderRow({
     setOpen(!open);
     if (!open && koiDetails.length === 0) {
       fetchKoiDetails(row.orderId);
+      console.log(api.get(`OrderDetails/OrderDetailsByOrderId/${row.orderId}`));
     }
   };
 
@@ -76,7 +79,9 @@ function OrderRow({
         <TableCell>{row.orderStatus.orderStatusName}</TableCell>
         <TableCell>
           <select
-            onChange={(event) => updateOrderStatusBySelect(event, row.orderId, row.orderStatusId)}
+            onChange={(event) =>
+              updateOrderStatusBySelect(event, row.orderId, row.orderStatusId)
+            }
             value={row.orderStatusId}
           >
             {orderStatus.map((status) => (
@@ -88,13 +93,21 @@ function OrderRow({
         </TableCell>
         <TableCell>
           <Box display="flex" flexDirection="column" gap={1}>
-            <Button onClick={() => updateOrderStatusByClick(row.orderId, row.orderStatusId)}>
+            <Button
+              onClick={() =>
+                updateOrderStatusByClick(row.orderId, row.orderStatusId)
+              }
+            >
               Update Status
             </Button>
-            <Button onClick={() => openDocumentModal(row.orderId, row.orderStatusId)}>
+            <Button
+              onClick={() => openDocumentModal(row.orderId, row.orderStatusId)}
+            >
               Order Document
             </Button>
-            <Button onClick={() => openReportModal(row.orderId)}>Transportation Report</Button>
+            <Button onClick={() => openReportModal(row.orderId)}>
+              Transportation Report
+            </Button>
             <Button onClick={() => cancelOrder(row.orderId)} color="error">
               Cancel
             </Button>
@@ -187,7 +200,9 @@ export default function ManageRoute() {
   const [order, setOrder] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [orderStatus, setOrderStatus] = useState([]);
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")));
+  const [user, setUser] = useState(() =>
+    JSON.parse(localStorage.getItem("user"))
+  );
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
@@ -200,12 +215,10 @@ export default function ManageRoute() {
 
   useEffect(() => {
     // Filter orders with deliveryStaffId as null and orderStatusId as 6
-    const filtered = order.filter(
-      (o) => o.deliveryStaffId === null 
-    );
+    const filtered = order.filter((o) => o.deliveryStaffId === null);
     setFilteredOrders(filtered);
   }, [order]);
-  
+
   const fetchOrders = async () => {
     try {
       const data = await api.get(`Orders/${user.userId}`);
