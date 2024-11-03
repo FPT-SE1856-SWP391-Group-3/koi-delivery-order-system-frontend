@@ -50,6 +50,7 @@ function OrderRow({
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedOrderDetailId, setSelectedOrderDetailId] = useState(null);
   const [newKoiCondition, setNewKoiCondition] = useState("");
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   const fetchKoiDetails = async (orderId) => {
     try {
@@ -105,7 +106,7 @@ function OrderRow({
   };
 
   return (
-    row != null &&
+    row != null && ((user.roleId === 3 && row.orderStatusId <= 7) || (user.roleId === 4 && row.orderStatusId > 7) || (user.roleId === 5)) &&
     <React.Fragment>
       <TableRow>
         <TableCell>
