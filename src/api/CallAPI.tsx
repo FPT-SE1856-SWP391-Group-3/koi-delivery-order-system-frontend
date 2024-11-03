@@ -41,22 +41,6 @@ const formApiInstance = axios.create({
   },
 });
 
-// // Thêm một interceptor để kiểm tra response lỗi `401`
-// apiInstance.interceptors.response.use(
-//   (response) => {
-//     return response; // Trả về response nếu không có lỗi
-//   },
-//   (error) => {
-//     // Kiểm tra mã lỗi trả về
-//     if (error.response && error.response.status === 401) {
-//       // Xóa token và điều hướng về trang login
-//       localStorage.removeItem("token");
-//       window.location.href = "/login"; // Chuyển hướng người dùng đến trang login
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-
 // Thêm một interceptor để thêm Authorization header tự động
 apiInstance.interceptors.request.use(
   (config) => {
@@ -70,31 +54,6 @@ apiInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-// // Thêm một interceptor tạo loading
-// const setupInterceptors = (setIsLoading) => {
-//   apiInstance.interceptors.request.use(
-//       (config) => {
-//           setIsLoading(true); // Bắt đầu loading khi có request
-//           return config;
-//       },
-//       (error) => {
-//           setIsLoading(false);
-//           return Promise.reject(error);
-//       }
-//   );
-
-//   apiInstance.interceptors.response.use(
-//       (response) => {
-//           setIsLoading(false); // Dừng loading khi request hoàn tất
-//           return response;
-//       },
-//       (error) => {
-//           setIsLoading(false);
-//           return Promise.reject(error);
-//       }
-//   );
-// };
 
 
 
