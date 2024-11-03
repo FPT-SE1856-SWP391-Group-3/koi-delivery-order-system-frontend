@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useMountEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "../css/ChoosePayment.css"; // Import custom CSS
 import ATMCard from "../../../assets/atm-icon.png";
@@ -7,10 +7,23 @@ import COD from "../../../assets/COD-icon.png";
 import { FaTimes } from "react-icons/fa"; // Import the icon for "X"
 import api from "../../../api/CallAPI";
 
+function useOnceCall(cb, condition = true) {
+  const isCalledRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (condition && !isCalledRef.current) {
+      isCalledRef.current = true;
+      cb();
+    }
+  }, [cb, condition]);
+}
+
+
 function CallBackPayment() {
   const [selectedPayment, setSelectedPayment] = useState("COD");
   const [searchParams] = useSearchParams();
   const [responseCode, setResponseCode] = useState(searchParams.get("vnp_ResponseCode"));
+  const [query, setQuery] = useState(window.location.search.substring(1));
 
   const navigate = useNavigate();
 
@@ -39,6 +52,15 @@ function CallBackPayment() {
   //   // navigate(-1); // Go back to the previous page
   //   navigate("")
   // };
+
+  const apiOneTimePayment = () => {
+    api.post(`Payments/payment-callback?${query}`).then((data) => {
+      console.log(data);
+    });
+  };
+
+  useOnceCall(apiOneTimePayment);
+  
 
   return (
     <div className="payment-container">

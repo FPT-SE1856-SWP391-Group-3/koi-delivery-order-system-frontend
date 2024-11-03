@@ -67,7 +67,7 @@ export default function Login() {
   }, []);
 
   const handleNavigateIfLoggedIn = () => {
-    if (user != null) {
+    if (user != null && token != null) {
       console.log(user);
       switch (user.roleId) {
         case 5:

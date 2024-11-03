@@ -83,6 +83,18 @@ const getFile = (url: string, path: any = {}) => {
     });
 };
 
+// Hàm GET địa chỉ
+const getAddress = (url: string) => {
+  return apiInstance
+    .get(url)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error(`GET ${url} failed:`, error);
+      throw error;
+    });
+}
+
+
 const get = async (url: string, params: any = {}) => {
   const fullUrl = buildUrl(url);
   return apiInstance
@@ -167,4 +179,5 @@ export default {
   buildUrl,
   imageBuildUrl,
   putForm,
+  getAddress,
 };

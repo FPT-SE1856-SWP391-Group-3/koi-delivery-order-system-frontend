@@ -2,18 +2,15 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReceiverInfo from "./COC/ReceiverInfo";
 import SenderInfo from "./COC/SenderInfo";
-import ServiceSelection from "./COC/ServiceSelection";
 import "../css/CreateOrder.css";
 
 import api from "../../../api/CallAPI";
 import CustomerDocumentInfo from "./COC/CustomerDocumentInfo";
 import SideMenu from "../SideMenu";
-import {
-  AppBar,
+import {  
   Box,
   Button,
   ButtonGroup,
-  ButtonGroupContext,
   Card,
   CardContent,
   Checkbox,
@@ -24,13 +21,14 @@ import UserAppBar from "../UserAppNavbar";
 import { Grid } from "@mui/joy";
 import UserToast from "../alert/UserToast";
 import { ToastContainer } from "react-toastify";
+import SenderPackage from "./COC/SenderPackage";
 
 function CreateOrder() {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [senderInfo, setSenderInfo] = useState({});
   const [receiverInfo, setReceiverInfo] = useState({});
-  const [serviceSelection, setServiceSelection] = useState([{}]);
+  const [senderPackage, setSenderPackage] = useState([{}]);
   const [customerDocument, setCustomerDocument] = useState([{}]);
 
   const [serviceSelectionState, setServiceSelectionState] = useState(true);
@@ -43,7 +41,7 @@ function CreateOrder() {
     if (savedOrderData) {
       setSenderInfo(savedOrderData.senderInfo || {});
       setReceiverInfo(savedOrderData.receiverInfo || {});
-      setServiceSelection(savedOrderData.serviceSelection || [{}]);
+      setSenderPackage(savedOrderData.serviceSelection || [{}]);
       setCustomerDocument(savedOrderData.customerDocument || [{}]);
     }
   }, []);
@@ -52,13 +50,7 @@ function CreateOrder() {
     setServiceSelectionState(!serviceSelectionState);
   }
 
-  useEffect(() => {
-    let total = 0;
-    serviceSelection.map((service) => {
-      total += service.price * service.amount;
-    });
-    setTotalPrice(total);
-  }, []);
+ 
 
   const handleCheckboxChange = useCallback(() => {
     setIsCheckboxChecked((prevChecked) => !prevChecked);
@@ -97,12 +89,12 @@ function CreateOrder() {
     formData.append("ReceiverPhoneNumber", receiverInfo.phoneNumber);
     formData.append("ReceiverEmail", receiverInfo.email);
 
-    serviceSelection.map((service, index) => {
-      formData.append(`KoiName[${index}]`, service.koiName);
-      formData.append(`KoiWeight[${index}]`, service.weight);
-      formData.append(`KoiPrice[${index}]`, service.price);
-      formData.append(`Amount[${index}]`, service.amount);
-      formData.append(`KoiCondition[${index}]`, service.koiCondition);
+    senderPackage.map((pack, index) => {
+      formData.append(`KoiName[${index}]`, pack.koiName);
+      formData.append(`KoiWeight[${index}]`, pack.weight);
+      formData.append(`KoiPrice[${index}]`, pack.price);
+      formData.append(`Amount[${index}]`, pack.amount);
+      formData.append(`KoiCondition[${index}]`, pack.koiCondition);
     });
 
     customerDocument.map((doc, index) => {
@@ -119,24 +111,24 @@ function CreateOrder() {
         UserToast("error", "Đơn hàng tạo thất bại!");
       }
     });
-  }, [senderInfo, receiverInfo, serviceSelection, customerDocument, navigate]);
+  }, [senderInfo, receiverInfo, senderPackage, customerDocument, navigate]);
 
   const handleSaveClick = useCallback(() => {
     const formData = {
       senderInfo,
       receiverInfo,
-      serviceSelection,
+      senderPackage,
       customerDocument,
     };
     localStorage.setItem("orderData", JSON.stringify(formData));
     alert("Thông tin đơn hàng đã được lưu!");
-  }, [senderInfo, receiverInfo, serviceSelection, customerDocument]);
+  }, [senderInfo, receiverInfo, senderPackage, customerDocument]);
 
   const handleResetClick = useCallback(() => {
     localStorage.removeItem("orderData");
     setSenderInfo({});
     setReceiverInfo({});
-    setServiceSelection({});
+    setSenderPackage({});
     setCustomerDocument({});
     setIsCheckboxChecked(false);
     alert("Form đã được đặt lại!");
@@ -146,7 +138,7 @@ function CreateOrder() {
     setIsDropdownOpen((prevOpen) => !prevOpen);
   };
 
-  console.log(serviceSelection);
+  console.log(senderPackage);
   console.log(customerDocument);
   console.log(totalPrice);
   console.log(serviceSelectionState);
@@ -186,9 +178,10 @@ function CreateOrder() {
             <Grid item xs={12} md={6}>
               <Card sx={{ mb: 2 }}>
                 <CardContent>
-                  <ServiceSelection
-                    onChange={setServiceSelection}
+                  <SenderPackage
+                    onChange={setSenderPackage}
                     stateChange={handleServiceSelectionChange}
+                    setTotalPrice={setTotalPrice}
                   />
                 </CardContent>
               </Card>

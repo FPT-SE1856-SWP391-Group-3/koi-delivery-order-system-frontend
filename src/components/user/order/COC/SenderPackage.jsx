@@ -7,11 +7,19 @@ import { Grid } from "@mui/joy";
 import TextField from '@mui/material/TextField';
 import { Button, Divider, Typography } from "@mui/material";
 
-const ServiceSelection = ({ onChange }) => {
+const SenderPackage = ({ onChange, setTotalPrice }) => {
   const [orderServiceDetails, setOrderServiceDetails] = useState([]);
   const [itemList, setItemList] = useState([
     { koiName: "", weight: "", price: "", amount: "", koiCondition: "" },
   ]);
+
+  useEffect(() => {
+    let total = 0;
+    itemList.map((service) => {
+      total += service.price * service.amount;
+    });
+    setTotalPrice(total);
+  }, [itemList]);
 
   useEffect(() => {
     api.get("OrderServiceDetails/").then((data) => {
@@ -49,7 +57,7 @@ const ServiceSelection = ({ onChange }) => {
 
   return (
     <div>
-      <h2>Service Selection</h2>
+      <h2>Sender Package</h2>
       <div className="sectionCompo">
         {itemList.map((item, index) => (
           <div id="item" key={index}>
@@ -141,9 +149,9 @@ const ServiceSelection = ({ onChange }) => {
   );
 };
 
-ServiceSelection.propTypes = {
+SenderPackage.propTypes = {
   onChange: PropTypes.func.isRequired,
   stateChange: PropTypes.func.isRequired,
 };
 
-export default ServiceSelection;
+export default SenderPackage;

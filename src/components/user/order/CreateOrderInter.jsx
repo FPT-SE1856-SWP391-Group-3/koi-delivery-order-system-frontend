@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import OrderSummary from "./COIC/OrderSummary";
 import ReceiverInfo from "./COIC/ReceiverInfo";
 import SenderInfo from "./COC/SenderInfo";
-import ServiceSelection from "./COC/ServiceSelection.jsx";
 import api from "../../../api/CallAPI"; // Adjust the import path for your API calls
 import "../css/CreateOrder.css";
 import UserSideNav from "../UserSideNav";
