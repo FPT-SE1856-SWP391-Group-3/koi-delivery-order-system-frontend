@@ -30,6 +30,7 @@ function CreateOrder() {
   const [senderInfo, setSenderInfo] = useState({});
   const [receiverInfo, setReceiverInfo] = useState({});
   const [senderPackage, setSenderPackage] = useState([{}]);
+  const [senderPackage, setSenderPackage] = useState([{}]);
   const [customerDocument, setCustomerDocument] = useState([{}]);
 
   const [serviceSelectionState, setServiceSelectionState] = useState(true);
@@ -44,6 +45,7 @@ function CreateOrder() {
     if (savedOrderData) {
       setSenderInfo(savedOrderData.senderInfo || {});
       setReceiverInfo(savedOrderData.receiverInfo || {});
+      setSenderPackage(savedOrderData.serviceSelection || [{}]);
       setSenderPackage(savedOrderData.serviceSelection || [{}]);
       setCustomerDocument(savedOrderData.customerDocument || [{}]);
     }
@@ -99,6 +101,12 @@ function CreateOrder() {
       formData.append(`KoiPrice[${index}]`, pack.price);
       formData.append(`Amount[${index}]`, pack.amount);
       formData.append(`KoiCondition[${index}]`, pack.koiCondition);
+    senderPackage.map((pack, index) => {
+      formData.append(`KoiName[${index}]`, pack.koiName);
+      formData.append(`KoiWeight[${index}]`, pack.weight);
+      formData.append(`KoiPrice[${index}]`, pack.price);
+      formData.append(`Amount[${index}]`, pack.amount);
+      formData.append(`KoiCondition[${index}]`, pack.koiCondition);
     });
 
     customerDocument.map((doc, index) => {
@@ -132,11 +140,13 @@ function CreateOrder() {
     localStorage.setItem("orderData", JSON.stringify(formData));
     alert("Thông tin đơn hàng đã được lưu!");
   }, [senderInfo, receiverInfo, senderPackage, customerDocument]);
+  }, [senderInfo, receiverInfo, senderPackage, customerDocument]);
 
   const handleResetClick = useCallback(() => {
     localStorage.removeItem("orderData");
     setSenderInfo({});
     setReceiverInfo({});
+    setSenderPackage({});
     setSenderPackage({});
     setCustomerDocument({});
     setIsCheckboxChecked(false);
@@ -147,6 +157,7 @@ function CreateOrder() {
     setIsDropdownOpen((prevOpen) => !prevOpen);
   };
 
+  console.log(senderPackage);
   console.log(senderPackage);
   console.log(customerDocument);
   console.log(totalPrice);
