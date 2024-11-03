@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ReceiverInfo from "./COC/ReceiverInfo";
 import SenderInfo from "./COC/SenderInfo";
-import ServiceSelection from "./COC/ServiceSelection";
 import "../css/CreateOrder.css";
 
 import api from "../../../api/CallAPI";
@@ -22,6 +21,7 @@ import UserAppBar from "../UserAppNavbar";
 import { Grid } from "@mui/joy";
 import UserToast from "../alert/UserToast";
 import { ToastContainer } from "react-toastify";
+import SenderPackage from "./COC/SenderPackage";
 
 function CreateOrder() {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -50,13 +50,7 @@ function CreateOrder() {
     setServiceSelectionState(!serviceSelectionState);
   }
 
-  useEffect(() => {
-    let total = 0;
-    senderPackage.map((service) => {
-      total += service.price * service.amount;
-    });
-    setTotalPrice(total);
-  }, []);
+ 
 
   const handleCheckboxChange = useCallback(() => {
     setIsCheckboxChecked((prevChecked) => !prevChecked);
@@ -184,9 +178,10 @@ function CreateOrder() {
             <Grid item xs={12} md={6}>
               <Card sx={{ mb: 2 }}>
                 <CardContent>
-                  <ServiceSelection
+                  <SenderPackage
                     onChange={setSenderPackage}
                     stateChange={handleServiceSelectionChange}
+                    setTotalPrice={setTotalPrice}
                   />
                 </CardContent>
               </Card>
