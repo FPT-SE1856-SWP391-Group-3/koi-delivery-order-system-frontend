@@ -15,7 +15,7 @@ const koi = "/koi";
 const report = "/report/transporation";
 const type = "/type";
 const dashboard = "/dashboard";
-const manangeroute ="/manangeroute";
+const manangeroute = "manangeroute";
 const view = "/view/";
 const edit = "/edit/";
 const create = "/create/";
@@ -23,7 +23,7 @@ const admin = "/admin";
 
 const ComponentPath = {
   user: {
-    dashboard : user + dashboard,
+    dashboard: user + dashboard,
     address: {
       viewAddress: user + address + view,
       editAddress: address + edit,
@@ -42,9 +42,9 @@ const ComponentPath = {
       viewOrder: order + view,
       editOrder: order + edit,
       createOrder: order + create,
-      orderDetai : {
+      orderDetai: {
         viewOrderDetail: order + view + "detail/",
-      }
+      },
     },
     feedback: {
       viewFeedback: feedback + view,
@@ -75,7 +75,7 @@ const ComponentPath = {
     },
   },
   admin: {
-    dashboard : admin + dashboard,
+    dashboard: admin + dashboard,
     address: {
       manageUserAddress: admin + address + manage,
     },
@@ -99,8 +99,8 @@ const ComponentPath = {
       createFeedback: admin + feedback + create,
     },
     notification: {
-        manageNotification: admin + notification + manage,
-        createNotification: admin + notification + create,
+      manageNotification: admin + notification + manage,
+      createNotification: admin + notification + create,
     },
     order: {
       manageOrder: admin + order + manage,
@@ -110,11 +110,11 @@ const ComponentPath = {
         editOrderDocment: admin + order + edit + "document/",
         manageOrderDocument: admin + order + view + "document/",
       },
-      service :{
+      service: {
         createOrderService: admin + order + create + "service/",
         editOrderService: admin + order + edit + "service/",
         manageOrderService: admin + order + view + "service/",
-      }
+      },
     },
     payment: {
       managePaymentType: admin + payment + type + manage,
@@ -135,6 +135,9 @@ const ComponentPath = {
       manageUser: admin + user + manage,
       createUser: admin + user + create,
       editUser: admin + user + edit,
+    },
+    route: {
+      manageRoute: admin + manage + manangeroute,
     },
   },
 };

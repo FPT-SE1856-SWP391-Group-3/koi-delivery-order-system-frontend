@@ -18,29 +18,59 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import FolderIcon from '@mui/icons-material/Folder';
 import SpeedIcon from '@mui/icons-material/Speed';
 import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
 import ComponentPath from "routes/ComponentPath";
 
-const mainListItems = [
-  { text: 'Home', icon: <SpeedIcon />, link: "/admindashboard" },
-  { text: 'Manage User', icon: <PeopleRoundedIcon />, link: ComponentPath.admin.user.manageUser },
-  { text: 'Manage Order', icon: <LocalAtmIcon />, link: ComponentPath.admin.order.manageOrder},
-  { text: 'Manage Koi', icon: <SetMealIcon />, link: ComponentPath.admin.koi.manageKoi },
-  { text: 'Manage Service', icon: <RoomServiceIcon />, link: ComponentPath.admin.order.service.manageOrderService },
-  { text: 'Manage FAQ', icon: <QuizIcon />, link: ComponentPath.admin.faq.manageFaq},
-  { text: 'Manage Report', icon: <ReportIcon />, link: ComponentPath.admin.report.manageReport },
-  { text: 'Manage Payment Type', icon: <PaymentIcon />, link: ComponentPath.admin.payment.managePaymentType },
-  { text: 'Manage Blog News', icon: <NewspaperIcon />, link: ComponentPath.admin.blogNews.manageBlogNews },
-  { text: 'Manage Certification', icon: <GppGoodIcon />, link: ComponentPath.admin.certification.manageCertification },
-  { text: 'Manage route', icon: <AssignmentRoundedIcon />, link: "/manangeroute" },
-  { text: 'Manage Document', icon: <FolderIcon />, link: ComponentPath.admin.order.document.manageOrderDocument },
-];
 
 
 export default function MenuContent() {
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")));
+
+  // Define menu items for each role
+  const managerItems = [
+    { text: 'Home', icon: <SpeedIcon />, link: ComponentPath.admin.dashboard },
+    { text: 'Manage User', icon: <PeopleRoundedIcon />, link: ComponentPath.admin.user.manageUser },
+    { text: 'Manage Order', icon: <LocalAtmIcon />, link: ComponentPath.admin.order.manageOrder },
+    { text: 'Manage Service', icon: <RoomServiceIcon />, link: ComponentPath.admin.order.service.manageOrderService },
+    { text: 'Manage FAQ', icon: <QuizIcon />, link: ComponentPath.admin.faq.manageFaq },
+    { text: 'Manage Report', icon: <ReportIcon />, link: ComponentPath.admin.report.manageReport },
+    { text: 'Manage Payment Type', icon: <PaymentIcon />, link: ComponentPath.admin.payment.managePaymentType },
+    { text: 'Manage Blog News', icon: <NewspaperIcon />, link: ComponentPath.admin.blogNews.manageBlogNews },
+    { text: 'Manage Certification', icon: <GppGoodIcon />, link: ComponentPath.admin.certification.manageCertification },
+    { text: 'Manage Route', icon: <AssignmentRoundedIcon />, link: ComponentPath.admin.route.manageRoute },
+    { text: 'Manage Document', icon: <FolderIcon />, link: ComponentPath.admin.order.document.manageOrderDocument },
+  ];
+
+  const salestaffItems = [
+    { text: 'Sale Reports', icon: <SpeedIcon />, link: ComponentPath.admin.dashboard },
+    { text: 'Manage Order', icon: <LocalAtmIcon />, link: ComponentPath.admin.order.manageOrder },
+    { text: 'Manage FAQ', icon: <QuizIcon />, link: ComponentPath.admin.faq.manageFaq },
+    { text: 'Manage Blog News', icon: <NewspaperIcon />, link: ComponentPath.admin.blogNews.manageBlogNews },
+    { text: 'Manage Report', icon: <ReportIcon />, link: ComponentPath.admin.report.manageReport },
+  ];
+
+  const deliverstaffItems = [
+    { text: 'Manage Order', icon: <LocalAtmIcon />, link: ComponentPath.admin.order.manageOrder },
+    { text: 'Manage Report', icon: <ReportIcon />, link: ComponentPath.admin.report.manageReport },
+    { text: 'Manage Document', icon: <FolderIcon />, link: ComponentPath.admin.order.document.manageOrderDocument },
+  ];
+
+  const getMenuItems = () => {
+    if (user.roleId === 5) {
+      return managerItems;
+    } else if (user.roleId === 4) {
+      return deliverstaffItems;
+    } else if (user.roleId === 3) {
+      return salestaffItems;
+    }
+    return [];
+  };
+
+  const menuItems = getMenuItems();
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
       <List dense>
-        {mainListItems.map((item, index) => (
+        {menuItems.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: 'block' }}>
             <Link to={item.link}>
               <ListItemButton selected={index === 0}>

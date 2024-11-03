@@ -20,7 +20,6 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-
   const onSubmit = async (data) => {
     try {
       await api
@@ -35,16 +34,16 @@ export default function Login() {
             switch (data.user.roleId) {
               case 5:
                 console.log("redirect to admin");
-                navigate("/admindashboard");
+                navigate(ComponentPath.admin.dashboard);
                 break;
               case 2:
                 navigate(ComponentPath.user.profile.viewProfile);
                 break;
               case 3:
-                navigate("/admindashboard");
+                navigate(ComponentPath.admin.dashboard);
                 break;
               case 4:
-                navigate("/admindashboard");
+                navigate(ComponentPath.admin.dashboard);
                 break;
               default:
                 alert("Không xác định được vai trò người dùng");
@@ -137,7 +136,7 @@ export default function Login() {
   };
   return (
     /*!token ? */ <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
-      <ToastContainer/>
+      <ToastContainer />
       <div className="login">
         <a href="/" className="loginhome-icon">
           <img src={home} />
