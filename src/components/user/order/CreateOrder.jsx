@@ -30,7 +30,6 @@ function CreateOrder() {
   const [senderInfo, setSenderInfo] = useState({});
   const [receiverInfo, setReceiverInfo] = useState({});
   const [senderPackage, setSenderPackage] = useState([{}]);
-  const [senderPackage, setSenderPackage] = useState([{}]);
   const [customerDocument, setCustomerDocument] = useState([{}]);
 
   const [serviceSelectionState, setServiceSelectionState] = useState(true);
