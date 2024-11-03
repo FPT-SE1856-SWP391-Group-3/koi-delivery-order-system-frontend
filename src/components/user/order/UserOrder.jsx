@@ -35,8 +35,8 @@ export default function UserOrder() {
   useEffect(() => {
     api.get("Orders/" + userId).then((data) => {
       if (data.success) {
-        setOrders(data.order);
-        console.log(data.order);
+        setOrders(data.orders);
+        console.log(data.orders);
       } else {
         console.log("Không có đơn hàng!");
       }
@@ -90,57 +90,60 @@ export default function UserOrder() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {orders.map((order) => (
-                      <TableRow key={order.orderId}>
-                        <TableCell>{order.orderId}</TableCell>
-                        <TableCell>{order.orderDate}</TableCell>
-                        <TableCell>{order.deliveryDate}</TableCell>
-                        <TableCell>
-                          {order.startAddress == null
-                            ? ""
-                            : order.startAddress.addressLine}
-                        </TableCell>
-                        <TableCell>
-                          {order.endAddress == null
-                            ? ""
-                            : order.endAddress.addressLine}
-                        </TableCell>
-                        <TableCell>{order.totalPrice}</TableCell>
-                        <TableCell>
-                          {order.orderStatus == null
-                            ? ""
-                            : order.orderStatus.orderStatusName}
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="contained"
-                            onClick={() => handleShowDetailModal(order.orderId)}
-                          >
-                            Chi tiết
-                          </Button>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="contained"
-                            onClick={() =>
-                              handleShowFeedbackModal(order.orderId)
-                            }
-                          >
-                            Feedback
-                          </Button>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            variant="contained"
-                            onClick={() =>
-                              handleShowDocumentModal(order.orderId)
-                            }
-                          >
-                            Document
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                    {orders &&
+                      orders.map((order) => (
+                        <TableRow key={order.orderId}>
+                          <TableCell>{order.orderId}</TableCell>
+                          <TableCell>{order.orderDate}</TableCell>
+                          <TableCell>{order.deliveryDate}</TableCell>
+                          <TableCell>
+                            {order.startAddress == null
+                              ? ""
+                              : order.startAddress.addressLine}
+                          </TableCell>
+                          <TableCell>
+                            {order.endAddress == null
+                              ? ""
+                              : order.endAddress.addressLine}
+                          </TableCell>
+                          <TableCell>{order.totalPrice}</TableCell>
+                          <TableCell>
+                            {order.orderStatus == null
+                              ? ""
+                              : order.orderStatus.orderStatusName}
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="contained"
+                              onClick={() =>
+                                handleShowDetailModal(order.orderId)
+                              }
+                            >
+                              Chi tiết
+                            </Button>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="contained"
+                              onClick={() =>
+                                handleShowFeedbackModal(order.orderId)
+                              }
+                            >
+                              Feedback
+                            </Button>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="contained"
+                              onClick={() =>
+                                handleShowDocumentModal(order.orderId)
+                              }
+                            >
+                              Document
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </TableContainer>

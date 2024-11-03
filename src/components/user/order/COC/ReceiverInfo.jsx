@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import "../../css/CreateOrder.css";
 import { Grid } from "@mui/joy";
+import api from "../../../../api/CallAPI";
 
 const ReceiverInfo = ({ onChange }) => {
   const [addresses, setAddresses] = useState([]);
@@ -19,10 +20,13 @@ const ReceiverInfo = ({ onChange }) => {
   useEffect(() => {
     const fetchAddressData = async () => {
       try {
-        const response = await axios.get(
-          "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-        );
-        setAddresses(response.data);
+      await import("../../../../data/dvhcvn.json")
+        .then((response) => response.default)
+        .then((data) => {
+          console.log(data);
+          setAddresses(data.data);
+        });
+
       } catch (error) {
         console.error("Error fetching address data:", error);
       }
@@ -30,8 +34,8 @@ const ReceiverInfo = ({ onChange }) => {
     fetchAddressData();
   }, []);
 
-  const filteredDistricts = addresses.find((address) => address.Name === cityName)?.Districts || [];
-  const filteredWards = filteredDistricts.find((district) => district.Name === districtName)?.Wards || [];
+  const filteredDistricts = addresses.find((address) => address.name === cityName)?.level2s || [];
+  const filteredWards = filteredDistricts.find((district) => district.name === districtName)?.level3s || [];
 
   const updateReceiverInfo = () => {
     onChange({
@@ -93,8 +97,8 @@ const ReceiverInfo = ({ onChange }) => {
         >
           <option value="">Choose City</option>
           {addresses.map((address) => (
-            <option key={address.Id} value={address.Name}>
-              {address.Name}
+            <option key={address.level1_id} value={address.name}>
+              {address.name}
             </option>
           ))}
         </select>
@@ -110,8 +114,8 @@ const ReceiverInfo = ({ onChange }) => {
         >
           <option value="">Choose District</option>
           {filteredDistricts.map((district) => (
-            <option key={district.Id} value={district.Name}>
-              {district.Name}
+            <option key={district.level2_id} value={district.name}>
+              {district.name}
             </option>
           ))}
         </select>
@@ -124,8 +128,8 @@ const ReceiverInfo = ({ onChange }) => {
         >
           <option value="">Choose Ward</option>
           {filteredWards.map((ward) => (
-            <option key={ward.Id} value={ward.Name}>
-              {ward.Name}
+            <option key={ward.level3_id} value={ward.name}>
+              {ward.name}
             </option>
           ))}
         </select>

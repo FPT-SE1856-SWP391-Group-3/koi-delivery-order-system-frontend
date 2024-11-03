@@ -66,6 +66,7 @@ function OrderRow({
   };
 
   return (
+    row != null &&
     <React.Fragment>
       <TableRow>
         <TableCell>
@@ -78,13 +79,13 @@ function OrderRow({
         <TableCell>{row.orderDate}</TableCell>
         <TableCell>{row.paymentHistoryId == null ? "False" : "True"}</TableCell>
         <TableCell>{row.deliveryDate}</TableCell>
-        <TableCell>{row.orderStatus.orderStatusName}</TableCell>
+        <TableCell>{row.orderStatus != null ? row.orderStatus.orderStatusName : ""}</TableCell>
         <TableCell>
           <select
             onChange={(event) =>
               updateOrderStatusBySelect(event, row.orderId, row.orderStatusId)
             }
-            value={row.orderStatusId}
+            value={row == null  ? "" : row.orderStatusId}
           >
             {orderStatus.map((status) => (
               <option key={status.orderStatusId} value={status.orderStatusId}>
@@ -200,7 +201,7 @@ OrderRow.propTypes = {
 
 export default function ManageOrder() {
   const [order, setOrder] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [filteredOrders, setFilteredOrders] = useState([null]);
   const [orderStatus, setOrderStatus] = useState([]);
   const [dateRange, setDateRange] = useState([null, null]);
   const [user, setUser] = useState(() =>
@@ -275,7 +276,7 @@ export default function ManageOrder() {
       return;
     }
     try {
-      await api.put(`Orders/update-status/${orderId}`, {
+      const response = await api.put(`Orders/update-status/${orderId}`, {
         updateOrderStatusId: selectedStatusId,
       });
       setOrder((orders) =>
@@ -308,9 +309,31 @@ export default function ManageOrder() {
     }
     const nextStatusId = orderStatus[currentIndex + 1].orderStatusId;
     try {
-      await api.put(`Orders/update-status/${orderId}`, {
+      const response = await api.put(`Orders/update-status/${orderId}`, {
         updateOrderStatusId: nextStatusId,
       });
+
+      if (response.success) {
+        setOrder((orders) =>
+          orders.map((order) =>
+            order.orderId === orderId
+              ? { ...order, orderStatusId: nextStatusId }
+              : order
+          )
+        );
+      } else if (response.success === false) {
+        if (response.code == "error-payment") {
+          setAlertMessage("Payment is not completed yet.");
+          setAlertSeverity("warning");
+          setAlertOpen(true);
+          return;
+        } else if (response.code == "error-document") {
+          setAlertMessage("Document is not uploaded yet.");
+          setAlertSeverity("warning");
+          setAlertOpen(true);
+          return;
+        }
+      }
       setAlertMessage("Order status updated successfully!");
       setAlertSeverity("success");
       setAlertOpen(true);
@@ -452,9 +475,10 @@ export default function ManageOrder() {
             </TableHead>
 
             <TableBody>
-              {filteredOrders.map((order) => (
+              {  filteredOrders &&
+              filteredOrders.map((order) => (
                 <OrderRow
-                  key={order.orderId}
+                  key={order == null ? 0 : order.orderId}
                   row={order}
                   orderStatus={orderStatus}
                   updateOrderStatusBySelect={updateOrderStatusBySelect}
