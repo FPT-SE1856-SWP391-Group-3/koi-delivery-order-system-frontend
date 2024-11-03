@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "../css/ChoosePayment.css"; // Import custom CSS
 import ATMCard from "../../../assets/atm-icon.png";
@@ -11,6 +11,7 @@ function CallBackPayment() {
   const [selectedPayment, setSelectedPayment] = useState("COD");
   const [searchParams] = useSearchParams();
   const [responseCode, setResponseCode] = useState(searchParams.get("vnp_ResponseCode"));
+  const [query, setQuery] = useState(window.location.search.substring(1));
 
   const navigate = useNavigate();
 
@@ -39,6 +40,15 @@ function CallBackPayment() {
   //   // navigate(-1); // Go back to the previous page
   //   navigate("")
   // };
+
+  useEffect(() => {
+    api.get(`Payments/payment-callback?${query}`).then((data) => {
+      console.log(data);
+      setResponseCode(data.vnp_ResponseCode);
+    });
+  }
+  , [query]);
+  
 
   return (
     <div className="payment-container">
