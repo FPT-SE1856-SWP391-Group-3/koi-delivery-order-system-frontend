@@ -20,8 +20,8 @@ const ReceiverInfo = ({ onChange }) => {
   useEffect(() => {
     const fetchAddressData = async () => {
       try {
-      await import("../../../../data/dvhcvn.json")
-        .then((response) => response.default)
+      await fetch("https://raw.githubusercontent.com/daohoangson/dvhcvn/refs/heads/master/data/dvhcvn.json")
+        .then((response) => response.json())
         .then((data) => {
           console.log(data);
           setAddresses(data.data);
