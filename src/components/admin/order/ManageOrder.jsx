@@ -106,7 +106,7 @@ function OrderRow({
   };
 
   return (
-    row != null && ((user.roleId === 3 && row.orderStatusId <= 7) || (user.roleId === 4 && row.orderStatusId > 7) || (user.roleId === 5)) &&
+    row != null && ((user.roleId === 3 && row.orderStatusId < 7) || (user.roleId === 4 && row.orderStatusId >= 7) || (user.roleId === 5)) &&
     <React.Fragment>
       <TableRow>
         <TableCell>
