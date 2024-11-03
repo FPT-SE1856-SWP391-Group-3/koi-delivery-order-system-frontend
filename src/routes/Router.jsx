@@ -89,7 +89,6 @@ const isAdmin = async () => {
 
 // Create the router configuration
 const router = createBrowserRouter([
-
   {
     path: "/dashboard",
     element: <Dashboard />,
@@ -268,17 +267,13 @@ const router = createBrowserRouter([
         element: <AdminRoute />,
         children: [
           {
-            path: "/admindashboard",
+            path: ComponentPath.admin.dashboard,
             element: <AdminDashboard />,
           },
           {
-            path: "/manangeroute",
+            path: ComponentPath.admin.route.manageRoute,
             element: <ManageRoute />,
           },
-          // {
-          //   path: ComponentPath.admin.manage.manageroute,
-          //   element: <ManageRoute />,
-          // },
           {
             path: ComponentPath.admin.user.manageUser,
             element: <ManageUser />,
