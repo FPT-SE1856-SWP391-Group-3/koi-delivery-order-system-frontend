@@ -118,10 +118,6 @@ function CreateOrder() {
     });
   }, [senderInfo, receiverInfo, senderPackage, customerDocument, setIsLoading]);
 
-  useEffect(() => {
-    console.log("Is Loading " + isLoading);
-  }, [isLoading]);
-
   const handleSaveClick = useCallback(() => {
     const formData = {
       senderInfo,
@@ -146,11 +142,7 @@ function CreateOrder() {
   const toggleDropdown = () => {
     setIsDropdownOpen((prevOpen) => !prevOpen);
   };
-  console.log(senderPackage);
-  console.log(customerDocument);
-  console.log(totalPrice);
-  console.log(serviceSelectionState);
-  console.log(customerDocument);
+
 
   return (
     <LoadingOverlay active={isLoading} spinner text="Creating Order....">
