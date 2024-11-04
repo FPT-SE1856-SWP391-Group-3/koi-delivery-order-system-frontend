@@ -11,22 +11,26 @@ import { Alert } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserToast from "../alert/UserToast";
+import { LoadingOverlay } from '@achmadk/react-loading-overlay';
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
+     setIsLoading(true);
       await api
         .post("Users/login/jwt/", data)
         .then((data) => {
           if (data.success) {
             console.log("Đăng nhập thành công!");
+            setIsLoading(false);
             localStorage.setItem("user", JSON.stringify(data.user));
             localStorage.setItem("userId", JSON.stringify(data.userId));
             localStorage.setItem("token", JSON.stringify(data.stringToken));
@@ -54,13 +58,20 @@ export default function Login() {
         .catch((error) => {
           console.log("Đăng nhập thất bại!");
           setError("Đăng nhập thất bại!");
+          setIsLoading(false);
           UserToast("error", "Đăng nhập thất bại!");
         });
     } catch (error) {
       console.error("Lỗi đang nhập:", error);
+      setIsLoading(false);
       alert("Lỗi đang nhập, vui lòng thử lại.");
     }
+
   };
+
+  useEffect(() => {
+    console.log("Is Loading " + isLoading); 
+  }, [isLoading]);
 
   useEffect(() => {
     handleNavigateIfLoggedIn();
@@ -137,67 +148,69 @@ export default function Login() {
   return (
     /*!token ? */ <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
       <ToastContainer />
-      <div className="login">
-        <a href="/" className="loginhome-icon">
-          <img src={home} />
-        </a>
-        <div className="login-container">
-          <div className="login-box">
-            <div className="login-left">
-              <h1>Sign In</h1>
-              <p>
-                Dont have an account? <a href="/register">Sign Up</a>
-              </p>
+      <LoadingOverlay active={isLoading} spinner text="Logining In....">
+        <div className="login">
+          <a href="/" className="loginhome-icon">
+            <img src={home} />
+          </a>
+          <div className="login-container">
+            <div className="login-box">
+              <div className="login-left">
+                <h1>Sign In</h1>
+                <p>
+                  Dont have an account? <a href="/register">Sign Up</a>
+                </p>
 
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <h3>{error}</h3>
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  placeholder="Email"
-                  className="input-field"
-                  {...register("email")}
-                />
-
-                <label htmlFor="password">Password</label>
-                <div className="password-wrapper">
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <h3>{error}</h3>
+                  <label htmlFor="email">Email</label>
                   <input
-                    type="password"
-                    id="password"
-                    placeholder="Password"
+                    type="email"
+                    id="email"
+                    placeholder="Email"
                     className="input-field"
-                    name="password"
-                    {...register("password")}
+                    {...register("email")}
                   />
-                  <span className="password-icon"></span>
-                </div>
 
-                <button type="submit" className="signin-btn">
-                  Sign In
-                </button>
-              </form>
-
-              <div className="social-login">
-                <p>or continue with</p>
-                <div className="social-icons">
-                  <button className="google-btn">
-                    <GoogleLogin
-                      onSuccess={handleGoogleSuccess}
-                      onError={handleGoogleFailure}
-                      useOneTap // Hiển thị nút đăng nhập Google
+                  <label htmlFor="password">Password</label>
+                  <div className="password-wrapper">
+                    <input
+                      type="password"
+                      id="password"
+                      placeholder="Password"
+                      className="input-field"
+                      name="password"
+                      {...register("password")}
                     />
+                    <span className="password-icon"></span>
+                  </div>
+
+                  <button type="submit" className="signin-btn">
+                    Sign In
                   </button>
+                </form>
+
+                <div className="social-login">
+                  <p>or continue with</p>
+                  <div className="social-icons">
+                    <button className="google-btn">
+                      <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={handleGoogleFailure}
+                        useOneTap // Hiển thị nút đăng nhập Google
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="login-right">
-              <img src={koiFish} alt="Koi Fish" className="koi-fish" />
+              <div className="login-right">
+                <img src={koiFish} alt="Koi Fish" className="koi-fish" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </LoadingOverlay>
     </GoogleOAuthProvider>
     /* ) : (
     handleNavigateIfLoggedIn()*/

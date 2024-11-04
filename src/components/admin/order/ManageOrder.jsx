@@ -117,7 +117,7 @@ function OrderRow({
         <TableCell>{row.orderId}</TableCell>
         <TableCell>{row.customerId}</TableCell>
         <TableCell>{row.orderDate}</TableCell>
-        <TableCell>{row.paymentHistoryId == null ? "False" : "True"}</TableCell>
+        <TableCell>{(row.paymentHistoryId == null) ? "False" :    (row.paymentHistory.paymentStatusId == 2) ? "True" : "False"}</TableCell>
         <TableCell>{row.deliveryDate}</TableCell>
         <TableCell>{row.orderStatus != null ? row.orderStatus.orderStatusName : ""}</TableCell>
         <TableCell>
@@ -384,7 +384,7 @@ export default function ManageOrder() {
     const currentIndex = orderStatus.findIndex(
       (status) => status.orderStatusId === currentStatusId
     );
-    if (currentIndex === -1 || currentIndex === orderStatus.length - 1) {
+    if (currentIndex === -1 || currentIndex === orderStatus.length - 2) {
       setAlertMessage("Order is already complete or status not found.");
       setAlertSeverity("warning");
       setAlertOpen(true);
