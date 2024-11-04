@@ -117,7 +117,7 @@ function OrderRow({
         <TableCell>{row.orderId}</TableCell>
         <TableCell>{row.customerId}</TableCell>
         <TableCell>{row.orderDate}</TableCell>
-        <TableCell>{row.paymentHistoryId == null ? "False" : "True"}</TableCell>
+        <TableCell>{(row.paymentHistoryId == null) ? "False" :    (row.paymentHistory.paymentStatusId == 2) ? "True" : "False"}</TableCell>
         <TableCell>{row.deliveryDate}</TableCell>
         <TableCell>{row.orderStatus != null ? row.orderStatus.orderStatusName : ""}</TableCell>
         <TableCell>

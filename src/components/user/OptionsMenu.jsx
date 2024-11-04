@@ -12,6 +12,7 @@ import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from './MenuButton';
 import { Link } from "react-router-dom";
 import ComponentPath from '../../routes/ComponentPath';
+import {ButtonGroup } from '@mui/material';
 
 
 const MenuItem = styled(MuiMenuItem)({
@@ -69,12 +70,14 @@ export default function OptionsMenu() {
             },
           }}
         >
-          <ListItemText>
-            <Link to="/logout">Logout</Link>
-          </ListItemText>
-          <ListItemIcon>
-            <LogoutRoundedIcon fontSize="small" />
-          </ListItemIcon>
+          <Link to="/logout">
+            <ButtonGroup>
+              <ListItemText>Logout</ListItemText>
+              <ListItemIcon>
+                <LogoutRoundedIcon fontSize="small" />
+              </ListItemIcon>
+            </ButtonGroup>
+          </Link>
         </MenuItem>
       </Menu>
     </React.Fragment>

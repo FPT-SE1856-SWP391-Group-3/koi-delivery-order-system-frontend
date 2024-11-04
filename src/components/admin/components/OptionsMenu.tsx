@@ -10,6 +10,8 @@ import ListItemIcon, { listItemIconClasses } from '@mui/material/ListItemIcon';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import MoreVertRoundedIcon from '@mui/icons-material/MoreVertRounded';
 import MenuButton from "../components/MenuButton";
+import { ButtonGroup } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const MenuItem = styled(MuiMenuItem)({
   margin: '2px 0',
@@ -29,7 +31,7 @@ export default function OptionsMenu() {
       <MenuButton
         aria-label="Open menu"
         onClick={handleClick}
-        sx={{ borderColor: 'transparent' }}
+        sx={{ borderColor: "transparent" }}
       >
         <MoreVertRoundedIcon />
       </MenuButton>
@@ -39,17 +41,17 @@ export default function OptionsMenu() {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         sx={{
           [`& .${listClasses.root}`]: {
-            padding: '4px',
+            padding: "4px",
           },
           [`& .${paperClasses.root}`]: {
             padding: 0,
           },
           [`& .${dividerClasses.root}`]: {
-            margin: '4px -4px',
+            margin: "4px -4px",
           },
         }}
       >
@@ -60,18 +62,19 @@ export default function OptionsMenu() {
           onClick={handleClose}
           sx={{
             [`& .${listItemIconClasses.root}`]: {
-              ml: 'auto',
+              ml: "auto",
               minWidth: 0,
             },
           }}
         >
-
-         <ListItemText><a href="/logout">Logout</a> </ListItemText>
-          <ListItemIcon>
-            <LogoutRoundedIcon fontSize="small" />
-          </ListItemIcon>
-
-          
+          <Link to="/logout">
+            <ButtonGroup>
+              <ListItemText>Logout</ListItemText>
+              <ListItemIcon>
+                <LogoutRoundedIcon fontSize="small" />
+              </ListItemIcon>
+            </ButtonGroup>
+          </Link>
         </MenuItem>
       </Menu>
     </React.Fragment>
