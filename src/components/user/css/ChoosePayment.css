@@ -46,7 +46,7 @@ h2 {
 }
 
 .payment-methods div input[type="radio"]:checked::before {
-    content: '';
+    content: "";
     display: block;
     width: 14px;
     height: 14px;
@@ -134,15 +134,14 @@ h2 {
     position: absolute;
     top: 20px;
     left: 20px;
-  }
-  
-  .back-btn .back-icon {
+}
+
+.back-btn .back-icon {
     font-size: 24px;
     color: #333;
     transition: color 0.3s ease;
-  }
-  
-  .back-btn .back-icon:hover {
+}
+
+.back-btn .back-icon:hover {
     color: #ff4d4d;
-  }
-  
+}
