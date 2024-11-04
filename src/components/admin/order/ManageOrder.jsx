@@ -384,7 +384,7 @@ export default function ManageOrder() {
     const currentIndex = orderStatus.findIndex(
       (status) => status.orderStatusId === currentStatusId
     );
-    if (currentIndex === -1 || currentIndex === orderStatus.length - 1) {
+    if (currentIndex === -1 || currentIndex === orderStatus.length - 2) {
       setAlertMessage("Order is already complete or status not found.");
       setAlertSeverity("warning");
       setAlertOpen(true);
