@@ -71,6 +71,8 @@ import CallBackPayment from "../components/user/payment/CallBackPayment";
 import Dashboard from "../components/user/dashboard/Dashboard";
 import ViewOrders from "../components/user/profile/ViewOrders";
 import ManageRoute from "../components/admin/order/ManageRoute";
+import ForgetPassword from "../components/user/auth/ForgetPassword";
+import ResetPassword from "../components/user/auth/ResetPassword";
 
 // Function to get the access token from cookies
 var adminUrl = "/admin";
@@ -92,6 +94,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: "CustomerDocument/" + ":orderId",
+    element: <ManageDocument />,
   },
   {
     path: "/ViewOrders",
@@ -140,6 +146,16 @@ const router = createBrowserRouter([
   {
     path: "/recruitment",
     element: <Recruitment />,
+    index: true,
+  },
+  {
+    path: "/ForgetPassword",
+    element: <ForgetPassword />,
+    index: true,
+  },
+  {
+    path: "/ResetPassword",
+    element: <ResetPassword />,
     index: true,
   },
   // {
@@ -244,7 +260,7 @@ const router = createBrowserRouter([
         element: <EditDocument />,
       },
       {
-        path: ComponentPath.user.document.manageDocument + ":orderId",
+        path: ComponentPath.user.document.viewDocument + ":orderId",
         element: <ManageDocument />,
       },
       {

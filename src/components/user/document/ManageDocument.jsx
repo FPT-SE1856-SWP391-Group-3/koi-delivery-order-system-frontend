@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import ComponentPath from "routes/ComponentPath";
+import UserSideNav from "../UserSideNav";
+import { Button } from "@mui/material";
 
 export default function ManageDocument() {
   const [customerDocuments, setCustomerDocuments] = useState([{}]);
@@ -46,44 +48,65 @@ export default function ManageDocument() {
 
   return (
     <div>
-      <h1>Documents</h1>
-      <a href={ComponentPath.user.document.createDocument}>Add Document</a>
-      <table>
-        <thead>
-          <tr>
-            <th>DocumentId</th>
-            <th>OrderId</th>
-            <th>FilePath</th>
-            <th>UploadDate</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {customerDocuments.map((customerDocument) => (
-            <tr key={customerDocument.documentId}>
-              <td>{customerDocument.documentId}</td>
-              <td>{customerDocument.orderId}</td>
-              <td>{customerDocument.filePath}</td>
-              <td>
-                <img
-                  src={api.imageBuildUrl(customerDocument.filePath)}
-                  width="100px"
-                  alt="Certificate"
-                />
-              </td>
-              <td>{document.uploadDate}</td>
-              <td>{document.description}</td>
-              <td>
-                <button onClick={() => deleteDocument(document.documentId)}>
-                  Delete
-                </button>
-                <a href={ComponentPath.user.document.editDocument + document.documentId}>Update</a>
-              </td>
+      <UserSideNav>
+        <h1>Documents</h1>
+        <Button variant="contained" color="primary" href={ComponentPath.user.document.createDocument}>
+          Add Document
+        </Button>
+        <table>
+          <thead>
+            <tr>
+              <th>DocumentId</th>
+              <th>OrderId</th>
+              <th>FilePath</th>
+              <th>UploadDate</th>
+              <th>Description</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {customerDocuments.map((customerDocument) => (
+              <tr key={customerDocument.documentId}>
+                <td>{customerDocument.documentId}</td>
+                <td>{customerDocument.orderId}</td>
+                <td>
+                  {api.imageBuildUrl(customerDocument.filePath)}
+                </td>
+                <td>
+                  <Button variant="contained" color="primary">
+                    <a
+                      download
+                      href={"data:" + api.imageBuildUrl(customerDocument.filePath)}
+                      style={{ color: 'inherit', textDecoration: 'none' }}
+                    >
+                      Download
+                    </a>
+                  </Button>
+                </td>
+                <td>{customerDocument.uploadDate}</td>
+                <td>{customerDocument.description}</td>
+                <td>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => deleteDocument(customerDocument.documentId)}
+                  >
+                    Delete
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    href={ComponentPath.user.document.editDocument + customerDocument.documentId}
+                    style={{ marginLeft: '10px' }}
+                  >
+                    Update
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </UserSideNav>
     </div>
   );
 }

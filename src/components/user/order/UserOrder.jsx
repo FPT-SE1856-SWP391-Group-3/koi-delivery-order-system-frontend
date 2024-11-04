@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import AddDocument from "../document/AddDocument";
 import CreateFeedback from "../feedback/CreateFeedback";
@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 
 import { Grid } from "@mui/joy"; 
+import ComponentPath from "../../../routes/ComponentPath";
 
 
 export default function UserOrder() {
@@ -35,8 +36,8 @@ export default function UserOrder() {
   useEffect(() => {
     api.get("Orders/" + userId).then((data) => {
       if (data.success) {
-        setOrders(data.orders);
-        console.log(data.orders);
+        setOrders(data.order);
+        console.log(data.order);
       } else {
         console.log("Không có đơn hàng!");
       }
@@ -140,6 +141,9 @@ export default function UserOrder() {
                               }
                             >
                               Document
+                            </Button>
+                            <Button variant="contained" sx={{marginTop: "1em"}}>
+                              <Link to={ComponentPath.user.document.viewDocument + order.orderId}>View Document</Link>
                             </Button>
                           </TableCell>
                         </TableRow>

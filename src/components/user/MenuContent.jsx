@@ -26,7 +26,7 @@ const mainListItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, href: ComponentPath.user.dashboard },
   { text: 'Create Order', icon: <InventoryIcon />, href: ComponentPath.user.order.createOrder },
   { text: 'View Order', icon: <AppsIcon />, href: ComponentPath.user.order.viewOrder },
-  { text: 'Notification', icon: <NotificationsActiveIcon />, href: ComponentPath.user.notification.viewNotification },
+  { text: 'Notification', icon: <NotificationsActiveIcon />, href: ComponentPath.user.notification.viewNotification }
 ];
 
 const secondaryListItems = [

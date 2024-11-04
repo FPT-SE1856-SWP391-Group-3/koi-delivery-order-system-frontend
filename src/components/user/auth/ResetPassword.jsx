@@ -1,66 +1,75 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
-import google from "../../../assets/google.png";
-import facebook from "../../../assets/facebook.png";
-import apple from "../../../assets/apple.png";
 import koiFish from "../../../assets/koi-fish.png";
-import home from "../../../assets/home.png";
 import "../css/Register.css";
+import UserToast from "../alert/UserToast";
+import { ToastContainer } from "react-toastify";
+import { useState } from "react";
+import { LoadingOverlay } from "@achmadk/react-loading-overlay";
+import Bootstrap from "../props/Bootstrap";
+import { Button } from "@mui/material";
 
-export default function Register() {
+export default function ResetPassword() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const [param, setParam] = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-//   const onSubmit = async (data) => {
-//     try {
-//       api.post("Users/register", data).then((data) => {
-//         if (data.success) {
-//           alert("Đăng ký thành công!");
-//           navigate("/login");
-//         } else {
-//           alert("Đăng ký thất bại!");
-//         }
-//       });
-//     } catch (error) {
-//       console.error("Register failed", error);
-//       alert("Register failed. Please try again.");
-//     }
-//   };
+  const onSubmit = async (data) => {
+    if (data.password !== data.confirmPassword) {
+      UserToast("error", "Password and Confirm Password do not match");
+      return;
+    }
+    console.log(param);
+    const fullData = {
+      email: param.get("email"),
+      token: param.get("token"),
+      password: data.password,
+    };
+    try {
+      setIsLoading(true);
+      api.post("Users/password/reset", fullData).then((data) => {
+        if (data.success) {
+          setIsLoading(false);
+          UserToast("success", "Your password has been reset successfully");
+          navigate("/login");
+        } else {
+          setIsLoading(false);
+          UserToast("error", "Reset password failed");
+        }
+      }).catch((error) => {
+        console.error("Register failed", error);
+        setIsLoading(false);
+        UserToast("error", "Reset password failed!");
+      });
+    } catch (error) {
+      console.error("Register failed", error);
+      setIsLoading(false);
+      UserToast("error", "Reset password failed!");
+    }
+  };
 
   return (
     <>
-      <div className="home-icon">
-        <a href="/">
-          <img src={home} alt="Home" />
-        </a>
-      </div>
+      <LoadingOverlay active={isLoading} spinner text="Resetting Password....">
+        <ToastContainer />
+        <Bootstrap/>
+        <div className="container">
+          <div className="content-box">
+            <div className="image-side">
+              <img src={koiFish} alt="Koi Fish" className="koi-fish" />
+            </div>
 
-      <div className="container">
-        <div className="content-box">
-          <div className="image-side">
-            <img src={koiFish} alt="Koi Fish" className="koi-fish" />
-          </div>
-
-          <div className="form-side">
-            <h1>Sign Up!</h1>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <label htmlFor="email">Email/SDT</label>
-              <input
-                type="text"
-                id="email"
-                placeholder="Email or Phone Number"
-                {...register("email", { required: true })}
-                className="input-field"
-              />
-              {errors.email && <span>This field is required</span>}
-
-              {/* <label htmlFor="password">Password</label>
-              <div className="password-wrapper">
+            <div className="form-side">
+              <h1>Reset Password</h1>
+              <form onSubmit={handleSubmit(onSubmit)}>  
+                <label htmlFor="email">Password</label>
                 <input
                   type="password"
                   id="password"
@@ -68,17 +77,22 @@ export default function Register() {
                   {...register("password", { required: true })}
                   className="input-field"
                 />
-                {errors.password && <span>This field is required</span>}
-              </div> */}
-
-              <button type="submit" className="btn">
-                Reset Password
-              </button>
-            </form>
-
+                <label htmlFor="email">Confirm Password</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder="Confirm Password"
+                  {...register("confirmPassword", { required: true })}
+                  className="input-field"
+                />
+                <Button color="primary" variant="contained" type="submit" className="btn">
+                  Reset Password
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+      </LoadingOverlay>
     </>
   );
 }

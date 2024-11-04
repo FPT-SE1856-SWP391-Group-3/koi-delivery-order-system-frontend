@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { set, useForm } from "react-hook-form";
 import api from "../../../api/CallAPI";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
@@ -189,7 +189,7 @@ export default function Login() {
                     Sign In
                   </button>
                 </form>
-
+                <p style={{marginTop : "1em"}}><Link to="/ForgetPassword"> Forget Password </Link></p>
                 <div className="social-login">
                   <p>or continue with</p>
                   <div className="social-icons">
