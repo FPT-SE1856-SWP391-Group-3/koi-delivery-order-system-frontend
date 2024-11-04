@@ -1,87 +1,91 @@
 /* Container chính cho form */
 .update-orderservice-container {
-  max-width: 550px; /* Độ rộng form */
-  margin: 0 auto;
-  padding: 30px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  border: none;
-  text-align: center;
+    max-width: 550px; /* Độ rộng form */
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
 }
 
 /* Tiêu đề form */
 .form-title {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 /* Nhóm form và các trường nhập liệu */
 .update-orderservice-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* Khoảng cách giữa các trường */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Khoảng cách giữa các trường */
 }
 
 .form-group label {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 5px;
-  display: block;
-  font-weight: 500;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: 500;
 }
 
 /* Trường nhập liệu */
 input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 input[type="text"]:focus {
-  outline: none;
-  border-color: #16a085;
-  box-shadow: 0px 0px 8px rgba(22, 160, 133, 0.3);
+    outline: none;
+    border-color: #16a085;
+    box-shadow: 0px 0px 8px rgba(22, 160, 133, 0.3);
 }
 
 /* Nút cập nhật */
 .btn-update {
-  background-color: #16a085;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  padding: 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-  margin-top: 20px;
+    background-color: #16a085;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .btn-update:hover {
-  background-color: #138d75;
+    background-color: #138d75;
 }
 
 /* Nút quay lại */
 .back-button {
-  display: inline-block;
-  margin-bottom: 20px;
-  font-size: 14px;
-  color: #3498db;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 8px 12px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease, color 0.3s ease;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
 }
 
 .back-button:hover {
-  background-color: #2980b9;
-  color: white;
+    background-color: #2980b9;
+    color: white;
 }
