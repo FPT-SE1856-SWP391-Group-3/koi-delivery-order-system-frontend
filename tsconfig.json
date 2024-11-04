@@ -4,6 +4,5 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "types": ["node", "vite/client"],
-    "allowJs": true,
   }
 }
