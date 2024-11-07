@@ -45,7 +45,6 @@ export default function ForgetPassword() {
 
   return (
     <>
-      {" "}
       <LoadingOverlay active={isLoading} spinner text="Resting Password....">
         <ToastContainer />
         <div className="login">
