@@ -47,7 +47,7 @@ export default function ForgetPassword() {
       {" "}
       <LoadingOverlay active={isLoading} spinner text="Resting Password....">
         <ToastContainer />
-        <div className="container">
+        <div className="login">
           <div className="content-box">
             <div className="image-side">
               <img src={koiFish} alt="Koi Fish" className="koi-fish" />
@@ -65,7 +65,8 @@ export default function ForgetPassword() {
                   className="input-field"
                 />
                 {errors.email && <span>This field is required</span>}
-                <Button type="submit" className="btn">
+                <br />
+                <Button type="submit" variant="contained" className="btn">
                   Reset Password
                 </Button>
               </form>

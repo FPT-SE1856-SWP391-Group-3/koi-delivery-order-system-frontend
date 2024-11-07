@@ -148,16 +148,7 @@ const router = createBrowserRouter([
     element: <Recruitment />,
     index: true,
   },
-  {
-    path: "/ForgetPassword",
-    element: <ForgetPassword />,
-    index: true,
-  },
-  {
-    path: "/ResetPassword",
-    element: <ResetPassword />,
-    index: true,
-  },
+  
   // {
   //   path: ComponentPath.uploadFile,
   //   element: <UploadFile />,
@@ -170,7 +161,14 @@ const router = createBrowserRouter([
       //   path: ComponentPath.admin.route.manageroute,
       //   element: <ManageRoute />,
       // },
-
+      {
+        path: ComponentPath.user.user.forgetPassword,
+        element: <ForgetPassword />,
+      },
+      {
+        path: ComponentPath.user.user.resetPassword,
+        element: <ResetPassword />,
+      },
       {
         path: ComponentPath.user.dashboard,
         element: <UserDashboard />,

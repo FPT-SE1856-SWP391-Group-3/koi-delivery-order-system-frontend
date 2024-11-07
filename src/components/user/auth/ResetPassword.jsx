@@ -60,7 +60,7 @@ export default function ResetPassword() {
       <LoadingOverlay active={isLoading} spinner text="Resetting Password....">
         <ToastContainer />
         <Bootstrap/>
-        <div className="container">
+        <div className="login">
           <div className="content-box">
             <div className="image-side">
               <img src={koiFish} alt="Koi Fish" className="koi-fish" />
@@ -85,6 +85,8 @@ export default function ResetPassword() {
                   {...register("confirmPassword", { required: true })}
                   className="input-field"
                 />
+                {errors.password && <span>This field is required</span>}
+                <br />
                 <Button color="primary" variant="contained" type="submit" className="btn">
                   Reset Password
                 </Button>

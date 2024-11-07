@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import UserSideNav from "../UserSideNav";
 
 export default function AddDocument({ orderId, userId }) {
   const { control, register, handleSubmit } = useForm();
@@ -51,6 +52,7 @@ export default function AddDocument({ orderId, userId }) {
 
   return (
     <div>
+      <UserSideNav />
       <div className="">
         <div className="row">
           <div className="col-md-12">

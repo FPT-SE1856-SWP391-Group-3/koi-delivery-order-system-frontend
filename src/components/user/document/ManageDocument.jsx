@@ -4,7 +4,9 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import ComponentPath from "routes/ComponentPath";
 import UserSideNav from "../UserSideNav";
-import { Button } from "@mui/material";
+import { Box, Button, Paper, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Table } from "react-bootstrap";
+import { FitScreen, FitScreenOutlined } from "@mui/icons-material";
 
 export default function ManageDocument() {
   const [customerDocuments, setCustomerDocuments] = useState([{}]);
@@ -47,66 +49,66 @@ export default function ManageDocument() {
   }
 
   return (
-    <div>
-      <UserSideNav>
-        <h1>Documents</h1>
-        <Button variant="contained" color="primary" href={ComponentPath.user.document.createDocument}>
+    <UserSideNav>
+    <Box sx={{marginInline : "1em"}}>
+        <Typography variant="h4" gutterBottom>
+          Documents
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          href={ComponentPath.user.document.createDocument}
+          sx={{ mb: 2 }}
+        >
           Add Document
         </Button>
-        <table>
-          <thead>
-            <tr>
-              <th>DocumentId</th>
-              <th>OrderId</th>
-              <th>FilePath</th>
-              <th>UploadDate</th>
-              <th>Description</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customerDocuments.map((customerDocument) => (
-              <tr key={customerDocument.documentId}>
-                <td>{customerDocument.documentId}</td>
-                <td>{customerDocument.orderId}</td>
-                <td>
-                  {api.imageBuildUrl(customerDocument.filePath)}
-                </td>
-                <td>
-                  <Button variant="contained" color="primary">
-                    <a
-                      download
-                      href={"data:" + api.imageBuildUrl(customerDocument.filePath)}
-                      style={{ color: 'inherit', textDecoration: 'none' }}
-                    >
-                      Download
+        <TableContainer component={Paper} >
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Document ID</TableCell>
+                <TableCell>Order ID</TableCell>
+                <TableCell>File Path</TableCell>
+                <TableCell>Upload Date</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {customerDocuments.map((doc) => (
+                <TableRow key={doc.documentId}>
+                  <TableCell>{doc.documentId}</TableCell>
+                  <TableCell>{doc.orderId}</TableCell>
+                  <TableCell>
+                    <a href={api.imageBuildUrl(doc.filePath)} target="_blank" rel="noopener noreferrer">
+                      View File
                     </a>
-                  </Button>
-                </td>
-                <td>{customerDocument.uploadDate}</td>
-                <td>{customerDocument.description}</td>
-                <td>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => deleteDocument(customerDocument.documentId)}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    href={ComponentPath.user.document.editDocument + customerDocument.documentId}
-                    style={{ marginLeft: '10px' }}
-                  >
-                    Update
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </TableCell>
+                  <TableCell>{doc.uploadDate}</TableCell>
+                  <TableCell>{doc.description}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => deleteDocument(doc.documentId)}
+                      sx={{ mr: 1 }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      href={`${ComponentPath.user.document.editDocument}${doc.documentId}`}
+                    >
+                      Update
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        </Box>
       </UserSideNav>
-    </div>
   );
 }
