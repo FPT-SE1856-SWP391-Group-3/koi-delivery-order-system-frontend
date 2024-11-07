@@ -1,8 +1,20 @@
 import { useEffect, useState } from "react";
 import api from "../../../api/CallAPI";
-
-import "../certification/ManageCertification.css";
 import Modal from "react-modal";
+import AddIcon from "@mui/icons-material/Add";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Box,
+  Fab,
+  Typography,
+} from "@mui/material";
 import ComponentPath from "routes/ComponentPath";
 import AdminSideMenu from "../components/AdminSideMenu";
 
@@ -61,62 +73,91 @@ export default function ManageCertification() {
   }
 
   return (
-    <div>
+    <>
       <AdminSideMenu />
-      <div className="content-container">
-        <h1>Manage Certifications</h1>
-        <a
-          href={ComponentPath.admin.certification.createCertification}
-          className="add-certificate-btn"
+      <Box sx={{ ml: "260px", p: 3 }}>
+        <Typography variant="h5" gutterBottom fontWeight="bold">
+          Certificate Management
+        </Typography>
+
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ width: "10%" }}>
+                  <Typography fontWeight={600} align="center">
+                    CertificationId
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    CertificationName
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Image
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Actions
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {certifications.map((certification) => (
+                <TableRow key={certification.certificationId}>
+                  <TableCell align="center">
+                    {certification.certificationId}
+                  </TableCell>
+                  <TableCell align="center">
+                    {certification.certificationName}
+                  </TableCell>
+                  <TableCell align="center">
+                    <img
+                      src={api.imageBuildUrl(certification.certificateFile)}
+                      width="100px"
+                      alt="Certificate"
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button
+                      onClick={() =>
+                        openDeleteModal(certification.certificationId)
+                      }
+                      variant="contained"
+                      color="error"
+                      sx={{ marginRight: 1 }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      href={
+                        ComponentPath.admin.certification.editCertification +
+                        certification.certificationId
+                      }
+                      variant="contained"
+                      color="primary"
+                    >
+                      Update
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{ position: "fixed", bottom: 16, right: 16 }}
         >
-          Add Certification
-        </a>
-        <table className="certificate-table">
-          <thead>
-            <tr>
-              <th>CertificationId</th>
-              <th>CertificationName</th>
-              <th>CertificateFile</th>
-              <th>Image</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {certifications.map((certification) => (
-              <tr key={certification.certificationId}>
-                <td>{certification.certificationId}</td>
-                <td>{certification.certificationName}</td>
-                <td>{certification.certificateFile}</td>
-                <td>
-                  <img
-                    src={api.imageBuildUrl(certification.certificateFile)}
-                    width="100px"
-                    alt="Certificate"
-                  />
-                </td>
-                <td>
-                  <button
-                    onClick={() =>
-                      openDeleteModal(certification.certificationId)
-                    }
-                    className="delete-btn"
-                  >
-                    Delete
-                  </button>
-                  <a
-                    href={
-                      ComponentPath.admin.certification.editCertification +
-                      certification.certificationId
-                    }
-                    className="update-btn"
-                  >
-                    Update
-                  </a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          <AddIcon />
+        </Fab>
+
         {/* Modal xác nhận xóa */}
         <Modal
           isOpen={isDeleteModalOpen}
@@ -138,7 +179,7 @@ export default function ManageCertification() {
             </button>
           </div>
         </Modal>
-      </div>
-    </div>
+      </Box>
+    </>
   );
 }

@@ -106,169 +106,185 @@ function OrderRow({
   };
 
   return (
-    row != null && ((user.roleId === 3 && row.orderStatusId < 7) || (user.roleId === 4 && row.orderStatusId >= 7) || (user.roleId === 5)) &&
-    <React.Fragment>
-      <TableRow>
-        <TableCell>
-          <IconButton size="small" onClick={handleExpandClick}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell>{row.orderId}</TableCell>
-        <TableCell>{row.customerId}</TableCell>
-        <TableCell>{row.orderDate}</TableCell>
-        <TableCell>{(row.paymentHistoryId == null) ? "False" :    (row.paymentHistory.paymentStatusId == 2) ? "True" : "False"}</TableCell>
-        <TableCell>{row.deliveryDate}</TableCell>
-        <TableCell>{row.orderStatus != null ? row.orderStatus.orderStatusName : ""}</TableCell>
-        <TableCell>
-          <select
-            onChange={(event) =>
-              updateOrderStatusBySelect(event, row.orderId, row.orderStatusId)
-            }
-            value={row == null  ? "" : row.orderStatusId}
-          >
-            {orderStatus.map((status) => (
-              <option key={status.orderStatusId} value={status.orderStatusId}>
-                {status.orderStatusName}
-              </option>
-            ))}
-          </select>
-        </TableCell>
-        <TableCell>
-          <Box display="flex" flexDirection="column" gap={1}>
-            <Button
-              onClick={() =>
-                updateOrderStatusByClick(row.orderId, row.orderStatusId)
+    row != null &&
+    ((user.roleId === 3 && row.orderStatusId <= 7) ||
+      (user.roleId === 4 && row.orderStatusId >= 7) ||
+      user.roleId === 5) && (
+      <React.Fragment>
+        <TableRow>
+          <TableCell>
+            <IconButton size="small" onClick={handleExpandClick}>
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
+          <TableCell>{row.orderId}</TableCell>
+          <TableCell>{row.customerId}</TableCell>
+          <TableCell>{row.orderDate}</TableCell>
+          <TableCell>
+            {row.paymentHistoryId == null
+              ? "False"
+              : row.paymentHistory.paymentStatusId == 2
+                ? "True"
+                : "False"}
+          </TableCell>
+          <TableCell>{row.deliveryDate}</TableCell>
+          <TableCell>
+            {row.orderStatus != null ? row.orderStatus.orderStatusName : ""}
+          </TableCell>
+          <TableCell>
+            <select
+              onChange={(event) =>
+                updateOrderStatusBySelect(event, row.orderId, row.orderStatusId)
               }
+              value={row == null ? "" : row.orderStatusId}
             >
-              Update Status
-            </Button>
-            <Button
-              onClick={() => openDocumentModal(row.orderId, row.orderStatusId)}
-            >
-              Order Document
-            </Button>
-            <Button onClick={() => openReportModal(row.orderId)}>
-              Transportation Report
-            </Button>
-            <Button onClick={() => cancelOrder(row.orderId)} color="error">
-              Cancel
-            </Button>
-          </Box>
-        </TableCell>
-        <TableCell>{row.deliveryStaffId}</TableCell>
-      </TableRow>
+              {orderStatus.map((status) => (
+                <option key={status.orderStatusId} value={status.orderStatusId}>
+                  {status.orderStatusName}
+                </option>
+              ))}
+            </select>
+          </TableCell>
+          <TableCell>
+            <Box display="flex" flexDirection="column" gap={1}>
+              <Button
+                onClick={() =>
+                  updateOrderStatusByClick(row.orderId, row.orderStatusId)
+                }
+              >
+                Update Status
+              </Button>
+              <Button
+                onClick={() =>
+                  openDocumentModal(row.orderId, row.orderStatusId)
+                }
+              >
+                Order Document
+              </Button>
+              <Button onClick={() => openReportModal(row.orderId)}>
+                Transportation Report
+              </Button>
+              <Button onClick={() => cancelOrder(row.orderId)} color="error">
+                Cancel
+              </Button>
+            </Box>
+          </TableCell>
+          <TableCell>{row.deliveryStaffId}</TableCell>
+        </TableRow>
 
-      {/* Order Details */}
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box margin={2}>
-              <Typography variant="h6" gutterBottom component="div">
-                Order Details
-              </Typography>
-              <Table size="small" aria-label="order details">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Pickup Address</TableCell>
-                    <TableCell>Shipping Address</TableCell>
-                    <TableCell>Distance</TableCell>
-                    <TableCell>Delivery Time</TableCell>
-                    <TableCell>Total Price</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>{row.startAddress?.addressLine || ""}</TableCell>
-                    <TableCell>{row.endAddress?.addressLine || ""}</TableCell>
-                    <TableCell>{row.distance}</TableCell>
-                    <TableCell>{row.duration}</TableCell>
-                    <TableCell>{row.totalPrice}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-
-              <Box marginTop={2}>
+        {/* Order Details */}
+        <TableRow>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box margin={2}>
                 <Typography variant="h6" gutterBottom component="div">
-                  Koi Details
+                  Order Details
                 </Typography>
-                <Table size="small" aria-label="koi details">
+                <Table size="small" aria-label="order details">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Koi ID</TableCell>
-                      <TableCell>Koi Name</TableCell>
-                      <TableCell>Weight (kg)</TableCell>
-                      <TableCell>Koi Condition</TableCell>
-                      <TableCell>Price ($)</TableCell>
-                      <TableCell align="center">Actions</TableCell>
+                      <TableCell>Pickup Address</TableCell>
+                      <TableCell>Shipping Address</TableCell>
+                      <TableCell>Distance</TableCell>
+                      <TableCell>Delivery Time</TableCell>
+                      <TableCell>Total Price</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {Array.isArray(koiDetails) && koiDetails.length > 0 ? (
-                      koiDetails.map((koiDetail) => (
-                        <TableRow key={koiDetail.orderDetailId}>
-                          <TableCell>{koiDetail.koi.koiId}</TableCell>
-                          <TableCell>{koiDetail.koi.koiName}</TableCell>
-                          <TableCell>{koiDetail.koi.weight}</TableCell>
-                          <TableCell>{koiDetail.koiCondition}</TableCell>
-                          <TableCell>{koiDetail.koi.price}</TableCell>
-                          <TableCell align="center">
-                            <Button
-                              variant="contained"
-                              size="small"
-                              onClick={() =>
-                                openUpdateModal(
-                                  koiDetail.orderDetailId,
-                                  koiDetail.koiCondition
-                                )
-                              }
-                            >
-                              Update Condition
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={5} align="center">
-                          No Koi Details Available
-                        </TableCell>
-                      </TableRow>
-                    )}
+                    <TableRow>
+                      <TableCell>
+                        {row.startAddress?.addressLine || ""}
+                      </TableCell>
+                      <TableCell>{row.endAddress?.addressLine || ""}</TableCell>
+                      <TableCell>{row.distance}</TableCell>
+                      <TableCell>{row.duration}</TableCell>
+                      <TableCell>{row.totalPrice}</TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
+
+                <Box marginTop={2}>
+                  <Typography variant="h6" gutterBottom component="div">
+                    Koi Details
+                  </Typography>
+                  <Table size="small" aria-label="koi details">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Koi ID</TableCell>
+                        <TableCell>Koi Name</TableCell>
+                        <TableCell>Weight (kg)</TableCell>
+                        <TableCell>Koi Condition</TableCell>
+                        <TableCell>Price ($)</TableCell>
+                        <TableCell align="center">Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {Array.isArray(koiDetails) && koiDetails.length > 0 ? (
+                        koiDetails.map((koiDetail) => (
+                          <TableRow key={koiDetail.orderDetailId}>
+                            <TableCell>{koiDetail.koi.koiId}</TableCell>
+                            <TableCell>{koiDetail.koi.koiName}</TableCell>
+                            <TableCell>{koiDetail.koi.weight}</TableCell>
+                            <TableCell>{koiDetail.koiCondition}</TableCell>
+                            <TableCell>{koiDetail.koi.price}</TableCell>
+                            <TableCell align="center">
+                              <Button
+                                variant="contained"
+                                size="small"
+                                onClick={() =>
+                                  openUpdateModal(
+                                    koiDetail.orderDetailId,
+                                    koiDetail.koiCondition
+                                  )
+                                }
+                              >
+                                Update Condition
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      ) : (
+                        <TableRow>
+                          <TableCell colSpan={5} align="center">
+                            No Koi Details Available
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </Box>
               </Box>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-      {/* Update Condition Modal */}
-      <Dialog open={isUpdateModalOpen} onClose={closeUpdateModal}>
-        <DialogTitle>Update Koi Condition</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Enter a new condition for this koi:
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Koi Condition"
-            fullWidth
-            variant="outlined"
-            value={newKoiCondition}
-            onChange={(e) => setNewKoiCondition(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeUpdateModal} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={updateKoiCondition} color="primary">
-            Update
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </React.Fragment>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+        {/* Update Condition Modal */}
+        <Dialog open={isUpdateModalOpen} onClose={closeUpdateModal}>
+          <DialogTitle>Update Koi Condition</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Enter a new condition for this koi:
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              label="Koi Condition"
+              fullWidth
+              variant="outlined"
+              value={newKoiCondition}
+              onChange={(e) => setNewKoiCondition(e.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeUpdateModal} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={updateKoiCondition} color="primary">
+              Update
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
+    )
   );
 }
 
@@ -352,6 +368,17 @@ export default function ManageOrder() {
 
   const updateOrderStatusBySelect = async (event, orderId, currentStatusId) => {
     const selectedStatusId = parseInt(event.target.value);
+
+    // Check user role and status constraints
+    if (
+      (user.roleId === 3 && selectedStatusId > 7) ||
+      (user.roleId === 4 && selectedStatusId < 7)
+    ) {
+      setAlertMessage("You don't have permission to update to this status.");
+      setAlertSeverity("warning");
+      setAlertOpen(true);
+      return;
+    }
     if (selectedStatusId <= currentStatusId) {
       setAlertMessage("Please select the next status only.");
       setAlertSeverity("warning");
@@ -391,6 +418,18 @@ export default function ManageOrder() {
       return;
     }
     const nextStatusId = orderStatus[currentIndex + 1].orderStatusId;
+
+    // Check user role and status constraints
+    if (
+      (user.roleId === 3 && nextStatusId > 7) ||
+      (user.roleId === 4 && nextStatusId < 7)
+    ) {
+      setAlertMessage("You don't have permission to update to this status.");
+      setAlertSeverity("warning");
+      setAlertOpen(true);
+      return;
+    }
+
     try {
       const response = await api.put(`Orders/update-status/${orderId}`, {
         updateOrderStatusId: nextStatusId,
@@ -510,7 +549,7 @@ export default function ManageOrder() {
               <TableRow>
                 <TableCell />
                 <TableCell>
-                  <Typography fontWeight={600} allign="center">
+                  <Typography fontWeight={600} allign="center" width={100}>
                     Order ID
                   </Typography>
                 </TableCell>
@@ -558,19 +597,18 @@ export default function ManageOrder() {
             </TableHead>
 
             <TableBody>
-              {  filteredOrders &&
-              filteredOrders.map((order) => (
-                <OrderRow
-                  key={order == null ? 0 : order.orderId}
-                  row={order}
-                  orderStatus={orderStatus}
-                  updateOrderStatusBySelect={updateOrderStatusBySelect}
-                  updateOrderStatusByClick={updateOrderStatusByClick}
-                  openDocumentModal={openDocumentModal}
-                  openReportModal={openReportModal}
-                  cancelOrder={cancelOrder}
-                />
-              ))}
+              {filteredOrders?.map((order) => (
+                  <OrderRow
+                    key={order == null ? 0 : order.orderId}
+                    row={order}
+                    orderStatus={orderStatus}
+                    updateOrderStatusBySelect={updateOrderStatusBySelect}
+                    updateOrderStatusByClick={updateOrderStatusByClick}
+                    openDocumentModal={openDocumentModal}
+                    openReportModal={openReportModal}
+                    cancelOrder={cancelOrder}
+                  />
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

@@ -138,6 +138,7 @@ const ComponentPath = {
     },
     route: {
       manageRoute: admin + manage + manangeroute,
+      createRoute: admin + manage + manangeroute + create,
     },
   },
 };

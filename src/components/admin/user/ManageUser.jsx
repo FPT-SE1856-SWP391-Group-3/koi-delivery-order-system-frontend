@@ -142,7 +142,7 @@ export default function ManageUser() {
       <AdminSideMenu />
       <Box sx={{ ml: "260px", p: 3 }}>
         <Typography variant="h5" gutterBottom fontWeight="bold">
-          Manage Users
+          User Management
         </Typography>
 
         {/* Search bar */}
@@ -281,8 +281,8 @@ export default function ManageUser() {
               Confirm Deletion
             </Typography>
             <Typography variant="body1" color="text.secondary" paragraph>
-              Are you sure you want to delete this user? This action cannot be
-              undone.
+              Are you sure you want to <strong>Delete</strong> this user? This
+              action cannot be undone.
             </Typography>
             <Box
               sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}

@@ -1,9 +1,21 @@
 import { useState, useEffect } from "react";
 import api from "../../../api/CallAPI";
-import Sidebar from "../../user/common/Sidebar";
-import "../payment/ManagePaymentMethod.css";
 import AddPaymentType from "./AddPaymentMethod";
 import EditPaymentType from "./EditPaymentMethod";
+import AddIcon from "@mui/icons-material/Add";
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Fab,
+} from "@mui/material";
 import Modal from "react-modal";
 import AdminSideMenu from "../components/AdminSideMenu";
 
@@ -89,42 +101,75 @@ export default function ManagePaymentMethod() {
   };
 
   return (
-    <div>
+    <Box display="flex">
       <AdminSideMenu />
-      <div className="content-container">
-        <h1>Payment Methods</h1>
-        <button onClick={openAddModal} className="add-payment-btn">
-          Add Payment Method
-        </button>
-        <table className="payment-table">
-          <thead>
-            <th>PaymentMethodId</th>
-            <th>Name</th>
-            <th>Action</th>
-          </thead>
-          <tbody>
-            {paymentMethods.map((paymentType) => (
-              <tr key={paymentType.paymentMethodId}>
-                <td>{paymentType.paymentMethodId}</td>
-                <td>{paymentType.paymentMethodName}</td>
-                <td>
-                  <button
-                    onClick={() => openDeleteModal(paymentType.paymentMethodId)}
-                    className="delete-btn"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => openEditModal(paymentType.paymentMethodId)}
-                    className="update-btn"
-                  >
-                    Update
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <Box flex={1} padding={3}>
+        <Typography variant="h5" gutterBottom fontWeight="bold">
+          Payment Methods Management
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ height: 30 }}>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Name
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Payment Method
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Action
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {paymentMethods.map((paymentType) => (
+                <TableRow key={paymentType.paymentMethodId}>
+                  <TableCell align="center">
+                    {paymentType.paymentMethodId}
+                  </TableCell>
+                  <TableCell align="center">
+                    {paymentType.paymentMethodName}
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button
+                      onClick={() =>
+                        openDeleteModal(paymentType.paymentMethodId)
+                      }
+                      variant="contained"
+                      color="error"
+                      sx={{ marginRight: 1 }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      onClick={() => openEditModal(paymentType.paymentMethodId)}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Update
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {/* Floating Action Button for Adding Blog/News */}
+        <Fab
+          color="primary"
+          aria-label="add"
+          sx={{ position: "fixed", bottom: 16, right: 16 }}
+          onClick={openAddModal}
+        >
+          <AddIcon />
+        </Fab>
         {/* Modal thêm mới Payment Method */}
         <Modal
           isOpen={isAddModalOpen}
@@ -179,7 +224,7 @@ export default function ManagePaymentMethod() {
             </button>
           </div>
         </Modal>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
