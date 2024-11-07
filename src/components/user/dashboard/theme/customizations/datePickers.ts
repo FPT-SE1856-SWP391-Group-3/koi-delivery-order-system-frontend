@@ -4,7 +4,6 @@ import { pickersYearClasses, pickersMonthClasses, pickersDayClasses } from '@mui
 import { menuItemClasses } from '@mui/material/MenuItem';
 import { gray, brand } from '../../../../shared-theme/themePrimitives';
 
-/* eslint-disable import/prefer-default-export */
 export const datePickersCustomizations: PickerComponents<Theme> = {
   MuiPickersPopper: {
     styleOverrides: {
