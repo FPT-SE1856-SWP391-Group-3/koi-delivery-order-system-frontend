@@ -8,6 +8,7 @@ import {LoadingOverlay} from "@achmadk/react-loading-overlay";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import UserToast from "../alert/UserToast";
+import ComponentPath from "../../../routes/ComponentPath";
 
 export default function ForgetPassword() {
   const {
@@ -22,7 +23,7 @@ export default function ForgetPassword() {
   const onSubmit = async (data) => {
     const fullData = {
       email: data.email,
-      clientUri: window.location.origin + "/ResetPassword",
+      clientUri: window.location.origin + ComponentPath.user.user.resetPassword,
     };
     try {
       setIsLoading(true);

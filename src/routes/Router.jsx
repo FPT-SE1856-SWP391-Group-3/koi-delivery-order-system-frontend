@@ -96,22 +96,6 @@ const router = createBrowserRouter([
     element: <Dashboard />,
   },
   {
-    path: "CustomerDocument/" + ":orderId",
-    element: <ManageDocument />,
-  },
-  {
-    path: "/ViewOrders",
-    element: <ViewOrders />,
-  },
-  {
-    path: "/ChoosePayment",
-    element: <ChoosePayment />,
-  },
-  {
-    path: "/CallBackPayment",
-    element: <CallBackPayment />,
-  },
-  {
     path: "/login",
     element: <Login />,
   },
@@ -148,7 +132,14 @@ const router = createBrowserRouter([
     element: <Recruitment />,
     index: true,
   },
-  
+  {
+    path: ComponentPath.user.user.forgetPassword,
+    element: <ForgetPassword />,
+  },
+  {
+    path: ComponentPath.user.user.resetPassword,
+    element: <ResetPassword />,
+  },
   // {
   //   path: ComponentPath.uploadFile,
   //   element: <UploadFile />,
@@ -162,13 +153,14 @@ const router = createBrowserRouter([
       //   element: <ManageRoute />,
       // },
       {
-        path: ComponentPath.user.user.forgetPassword,
-        element: <ForgetPassword />,
+        path: "/payment/choose",
+        element: <ChoosePayment />,
       },
       {
-        path: ComponentPath.user.user.resetPassword,
-        element: <ResetPassword />,
+        path: "/payment/callback",
+        element: <CallBackPayment />,
       },
+
       {
         path: ComponentPath.user.dashboard,
         element: <UserDashboard />,

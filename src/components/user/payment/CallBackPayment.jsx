@@ -54,7 +54,7 @@ function CallBackPayment() {
   // };
 
   const apiOneTimePayment = () => {
-    api.post(`Payments/payment-callback?${query}`).then((data) => {
+    api.get(`Payments/payment-callback?${query}`).then((data) => {
       console.log(data);
     });
   };

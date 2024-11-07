@@ -189,7 +189,7 @@ export default function Login() {
                     Sign In
                   </button>
                 </form>
-                <p style={{marginTop : "1em"}}><Link to="/ForgetPassword"> Forget Password </Link></p>
+                <p style={{marginTop : "1em"}}><Link to={ComponentPath.user.user.forgetPassword}> Forget Password </Link></p>
                 <div className="social-login">
                   <p>or continue with</p>
                   <div className="social-icons">
