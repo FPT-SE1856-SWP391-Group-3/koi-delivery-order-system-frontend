@@ -104,7 +104,7 @@ export default function ManageTransportationReportDetails() {
                   OrderId
                 </TableCell>
                 <TableCell fontWeight={600} align="center">
-                  Issue ype Name
+                  Issue Type Name
                 </TableCell>
                 <TableCell fontWeight={600} align="center">
                   Transportation Report Date

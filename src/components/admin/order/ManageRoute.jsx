@@ -70,7 +70,7 @@ function OrderRow({ row }) {
           }
         } catch (routeError) {
           if (routeError.response && routeError.response.status === 404) {
-            console.log(`Route with ID ${Response.routeId} not found`);
+            console.log(`Route with ID ${response.routeId} not found`);
           }
         }
 
@@ -133,11 +133,8 @@ function OrderRow({ row }) {
         <TableCell>{row.customerId}</TableCell>
         <TableCell>{row.orderDate}</TableCell>
         <TableCell>
-          {row.paymentHistoryId == null
-            ? "False"
-            : row.paymentHistory.paymentStatusId === 2
-              ? "True"
-              : "False"}
+          {row.paymentHistoryId != null && row.paymentHistory && row.paymentHistory.paymentStatusId === 2
+              ? "True" : "False"}
         </TableCell>
         <TableCell>{row.deliveryDate}</TableCell>
         <TableCell>
@@ -199,6 +196,7 @@ function OrderRow({ row }) {
                           variant="contained"
                           color="primary"
                           onClick={() => handleAddOrderToRoute(route.routeId)}
+                          disabled={route.currentLoad >= route.capacity}
                         >
                           Add
                         </Button>
@@ -356,7 +354,7 @@ export default function ManageRoute() {
               <TableRow>
                 <TableCell />
                 <TableCell>
-                  <Typography fontWeight={600} allign="center">
+                  <Typography fontWeight={600} align="center">
                     Order ID
                   </Typography>
                 </TableCell>

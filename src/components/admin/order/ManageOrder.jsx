@@ -597,8 +597,7 @@ export default function ManageOrder() {
             </TableHead>
 
             <TableBody>
-              {filteredOrders &&
-                filteredOrders.map((order) => (
+              {filteredOrders?.map((order) => (
                   <OrderRow
                     key={order == null ? 0 : order.orderId}
                     row={order}

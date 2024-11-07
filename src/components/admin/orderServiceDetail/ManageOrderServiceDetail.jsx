@@ -196,9 +196,8 @@ export default function ManageOrderServiceDetail() {
 
         {/* Modal xác nhận xóa */}
         <Dialog
-          isOpen={isDeleteModalOpen}
-          onRequestClose={closeDeleteModal}
-          overlayClassName="overlay"
+          open={isDeleteModalOpen}  
+          onClose={closeDeleteModal} 
         >
           <DialogTitle align="center">Confirm Deletion</DialogTitle>
           <DialogContentText>
