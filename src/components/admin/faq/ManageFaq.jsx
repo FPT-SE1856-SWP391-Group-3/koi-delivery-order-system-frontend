@@ -100,8 +100,8 @@ export default function ManageFaq() {
     <Box display="flex">
       <AdminSideMenu />
       <Box flex={1} padding={3}>
-        <Typography variant="h4" gutterBottom>
-          Manage FAQs
+        <Typography variant="h5" gutterBottom fontWeight="bold">
+          FAQs Management
         </Typography>
 
         <TableContainer component={Paper}>
@@ -170,24 +170,32 @@ export default function ManageFaq() {
         </Fab>
 
         {/* Delete Confirmation Dialog */}
-        <Dialog
-          open={isDeleteDialogOpen}
-          onClose={closeDeleteDialog}
-          aria-labelledby="delete-dialog-title"
-          aria-describedby="delete-dialog-description"
-        >
-          <DialogTitle id="delete-dialog-title">Confirm Deletion</DialogTitle>
+        <Dialog open={isDeleteDialogOpen} onClose={closeDeleteDialog}>
+          <DialogTitle id="delete-dialog-title" align="center">
+            Confirm Deletion
+          </DialogTitle>
           <DialogContent>
-            <DialogContentText id="delete-dialog-description">
-              Are you sure you want to delete this FAQ?
+            <DialogContentText id="delete-dialog-description" align="center">
+              Are you sure you want to <strong>Delete</strong> this FAQ?
             </DialogContentText>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={confirmDeleteFaq} color="error">
-              Yes
+          <DialogActions
+            sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}
+          >
+            <Button
+              onClick={confirmDeleteFaq}
+              variant="contained"
+              color="error"
+            >
+              Delete
             </Button>
-            <Button onClick={closeDeleteDialog} color="primary" autoFocus>
-              No
+            <Button
+              onClick={closeDeleteDialog}
+              variant="outlined"
+              color="primary"
+              autoFocus
+            >
+              Cancel
             </Button>
           </DialogActions>
         </Dialog>

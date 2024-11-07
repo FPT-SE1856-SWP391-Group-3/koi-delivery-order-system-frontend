@@ -104,7 +104,7 @@ export default function ManageBlogNews() {
     <Box display="flex">
       <AdminSideMenu />
       <Box flex={1} padding={3}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h5" gutterBottom fontWeight="bold">
           Blog and News Management
         </Typography>
 

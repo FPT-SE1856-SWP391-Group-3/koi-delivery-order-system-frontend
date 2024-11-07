@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import api from "../../../api/CallAPI";
-import Sidebar from "../../user/common/Sidebar";
-import "../report/ManageTransportationReportDetails.css";
 import EditTransportationReportDetails from "./EditTransportationReportDetails";
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import Modal from "react-modal";
 import AdminSideMenu from "../components/AdminSideMenu";
 
@@ -77,47 +87,74 @@ export default function ManageTransportationReportDetails() {
   };
 
   return (
-    <div>
+    <Box display="flex">
       <AdminSideMenu />
-      <div className="content-container">
-        <h1>Manage Transportation Report</h1>
-        <table className="report-table">
-          <thead>
-            <tr>
-              <th>ReportId</th>
-              <th>OrderId</th>
-              <th>Issue ype Name</th>
-              <th>Transportation Report Date</th>
-              <th>Description</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reports.map((report) => (
-              <tr key={report.transReportDetailId}>
-                <td>{report.transReportDetailId}</td>
-                <td>{report.orderId}</td>
-                <td>{report.issueTypeName}</td>
-                <td>{report.transportationReportDate}</td>
-                <td>{report.description}</td>
-                <td>
-                  <button
-                    className="delete-btn"
-                    onClick={() => openDeleteModal(report.transReportDetailId)}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => openUpdateModal(report.transReportDetailId)}
-                    className="change-btn"
-                  >
-                    Update
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <Box flex={1} padding={3}>
+        <Typography variant="h5" gutterBottom fontWeight="bold">
+          Transportation Report Management
+        </Typography>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell fontWeight={600} align="center">
+                  ReportId
+                </TableCell>
+                <TableCell fontWeight={600} align="center">
+                  OrderId
+                </TableCell>
+                <TableCell fontWeight={600} align="center">
+                  Issue Type Name
+                </TableCell>
+                <TableCell fontWeight={600} align="center">
+                  Transportation Report Date
+                </TableCell>
+                <TableCell fontWeight={600} align="center">
+                  Description
+                </TableCell>
+                <TableCell fontWeight={600} align="center">
+                  Action
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {reports.map((report) => (
+                <TableRow key={report.transReportDetailId}>
+                  <TableCell align="center">
+                    {report.transReportDetailId}
+                  </TableCell>
+                  <TableCell align="center">{report.orderId}</TableCell>
+                  <TableCell align="center">{report.issueTypeName}</TableCell>
+                  <TableCell align="center">
+                    {report.transportationReportDate}
+                  </TableCell>
+                  <TableCell align="center">{report.description}</TableCell>
+                  <TableCell align="center">
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() =>
+                        openDeleteModal(report.transReportDetailId)
+                      }
+                      sx={{ marginRight: 1 }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() =>
+                        openUpdateModal(report.transReportDetailId)
+                      }
+                    >
+                      Update
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
         {/* Modal xác nhận xóa */}
         <Modal
           isOpen={isDeleteModalOpen}
@@ -155,7 +192,7 @@ export default function ManageTransportationReportDetails() {
             />
           )}
         </Modal>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
