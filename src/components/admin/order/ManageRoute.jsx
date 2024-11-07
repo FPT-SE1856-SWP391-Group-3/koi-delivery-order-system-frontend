@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import dayjs from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import AdminSideMenu from "../components/AdminSideMenu";
 import {
   Box,
@@ -14,6 +11,7 @@ import {
   TableRow,
   Paper,
   Button,
+  Modal,
   IconButton,
   Typography,
   Collapse,
@@ -23,30 +21,22 @@ import {
   KeyboardArrowUp as KeyboardArrowUpIcon,
 } from "@mui/icons-material";
 import api from "../../../api/CallAPI";
-import Modal from "react-modal";
-import CreateOrderDocument from "./CreateOrderDocument";
-import CreateTransportationReportDetails from "../report/CreateTransportationReportDetails";
 
-function OrderRow({
-  row,
-  orderStatus,
-  updateOrderStatusBySelect,
-  updateOrderStatusByClick,
-  openDocumentModal,
-  openReportModal,
-  cancelOrder,
-}) {
+function OrderRow({ row }) {
   const [open, setOpen] = useState(false);
   const [koiDetails, setKoiDetails] = useState([]);
+  const [routeModalOpen, setRouteModalOpen] = useState(false);
+  const [matchingRoutes, setMatchingRoutes] = useState([]);
+  const [error, setError] = useState(null); // State for error handling
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const fetchKoiDetails = async (orderId) => {
     try {
       const data = await api.get(
         `OrderDetails/OrderDetailsByOrderId/${orderId}`
       );
-
       if (data.success) {
-        setKoiDetails(data.koiDetails || []);
+        setKoiDetails(data.orderDetails || []);
       } else {
         console.log("No koi details found!");
       }
@@ -59,10 +49,78 @@ function OrderRow({
     setOpen(!open);
     if (!open && koiDetails.length === 0) {
       fetchKoiDetails(row.orderId);
-      console.log(api.get(`OrderDetails/OrderDetailsByOrderId/${row.orderId}`));
     }
   };
 
+  // Fetch matching routes and open the modal
+  const handleAddRouteClick = async () => {
+    try {
+      const response = await api.get(
+        `RoutesControllers/findMatchingRouteForOrder/${row.orderId}`
+      );
+      if (response.success) {
+        const detailedRoutes = [];
+
+        try {
+          const routeResponse = await api.get(
+            `RoutesControllers/${response.routeId}`
+          );
+          if (routeResponse.success) {
+            detailedRoutes.push(routeResponse.route);
+          }
+        } catch (routeError) {
+          if (routeError.response && routeError.response.status === 404) {
+            console.log(`Route with ID ${Response.routeId} not found`);
+          }
+        }
+
+        setMatchingRoutes(detailedRoutes);
+        setRouteModalOpen(true);
+      } else {
+        setMatchingRoutes([]);
+        setError("No Route Match!");
+        setRouteModalOpen(true);
+      }
+    } catch (error) {
+      console.error("Error fetching matching routes:", error);
+      setError("An error occurred while fetching routes.");
+      setRouteModalOpen(true);
+    }
+  };
+
+  // Function to add the order to the selected route
+  // Function to add the order to the selected route
+  const handleAddOrderToRoute = async (routeId) => {
+    try {
+      // Check if routeId is valid
+      if (!routeId) {
+        throw new Error("Invalid routeId");
+      }
+
+      const payload = { routeId, orderId: row.orderId };
+      console.log("Payload:", payload); // Add this to verify the payload
+
+      const response = await api.post(
+        "RoutesControllers/addOrderToRoute",
+        payload
+      );
+
+      // Check if response is valid
+      if (!response || !response.success) {
+        throw new Error("Invalid response");
+      }
+
+      if (response.success) {
+        alert("Order successfully added to route!");
+        setRouteModalOpen(false); // Close modal after successful addition
+      } else {
+        alert("Failed to add order to route.");
+      }
+    } catch (error) {
+      console.error("Error adding order to route:", error);
+      alert("An error occurred while adding the order to the route.");
+    }
+  };
   return (
     <React.Fragment>
       <TableRow>
@@ -74,47 +132,101 @@ function OrderRow({
         <TableCell>{row.orderId}</TableCell>
         <TableCell>{row.customerId}</TableCell>
         <TableCell>{row.orderDate}</TableCell>
-        <TableCell>{row.paymentHistoryId == null ? "False" : "True"}</TableCell>
-        <TableCell>{row.deliveryDate}</TableCell>
-        <TableCell>{row.orderStatus.orderStatusName}</TableCell>
         <TableCell>
-          <select
-            onChange={(event) =>
-              updateOrderStatusBySelect(event, row.orderId, row.orderStatusId)
-            }
-            value={row.orderStatusId}
-          >
-            {orderStatus.map((status) => (
-              <option key={status.orderStatusId} value={status.orderStatusId}>
-                {status.orderStatusName}
-              </option>
-            ))}
-          </select>
+          {row.paymentHistoryId == null
+            ? "False"
+            : row.paymentHistory.paymentStatusId === 2
+              ? "True"
+              : "False"}
+        </TableCell>
+        <TableCell>{row.deliveryDate}</TableCell>
+        <TableCell>
+          {row.orderStatus ? row.orderStatus.orderStatusName : ""}
         </TableCell>
         <TableCell>
-          <Box display="flex" flexDirection="column" gap={1}>
-            <Button
-              onClick={() =>
-                updateOrderStatusByClick(row.orderId, row.orderStatusId)
-              }
-            >
-              Update Status
-            </Button>
-            <Button
-              onClick={() => openDocumentModal(row.orderId, row.orderStatusId)}
-            >
-              Order Document
-            </Button>
-            <Button onClick={() => openReportModal(row.orderId)}>
-              Transportation Report
-            </Button>
-            <Button onClick={() => cancelOrder(row.orderId)} color="error">
-              Cancel
-            </Button>
-          </Box>
+          <Button variant="contained" onClick={handleAddRouteClick}>
+            Add Route
+          </Button>
         </TableCell>
         <TableCell>{row.deliveryStaffId}</TableCell>
       </TableRow>
+      {/* Modal for Matching Routes */}
+      <Modal
+        open={routeModalOpen}
+        onClose={() => setRouteModalOpen(false)}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 600,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <Typography id="modal-title" variant="h6" component="h2">
+            Select a Route for Order #{row.orderId}
+          </Typography>
+          {matchingRoutes.length > 0 ? (
+            <TableContainer component={Paper} sx={{ mt: 2 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Route ID</TableCell>
+                    <TableCell>Current Location</TableCell>
+                    <TableCell>Capacity</TableCell>
+                    <TableCell>Current Load</TableCell>
+                    <TableCell>Delivery Staff ID</TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {matchingRoutes.map((route) => (
+                    <TableRow key={route.routeId}>
+                      <TableCell>{route.routeId}</TableCell>
+                      <TableCell>{route.currentLocation}</TableCell>
+                      <TableCell>{route.capacity}</TableCell>
+                      <TableCell>{route.currentLoad}</TableCell>
+                      <TableCell>{route.deliveryStaffId}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => handleAddOrderToRoute(route.routeId)}
+                        >
+                          Add
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Typography
+              variant="body1"
+              color="textSecondary"
+              align="center"
+              sx={{ mt: 2 }}
+            >
+              {error || "No Route Match!"}
+            </Typography>
+          )}
+          <Box mt={2} display="flex" justifyContent="flex-end">
+            <Button variant="outlined" onClick={() => setRouteModalOpen(false)}>
+              Close
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+
+      {/* Order Details */}
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
           <Collapse in={open} timeout="auto" unmountOnExit>
@@ -129,7 +241,7 @@ function OrderRow({
                     <TableCell>Shipping Address</TableCell>
                     <TableCell>Distance</TableCell>
                     <TableCell>Delivery Time</TableCell>
-                    <TableCell>Total Amount</TableCell>
+                    <TableCell>Total Price</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -150,22 +262,22 @@ function OrderRow({
                 <Table size="small" aria-label="koi details">
                   <TableHead>
                     <TableRow>
-                      <TableCell>OrderDetailId</TableCell>
+                      <TableCell>Koi ID</TableCell>
                       <TableCell>Koi Name</TableCell>
                       <TableCell>Weight (kg)</TableCell>
+                      <TableCell>Koi Condition</TableCell>
                       <TableCell>Price ($)</TableCell>
-                      <TableCell>Koi Type</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {Array.isArray(koiDetails) && koiDetails.length > 0 ? (
-                      koiDetails.map((koi) => (
-                        <TableRow key={koi.orderDetailId}>
-                          <TableCell>{koi.orderDetailId}</TableCell>
-                          <TableCell>{koi.koiName}</TableCell>
-                          <TableCell>{koi.weight}</TableCell>
-                          <TableCell>{koi.price}</TableCell>
-                          <TableCell>{koi.koiType}</TableCell>
+                      koiDetails.map((koiDetail) => (
+                        <TableRow key={koiDetail.orderDetailId}>
+                          <TableCell>{koiDetail.koi.koiId}</TableCell>
+                          <TableCell>{koiDetail.koi.koiName}</TableCell>
+                          <TableCell>{koiDetail.koi.weight}</TableCell>
+                          <TableCell>{koiDetail.koiCondition}</TableCell>
+                          <TableCell>{koiDetail.koi.price}</TableCell>
                         </TableRow>
                       ))
                     ) : (
@@ -188,51 +300,33 @@ function OrderRow({
 
 OrderRow.propTypes = {
   row: PropTypes.object.isRequired,
-  orderStatus: PropTypes.array.isRequired,
-  updateOrderStatusBySelect: PropTypes.func.isRequired,
-  updateOrderStatusByClick: PropTypes.func.isRequired,
-  openDocumentModal: PropTypes.func.isRequired,
-  openReportModal: PropTypes.func.isRequired,
-  cancelOrder: PropTypes.func.isRequired,
 };
 
 export default function ManageRoute() {
   const [order, setOrder] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [orderStatus, setOrderStatus] = useState([]);
-  const [user, setUser] = useState(() =>
-    JSON.parse(localStorage.getItem("user"))
-  );
-  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
-  const [selectedOrderStatusId, setSelectedOrderStatusId] = useState(null);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     fetchOrders();
     fetchOrderStatus();
   }, []);
 
-  useEffect(() => {
-    // Filter orders with deliveryStaffId as null and orderStatusId as 6
-    const filtered = order.filter((o) => o.deliveryStaffId === null);
-    setFilteredOrders(filtered);
-  }, [order]);
-
   const fetchOrders = async () => {
     try {
-      const data = await api.get(`Orders/${user.userId}`);
-      if (data.success) {
-        // Filter orders with orderStatusId = 6 and deliveryStaffId as null
+      const data = await api.get("Orders"); // Make sure this URL is correct and reachable
+      if (data.success && Array.isArray(data.order)) {
         const filtered = data.order.filter(
-          (o) => o.orderStatusId === 6 && o.deliveryStaffId === null
+          (o) => o.orderStatusId === 7 && o.deliveryStaffId === null
         );
-        setOrder(data.order); // Set all orders if needed for other purposes
-        setFilteredOrders(filtered); // Only set the filtered orders for display
+        setOrder(data.order);
+        setFilteredOrders(filtered);
       } else {
-        console.log("No orders found!");
+        console.log("No orders found or incorrect response structure:", data);
       }
     } catch (error) {
+      console.error("Error fetching orders:", error); // Log the error for debugging
       alert("An error occurred while fetching orders.");
     }
   };
@@ -250,167 +344,76 @@ export default function ManageRoute() {
     }
   };
 
-  const updateOrderStatusBySelect = async (event, orderId, currentStatusId) => {
-    const selectedStatusId = parseInt(event.target.value);
-    if (selectedStatusId <= currentStatusId) {
-      alert("Please select the next status only.");
-      return;
-    }
-    try {
-      await api.put(`Orders/update-status/${orderId}`, {
-        updateOrderStatusId: selectedStatusId,
-      });
-      setOrder((orders) =>
-        orders.map((order) =>
-          order.orderId === orderId
-            ? { ...order, orderStatusId: selectedStatusId }
-            : order
-        )
-      );
-      alert("Order status updated successfully!");
-    } catch (error) {
-      console.error("Error during update:", error);
-      alert("An error occurred during status update.");
-    }
-  };
-
-  const updateOrderStatusByClick = async (orderId, currentStatusId) => {
-    const currentIndex = orderStatus.findIndex(
-      (status) => status.orderStatusId === currentStatusId
-    );
-    if (currentIndex === -1 || currentIndex === orderStatus.length - 1) {
-      alert("Order is already complete or status not found.");
-      return;
-    }
-    const nextStatusId = orderStatus[currentIndex + 1].orderStatusId;
-    try {
-      await api.put(`Orders/update-status/${orderId}`, {
-        updateOrderStatusId: nextStatusId,
-      });
-      setOrder((orders) =>
-        orders.map((order) =>
-          order.orderId === orderId
-            ? { ...order, orderStatusId: nextStatusId }
-            : order
-        )
-      );
-      alert("Order status updated successfully!");
-    } catch (error) {
-      console.error("Error during update:", error);
-      alert("An error occurred during status update.");
-    }
-  };
-
-  const cancelOrder = async (orderId) => {
-    const finalStatusId = orderStatus[orderStatus.length - 1]?.orderStatusId;
-    if (!finalStatusId) {
-      alert("Final status not found.");
-      return;
-    }
-    try {
-      await api.put(`Orders/update-status/${orderId}`, {
-        updateOrderStatusId: finalStatusId,
-      });
-      setOrder((orders) =>
-        orders.map((order) =>
-          order.orderId === orderId
-            ? { ...order, orderStatusId: finalStatusId }
-            : order
-        )
-      );
-      alert("Order canceled successfully!");
-    } catch (error) {
-      console.error("Error canceling order:", error);
-      alert("An error occurred while canceling the order.");
-    }
-  };
-
-  const openDocumentModal = (orderId, orderStatusId) => {
-    setSelectedOrderId(orderId);
-    setSelectedOrderStatusId(orderStatusId);
-    setIsDocumentModalOpen(true);
-  };
-
-  const closeDocumentModal = () => {
-    setIsDocumentModalOpen(false);
-    setSelectedOrderId(null);
-    setSelectedOrderStatusId(null);
-  };
-
-  const openReportModal = (orderId) => {
-    setSelectedOrderId(orderId);
-    setIsReportModalOpen(true);
-  };
-
-  const closeReportModal = () => {
-    setIsReportModalOpen(false);
-    setSelectedOrderId(null);
-  };
-
   return (
     <Box display="flex">
-      {/* Admin Side Menu */}
-      <Box width="20%" padding={2}>
-        <AdminSideMenu />
-      </Box>
+      <AdminSideMenu />
 
       {/* Main Table Area */}
-      <Box width="80%" padding={2}>
+      <Box width="100%" padding={2}>
         <TableContainer component={Paper}>
           <Table aria-label="collapsible table">
             <TableHead>
               <TableRow>
                 <TableCell />
-                <TableCell>Order ID</TableCell>
-                <TableCell>Customer ID</TableCell>
-                <TableCell>Order Date</TableCell>
-                <TableCell>Is Payment</TableCell>
-                <TableCell>Delivery Date</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Edit Status</TableCell>
-                <TableCell>Action</TableCell>
-                <TableCell>Delivering Staff</TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Order ID
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Customer ID
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Order Date
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Is Payment
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Delivery Date
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Status
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Action
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} allign="center">
+                    Delivering Staff
+                  </Typography>
+                </TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
-              {filteredOrders.map((order) => (
-                <OrderRow
-                  key={order.orderId}
-                  row={order}
-                  orderStatus={orderStatus}
-                  updateOrderStatusBySelect={updateOrderStatusBySelect}
-                  updateOrderStatusByClick={updateOrderStatusByClick}
-                  openDocumentModal={openDocumentModal}
-                  openReportModal={openReportModal}
-                  cancelOrder={cancelOrder}
-                />
-              ))}
+              {filteredOrders.length > 0 ? (
+                filteredOrders.map((order) => (
+                  <OrderRow key={order.orderId} row={order} />
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={9} align="center">
+                    No orders available for route creation.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Box>
-
-      <Modal isOpen={isDocumentModalOpen} onRequestClose={closeDocumentModal}>
-        <button onClick={closeDocumentModal}>Close</button>
-        {selectedOrderId && selectedOrderStatusId && (
-          <CreateOrderDocument
-            orderId={selectedOrderId}
-            orderStatusId={selectedOrderStatusId}
-            onClose={closeDocumentModal}
-          />
-        )}
-      </Modal>
-
-      <Modal isOpen={isReportModalOpen} onRequestClose={closeReportModal}>
-        <button onClick={closeReportModal}>Close</button>
-        {selectedOrderId && (
-          <CreateTransportationReportDetails
-            orderId={selectedOrderId}
-            onClose={closeReportModal}
-          />
-        )}
-      </Modal>
     </Box>
   );
 }

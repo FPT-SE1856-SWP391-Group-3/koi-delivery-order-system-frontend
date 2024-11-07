@@ -4,7 +4,6 @@ import {
   Button,
   Dialog,
   DialogActions,
-  DialogContent,
   DialogContentText,
   DialogTitle,
   Paper,
@@ -116,7 +115,7 @@ export default function ManageOrderServiceDetail() {
     <Box display="flex">
       <AdminSideMenu />
       <Box flex={1} padding={3}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h5" gutterBottom fontWeight="bold">
           Manage Order Services
         </Typography>
         <TableContainer component={Paper}>
@@ -196,23 +195,28 @@ export default function ManageOrderServiceDetail() {
         </Fab>
 
         {/* Modal xác nhận xóa */}
-        <Modal
+        <Dialog
           isOpen={isDeleteModalOpen}
           onRequestClose={closeDeleteModal}
-          className="modal"
           overlayClassName="overlay"
         >
-          <h2>Confirm Deletion</h2>
-          <p>Are you sure you want to delete this Order Service Detail?</p>
-          <div className="modal-buttons">
-            <button className="confirm-btn" onClick={confirmDeleteOrderService}>
+          <DialogTitle align="center">Confirm Deletion</DialogTitle>
+          <DialogContentText>
+            Are you sure you want to <strong>Delete</strong> this Order Service
+            Detail?
+          </DialogContentText>
+          <DialogActions
+            sx={{ display: "flex", justifyContent: "center", gap: 2, mt: 3 }}
+          >
+            <Button onClick={confirmDeleteOrderService} color="error">
               Yes
-            </button>
-            <button className="cancel-btn" onClick={closeDeleteModal}>
+            </Button>
+            <Button onClick={closeDeleteModal} color="primary">
               No
-            </button>
-          </div>
-        </Modal>
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         {/* Modal thêm mới Order Service Detail */}
         <Modal
           isOpen={isAddModalOpen}
@@ -220,9 +224,6 @@ export default function ManageOrderServiceDetail() {
           className="modal"
           overlayClassName="overlay"
         >
-          <button className="btn-close" onClick={closeAddModal}>
-            X
-          </button>
           <AddOrderServiceDetail
             onClose={closeAddModal}
             onAddSuccess={fetchOrderServiceDetails}

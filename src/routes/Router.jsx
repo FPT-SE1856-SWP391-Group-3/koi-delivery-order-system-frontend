@@ -71,6 +71,7 @@ import CallBackPayment from "../components/user/payment/CallBackPayment";
 import Dashboard from "../components/user/dashboard/Dashboard";
 import ViewOrders from "../components/user/profile/ViewOrders";
 import ManageRoute from "../components/admin/order/ManageRoute";
+import CreateRoute from "../components/admin/order/CreateRoute";
 
 // Function to get the access token from cookies
 var adminUrl = "/admin";
@@ -273,6 +274,10 @@ const router = createBrowserRouter([
           {
             path: ComponentPath.admin.route.manageRoute,
             element: <ManageRoute />,
+          },
+          {
+            path: ComponentPath.admin.route.createRoute,
+            element: <CreateRoute />,
           },
           {
             path: ComponentPath.admin.user.manageUser,
