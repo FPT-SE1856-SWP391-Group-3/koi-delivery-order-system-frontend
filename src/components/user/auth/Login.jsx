@@ -1,23 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import api from "../../../api/CallAPI";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import "../css/Login.css";
 import koiFish from "../../../assets/koi-fish.png";
 import home from "../../../assets/home.png";
 import ComponentPath from "routes/ComponentPath";
-import { Alert } from "@mui/material";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import UserToast from "../alert/UserToast";
 import { LoadingOverlay } from '@achmadk/react-loading-overlay';
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
-  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -38,10 +32,11 @@ export default function Login() {
             switch (data.user.roleId) {
               case 5:
                 console.log("redirect to admin");
-                navigate(ComponentPath.admin.dashboard);
+                var admin = ComponentPath.admin.dashboard;
+                navigate(admin);
                 break;
               case 2:
-                navigate(ComponentPath.user.profile.viewProfile);
+                navigate(ComponentPath.user.dashboard);
                 break;
               case 3:
                 navigate(ComponentPath.admin.dashboard);
@@ -59,7 +54,6 @@ export default function Login() {
           console.log("Đăng nhập thất bại!");
           setError("Đăng nhập thất bại!");
           setIsLoading(false);
-          UserToast("error", "Đăng nhập thất bại!");
         });
     } catch (error) {
       console.error("Lỗi đang nhập:", error);
@@ -130,7 +124,7 @@ export default function Login() {
       if (data.success) {
         alert("Đăng nhập bằng Google thành công!");
         localStorage.setItem("user", JSON.stringify(data.user));
-        navigate(ComponentPath.user.profile.viewProfile);
+        navigate(ComponentPath.user.dashboard);
       } else {
         alert("Đăng nhập bằng Google thất bại!");
       }
@@ -145,11 +139,11 @@ export default function Login() {
     console.error("Google Login Failure:", error);
     alert("Đăng nhập bằng Google thất bại!");
   };
+
   return (
-    /*!token ? */ <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
-      <ToastContainer />
+    <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
       <LoadingOverlay active={isLoading} spinner text="Logining In....">
-        <div className="login">
+        <div>
           <a href="/" className="loginhome-icon">
             <img src={home} />
           </a>
@@ -212,8 +206,6 @@ export default function Login() {
         </div>
       </LoadingOverlay>
     </GoogleOAuthProvider>
-    /* ) : (
-    handleNavigateIfLoggedIn()*/
   );
 }
 /* {/* <h1>Login</h1>
