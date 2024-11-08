@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import api from "../../../api/CallAPI";
@@ -7,11 +7,14 @@ import "../css/Login.css";
 import koiFish from "../../../assets/koi-fish.png";
 import home from "../../../assets/home.png";
 import ComponentPath from "routes/ComponentPath";
+import { Alert } from "@mui/material";
 import { LoadingOverlay } from '@achmadk/react-loading-overlay';
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState("");
+  const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -50,7 +53,7 @@ export default function Login() {
             }
           }
         })
-        .catch((error) => {
+        .catch(() => {
           console.log("Đăng nhập thất bại!");
           setError("Đăng nhập thất bại!");
           setIsLoading(false);
@@ -143,7 +146,7 @@ export default function Login() {
   return (
     <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
       <LoadingOverlay active={isLoading} spinner text="Logining In....">
-        <div>
+        <div className="login">
           <a href="/" className="loginhome-icon">
             <img src={home} />
           </a>
