@@ -14,7 +14,7 @@ import UserToast from "../alert/UserToast";
 import { LoadingOverlay } from '@achmadk/react-loading-overlay';
 
 export default function Login() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState : {errors} } = useForm();
   const [error, setError] = useState("");
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -148,69 +148,82 @@ export default function Login() {
   return (
     /*!token ? */ <GoogleOAuthProvider clientId="140153999668-glsb80p23t7i57jhuvkllouljgv5uo48.apps.googleusercontent.com">
       <ToastContainer />
-      <LoadingOverlay active={isLoading} spinner text="Logining In....">
-        <div className="login">
-          <a href="/" className="loginhome-icon">
-            <img src={home} />
-          </a>
-          <div className="login-container">
-            <div className="login-box">
-              <div className="login-left">
-                <h1>Sign In</h1>
-                <p>
-                  Dont have an account? <a href="/register">Sign Up</a>
-                </p>
+      <div className="login">
+        <a href="/" className="loginhome-icon">
+          <img src={home} />
+        </a>
+        <div className="login-container">
+          <div className="login-box">
+            <div className="login-left">
+              <h1>Sign In</h1>
+              <p>
+                Dont have an account? <a href="/register">Sign Up</a>
+              </p>
 
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <h3>{error}</h3>
-                  <label htmlFor="email">Email</label>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <h3>{error}</h3>
+                
+                <label htmlFor="email">Email </label>
+                <br/>
+                <span style={{color: "red"}}>{errors.email && errors.email.message}</span>
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="Email"
+                  className="input-field"
+                  {...register("email", { required: "Please enter your emails!" })}
+                />
+             
+                <br/>
+                <label htmlFor="password">Password</label>
+                <br/>
+                <span style={{color: "red"}}>{errors.password && errors.password.message}</span>
+                <div className="password-wrapper">
                   <input
-                    type="email"
-                    id="email"
-                    placeholder="Email"
+                    type="password"
+                    id="password"
+                    placeholder="Password"
                     className="input-field"
-                    {...register("email")}
+                    name="password"
+                    {...register("password", { required: "Please enter your password!" })}
                   />
-
-                  <label htmlFor="password">Password</label>
-                  <div className="password-wrapper">
-                    <input
-                      type="password"
-                      id="password"
-                      placeholder="Password"
-                      className="input-field"
-                      name="password"
-                      {...register("password")}
-                    />
-                    <span className="password-icon"></span>
-                  </div>
-
+                  <span className="password-icon"></span>
+                </div>
+                {isLoading ? (
+                  <button type="submit" className="signin-btn-loading" disabled>
+                    Signing In...
+                  </button>
+                ) : (
                   <button type="submit" className="signin-btn">
                     Sign In
                   </button>
-                </form>
-                <p style={{marginTop : "1em"}}><Link to={ComponentPath.user.user.forgetPassword}> Forget Password </Link></p>
-                <div className="social-login">
-                  <p>or continue with</p>
-                  <div className="social-icons">
-                    <button className="google-btn">
-                      <GoogleLogin
-                        onSuccess={handleGoogleSuccess}
-                        onError={handleGoogleFailure}
-                        useOneTap // Hiển thị nút đăng nhập Google
-                      />
-                    </button>
-                  </div>
+                )}
+              </form>
+              <p style={{ marginTop: "1em" }}>
+                <Link to={ComponentPath.user.user.forgetPassword}>
+                  Forget Password
+                </Link>
+              </p>
+              <div className="social-login">
+                <p>or continue with</p>
+                <div className="social-icons">
+                  <button className="google-btn">
+                    <GoogleLogin
+                      onSuccess={handleGoogleSuccess}
+                      onError={handleGoogleFailure}
+                      useOneTap // Hiển thị nút đăng nhập Google
+                    />
+                  </button>
                 </div>
               </div>
+            </div>
 
-              <div className="login-right">
-                <img src={koiFish} alt="Koi Fish" className="koi-fish" />
-              </div>
+            <div className="login-right">
+              <img src={koiFish} alt="Koi Fish" className="koi-fish" />
             </div>
           </div>
         </div>
-      </LoadingOverlay>
+      </div>
     </GoogleOAuthProvider>
     /* ) : (
     handleNavigateIfLoggedIn()*/

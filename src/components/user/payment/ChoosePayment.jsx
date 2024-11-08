@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import "../css/ChoosePayment.css"; // Import custom CSS
 import ATMCard from "../../../assets/atm-icon.png";
@@ -22,18 +22,38 @@ function ChoosePayment() {
     setSelectedPayment(e.target.value);
   };
 
+  useEffect(() => {
+    api.get(`Orders/orderId/${orderId}`).then((data) => {
+      console.log(data);
+      setTotalPrice(data.order.totalPrice);
+    });
+  }, []);
+
   const handlePaymentSubmit = () => {
     // alert(`You have selected ${selectedPayment} as your payment method.`);
     // navigate("/payment-success")
-      
+    
+    var paymentMethodId = 0;
+    if (selectedPayment === "COD") {
+      paymentMethodId = 1;
+    } else if (selectedPayment === "ATM" || selectedPayment === "Visa") {
+      paymentMethodId = 2;
+    }
+
+
     const data = {
       orderId: orderId,
+      paymentMethodId: paymentMethodId,
     };
 
     console.log(data);
     api.post("Payments/create-payment", data).then((data) =>{
       console.log(data)
+      if (paymentMethodId !== 1) {
       window.location.href  = data.paymentUrl;
+      } else {
+        navigate("/payment/callback");
+      }
     })
   };
 
@@ -122,7 +142,7 @@ function ChoosePayment() {
               {pkg.type} - {pkg.weight} kg - {pkg.length} x {pkg.width} x {pkg.height} cm
             </p>
           ))} */} 
-          <p className="total">Thành tiền: 197,400 đ</p>
+          <p className="total">Thành tiền: {totalPrice} đ</p>
         </div>
 
         <div className="payment-footer">
