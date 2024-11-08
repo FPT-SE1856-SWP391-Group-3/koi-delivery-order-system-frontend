@@ -33,6 +33,7 @@ export default function MenuContent() {
     { text: 'Order', icon: <LocalAtmIcon />, link: ComponentPath.admin.order.manageOrder },
     { text: 'Routing for Orders', icon: <LocalShippingIcon />, link: ComponentPath.admin.route.manageRoute },
     { text: 'Route', icon: <LocalShippingIcon />, link: ComponentPath.admin.route.createRoute },
+    { text: 'Feedback', icon: <QuizIcon />, link: ComponentPath.user.feedback.viewFeedback },
     { text: 'Report', icon: <ReportIcon />, link: ComponentPath.admin.report.manageReport },
     { text: 'Feedback', icon: <FeedbackIcon />, link: ComponentPath.admin.report.manageReport },
     { text: 'FAQ', icon: <QuizIcon />, link: ComponentPath.admin.faq.manageFaq },

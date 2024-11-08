@@ -1,151 +1,240 @@
-import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import api from "../../../api/CallAPI";
-import ComponentPath from "routes/ComponentPath";
-import { Box, Button, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import UserSideNav from "../UserSideNav";
-import { Grid } from "@mui/joy";
-import { Create } from "@mui/icons-material";
-import CreateFeedback from "./CreateFeedback";
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Alert,
+  Button,
+  Modal,
+  TextField,
+} from "@mui/material";
+import AdminSideMenu from "../../admin/components/AdminSideMenu";
 
-
-
-
-export default function ManageFeedBack() {
+export default function ViewFeedback() {
   const [feedbacks, setFeedbacks] = useState([]);
-  const navigate = useNavigate();
-  const id = localStorage.getItem("userId");
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertSeverity, setAlertSeverity] = useState("success");
+  const [showAnswerModal, setShowAnswerModal] = useState(false);
+  const [selectedFeedback, setSelectedFeedback] = useState(null);
+  const [answer, setAnswer] = useState("");
 
-  const [showDetailModal, setShowDetailModal] = useState(false);
-
+  // Fetch all feedbacks on component mount
   useEffect(() => {
-    try {
-      // Goi API lay danh sach phan hoi theo id
-      api.get("CustomerFeedbacks/order/" + id).then((data) => {
-        if (data.success) {
-          setFeedbacks(data.customerFeedback);
-          console.log(data.customerFeedback);
-        } else {
-          alert("Không có phản hồi!");
-        }
-      });
-    } catch (error) {
-      alert("An error has occurred. Please try again.");
-    }
-  }, [id]);
+    fetchAllFeedbacks();
+  }, []);
 
-  async function deleteFeedback(feedbackId) {
+  // Fetch all feedbacks
+  const fetchAllFeedbacks = async () => {
     try {
-      api.del("CustomerFeedbacks/" + feedbackId).then((data) => {
-        if (data.success) {
-          alert("Xóa thành công!");
-          const newFeedbacks = feedbacks.filter(
-            (feedback) => feedback.customerFeedbackId !== feedbackId
-          );
-          setFeedbacks(newFeedbacks);
-        } else {
-          alert("Xóa thất bại!");
-        }
-      });
+      const data = await api.get("CustomerFeedbacks");
+
+      if (Array.isArray(data) && data.length > 0) {
+        setFeedbacks(data);
+      } else {
+        setAlertMessage("No feedback available!");
+        setAlertSeverity("warning");
+      }
     } catch (error) {
-      console.error("Error during deletion:", error);
-      alert("An error occurred during deletion. Please try again.");
+      console.error("Error fetching feedbacks:", error);
+      setAlertMessage("An error occurred while fetching feedbacks.");
+      setAlertSeverity("error");
     }
-  }
+  };
+
+  // Delete feedback by ID
+  const handleDeleteFeedback = async (feedbackId) => {
+    try {
+      const data = await api.del(`CustomerFeedbacks/${feedbackId}`);
+      if (data.success) {
+        setFeedbacks((prevFeedbacks) =>
+          prevFeedbacks.filter(
+            (feedback) => feedback.customerFeedbackId !== feedbackId
+          )
+        );
+        setAlertMessage("Feedback deleted successfully!");
+        setAlertSeverity("success");
+      } else {
+        setAlertMessage("Failed to delete feedback.");
+        setAlertSeverity("error");
+      }
+    } catch (error) {
+      console.error("Error deleting feedback:", error);
+      setAlertMessage("An error occurred during deletion.");
+      setAlertSeverity("error");
+    }
+  };
+
+  // Answer feedback as admin
+  const handleAnswerFeedback = async () => {
+    if (!answer.trim()) {
+      setAlertMessage("Answer cannot be empty.");
+      setAlertSeverity("warning");
+      return;
+    }
+
+    try {
+      const data = await api.put(
+        `CustomerFeedbacks/forAdmin/${selectedFeedback.customerFeedbackId}`,
+        {
+          resolutionAnswer: answer,
+          resolutionStatusId: 1, // assuming 1 is the ID for "answered" status; adjust as needed
+        }
+      );
+
+      if (data.success) {
+        setAlertMessage("Answer submitted successfully!");
+        setAlertSeverity("success");
+        setShowAnswerModal(false);
+        fetchAllFeedbacks(); // Refresh feedback list
+        setAnswer(""); // Reset the answer field
+      } else {
+        setAlertMessage("Failed to submit answer.");
+        setAlertSeverity("error");
+      }
+    } catch (error) {
+      console.error("Error submitting answer:", error);
+      setAlertMessage("An error occurred while submitting the answer.");
+      setAlertSeverity("error");
+    }
+  };
 
   return (
-    <div>
-      <UserSideNav>
-        <Box sx={{ display: "block", marginInline: "1em" }}>
-          <Typography variant="h4" gutterBottom>
-            Quản lý phản hồi
-          </Typography>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Mã phản hồi</TableCell>
-                  <TableCell>Mã khách hàng</TableCell>
-                  <TableCell>Mã đơn hàng</TableCell>
-                  <TableCell>Trạng thái giải quyết</TableCell>
-                  <TableCell>Bình luận</TableCell>
-                  <TableCell>Ngày gửi</TableCell>
-                  <TableCell>Ngày giải quyết</TableCell>
-                  <TableCell>Đánh giá</TableCell>
-                  <TableCell>Thao tác</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {feedbacks.map((feedback) => (
+    <Box sx={{ display: "flex", minHeight: "100vh" }}>
+      {/* Sidebar */}
+      <Box sx={{ width: 240, flexShrink: 0 }}>
+        <AdminSideMenu />
+      </Box>
+
+      {/* Main Content */}
+      <Box sx={{ flexGrow: 1, p: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          View Feedback
+        </Typography>
+
+        {alertMessage && (
+          <Alert
+            severity={alertSeverity}
+            onClose={() => setAlertMessage(null)}
+            sx={{ mb: 2 }}
+          >
+            {alertMessage}
+          </Alert>
+        )}
+
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Feedback ID</TableCell>
+                <TableCell>Customer ID</TableCell>
+                <TableCell>Order ID</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Comment</TableCell>
+                <TableCell>Submitted Date</TableCell>
+                <TableCell>Resolution Date</TableCell>
+                <TableCell>Rating</TableCell>
+                <TableCell>Answer</TableCell> {/* New Column for Answer */}
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {feedbacks.length > 0 ? (
+                feedbacks.map((feedback) => (
                   <TableRow key={feedback.customerFeedbackId}>
                     <TableCell>{feedback.customerFeedbackId}</TableCell>
-                    <TableCell>{feedback.customerId}</TableCell>
-                    <TableCell>{feedback.orderId}</TableCell>
-                    <TableCell>{feedback.resolutionStatusName}</TableCell>
+                    <TableCell>{feedback.customer?.userId}</TableCell>
+                    <TableCell>{feedback.order?.orderId}</TableCell>
+                    <TableCell>
+                      {feedback.resolution?.resolutionStatusId || "Pending"}
+                    </TableCell>
                     <TableCell>{feedback.comment}</TableCell>
                     <TableCell>{feedback.submittedDate}</TableCell>
-                    <TableCell>{feedback.resolutionDate}</TableCell>
+                    <TableCell>{feedback.resolution?.resolutionDate}</TableCell>
                     <TableCell>{feedback.rating}</TableCell>
+                    <TableCell>{feedback.resolution?.resolutionAnswer || "No answer yet"}</TableCell> {/* Display Answer */}
                     <TableCell>
                       <Button
                         variant="contained"
                         color="error"
                         onClick={() =>
-                          deleteFeedback(feedback.customerFeedbackId)
+                          handleDeleteFeedback(feedback.customerFeedbackId)
                         }
                         sx={{ mr: 1 }}
                       >
-                        Xóa
+                        Delete
                       </Button>
                       <Button
-                        component={Link}
-                        to={
-                          ComponentPath.user.feedback.editFeedback +
-                          feedback.customerFeedbackId
-                        }
                         variant="contained"
                         color="primary"
+                        onClick={() => {
+                          setSelectedFeedback(feedback);
+                          setShowAnswerModal(true);
+                        }}
                       >
-                        Sửa
+                        Answer
                       </Button>
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setShowDetailModal(true)}
-            sx={{ mt: 2 }}
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={10} align="center">
+                    No feedback available.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* Answer Feedback Modal */}
+        <Modal
+          open={showAnswerModal}
+          onClose={() => setShowAnswerModal(false)}
+          aria-labelledby="modal-answer-feedback"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              minWidth: 300,
+            }}
           >
-            Tạo phản hồi
-          </Button>
-          <Modal
-            open={showDetailModal}
-            onClose={() => setShowDetailModal(false)}
-            aria-labelledby="modal-create-feedback"
-          >
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                bgcolor: "background.paper",
-                boxShadow: 24,
-                p: 4,
-              }}
-            >
-              <CreateFeedback id={id} />
-              <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
-                <Button onClick={() => setShowDetailModal(false)}>Close</Button>
-              </Box>
+            <Typography variant="h6">Answer Feedback</Typography>
+            <TextField
+              label="Answer"
+              fullWidth
+              multiline
+              rows={4}
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              sx={{ mt: 2, mb: 2 }}
+            />
+            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
+              <Button onClick={() => setShowAnswerModal(false)}>Cancel</Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAnswerFeedback}
+              >
+                Submit
+              </Button>
             </Box>
-          </Modal>
-        </Box>
-      </UserSideNav>
-    </div>
+          </Box>
+        </Modal>
+      </Box>
+    </Box>
   );
 }
