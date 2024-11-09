@@ -17,9 +17,9 @@
 }
 
 .addblog-container {
-  margin: 100px auto 50px; /* Điều chỉnh để container không bị trùng với nút Back */
+  margin: 0 auto 50px; /* Điều chỉnh để container không bị trùng với nút Back */
   padding: 20px;
-  max-width: 600px;
+  /*max-width: 90%;*/
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;

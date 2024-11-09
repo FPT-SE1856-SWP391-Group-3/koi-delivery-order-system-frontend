@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import MDEditor from "@uiw/react-md-editor";
 import api from "../../../api/CallAPI";
 import "../blogandnews/EditBlogNews.css";
 
@@ -12,6 +13,7 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
   useEffect(() => {
     const fetchBlogNews = async () => {
       try {
+        if (!postId) return;
         api.get("BlogNews/" + postId).then((data) => {
           if (data.success) {
             setBlogNews(data.blogNews);
@@ -48,7 +50,6 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
 
   return (
     <div className="updateblog-container">
-      <h2 className="form-title">Update BlogNews</h2>
       <form onSubmit={handleSubmit} className="updateblog-form">
         <div className="form-group">
           <label htmlFor="title">Title</label>
@@ -63,13 +64,39 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
           />
         </div>
         <div className="form-group">
+          <label htmlFor="subtitle">Subtitle</label>
+          <input
+            type="text"
+            id="subtitle"
+            name="subtitle"
+            value={blogNews.subtitle}
+            onChange={(e) =>
+              setBlogNews({ ...blogNews, subtitle: e.target.value })
+            }
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="thumbnail">Thumbnail</label>
+          <input
+            type="url"
+            id="thumbnail"
+            name="thumbnail"
+            pattern="https?://.+"
+            placeholder="https://example.com/image.jpg"
+            value={blogNews.thumbnail}
+            onChange={(e) =>
+              setBlogNews({ ...blogNews, thumbnail: e.target.value })
+            }
+          />
+        </div>
+        <div className="form-group">
           <label htmlFor="content">Content</label>
-          <textarea
+          <MDEditor
             id="content"
             name="content"
             value={blogNews.content}
-            onChange={(e) =>
-              setBlogNews({ ...blogNews, content: e.target.value })
+            onChange={(value) =>
+              setBlogNews({ ...blogNews, content: value })
             }
           />
         </div>
