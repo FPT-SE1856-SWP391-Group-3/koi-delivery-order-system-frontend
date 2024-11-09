@@ -4,7 +4,6 @@ import api from "../../../api/CallAPI";
 import koiFish from "../../../assets/koi-fish.png";
 import "../css/Register.css";
 import { Button } from "@mui/material";
-import {LoadingOverlay} from "@achmadk/react-loading-overlay";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import UserToast from "../alert/UserToast";

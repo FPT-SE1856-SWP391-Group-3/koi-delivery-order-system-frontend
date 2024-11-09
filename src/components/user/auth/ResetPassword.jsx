@@ -6,7 +6,6 @@ import "../css/Register.css";
 import UserToast from "../alert/UserToast";
 import { ToastContainer } from "react-toastify";
 import { useState } from "react";
-import { LoadingOverlay } from "@achmadk/react-loading-overlay";
 import Bootstrap from "../props/Bootstrap";
 import { Button } from "@mui/material";
 
