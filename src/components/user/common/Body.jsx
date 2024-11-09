@@ -150,20 +150,18 @@ const Body = () => {
             </li>
           </ul>
           {selector === "consignment" && (
-            <div>
-              <div className="consignment-content">
-                <div className="text-content">
-                  <h3>Order code</h3>
-                  <input
-                    type="text"
-                    placeholder="Ex: 122342, 93863821"
-                    value={orderId}
-                    onChange={(e) => setOrderId(e.target.value)}
-                  />
-                  <OrderInfo />
-                </div>
-                <img src={consignment} alt="" />
+            <div className="consignment-content">
+              <div className="text-content">
+                <h3>Order code</h3>
+                <input
+                  type="text"
+                  placeholder="Ex: 122342, 93863821"
+                  value={orderId}
+                  onChange={(e) => setOrderId(e.target.value)}
+                />
+                <OrderInfo />
               </div>
+              <img src={consignment} alt="" />
             </div>
           )}
 
