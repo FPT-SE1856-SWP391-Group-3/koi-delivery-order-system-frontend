@@ -78,9 +78,11 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
         <div className="form-group">
           <label htmlFor="thumbnail">Thumbnail</label>
           <input
-            type="text"
+            type="url"
             id="thumbnail"
             name="thumbnail"
+            pattern="https?://.+"
+            placeholder="https://example.com/image.jpg"
             value={blogNews.thumbnail}
             onChange={(e) =>
               setBlogNews({ ...blogNews, thumbnail: e.target.value })

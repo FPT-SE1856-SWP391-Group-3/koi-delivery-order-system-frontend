@@ -40,20 +40,23 @@ export default function CreateBlogNews({ onClose, onAddSuccess }) {
           <input type="text" id="title" name="title" {...register("title")} />
         </div>
         <div className="form-group">
-          <label htmlFor="title">Subtitle</label>
+          <label htmlFor="subtitle">Subtitle</label>
           <input
             type="text"
             id="subtitle"
             name="subtitle"
+            maxLength={255}
+            placeholder="Enter subtitle"
             {...register("subtitle")}
           />
         </div>
         <div className="form-group">
-          <label htmlFor="title">Thumbnail</label>
+          <label htmlFor="subtitle">Thumbnail URL</label>
           <input
             type="text"
             id="thumbnail"
             name="thumbnail"
+            placeholder="Enter image URL"
             {...register("thumbnail")}
           />
         </div>
