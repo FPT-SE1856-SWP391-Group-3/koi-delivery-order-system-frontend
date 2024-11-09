@@ -6,7 +6,7 @@ import { Grid } from "@mui/joy";
 import api from "../../../../api/CallAPI";
 import { useForm } from "react-hook-form";
 
-const ReceiverInfo = ({ onChange, schema }) => {
+const ReceiverInfo = ({ onChange }) => {
   const [addresses, setAddresses] = useState([]);
   const [cityName, setCityName] = useState("");
   const [districtName, setDistrictName] = useState("");
@@ -16,12 +16,7 @@ const ReceiverInfo = ({ onChange, schema }) => {
   const [email, setEmail] = useState("");
   const [receiverFullAddressLine, setReceiverFullAddressLine] = useState("");
   const [receiverPartAddressLine, setReceiverPartAddressLine] = useState("");
-
-  //Dung useForm de check validation
-  const { register, handleSubmit, formState: { errors } } = useForm();
-
-
-
+  
   useEffect(() => {
     const fetchAddressData = async () => {
       try {
