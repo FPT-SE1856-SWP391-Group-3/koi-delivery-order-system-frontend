@@ -19,25 +19,25 @@ const Body = () => {
   const [selector, setSelector] = useState("consignment");
   const [orderId, setOrderId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [error, setError] = useState(null);
   const [order, setOrder] = useState([
     {
-      orderDate: "2024-10-18",
-      deliveryDate: "2024-12-08",
+      orderDate: "",
+      deliveryDate: "",
       distance: null,
       duration: null,
-      totalPrice: 2170000,
+      totalPrice: null,
       endAddress: {
-        addressLine: "Thôn 1, Phường Phúc Xá, Quận Ba Đình, Thành phố Hà Nội",
+        addressLine: "",
       },
       orderStatus: {
-        orderStatusName: "Đang xử lí",
+        orderStatusName: "",
       },
       receiver: null,
       route: null,
       shippingMethod: null,
       startAddress: {
-        addressLine:
-          "Bãi cỏ KTX khu B, Phường Đông Hòa, Dĩ An, Tỉnh Bình Dương, Việt Nam",
+        addressLine: "",
       },
     },
   ]);
@@ -46,19 +46,24 @@ const Body = () => {
     try {
       const data = await api.get(`Orders/orderId/${orderId}`);
       if (data.success) {
+        setError(null);
         setOrder(data.order);
-        console.log(data.order);
+        setIsOpen(true);
       } else {
-        console.log("No orders found!");
+        setError("Order not found!");
       }
     } catch (error) {
-      console.error("Error fetching order: ", error);
+      if (error.response.status == 404) {
+        setError("Order not found!");
+        return;
+      }
+      setError("An error occurred while fetching orders.");
     }
   };
 
   const OrderInfo = () => {
     const handleCheck = () => {
-      fetchOrder().then(() => setIsOpen(true));
+      fetchOrder();
     };
 
     return (
@@ -153,6 +158,11 @@ const Body = () => {
             <div className="consignment-content">
               <div className="text-content">
                 <h3>Order code</h3>
+                {error && (
+                  <Typography color="error" sx={{ mt: 1 }}>
+                    {error}
+                  </Typography>
+                )}
                 <input
                   type="text"
                   placeholder="Ex: 122342, 93863821"
