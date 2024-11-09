@@ -27,15 +27,22 @@ export default function ForgetPassword() {
     };
     try {
       setIsLoading(true);
-      api.post("Users/password/forget", fullData).then((data) => {
-        if (data.success) {
+      api
+        .post("Users/password/forget", fullData)
+        .then((data) => {
+          if (data.success) {
+            setIsLoading(false);
+            UserToast("success", "Check your email to reset password");
+          } else {
+            setIsLoading(false);
+            UserToast("error", "Reset password failed");
+          }
+        })
+        .catch((error) => {
+          console.error("Register failed", error);
           setIsLoading(false);
-          UserToast("success", "Check your email to reset password");
-        } else {
-          setIsLoading(false);
-          UserToast("error", "Reset password failed");
-        }
-      });
+          UserToast("error", "Reset password failed, please check your email");
+        });
     } catch (error) {
       console.error("Register failed", error);
       setIsLoading(false);
@@ -45,35 +52,44 @@ export default function ForgetPassword() {
 
   return (
     <>
-      <LoadingOverlay active={isLoading} spinner text="Resting Password....">
-        <ToastContainer />
-        <div className="login">
-          <div className="content-box">
-            <div className="image-side">
-              <img src={koiFish} alt="Koi Fish" className="koi-fish" />
-            </div>
+      <ToastContainer />
+      <div className="login">
+        <div className="content-box">
+          <div className="image-side">
+            <img src={koiFish} alt="Koi Fish" className="koi-fish" />
+          </div>
 
-            <div className="form-side">
-              <h1>Forget Password</h1>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <label htmlFor="email">Email/SDT</label>
-                <input
-                  type="text"
-                  id="email"
-                  placeholder="Email"
-                  {...register("email", { required: true })}
-                  className="input-field"
-                />
-                {errors.email && <span>This field is required</span>}
-                <br />
+          <div className="form-side">
+            <h1>Forget Password</h1>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <label htmlFor="email">Email/SDT</label>
+              <input
+                type="text"
+                id="email"
+                placeholder="Email"
+                {...register("email", { required: true })}
+                className="input-field"
+              />
+              {errors.email && <span>This field is required</span>}
+              <br />
+              {isLoading ? (
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className="btn"
+                  disabled
+                >
+                  Reset Password...
+                </Button>
+              ) : (
                 <Button type="submit" variant="contained" className="btn">
                   Reset Password
                 </Button>
-              </form>
-            </div>
+              )}
+            </form>
           </div>
         </div>
-      </LoadingOverlay>
+      </div>
     </>
   );
 }

@@ -57,44 +57,60 @@ export default function ResetPassword() {
 
   return (
     <>
-      <LoadingOverlay active={isLoading} spinner text="Resetting Password....">
-        <ToastContainer />
-        <Bootstrap/>
-        <div className="login">
-          <div className="content-box">
-            <div className="image-side">
-              <img src={koiFish} alt="Koi Fish" className="koi-fish" />
-            </div>
+      <ToastContainer />
+      <Bootstrap />
+      <div className="login">
+        <div className="content-box">
+          <div className="image-side">
+            <img src={koiFish} alt="Koi Fish" className="koi-fish" />
+          </div>
 
-            <div className="form-side">
-              <h1>Reset Password</h1>
-              <form onSubmit={handleSubmit(onSubmit)}>  
-                <label htmlFor="email">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  placeholder="Password"
-                  {...register("password", { required: true })}
-                  className="input-field"
-                />
-                <label htmlFor="email">Confirm Password</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  placeholder="Confirm Password"
-                  {...register("confirmPassword", { required: true })}
-                  className="input-field"
-                />
-                {errors.password && <span>This field is required</span>}
-                <br />
-                <Button color="primary" variant="contained" type="submit" className="btn">
+          <div className="form-side">
+            <h1>Reset Password</h1>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <label htmlFor="email">Password</label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                {...register("password", { required: true })}
+                className="input-field"
+              />
+              <label htmlFor="email">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm Password"
+                {...register("confirmPassword", { required: true })}
+                className="input-field"
+              />
+              {errors.password && <span>This field is required</span>}
+              <br />
+              {isLoading ? (
+                <Button
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  className="btn"
+                  disabled
+                >
+                  Reseting Password...
+                </Button>
+              ) : (
+                <Button
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  className="btn"
+                   
+                >
                   Reset Password
                 </Button>
-              </form>
-            </div>
+              )}
+            </form>
           </div>
         </div>
-      </LoadingOverlay>
+      </div>
     </>
   );
 }
