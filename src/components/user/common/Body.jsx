@@ -86,7 +86,11 @@ const Body = () => {
               Delivery Date: {order.deliveryDate}
             </Typography>
             <Typography variant="body1">
-              Total Price: {order.totalPrice}
+              Total Price:{" "}
+              {order?.totalPrice?.toLocaleString("en-US", {
+                style: "currency",
+                currency: "VND",
+              })}
             </Typography>
             <Typography variant="body1">
               Status: {order.orderStatus?.orderStatusName}
@@ -166,8 +170,15 @@ const Body = () => {
                 <input
                   type="text"
                   placeholder="Ex: 122342, 93863821"
+                  pattern="[0-9]*"
+                  maxLength="20"
                   value={orderId}
-                  onChange={(e) => setOrderId(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value.trim();
+                    if (!value || /^\d+$/.test(value)) {
+                      setOrderId(value);
+                    }
+                  }}
                 />
                 <OrderInfo />
               </div>
