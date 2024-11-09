@@ -11,10 +11,93 @@ import healthcheck from "../../../assets/healthcheck.png";
 import delivering from "../../../assets/delivering.png";
 import done from "../../../assets/done.png";
 import BlogCard from "./BlogCard";
+import api from "../../../api/CallAPI";
+import { Typography, Box } from "@mui/material";
 
 const Body = () => {
   const [button, setButton] = useState("search");
   const [selector, setSelector] = useState("consignment");
+  const [orderId, setOrderId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [order, setOrder] = useState([
+    {
+      orderDate: "2024-10-18",
+      deliveryDate: "2024-12-08",
+      distance: null,
+      duration: null,
+      totalPrice: 2170000,
+      endAddress: {
+        addressLine: "Thôn 1, Phường Phúc Xá, Quận Ba Đình, Thành phố Hà Nội",
+      },
+      orderStatus: {
+        orderStatusName: "Đang xử lí",
+      },
+      receiver: null,
+      route: null,
+      shippingMethod: null,
+      startAddress: {
+        addressLine:
+          "Bãi cỏ KTX khu B, Phường Đông Hòa, Dĩ An, Tỉnh Bình Dương, Việt Nam",
+      },
+    },
+  ]);
+
+  const fetchOrder = async () => {
+    try {
+      const data = await api.get(`Orders/orderId/${orderId}`);
+      if (data.success) {
+        setOrder(data.order);
+        console.log(data.order);
+      } else {
+        console.log("No orders found!");
+      }
+    } catch (error) {
+      console.error("Error fetching order: ", error);
+    }
+  };
+
+  const OrderInfo = () => {
+    const handleCheck = () => {
+      fetchOrder().then(() => setIsOpen(true));
+    };
+
+    return (
+      <>
+        <button onClick={handleCheck}>Check</button>
+        <Box
+          sx={{
+            backgroundColor: "white",
+            padding: "1rem",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+            display: isOpen ? "block" : "none",
+          }}
+        >
+          <Typography variant="h6">Order Information</Typography>
+          <Box>
+            <Typography variant="body1">
+              Order Date: {order.orderDate}
+            </Typography>
+            <Typography variant="body1">
+              Delivery Date: {order.deliveryDate}
+            </Typography>
+            <Typography variant="body1">
+              Total Price: {order.totalPrice}
+            </Typography>
+            <Typography variant="body1">
+              Status: {order.orderStatus?.orderStatusName}
+            </Typography>
+            <Typography variant="body1">
+              Start Address: {order.startAddress?.addressLine}
+            </Typography>
+            <Typography variant="body1">
+              End Address: {order.endAddress?.addressLine}
+            </Typography>
+          </Box>
+        </Box>
+      </>
+    );
+  };
+
   return (
     <div className="body-container">
       <ul className="button">
@@ -67,13 +150,20 @@ const Body = () => {
             </li>
           </ul>
           {selector === "consignment" && (
-            <div className="consignment-content">
-              <div className="text-content">
-                <h3>Order code</h3>
-                <input type="text" placeholder="Ex: 122342, 93863821" />
-                <button>Check</button>
+            <div>
+              <div className="consignment-content">
+                <div className="text-content">
+                  <h3>Order code</h3>
+                  <input
+                    type="text"
+                    placeholder="Ex: 122342, 93863821"
+                    value={orderId}
+                    onChange={(e) => setOrderId(e.target.value)}
+                  />
+                  <OrderInfo />
+                </div>
+                <img src={consignment} alt="" />
               </div>
-              <img src={consignment} alt="" />
             </div>
           )}
 
