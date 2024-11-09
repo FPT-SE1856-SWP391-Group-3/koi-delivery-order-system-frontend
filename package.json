@@ -28,6 +28,7 @@
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.6",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",
     "koi-delivery-order-system-frontend": "file:",
@@ -43,6 +44,7 @@
     "react-router-dom": "^6.26.2",
     "react-toastify": "^10.0.6",
     "react-transition-group": "^4.4.5",
+    "recharts": "^2.13.3",
     "sass": "^1.80.3",
     "sass-embedded": "^1.80.3",
     "styled-components": "^6.1.13"
