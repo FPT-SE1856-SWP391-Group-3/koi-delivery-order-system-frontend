@@ -213,7 +213,7 @@ const Body = () => {
           <p>This is services</p>
         </div>
       )}
-      <BlogCard />
+      <BlogCard firstChunk={true} />
       <div className="process-content">
         <ul>
           <li className="process_state">

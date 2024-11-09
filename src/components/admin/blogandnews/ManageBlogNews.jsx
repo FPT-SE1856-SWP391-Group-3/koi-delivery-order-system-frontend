@@ -129,6 +129,16 @@ export default function ManageBlogNews() {
                 </TableCell>
                 <TableCell>
                   <Typography fontWeight={600} align="center">
+                    Subtitle
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
+                    Thumbnail
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography fontWeight={600} align="center">
                     Content
                   </Typography>
                 </TableCell>
@@ -155,6 +165,8 @@ export default function ManageBlogNews() {
                   <TableCell align="center">{post.postId}</TableCell>
                   <TableCell align="center">{post.userId}</TableCell>
                   <TableCell align="center">{post.title}</TableCell>
+                  <TableCell align="center">{post.subtitle}</TableCell>
+                  <TableCell align="center">{post.thumbnail}</TableCell>
                   <TableCell>{post.content}</TableCell>
                   <TableCell align="center">{post.postDate}</TableCell>
                   <TableCell align="center">{post.category}</TableCell>
@@ -218,7 +230,7 @@ export default function ManageBlogNews() {
         <Dialog
           open={isAddDialogOpen}
           onClose={closeAddDialog}
-          maxWidth="sm"
+          maxWidth="md"
           fullWidth
         >
           <DialogTitle>Add New Blog/News</DialogTitle>
@@ -239,7 +251,7 @@ export default function ManageBlogNews() {
         <Dialog
           open={isEditDialogOpen}
           onClose={closeEditDialog}
-          maxWidth="sm"
+          maxWidth="md"
           fullWidth
         >
           <DialogTitle>Edit Blog/News</DialogTitle>

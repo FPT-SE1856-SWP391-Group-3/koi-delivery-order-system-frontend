@@ -1,9 +1,10 @@
 import api from "../../../api/CallAPI";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import "../blogandnews/CreateBlogNews.css";
+import MDEditor from "@uiw/react-md-editor";
 
 export default function CreateBlogNews({ onClose, onAddSuccess }) {
-  const { register, handleSubmit } = useForm();
+  const { control, register, handleSubmit } = useForm();
   const userId = JSON.parse(localStorage.getItem("userId"));
 
   // Add blog/news
@@ -26,7 +27,6 @@ export default function CreateBlogNews({ onClose, onAddSuccess }) {
 
   return (
     <div className="addblog-container">
-      <h1 className="form-title">Add Blog/News</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="addblog-form">
         <input
           type="hidden"
@@ -40,8 +40,30 @@ export default function CreateBlogNews({ onClose, onAddSuccess }) {
           <input type="text" id="title" name="title" {...register("title")} />
         </div>
         <div className="form-group">
+          <label htmlFor="title">Subtitle</label>
+          <input
+            type="text"
+            id="subtitle"
+            name="subtitle"
+            {...register("subtitle")}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="title">Thumbnail</label>
+          <input
+            type="text"
+            id="thumbnail"
+            name="thumbnail"
+            {...register("thumbnail")}
+          />
+        </div>
+        <div className="form-group">
           <label htmlFor="content">Content</label>
-          <textarea id="content" name="content" {...register("content")} />
+          <Controller
+            name="content"
+            control={control}
+            render={({ field }) => <MDEditor {...field} />}
+          />
         </div>
         <div className="form-group">
           <label htmlFor="category">Category</label>
