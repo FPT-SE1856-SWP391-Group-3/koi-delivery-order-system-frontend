@@ -8,7 +8,7 @@ export default function CreateOrderDocument({
   orderId,
   orderStatusId,
   onClose,
-  onAddSuccess,
+  // onAddSuccess,
 }) {
   const { control, register, handleSubmit } = useForm();
   const { fields, append, remove } = useFieldArray({
@@ -33,7 +33,7 @@ export default function CreateOrderDocument({
         }
       });
       alert("All documents added successfully!");
-      onAddSuccess(); // Update list after successful addition
+      // onAddSuccess(); // Update list after successful addition
       onClose(); // Close modal
     } catch (error) {
       console.error("Error:", error);

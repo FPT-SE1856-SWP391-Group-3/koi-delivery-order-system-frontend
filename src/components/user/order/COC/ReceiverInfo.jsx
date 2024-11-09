@@ -4,6 +4,7 @@ import axios from "axios";
 import "../../css/CreateOrder.css";
 import { Grid } from "@mui/joy";
 import api from "../../../../api/CallAPI";
+import { useForm } from "react-hook-form";
 
 const ReceiverInfo = ({ onChange }) => {
   const [addresses, setAddresses] = useState([]);
@@ -15,8 +16,7 @@ const ReceiverInfo = ({ onChange }) => {
   const [email, setEmail] = useState("");
   const [receiverFullAddressLine, setReceiverFullAddressLine] = useState("");
   const [receiverPartAddressLine, setReceiverPartAddressLine] = useState("");
-
-
+  
   useEffect(() => {
     const fetchAddressData = async () => {
       try {
@@ -56,17 +56,18 @@ const ReceiverInfo = ({ onChange }) => {
       setReceiverPartAddressLine(`${wardName}, ${districtName}, ${cityName}`)
     }
   };
-
   useEffect(updateReceiverInfo, [cityName, districtName, wardName, phoneNumber, fullName, receiverFullAddressLine, receiverPartAddressLine]);
+
 
 
   return (
     <div>
       <h2>Receiver Information</h2>
       <div className="sectionCompo">
-        <label>Phone Number</label>
+        <label>Phone Number </label>
         <input
-          type="text"
+          type="number"
+          min={0}
           placeholder="Enter phone number"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
@@ -149,6 +150,7 @@ const ReceiverInfo = ({ onChange }) => {
 // Xác nhận prop types
 ReceiverInfo.propTypes = {
   onChange: PropTypes.func.isRequired,
+  schema: PropTypes.object.isRequired,
 };
 
 export default ReceiverInfo;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import UserSideNav from "../UserSideNav";
 
 export default function EditDocument() {
   const [customerDocument, setCustomerDocument] = useState({
@@ -62,49 +63,53 @@ export default function EditDocument() {
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2 className="text-center">Cập nhật Document</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="documentFile">Tệp tài liệu</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  id="documentFile"
-                  name="documentFile"
-                  onChange={(e) =>
-                    setCustomerDocument({
-                      ...document,
-                      documentFile: e.target.files[0],
-                    })
-                  }
-                />
+    <>
+      <UserSideNav>
+        <div>
+          <div className="container">
+            <div className="row">
+              <div className="col-md-6 offset-md-3">
+                <h2 className="text-center">Cập nhật Document</h2>
+                <form onSubmit={handleSubmit}>
+                  <div className="form-group">
+                    <label htmlFor="documentFile">Tệp tài liệu</label>
+                    <input
+                      type="file"
+                      className="form-control"
+                      id="documentFile"
+                      name="documentFile"
+                      onChange={(e) =>
+                        setCustomerDocument({
+                          ...document,
+                          documentFile: e.target.files[0],
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="description">Mô tả</label>
+                    <textarea
+                      className="form-control"
+                      id="description"
+                      name="description"
+                      value={customerDocument.description}
+                      onChange={(e) =>
+                        setCustomerDocument({
+                          ...document,
+                          description: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                  <button type="submit" className="btn btn-primary">
+                    Cập nhật
+                  </button>
+                </form>
               </div>
-              <div className="form-group">
-                <label htmlFor="description">Mô tả</label>
-                <textarea
-                  className="form-control"
-                  id="description"
-                  name="description"
-                  value={customerDocument.description}
-                  onChange={(e) =>
-                    setCustomerDocument({
-                      ...document,
-                      description: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Cập nhật
-              </button>
-            </form>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </UserSideNav>
+    </>
   );
 }

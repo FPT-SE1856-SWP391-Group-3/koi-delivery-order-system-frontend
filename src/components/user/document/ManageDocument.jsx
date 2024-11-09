@@ -3,6 +3,10 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import ComponentPath from "routes/ComponentPath";
+import UserSideNav from "../UserSideNav";
+import { Box, Button, Paper, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Table } from "react-bootstrap";
+import { FitScreen, FitScreenOutlined } from "@mui/icons-material";
 
 export default function ManageDocument() {
   const [customerDocuments, setCustomerDocuments] = useState([{}]);
@@ -45,45 +49,66 @@ export default function ManageDocument() {
   }
 
   return (
-    <div>
-      <h1>Documents</h1>
-      <a href={ComponentPath.user.document.createDocument}>Add Document</a>
-      <table>
-        <thead>
-          <tr>
-            <th>DocumentId</th>
-            <th>OrderId</th>
-            <th>FilePath</th>
-            <th>UploadDate</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {customerDocuments.map((customerDocument) => (
-            <tr key={customerDocument.documentId}>
-              <td>{customerDocument.documentId}</td>
-              <td>{customerDocument.orderId}</td>
-              <td>{customerDocument.filePath}</td>
-              <td>
-                <img
-                  src={api.imageBuildUrl(customerDocument.filePath)}
-                  width="100px"
-                  alt="Certificate"
-                />
-              </td>
-              <td>{document.uploadDate}</td>
-              <td>{document.description}</td>
-              <td>
-                <button onClick={() => deleteDocument(document.documentId)}>
-                  Delete
-                </button>
-                <a href={ComponentPath.user.document.editDocument + document.documentId}>Update</a>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <UserSideNav>
+    <Box sx={{marginInline : "1em"}}>
+        <Typography variant="h4" gutterBottom>
+          Documents
+        </Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          href={ComponentPath.user.document.createDocument}
+          sx={{ mb: 2 }}
+        >
+          Add Document
+        </Button>
+        <TableContainer component={Paper} >
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Document ID</TableCell>
+                <TableCell>Order ID</TableCell>
+                <TableCell>File Path</TableCell>
+                <TableCell>Upload Date</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {customerDocuments.map((doc) => (
+                <TableRow key={doc.documentId}>
+                  <TableCell>{doc.documentId}</TableCell>
+                  <TableCell>{doc.orderId}</TableCell>
+                  <TableCell>
+                    <a href={api.imageBuildUrl(doc.filePath)} target="_blank" rel="noopener noreferrer">
+                      View File
+                    </a>
+                  </TableCell>
+                  <TableCell>{doc.uploadDate}</TableCell>
+                  <TableCell>{doc.description}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => deleteDocument(doc.documentId)}
+                      sx={{ mr: 1 }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      href={`${ComponentPath.user.document.editDocument}${doc.documentId}`}
+                    >
+                      Update
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        </Box>
+      </UserSideNav>
   );
 }

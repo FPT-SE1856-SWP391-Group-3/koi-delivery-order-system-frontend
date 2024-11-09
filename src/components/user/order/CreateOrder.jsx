@@ -15,6 +15,7 @@ import {
   CardContent,
   Checkbox,
   FormControlLabel,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import UserAppBar from "../UserAppNavbar";
@@ -22,7 +23,6 @@ import { Grid } from "@mui/joy";
 import UserToast from "../alert/UserToast";
 import { ToastContainer } from "react-toastify";
 import SenderPackage from "./COC/SenderPackage";
-import { LoadingOverlay } from '@achmadk/react-loading-overlay';
 
 function CreateOrder() {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
@@ -62,6 +62,20 @@ function CreateOrder() {
   const username = "đăng khoa";
   const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=0D8ABC&color=fff`;
 
+  const validateForm = () => {  
+    if (!senderInfo.fullName || !senderInfo.email || !senderInfo.phoneNumber || !senderInfo.addressLine || !receiverInfo.fullName || !receiverInfo.email || !receiverInfo.phoneNumber || !receiverInfo.receiverPartAddressLine || !receiverInfo.receiverFullAddressLine) {
+      UserToast("error", "Please fill in all required fields!");
+      return false;
+    }
+    if (senderPackage.length === 0 || senderPackage[0].koiName === "" || senderPackage[0].weight === "" || senderPackage[0].price === "" || senderPackage[0].amount === "" || senderPackage[0].koiCondition === "") {
+      UserToast("error", "Please add at least one package!");
+      return false;
+    }
+    return true;
+  };
+
+
+
   const handleSubmitClick = useCallback(() => {
     // const formData = {
     //   senderInfo,
@@ -73,6 +87,11 @@ function CreateOrder() {
     // navigate("/ChoosePayment");
     setIsLoading(true);
     const formData = new FormData();
+
+    if (!validateForm()) {
+      setIsLoading(false);
+      return;
+    }
 
     formData.append("CustomerId", senderInfo.userId || null);
     formData.append("OrderStatusId", 1);
@@ -115,6 +134,10 @@ function CreateOrder() {
         UserToast("error", "Đơn hàng tạo thất bại!");
       }
       setIsLoading(false);
+    }).catch((error) => {
+      console.error("Error during order creation:", error);
+      UserToast("error", "An error occurred during order creation. Please try again.");
+      setIsLoading(false); 
     });
   }, [senderInfo, receiverInfo, senderPackage, customerDocument, setIsLoading]);
 
@@ -143,83 +166,92 @@ function CreateOrder() {
     setIsDropdownOpen((prevOpen) => !prevOpen);
   };
 
-
   return (
-    <LoadingOverlay active={isLoading} spinner text="Creating Order....">
-      <Box sx={{ display: "flex" }}>
-        <SideMenu />
-
-        <ToastContainer />
-        <Box component="main" sx={{ flexGrow: 1 }}>
-          <UserAppBar />
-          <Box sx={{ p: 2 }}>
-            <Box component="header" sx={{ mb: 2 }}>
-              <ButtonGroup variant="contained">
-                <Button color="primary" href="/CreateOrder">
-                  Create Domestic Order
-                </Button>
-                <Button color="secondary" href="/CreateOrderInter">
+    <Box sx={{ display: "flex" }}>
+      <SideMenu />
+      <ToastContainer />
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        <UserAppBar />
+        <Box sx={{ p: 2 }}>
+          <Box component="header" sx={{ mb: 2 }}>
+            <ButtonGroup variant="contained">
+              <Button color="primary" href="/CreateOrder">
+                Create Domestic Order
+              </Button>
+              <Tooltip title="This function is not available yet">
+                <Button color="secondary">
                   Create International Order
                 </Button>
-              </ButtonGroup>
-            </Box>
-
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <Card sx={{ mb: 2 }}>
-                  <CardContent>
-                    <SenderInfo onChange={setSenderInfo} />
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent>
-                    <ReceiverInfo onChange={setReceiverInfo} />
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Card sx={{ mb: 2 }}>
-                  <CardContent>
-                    <SenderPackage
-                      onChange={setSenderPackage}
-                      stateChange={handleServiceSelectionChange}
-                      setTotalPrice={setTotalPrice}
-                    />
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent>
-                    <CustomerDocumentInfo onChange={setCustomerDocument} />
-                  </CardContent>
-                </Card>
-              </Grid>
-            </Grid>
-
-            <Box component="footer" sx={{ mt: 4 }}>
+              </Tooltip>
+            </ButtonGroup>
+          </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <Card sx={{ mb: 2 }}>
+                <CardContent>
+                  <SenderInfo onChange={setSenderInfo} />
+                </CardContent>
+              </Card>
               <Card>
                 <CardContent>
-                  <Grid container spacing={2} alignItems="center">
-                    <Grid item xs={12} md={8}>
-                      <Typography variant="body1">
-                        Total Freight: 0 đ
-                      </Typography>
-                      <Typography variant="body1">
-                        Total Cost: {totalPrice} đ
-                      </Typography>
-                      <Typography variant="body1">
-                        Estimated Delivery: Same Day
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} md={4}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={isCheckboxChecked}
-                            onChange={handleCheckboxChange}
-                          />
-                        }
-                        label="Tôi đã đọc và đồng ý với Điều khoản quy định"
-                      />
+                  <ReceiverInfo onChange={setReceiverInfo}/>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Card sx={{ mb: 2 }}>
+                <CardContent>
+                  <SenderPackage
+                    onChange={setSenderPackage}
+                    stateChange={handleServiceSelectionChange}
+                    setTotalPrice={setTotalPrice}
+                  />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent>
+                  <CustomerDocumentInfo onChange={setCustomerDocument} />
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+
+          <Box component="footer" sx={{ mt: 4 }}>
+            <Card>
+              <CardContent>
+                <Grid container spacing={2} alignItems="center">
+                  <Grid item xs={12} md={8}>
+                    <Typography variant="body1">Total Freight: 0 đ</Typography>
+                    <Typography variant="body1">
+                      Total Cost: {totalPrice} đ
+                    </Typography>
+                    <Typography variant="body1">
+                      Estimated Delivery: Same Day
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} md={4}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={isCheckboxChecked}
+                          onChange={handleCheckboxChange}
+                        />
+                      }
+                      label="Tôi đã đọc và đồng ý với Điều khoản quy định"
+                    />
+                    {isLoading ? (
+                      <ButtonGroup variant="contained" disabled>
+                        <Button
+                          color="secondary"
+                          disabled={!isCheckboxChecked}
+                          onClick={handleSubmitClick}
+                        >
+                          Submit
+                        </Button>
+                        <Button onClick={handleSaveClick}>Save</Button>
+                        <Button onClick={handleResetClick}>Reset</Button>
+                      </ButtonGroup>
+                    ) : (
                       <ButtonGroup variant="contained">
                         <Button
                           color="primary"
@@ -231,15 +263,15 @@ function CreateOrder() {
                         <Button onClick={handleSaveClick}>Save</Button>
                         <Button onClick={handleResetClick}>Reset</Button>
                       </ButtonGroup>
-                    </Grid>
+                    )}
                   </Grid>
-                </CardContent>
-              </Card>
-            </Box>
+                </Grid>
+              </CardContent>
+            </Card>
           </Box>
         </Box>
       </Box>
-    </LoadingOverlay>
+    </Box>
   );
 }
 export default CreateOrder;

@@ -54,7 +54,7 @@ function CallBackPayment() {
   // };
 
   const apiOneTimePayment = () => {
-    api.post(`Payments/payment-callback?${query}`).then((data) => {
+    api.get(`Payments/payment-callback?${query}`).then((data) => {
       console.log(data);
     });
   };
@@ -71,7 +71,9 @@ function CallBackPayment() {
 
       <h2>Tình trạng thanh toán</h2>
         <h1>{
-            responseCode === "00" ? "Thanh toán thành công" : "Thanh toán thất bại"
+            responseCode === "00" ? "Thanh toán thành công" :
+            (responseCode === null || responseCode === undefined) ? "Đang thanh toán với COD" :
+            "Thanh toán thất bại"
           }</h1>
     </div>
   );
