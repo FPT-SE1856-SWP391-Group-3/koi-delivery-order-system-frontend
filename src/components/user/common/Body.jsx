@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../css/Body.css";
 import icon1 from "../../../assets/icon1.png";
 import icon2 from "../../../assets/icon2.png";
 import icon3 from "../../../assets/icon3.png";
 import consignment from "../../../assets/cosignment.png";
-import faq from "../../../assets/fag.png";
+import faqIcon from "../../../assets/fag.png";
 import orderaccept from "../../../assets/orderaccept.png";
 import pickup from "../../../assets/pickup.png";
 import healthcheck from "../../../assets/healthcheck.png";
@@ -12,7 +12,20 @@ import delivering from "../../../assets/delivering.png";
 import done from "../../../assets/done.png";
 import BlogCard from "./BlogCard";
 import api from "../../../api/CallAPI";
-import { Typography, Box } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  List,
+  ListItemButton,
+  ListItemText,
+  Divider,
+  ListItem,
+} from "@mui/material";
 
 const Body = () => {
   const [button, setButton] = useState("search");
@@ -41,6 +54,30 @@ const Body = () => {
       },
     },
   ]);
+  const [isFaqOpen, setFaqOpen] = useState(false);
+  const [faq, setFaq] = useState([
+    {
+      question: "",
+      answer: "",
+    },
+  ]);
+
+  useEffect(() => {
+    fetchFaq();
+  }, []);
+
+  const fetchFaq = async () => {
+    try {
+      const data = await api.get("Faqs/");
+      if (data.success) {
+        setFaq(data.faqs);
+      } else {
+        console.log("No FAQs found.");
+      }
+    } catch (error) {
+      console.error("An error occurred while fetching FAQs. Please try again.", error);
+    }
+  };
 
   const fetchOrder = async () => {
     try {
@@ -202,9 +239,40 @@ const Body = () => {
                   Answer frequently asked questions/questions from customers at
                   Koi Delivery
                 </p>
-                <button>See Now</button>
+                <button onClick={() => setFaqOpen(true)}>See Now</button>
               </div>
-              <img src={faq} alt="" />
+              <img src={faqIcon} alt="" />
+              {isFaqOpen && (
+                <Dialog
+                  open={isFaqOpen}
+                  onClose={() => setFaqOpen(false)}
+                  maxWidth="lg"
+                  fullWidth
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">FAQ</DialogTitle>
+                  <DialogContent>
+                    <List>
+                      {faq.map((faq, index) => (
+                        <ListItem key={index}>
+                          <ListItemButton>
+                            <ListItemText
+                              primary={faq.question}
+                              secondary={faq.answer}
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => setFaqOpen(false)} color="primary">
+                      Close
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              )}
             </div>
           )}
         </>
