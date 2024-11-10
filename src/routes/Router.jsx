@@ -74,6 +74,8 @@ import ManageRoute from "../components/admin/order/ManageRoute";
 import ForgetPassword from "../components/user/auth/ForgetPassword";
 import ResetPassword from "../components/user/auth/ResetPassword";
 import CreateRoute from "../components/admin/order/CreateRoute";
+import path from "path";
+import ViewFeedback from "../components/admin/feedback/ManageFeedback";
 
 // Function to get the access token from cookies
 var adminUrl = "/admin";
@@ -281,6 +283,10 @@ const router = createBrowserRouter([
             path: ComponentPath.admin.route.manageRoute,
             element: <ManageRoute />,
           },
+        {
+          path: ComponentPath.admin.feedback.manageFeedback,
+          element: <ViewFeedback />,
+        },
           {
             path: ComponentPath.admin.route.createRoute,
             element: <CreateRoute />,

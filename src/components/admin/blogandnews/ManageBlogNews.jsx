@@ -36,7 +36,7 @@ export default function ManageBlogNews() {
 
   const fetchPosts = async () => {
     try {
-      const data = await api.get("BlogNews/");
+      const data = await api.get("BlogNews");
       if (data.success) {
         setPosts(data.blogNews);
       } else {

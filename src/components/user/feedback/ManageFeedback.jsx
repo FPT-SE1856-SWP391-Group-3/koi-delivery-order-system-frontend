@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../../../api/CallAPI";
+import ComponentPath from "routes/ComponentPath";
 import {
   Box,
+  Button,
+  Modal,
   Paper,
   Table,
   TableBody,
@@ -10,231 +14,173 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Alert,
-  Button,
-  Modal,
-  TextField,
 } from "@mui/material";
-import AdminSideMenu from "../../admin/components/AdminSideMenu";
+import UserSideNav from "../UserSideNav";
+import CreateFeedback from "./CreateFeedback";
+import UserToast from "../alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
-export default function ViewFeedback() {
+export default function ManageFeedback() {
   const [feedbacks, setFeedbacks] = useState([]);
-  const [alertMessage, setAlertMessage] = useState(null);
-  const [alertSeverity, setAlertSeverity] = useState("success");
-  const [showAnswerModal, setShowAnswerModal] = useState(false);
-  const [selectedFeedback, setSelectedFeedback] = useState(null);
-  const [answer, setAnswer] = useState("");
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
 
-  // Fetch all feedbacks on component mount
   useEffect(() => {
-    fetchAllFeedbacks();
-  }, []);
-
-  // Fetch all feedbacks
-  const fetchAllFeedbacks = async () => {
-    try {
-      const data = await api.get("CustomerFeedbacks");
-
-      if (Array.isArray(data) && data.length > 0) {
-        setFeedbacks(data);
-      } else {
-        setAlertMessage("No feedback available!");
-        setAlertSeverity("warning");
+    const fetchFeedbacks = async () => {
+      if (!userId) {
+        alert("User ID is not set. Please log in.");
+        return;
       }
-    } catch (error) {
-      console.error("Error fetching feedbacks:", error);
-      setAlertMessage("An error occurred while fetching feedbacks.");
-      setAlertSeverity("error");
-    }
-  };
+      try {
+    api.get(`CustomerFeedbacks/${userId}`).then ((response) => {
+        if (!response || !response.success) {
+          UserToast("error", "Không có phản hồi!");
+          return;
+        }
+        if (response.customerFeedback) {
+          setFeedbacks(response.customerFeedback);
+        } else {
+          UserToast("error", "Không công phản hồi!");
+        }
+      });
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+         UserToast("error", "Vui lọc đăng nhập!");
+        } else if (error.response && error.response.status === 404) {
+          UserToast("error", "Không có phản hồi!");
+        } else {
+          console.error("Error during fetching feedbacks:", error);
+       UserToast("error", "Không công phản hồi!");
+        }
+      }
+    };
 
-  // Delete feedback by ID
-  const handleDeleteFeedback = async (feedbackId) => {
+    fetchFeedbacks();
+  }, [userId]);
+
+  async function deleteFeedback(feedbackId) {
     try {
-      const data = await api.del(`CustomerFeedbacks/${feedbackId}`);
-      if (data.success) {
+      const response = await api.del(`CustomerFeedbacks/${feedbackId}`);
+      if (response.success) { // Adjusted to check response structure
+        UserToast("success", "Xóa thành công!");
         setFeedbacks((prevFeedbacks) =>
           prevFeedbacks.filter(
             (feedback) => feedback.customerFeedbackId !== feedbackId
           )
         );
-        setAlertMessage("Feedback deleted successfully!");
-        setAlertSeverity("success");
       } else {
-        setAlertMessage("Failed to delete feedback.");
-        setAlertSeverity("error");
+        UserToast("error", "Xóa thất bại!");
       }
     } catch (error) {
-      console.error("Error deleting feedback:", error);
-      setAlertMessage("An error occurred during deletion.");
-      setAlertSeverity("error");
+      console.error("Error during deletion:", error);
+      UserToast("error", "Đã xảy ra lỗi khi xóa phản hồi. Vui lòng thử lại.");
     }
-  };
+  }
 
-  // Answer feedback as admin
-  const handleAnswerFeedback = async () => {
-    if (!answer.trim()) {
-      setAlertMessage("Answer cannot be empty.");
-      setAlertSeverity("warning");
-      return;
-    }
-
+  const handleFeedbackCreated = async () => {
+    setShowDetailModal(false); // Close the modal after creating feedback
     try {
-      const data = await api.put(
-        `CustomerFeedbacks/forAdmin/${selectedFeedback.customerFeedbackId}`,
-        {
-          resolutionAnswer: answer,
-          resolutionStatusId: 1, // assuming 1 is the ID for "answered" status; adjust as needed
+      await api.get(`CustomerFeedbacks/order/${userId}`).then((response) => {
+        if (response.success) {
+          setFeedbacks(response.customerFeedback);
         }
-      );
-
-      if (data.success) {
-        setAlertMessage("Answer submitted successfully!");
-        setAlertSeverity("success");
-        setShowAnswerModal(false);
-        fetchAllFeedbacks(); // Refresh feedback list
-        setAnswer(""); // Reset the answer field
-      } else {
-        setAlertMessage("Failed to submit answer.");
-        setAlertSeverity("error");
-      }
-    } catch (error) {
-      console.error("Error submitting answer:", error);
-      setAlertMessage("An error occurred while submitting the answer.");
-      setAlertSeverity("error");
+      });
+    }catch (error) {
+      console.error("Error fetching feedbacks:", error);
     }
   };
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh" }}>
-      {/* Sidebar */}
-      <Box sx={{ width: 240, flexShrink: 0 }}>
-        <AdminSideMenu />
-      </Box>
-
-      {/* Main Content */}
-      <Box sx={{ flexGrow: 1, p: 3 }}>
-        <Typography variant="h4" gutterBottom>
-          View Feedback
-        </Typography>
-
-        {alertMessage && (
-          <Alert
-            severity={alertSeverity}
-            onClose={() => setAlertMessage(null)}
-            sx={{ mb: 2 }}
-          >
-            {alertMessage}
-          </Alert>
-        )}
-
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Feedback ID</TableCell>
-                <TableCell>Customer ID</TableCell>
-                <TableCell>Order ID</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Comment</TableCell>
-                <TableCell>Submitted Date</TableCell>
-                <TableCell>Resolution Date</TableCell>
-                <TableCell>Rating</TableCell>
-                <TableCell>Answer</TableCell> {/* New Column for Answer */}
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {feedbacks.length > 0 ? (
-                feedbacks.map((feedback) => (
+    <div>
+      <ToastContainer />
+      <UserSideNav>
+        <Box sx={{ display: "block", marginInline: "1em" }}>
+          <Typography variant="h4" gutterBottom>
+            Quản lý phản hồi
+          </Typography>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Mã phản hồi</TableCell>
+                  <TableCell>Mã khách hàng</TableCell>
+                  <TableCell>Mã đơn hàng</TableCell>
+                  <TableCell>Trạng thái giải quyết</TableCell>
+                  <TableCell>Bình luận</TableCell>
+                  <TableCell>Ngày gửi</TableCell>
+                  <TableCell>Ngày giải quyết</TableCell>
+                  <TableCell>Đánh giá</TableCell>
+                  <TableCell>Thao tác</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {feedbacks.map((feedback) => (
                   <TableRow key={feedback.customerFeedbackId}>
                     <TableCell>{feedback.customerFeedbackId}</TableCell>
-                    <TableCell>{feedback.customer?.userId}</TableCell>
-                    <TableCell>{feedback.order?.orderId}</TableCell>
-                    <TableCell>
-                      {feedback.resolution?.resolutionStatusId || "Pending"}
-                    </TableCell>
+                    <TableCell>{feedback.customerId}</TableCell>
+                    <TableCell>{feedback.orderId}</TableCell>
+                    <TableCell>{feedback.resolutionStatusName}</TableCell>
                     <TableCell>{feedback.comment}</TableCell>
                     <TableCell>{feedback.submittedDate}</TableCell>
-                    <TableCell>{feedback.resolution?.resolutionDate}</TableCell>
+                    <TableCell>{feedback.resolutionDate}</TableCell>
                     <TableCell>{feedback.rating}</TableCell>
-                    <TableCell>{feedback.resolution?.resolutionAnswer || "No answer yet"}</TableCell> {/* Display Answer */}
                     <TableCell>
                       <Button
                         variant="contained"
                         color="error"
-                        onClick={() =>
-                          handleDeleteFeedback(feedback.customerFeedbackId)
-                        }
+                        onClick={() => deleteFeedback(feedback.customerFeedbackId)}
                         sx={{ mr: 1 }}
                       >
-                        Delete
+                        Xóa
                       </Button>
                       <Button
+                        component={Link}
+                        to={`${ComponentPath.user.feedback.editFeedback}${feedback.customerFeedbackId}`}
                         variant="contained"
                         color="primary"
-                        onClick={() => {
-                          setSelectedFeedback(feedback);
-                          setShowAnswerModal(true);
-                        }}
                       >
-                        Answer
+                        Sửa
                       </Button>
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={10} align="center">
-                    No feedback available.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        {/* Answer Feedback Modal */}
-        <Modal
-          open={showAnswerModal}
-          onClose={() => setShowAnswerModal(false)}
-          aria-labelledby="modal-answer-feedback"
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 4,
-              minWidth: 300,
-            }}
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setShowDetailModal(true)}
+            sx={{ mt: 2 }}
           >
-            <Typography variant="h6">Answer Feedback</Typography>
-            <TextField
-              label="Answer"
-              fullWidth
-              multiline
-              rows={4}
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              sx={{ mt: 2, mb: 2 }}
-            />
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}>
-              <Button onClick={() => setShowAnswerModal(false)}>Cancel</Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleAnswerFeedback}
-              >
-                Submit
-              </Button>
+            Tạo phản hồi
+          </Button>
+          <Modal
+            open={showDetailModal}
+            onClose={() => setShowDetailModal(false)}
+            aria-labelledby="modal-create-feedback"
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                bgcolor: "background.paper",
+                boxShadow: 24,
+                p: 4,
+              }}
+            >
+              <CreateFeedback customerId={userId} onSuccess={handleFeedbackCreated}  />
+              <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
+                <Button onClick={() => setShowDetailModal(false)}>Close</Button>
+                
+              </Box>
             </Box>
-          </Box>
-        </Modal>
-      </Box>
-    </Box>
+          </Modal>
+        </Box>
+      </UserSideNav>
+    </div>
   );
 }
