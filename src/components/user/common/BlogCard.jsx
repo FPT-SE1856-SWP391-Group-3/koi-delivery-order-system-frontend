@@ -91,7 +91,7 @@ const BlogCard = ({ chunkSize = 4, firstChunk = false }) => {
             open={isDialogOpen}
             onClose={() => setIsDialogOpen(false)}
             maxWidth="lg"
-            fullWidth
+            fullScreen
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
@@ -99,6 +99,8 @@ const BlogCard = ({ chunkSize = 4, firstChunk = false }) => {
               {selectedPost.title}
             </DialogTitle>
             <DialogContent>
+            <div style={{textAlign: "right"}}>{selectedPost.postDate} - {selectedPost.category}</div>
+            <br/>
               <Markdown>{selectedPost.content}</Markdown>
             </DialogContent>
             <DialogActions>
