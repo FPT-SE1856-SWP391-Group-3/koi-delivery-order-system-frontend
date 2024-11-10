@@ -50,7 +50,11 @@ const BlogCard = ({ chunkSize = 4, firstChunk = false }) => {
           key={posts[0]?.postId}
           onClick={() => handlePostClick(posts[0])}
         >
-          <img src={posts[0]?.thumbnail} alt="Main Blog Image" className="main-img" />
+          <img
+            src={posts[0]?.thumbnail}
+            alt="Main Blog Image"
+            className="main-img"
+          />
           <div className="main-content">
             <div className="main-text">
               <h2>{posts[0]?.title}</h2>
@@ -67,7 +71,11 @@ const BlogCard = ({ chunkSize = 4, firstChunk = false }) => {
                 key={post.postId}
                 onClick={() => handlePostClick(post)}
               >
-                <img src={post.thumbnail} alt="Side Blog Image" className="side-img" />
+                <img
+                  src={post.thumbnail}
+                  alt="Side Blog Image"
+                  className="side-img"
+                />
                 <div className="side-content">
                   <h3>
                     <i className="icon"></i>
