@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import Copyright from '../../internals/components/Copyright';
 import BarChart from '../../dashboard/dashboard/BarChart';
 import OrderCount from '../../dashboard/dashboard/OrderCount';
+import Grid2 from '@mui/material/Grid2';
 
 export default function MainGrid() {
   const data: StatCardProps[] = [

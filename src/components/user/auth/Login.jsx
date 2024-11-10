@@ -11,7 +11,9 @@ import { Alert } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 
 export default function Login() {
-  const { register, handleSubmit, formState : {errors} } = useForm();
+  const { register, handleSubmit, formState : {errors} } = useForm({
+    mode: "onBlur",
+  });
   const [error, setError] = useState("");
   const [token, setToken] = useState(JSON.parse(localStorage.getItem("token")));
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
