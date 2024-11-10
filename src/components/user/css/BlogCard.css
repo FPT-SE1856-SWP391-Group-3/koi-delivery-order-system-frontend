@@ -15,7 +15,8 @@
 
 .main-img {
   width: 100%;
-  height: auto;
+  height: 10rem;
+  object-fit: fill;
 }
 
 .main-content {
@@ -63,7 +64,8 @@
 
 .side-img {
   width: 40%;
-  height: auto;
+  height: 4rem;
+  object-fit: fill;
 }
 
 .side-content {
