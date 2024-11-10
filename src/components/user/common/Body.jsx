@@ -23,7 +23,6 @@ import {
   List,
   ListItemButton,
   ListItemText,
-  Divider,
   ListItem,
 } from "@mui/material";
 
@@ -32,6 +31,7 @@ const Body = () => {
   const [selector, setSelector] = useState("consignment");
   const [orderId, setOrderId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isOrderLoading, setOrderLoading] = useState(false);
   const [error, setError] = useState(null);
   const [order, setOrder] = useState([
     {
@@ -80,6 +80,7 @@ const Body = () => {
   };
 
   const fetchOrder = async () => {
+    setOrderLoading(true);
     try {
       const data = await api.get(`Orders/orderId/${orderId}`);
       if (data.success) {
@@ -95,6 +96,8 @@ const Body = () => {
         return;
       }
       setError("An error occurred while fetching orders.");
+    } finally {
+      setOrderLoading(false);
     }
   };
 
@@ -105,10 +108,13 @@ const Body = () => {
 
     return (
       <>
-        <button onClick={handleCheck}>Check</button>
+        <button onClick={handleCheck}>
+          {isOrderLoading ? "Checking" : "Check"}
+        </button>
         <Box
           sx={{
             backgroundColor: "white",
+            marginTop: "1rem",
             padding: "1rem",
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
             display: isOpen ? "block" : "none",
