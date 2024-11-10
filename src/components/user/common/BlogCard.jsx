@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../css/BlogCard.css";
-import blog1 from "../../../assets/blog1.jfif";
-import blog2 from "../../../assets/blog2.jpg";
-import blog3 from "../../../assets/blog3.jpg";
-import blog4 from "../../../assets/blog4.jfif";
 import CallAPI from "../../../api/CallAPI";
 import {
   Button,
