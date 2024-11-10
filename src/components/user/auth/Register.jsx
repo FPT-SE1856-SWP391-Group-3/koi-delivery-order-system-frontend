@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import google from "../../../assets/google.png";
@@ -15,21 +15,35 @@ export default function Register() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: "onBlur",
+  });
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
 
+
+  const checkPassword = (password, confirmPassword) => {
+    return password === confirmPassword;
+  };
+
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
+      if (!checkPassword(data.password, data.confirmPassword)) {
+        setIsLoading(false);
+        UserToast("error", "Mật khẩu không khớp!");
+        return;
+      }
       api
         .post("Users/register", data)
         .then((data) => {
           if (data.success) {
-            UserToast("success", "Đăng ký thành công!");
+            UserToast("success", "Đăng ký thành công! Đang chuyển hướng đến trang đăng nhập...");
             setIsLoading(false);
-            navigate("/login");
+            setTimeout(() => {
+              navigate("/login");
+            }, 3000);
           } else {
             setIsLoading(false);
             UserToast("error", "Đăng ký thất bại!");
@@ -62,6 +76,9 @@ export default function Register() {
 
             <div className="form-side">
               <h1>Sign Up!</h1>
+              {errors.email && (
+                <span style={{ color: "red" }}>This field is required</span>
+              )}
               <form onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="email">Email/SDT</label>
                 <input
@@ -71,9 +88,13 @@ export default function Register() {
                   {...register("email", { required: true })}
                   className="input-field"
                 />
-                {errors.email && <span>This field is required</span>}
 
+                {errors.username && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
+                <br />
                 <label htmlFor="username">Username</label>
+
                 <input
                   type="text"
                   id="username"
@@ -81,9 +102,12 @@ export default function Register() {
                   {...register("username", { required: true })}
                   className="input-field"
                 />
-                {errors.username && <span>This field is required</span>}
-
+                {errors.password && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
+                <br />
                 <label htmlFor="password">Password</label>
+
                 <div className="password-wrapper">
                   <input
                     type="password"
@@ -92,8 +116,23 @@ export default function Register() {
                     {...register("password", { required: true })}
                     className="input-field"
                   />
-                  {errors.password && <span>This field is required</span>}
                 </div>
+
+                {errors.confirmPassword && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
+                <br />
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <div className="password-wrapper">
+                  <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm Password"
+                    {...register("confirmPassword", { required: true })}
+                    className="input-field"
+                  />
+                </div>
+                <br />
 
                 {isLoading ? (
                   <button type="submit" className="signup-btn" disabled>
