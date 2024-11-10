@@ -133,8 +133,11 @@ function OrderRow({ row }) {
         <TableCell>{row.customerId}</TableCell>
         <TableCell>{row.orderDate}</TableCell>
         <TableCell>
-          {row.paymentHistoryId != null && row.paymentHistory && row.paymentHistory.paymentStatusId === 2
-              ? "True" : "False"}
+          {row.paymentHistoryId != null &&
+          row.paymentHistory &&
+          row.paymentHistory.paymentStatusId === 2
+            ? "True"
+            : "False"}
         </TableCell>
         <TableCell>{row.deliveryDate}</TableCell>
         <TableCell>
