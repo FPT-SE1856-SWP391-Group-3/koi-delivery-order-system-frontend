@@ -107,7 +107,7 @@ function OrderRow({
 
   return (
     row != null &&
-    ((user.roleId === 3 && row.orderStatusId <= 7) ||
+    ((user.roleId === 3 && row.orderStatusId < 7) ||
       (user.roleId === 4 && row.orderStatusId >= 7) ||
       user.roleId === 5) && (
       <React.Fragment>
@@ -341,6 +341,7 @@ export default function ManageOrder() {
       if (data.success) {
         setOrder(data.order);
         setFilteredOrders(data.order);
+        console.log(order);
       } else {
         console.log("No orders found!");
       }
