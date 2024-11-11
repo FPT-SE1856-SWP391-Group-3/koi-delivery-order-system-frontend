@@ -72,20 +72,20 @@ export default function UserOrder() {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h4" align="center">
-                Danh sách đơn hàng
+                Order History
               </Typography>
               <TableContainer component={Paper} sx={{ marginTop: 2 }}>
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Mã đơn hàng</TableCell>
-                      <TableCell>Ngày đặt hàng</TableCell>
-                      <TableCell>Ngày giao hàng</TableCell>
-                      <TableCell>Địa chỉ lấy hàng</TableCell>
-                      <TableCell>Địa chỉ giao hàng</TableCell>
-                      <TableCell>Tổng tiền</TableCell>
-                      <TableCell>Trạng thái</TableCell>
-                      <TableCell>Chi tiết</TableCell>
+                      <TableCell>OrderId</TableCell>
+                      <TableCell>Placed Date</TableCell>
+                      <TableCell>Delivery Date</TableCell>
+                      <TableCell>Sender Address</TableCell>
+                      <TableCell>Delivery Address</TableCell>
+                      <TableCell>Total</TableCell>
+                      <TableCell>Status</TableCell>
+                      <TableCell>Details</TableCell>
                       <TableCell>FeedBack</TableCell>
                       <TableCell>Document</TableCell>
                     </TableRow>
@@ -120,7 +120,7 @@ export default function UserOrder() {
                                 handleShowDetailModal(order.orderId)
                               }
                             >
-                              Chi tiết
+                              Details
                             </Button>
                           </TableCell>
                           <TableCell>
@@ -176,7 +176,7 @@ export default function UserOrder() {
             }}
           >
             <Typography id="detail-modal-title" variant="h6" component="h2">
-              Chi tiết đơn hàng
+              Order Details
             </Typography>
             <UserOrderDetail orderId={selectedOrderId} />
             <Box display="flex" justifyContent="flex-end" mt={2}>

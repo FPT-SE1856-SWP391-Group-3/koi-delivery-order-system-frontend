@@ -35,23 +35,23 @@ export default function ManageFeedback() {
       try {
     api.get(`CustomerFeedbacks/${userId}`).then ((response) => {
         if (!response || !response.success) {
-          UserToast("error", "Không có phản hồi!");
+          UserToast("error", "No feedback!");
           return;
         }
         if (response.customerFeedback) {
           setFeedbacks(response.customerFeedback);
         } else {
-          UserToast("error", "Không công phản hồi!");
+          UserToast("error", "No feedback!");
         }
       });
       } catch (error) {
         if (error.response && error.response.status === 401) {
-         UserToast("error", "Vui lọc đăng nhập!");
+         UserToast("error", "Please Login!");
         } else if (error.response && error.response.status === 404) {
-          UserToast("error", "Không có phản hồi!");
+          UserToast("error", "Not responding!");
         } else {
           console.error("Error during fetching feedbacks:", error);
-       UserToast("error", "Không công phản hồi!");
+       UserToast("error", "Cannot load feedbacks!");
         }
       }
     };
@@ -70,11 +70,11 @@ export default function ManageFeedback() {
           )
         );
       } else {
-        UserToast("error", "Xóa thất bại!");
+        UserToast("error", "fail to delete!");
       }
     } catch (error) {
       console.error("Error during deletion:", error);
-      UserToast("error", "Đã xảy ra lỗi khi xóa phản hồi. Vui lòng thử lại.");
+      UserToast("error", "Error occured while loading feedbacks");
     }
   }
 
@@ -97,21 +97,21 @@ export default function ManageFeedback() {
       <UserSideNav>
         <Box sx={{ display: "block", marginInline: "1em" }}>
           <Typography variant="h4" gutterBottom>
-            Quản lý phản hồi
+            Feddback Management
           </Typography>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Mã phản hồi</TableCell>
-                  <TableCell>Mã khách hàng</TableCell>
-                  <TableCell>Mã đơn hàng</TableCell>
-                  <TableCell>Trạng thái giải quyết</TableCell>
-                  <TableCell>Bình luận</TableCell>
-                  <TableCell>Ngày gửi</TableCell>
-                  <TableCell>Ngày giải quyết</TableCell>
-                  <TableCell>Đánh giá</TableCell>
-                  <TableCell>Thao tác</TableCell>
+                  <TableCell>ID</TableCell>
+                  <TableCell>CustomerID</TableCell>
+                  <TableCell>OrderID</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Comment</TableCell>
+                  <TableCell>Send Date</TableCell>
+                  <TableCell>Solve Date</TableCell>
+                  <TableCell>Rating</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -132,7 +132,7 @@ export default function ManageFeedback() {
                         onClick={() => deleteFeedback(feedback.customerFeedbackId)}
                         sx={{ mr: 1 }}
                       >
-                        Xóa
+                        Delete
                       </Button>
                       <Button
                         component={Link}
@@ -140,7 +140,7 @@ export default function ManageFeedback() {
                         variant="contained"
                         color="primary"
                       >
-                        Sửa
+                        Update
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -154,7 +154,7 @@ export default function ManageFeedback() {
             onClick={() => setShowDetailModal(true)}
             sx={{ mt: 2 }}
           >
-            Tạo phản hồi
+            Create
           </Button>
           <Modal
             open={showDetailModal}
