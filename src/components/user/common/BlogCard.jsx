@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import Markdown from "react-markdown";
 
-const BlogCard = ({ chunkSize = 4, firstChunk = false }) => {
+const BlogCard = ({ chunkSize = 3, firstChunk = false }) => {
   const [chunkedPosts, setChunkedPosts] = useState([[]]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -99,8 +99,10 @@ const BlogCard = ({ chunkSize = 4, firstChunk = false }) => {
               {selectedPost.title}
             </DialogTitle>
             <DialogContent>
-            <div style={{textAlign: "right"}}>{selectedPost.postDate} - {selectedPost.category}</div>
-            <br/>
+              <div style={{ textAlign: "right" }}>
+                {selectedPost.postDate} - {selectedPost.category}
+              </div>
+              <br />
               <Markdown>{selectedPost.content}</Markdown>
             </DialogContent>
             <DialogActions>
