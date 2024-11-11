@@ -45,7 +45,10 @@ export default function ManageBlogNews() {
         console.log("No posts found!");
       }
     } catch (error) {
-      UserToast("error", "An error occurred while fetching posts. Please try again.");
+      UserToast(
+        "error",
+        "An error occurred while fetching posts. Please try again."
+      );
     }
   };
 
@@ -75,7 +78,10 @@ export default function ManageBlogNews() {
       }
     } catch (error) {
       console.error("Error during deletion:", error);
-      UserToast("error", "An error occurred during deletion. Please try again.");
+      UserToast(
+        "error",
+        "An error occurred during deletion. Please try again."
+      );
     }
     closeDeleteDialog();
   };
@@ -135,11 +141,7 @@ export default function ManageBlogNews() {
                     Subtitle
                   </Typography>
                 </TableCell>
-                <TableCell>
-                  <Typography fontWeight={600} align="center">
-                    Thumbnail
-                  </Typography>
-                </TableCell>
+
                 <TableCell>
                   <Typography fontWeight={600} align="center">
                     Content
@@ -169,7 +171,6 @@ export default function ManageBlogNews() {
                   <TableCell align="center">{post.userId}</TableCell>
                   <TableCell align="center">{post.title}</TableCell>
                   <TableCell align="center">{post.subtitle}</TableCell>
-                  <TableCell align="center">{post.thumbnail}</TableCell>
                   <TableCell>{post.content}</TableCell>
                   <TableCell align="center">{post.postDate}</TableCell>
                   <TableCell align="center">{post.category}</TableCell>
