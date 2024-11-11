@@ -6,10 +6,9 @@ import ComponentPath from "routes/ComponentPath";
 import UserSideNav from "../UserSideNav";
 import { Box, Button, Paper, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Table } from "react-bootstrap";
-import { FitScreen, FitScreenOutlined } from "@mui/icons-material";
-
 export default function ManageDocument() {
   const [customerDocuments, setCustomerDocuments] = useState([{}]);
+  const userId = JSON.parse(localStorage.getItem("userId"));  
   const { orderId } = useParams();
   const navigate = useNavigate();
 
@@ -50,19 +49,21 @@ export default function ManageDocument() {
 
   return (
     <UserSideNav>
-    <Box sx={{marginInline : "1em"}}>
+      <Box sx={{ marginInline: "1em" }}>
         <Typography variant="h4" gutterBottom>
           Documents
         </Typography>
         <Button
           variant="contained"
           color="primary"
-          href={ComponentPath.user.document.createDocument}
+          href={
+            ComponentPath.user.document.createDocument + orderId + "/" + userId
+          }
           sx={{ mb: 2 }}
         >
           Add Document
         </Button>
-        <TableContainer component={Paper} >
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
@@ -80,9 +81,17 @@ export default function ManageDocument() {
                   <TableCell>{doc.documentId}</TableCell>
                   <TableCell>{doc.orderId}</TableCell>
                   <TableCell>
-                    <a href={api.imageBuildUrl(doc.filePath)} target="_blank" rel="noopener noreferrer">
-                      View File
-                    </a>
+                    <Button variant="contained">
+                      {" "}
+                      <a
+                        href={"data:" + api.imageBuildUrl(doc.filePath)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                      >
+                        Download File
+                      </a>
+                    </Button>
                   </TableCell>
                   <TableCell>{doc.uploadDate}</TableCell>
                   <TableCell>{doc.description}</TableCell>
@@ -108,7 +117,7 @@ export default function ManageDocument() {
             </TableBody>
           </Table>
         </TableContainer>
-        </Box>
-      </UserSideNav>
+      </Box>
+    </UserSideNav>
   );
 }
