@@ -13,6 +13,8 @@ import {
   CircularProgress,
   Paper,
 } from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import UserToast from "../../user/alert/UserToast";
 
 export default function ManageUserAddress({ userId }) {
   const [addresses, setAddresses] = useState([]);
@@ -28,12 +30,10 @@ export default function ManageUserAddress({ userId }) {
           setAddresses(data.address);
         } else {
           setAddresses([]);
-          alert("No address information found for this user.");
+          UserToast("error", "No address information found for this user.");
         }
       } catch (error) {
-        alert(
-          "An error has occurred while fetching addresses. Please try again."
-        );
+        UserToast("error", "An error occurred while fetching addresses.");
       } finally {
         setLoading(false); // Stop loading after fetching
       }
@@ -43,6 +43,7 @@ export default function ManageUserAddress({ userId }) {
 
   return (
     <Box>
+      <ToastContainer />
       {loading ? (
         <CircularProgress />
       ) : addresses.length > 0 ? (

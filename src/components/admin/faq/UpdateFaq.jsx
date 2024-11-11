@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import api from "../../../api/CallAPI";
+import UserToast from "../../user/alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 
 export default function UpdateFaq({ faqId, onClose, onUpdateSuccess }) {
@@ -17,11 +19,11 @@ export default function UpdateFaq({ faqId, onClose, onUpdateSuccess }) {
         if (data.success) {
           setUpdateFaq(data.faq);
         } else {
-          alert("FAQ not found!");
+          UserToast("error", "FAQ not found.");
         }
       } catch (error) {
         console.error("Error fetching FAQ:", error);
-        alert("An error occurred while fetching the FAQ.");
+        UserToast("error", "An error occurred while fetching the FAQ.");
       }
     };
 
@@ -34,20 +36,21 @@ export default function UpdateFaq({ faqId, onClose, onUpdateSuccess }) {
     try {
       const data = await api.put(`Faqs/${faqId}`, updateFaq);
       if (data.success) {
-        alert("FAQ updated successfully!");
+        UserToast("success", "FAQ updated successfully!");
         onUpdateSuccess(); // Callback to refresh FAQ list
         onClose(); // Close modal on successful update
       } else {
-        alert("Failed to update FAQ!");
+        UserToast("error", "Failed to update FAQ!");
       }
     } catch (error) {
       console.error("Error during update:", error);
-      alert("An error occurred during the update. Please try again.");
+      UserToast("error", "An error occurred during update. Please try again.");
     }
   };
 
   return (
     <Box className="updatefaq-container" padding={3} component="form" onSubmit={handleSubmit}>
+      <ToastContainer />
       <Typography variant="h5" className="form-title" gutterBottom>
         Update FAQ
       </Typography>

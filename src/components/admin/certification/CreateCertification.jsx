@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import { useFieldArray, useForm } from "react-hook-form";
 import "../certification/CreateCertification.css";
+import UserToast from "../../user/alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 export default function CreateCertification() {
   const { control, register, handleSubmit } = useForm();
@@ -31,22 +33,23 @@ export default function CreateCertification() {
         );
         api.postForm("Certifications/", certificationData).then((data) => {
           if (data.success) {
-            alert("Thêm thành công!");
+            UserToast("success", "Add certification successfully!");
             navigate("/admin/manage-certification");
           } else {
-            alert("Thêm thất bại!");
+            UserToast("error", "Failed to add certification!");
           }
         });
       });
     } catch (error) {
       console.error("Error during registration:", error);
-      alert("An error occurred during registration. Please try again.");
+      UserToast("error", "Error! Please try again.");
     }
   };
 
   console.log(fields);
   return (
     <>
+    <ToastContainer />
       <a className="back-button" href="/admin/manage-certification">
         Back
       </a>

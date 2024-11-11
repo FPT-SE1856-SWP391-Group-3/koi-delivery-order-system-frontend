@@ -84,12 +84,12 @@ export default function ManageDocument() {
                     <Button variant="contained">
                       {" "}
                       <a
-                        href={"data:" + api.imageBuildUrl(doc.filePath)}
+                        href={api.imageBuildUrl(doc.filePath)}
                         target="_blank"
                         rel="noopener noreferrer"
                         download
                       >
-                        Download File
+                        View File
                       </a>
                     </Button>
                   </TableCell>

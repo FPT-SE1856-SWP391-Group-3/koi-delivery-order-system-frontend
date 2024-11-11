@@ -17,6 +17,8 @@ import {
 } from "@mui/material";
 import ComponentPath from "routes/ComponentPath";
 import AdminSideMenu from "../components/AdminSideMenu";
+import UserToast from "../../user/alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 export default function ManageCertification() {
   const [certifications, setCertifications] = useState([]);
@@ -33,7 +35,7 @@ export default function ManageCertification() {
         }
       });
     } catch (error) {
-      alert("An error has occurred. Please try again.");
+      UserToast("error", "An error occurred while fetching certifications.");
     }
   }, []);
 
@@ -54,7 +56,7 @@ export default function ManageCertification() {
     try {
       const data = await api.del("Certifications/" + selectedCertificationId);
       if (data.success) {
-        alert("Xóa thành công!");
+        UserToast("success", "Xóa chứng chỉ thành công!");
         setCertifications((prevCertifications) =>
           prevCertifications.filter(
             (certification) =>
@@ -63,17 +65,18 @@ export default function ManageCertification() {
         );
         closeDeleteModal();
       } else {
-        alert("Xóa thất bại!");
+        UserToast("error", "Xóa chứng chỉ thất bại!");
       }
     } catch (error) {
       console.error("Error during deletion:", error);
-      alert("An error occurred during deletion. Please try again.");
+      UserToast("error", "An error occurred during deletion. Please try again.");
       closeDeleteModal();
     }
   }
 
   return (
     <>
+      <ToastContainer />
       <AdminSideMenu />
       <Box sx={{ ml: "260px", p: 3 }}>
         <Typography variant="h5" gutterBottom fontWeight="bold">

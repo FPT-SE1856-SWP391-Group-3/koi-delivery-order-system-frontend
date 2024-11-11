@@ -22,6 +22,8 @@ import api from "../../../api/CallAPI";
 import NewFaq from "./NewFaq";
 import UpdateFaq from "./UpdateFaq";
 import AdminSideMenu from "../components/AdminSideMenu";
+import UserToast from "../../user/alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 export default function ManageFaq() {
   const [faqs, setFaqs] = useState([]);
@@ -40,7 +42,7 @@ export default function ManageFaq() {
         console.log("No FAQs found.");
       }
     } catch (error) {
-      alert("An error occurred while fetching FAQs. Please try again.");
+      UserToast("error", "An error occurred while fetching FAQs.");
     }
   };
 
@@ -53,16 +55,16 @@ export default function ManageFaq() {
     try {
       const data = await api.del(`Faqs/${selectedFaqId}`);
       if (data.success) {
-        alert("FAQ deleted successfully!");
+        UserToast("success", "FAQ deleted successfully!");
         setFaqs((prevFaqs) =>
           prevFaqs.filter((faq) => faq.faqid !== selectedFaqId)
         );
       } else {
-        alert("Failed to delete FAQ.");
+        UserToast("error", "Failed to delete FAQ.");
       }
     } catch (error) {
       console.error("Error during deletion:", error);
-      alert("An error occurred during deletion. Please try again.");
+      UserToast("error", "An error occurred during deletion. Please try again.");
     }
     closeDeleteDialog();
   };
@@ -98,6 +100,7 @@ export default function ManageFaq() {
 
   return (
     <Box display="flex">
+      <ToastContainer />
       <AdminSideMenu />
       <Box flex={1} padding={3}>
         <Typography variant="h5" gutterBottom fontWeight="bold">
