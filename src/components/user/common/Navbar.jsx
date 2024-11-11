@@ -41,12 +41,6 @@ const Navbar = () => {
         >
           <a href="/customer-support">Customer Support</a>
         </li>
-        <li
-          onClick={() => setMenu("recruitment")}
-          className={menu === "recruitment" ? "active" : ""}
-        >
-          <a href="/recruitment">Recruitment</a>
-        </li>
       </ul>
       <div className="navbar-right">
         {/* {token !== null ? (
