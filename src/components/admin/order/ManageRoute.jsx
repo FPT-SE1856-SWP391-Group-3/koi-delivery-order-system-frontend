@@ -63,7 +63,7 @@ function OrderRow({ row }) {
 
         try {
           const routeResponse = await api.get(
-            `RoutesControllers/${response.routeId}`
+            `RoutesControllers/${response.matchingRoutes[0].routeId}`
           );
           if (routeResponse.success) {
             detailedRoutes.push(routeResponse.route);
