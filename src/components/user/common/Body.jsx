@@ -75,7 +75,10 @@ const Body = () => {
         console.log("No FAQs found.");
       }
     } catch (error) {
-      console.error("An error occurred while fetching FAQs. Please try again.", error);
+      console.error(
+        "An error occurred while fetching FAQs. Please try again.",
+        error
+      );
     }
   };
 
@@ -166,7 +169,7 @@ const Body = () => {
             onClick={() => setButton("services")}
             className={button === "services" ? "active" : ""}
           >
-            Services
+            <a href="/services">Services</a>
           </button>
         </li>
       </ul>
@@ -283,9 +286,7 @@ const Body = () => {
           )}
         </>
       ) : (
-        <div className="services-content">
-          <p>This is services</p>
-        </div>
+        <div className="services-content"></div>
       )}
       <BlogCard firstChunk={true} />
       <div className="process-content">
