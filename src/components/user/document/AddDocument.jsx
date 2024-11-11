@@ -52,7 +52,7 @@ export default function AddDocument({ orderId, userId }) {
   return (
     <div>
       <UserSideNav>
-        <div className="">
+        <div className="container">
           <div className="row">
             <div className="col-md-12">
               <h2 className="text-center">Thêm Tài liệu mới</h2>
