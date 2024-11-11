@@ -51,99 +51,108 @@ export default function AddDocument({ orderId, userId }) {
 
   return (
     <div>
-      <UserSideNav />
-      <div className="">
-        <div className="row">
-          <div className="col-md-12">
-            <h2 className="text-center">Thêm Tài liệu mới</h2>
-            <div className="form-group">
-              <label htmlFor={`orderId`}>Mã đơn hàng</label>
-              <input
-                type="number"
-                className="form-control"
-                id={`orderId`}
-                name={`orderId`}
-                value={orderId}
-                readOnly
-              />
+      <UserSideNav>
+        <div className="">
+          <div className="row">
+            <div className="col-md-12">
+              <h2 className="text-center">Thêm Tài liệu mới</h2>
+              <div className="form-group">
+                <label htmlFor={`orderId`}>Mã đơn hàng</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id={`orderId`}
+                  name={`orderId`}
+                  value={orderId}
+                  readOnly
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor={`userId`}>Mã người dùng</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id={`userId`}
+                  name={`userId`}
+                  value={userId}
+                  readOnly
+                />
+              </div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                {fields.map((field, index) => (
+                  <>
+                    <h5>Tài liều thứ {index + 1}</h5>
+                    <div className="form-group">
+                      <input
+                        type="number"
+                        className="form-control"
+                        id={`customerDocuments.${index}.orderId`}
+                        name={`customerDocuments.${index}.orderId`}
+                        value={orderId}
+                        readOnly
+                        hidden
+                        {...register(`customerDocuments.${index}.orderId`)}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor={`customerDocuments.${index}.userId`}>
+                        Mã người dùng
+                      </label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        id={`customerDocuments.${index}.userId`}
+                        name={`customerDocuments.${index}.userId`}
+                        value={userId}
+                        readOnly
+                        hidden
+                        {...register(`customerDocuments.${index}.userId`)}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        id="customerDocumentFile"
+                        name="customerDocumentFile"
+                        type="file"
+                        accept="multipart/form-data"
+                        {...register(
+                          `customerDocuments.${index}.customerDocumentFile`
+                        )}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="description">Mô tả</label>
+                      <textarea
+                        className="form-control"
+                        id="description"
+                        name="description"
+                        {...register(`customerDocuments.${index}.description`)}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={() => remove(index)}
+                    >
+                      Delete
+                    </button>
+                  </>
+                ))}
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => append({})}
+                >
+                  Add document
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Thêm
+                </button>
+              </form>
             </div>
-            <div className="form-group">
-              <label htmlFor={`userId`}>Mã người dùng</label>
-              <input
-                type="number"
-                className="form-control"
-                id={`userId`}
-                name={`userId`}
-                value={userId}
-                readOnly
-              />
-            </div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              {fields.map((field, index) => (
-                <>
-                <h5>Tài liều thứ {index + 1}</h5>
-                  <div className="form-group">
-                    <input
-                      type="number"
-                      className="form-control"
-                      id={`customerDocuments.${index}.orderId`}
-                      name={`customerDocuments.${index}.orderId`}
-                      value={orderId}
-                      readOnly
-                      hidden
-                      {...register(`customerDocuments.${index}.orderId`)}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor={`customerDocuments.${index}.userId`}>
-                      Mã người dùng
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id={`customerDocuments.${index}.userId`}
-                      name={`customerDocuments.${index}.userId`}
-                      value={userId}
-                      readOnly
-                      hidden
-                      {...register(`customerDocuments.${index}.userId`)}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <input
-                      id="customerDocumentFile"
-                      name="customerDocumentFile"
-                      type="file"
-                      accept="multipart/form-data"
-                      {...register(
-                        `customerDocuments.${index}.customerDocumentFile`
-                      )}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="description">Mô tả</label>
-                    <textarea
-                      className="form-control"
-                      id="description"
-                      name="description"
-                      {...register(`customerDocuments.${index}.description`)}
-                    />
-                  </div>
-                  <button type="button" className="btn btn-danger" onClick={() => remove(index)}>
-                    Delete
-                  </button>
-                </>
-              ))}
-              <button type="button" className="btn btn-secondary" onClick={() => append({})}>
-                Add document
-              </button>
-              <button type="submit" className="btn btn-primary">
-                Thêm
-              </button>
-            </form>
           </div>
         </div>
-      </div>
+      </UserSideNav>
     </div>
   );
 }
