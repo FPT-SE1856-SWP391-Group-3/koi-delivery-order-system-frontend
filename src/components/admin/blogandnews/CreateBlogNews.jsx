@@ -2,6 +2,8 @@ import api from "../../../api/CallAPI";
 import { Controller, useForm } from "react-hook-form";
 import "../blogandnews/CreateBlogNews.css";
 import MDEditor from "@uiw/react-md-editor";
+import UserToast from "../../user/alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 export default function CreateBlogNews({ onClose, onAddSuccess }) {
   const { control, register, handleSubmit } = useForm();
@@ -12,21 +14,22 @@ export default function CreateBlogNews({ onClose, onAddSuccess }) {
     try {
       api.post("BlogNews", data).then((response) => {
         if (response.success) {
-          alert("Thêm thành công!");
+          UserToast("success", "Add blog/news successfully!");
           onClose(); // Đóng modal
           onAddSuccess(); // Cập nhật danh sách
         } else {
-          alert("Thêm thất bại!");
+          UserToast("error", "Failed to add blog/news!");
         }
       });
     } catch (error) {
       console.error("Error:", error);
-      alert("Error! Please try again.");
+      UserToast("error", "Error! Please try again.");
     }
   };
 
   return (
     <div className="addblog-container">
+      <ToastContainer />
       <form onSubmit={handleSubmit(onSubmit)} className="addblog-form">
         <input
           type="hidden"

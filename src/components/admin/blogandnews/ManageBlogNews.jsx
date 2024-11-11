@@ -22,6 +22,8 @@ import api from "../../../api/CallAPI";
 import EditBlogNews from "./EditBlogNews";
 import CreateBlogNews from "./CreateBlogNews";
 import AdminSideMenu from "../components/AdminSideMenu";
+import UserToast from "../../user/alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 export default function ManageBlogNews() {
   const [posts, setPosts] = useState([]);
@@ -43,7 +45,7 @@ export default function ManageBlogNews() {
         console.log("No posts found!");
       }
     } catch (error) {
-      alert("An error occurred while fetching posts. Please try again.");
+      UserToast("error", "An error occurred while fetching posts. Please try again.");
     }
   };
 
@@ -64,16 +66,16 @@ export default function ManageBlogNews() {
     try {
       const data = await api.del(`BlogNews/${selectedPostId}`);
       if (data.success) {
-        alert("Post deleted successfully!");
+        UserToast("success", "Post deleted successfully!");
         setPosts((prevPosts) =>
           prevPosts.filter((post) => post.postId !== selectedPostId)
         );
       } else {
-        alert("Failed to delete post!");
+        UserToast("error", "Failed to delete post!");
       }
     } catch (error) {
       console.error("Error during deletion:", error);
-      alert("An error occurred during deletion. Please try again.");
+      UserToast("error", "An error occurred during deletion. Please try again.");
     }
     closeDeleteDialog();
   };
@@ -102,6 +104,7 @@ export default function ManageBlogNews() {
 
   return (
     <Box display="flex">
+      <ToastContainer />
       <AdminSideMenu />
       <Box flex={1} padding={3}>
         <Typography variant="h5" gutterBottom fontWeight="bold">

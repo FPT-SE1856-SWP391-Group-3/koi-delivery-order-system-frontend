@@ -223,7 +223,7 @@ function CreateOrder() {
                   <Grid item xs={12} md={8}>
                     <Typography variant="body1">Total Freight: 0 đ</Typography>
                     <Typography variant="body1">
-                      Total Cost: {totalPrice} đ
+                      Total Cost: {totalPrice.toLocaleString("en-US", {style:"currency", currency:"VND"})}
                     </Typography>
                     <Typography variant="body1">
                       Estimated Delivery: Same Day

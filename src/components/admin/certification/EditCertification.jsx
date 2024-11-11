@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/CallAPI";
 import "../certification/EditCertification.css";
+import UserToast from "../../user/alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 export default function EditCertification() {
   const [certification, setCertification] = useState({
@@ -25,12 +27,12 @@ export default function EditCertification() {
               certificateFile: null, // File không thể set từ dữ liệu API
             }); // Set giá trị vào state
           } else {
-            alert("Không tìm thấy Certification!");
+            UserToast("error", "Không tìm thấy Certification!");
           }
         });
       } catch (error) {
         console.error("Error fetching Certification:", error);
-        alert("An error occurred while fetching the Certification.");
+        UserToast("error", "An error occurred while fetching the Certification.");
       }
     };
 
@@ -50,20 +52,21 @@ export default function EditCertification() {
         .putForm("Certifications/" + certificationId, certificationData)
         .then((data) => {
           if (data.success) {
-            alert("Cập nhật thành công!");
+            UserToast("success", "Update certification successfully!");
             navigate("/admin/manage-certification");
           } else {
-            alert("Cập nhật thất bại!");
+            UserToast("error", "Failed to update certification!");
           }
         });
     } catch (error) {
       console.error("Error during update:", error);
-      alert("An error occurred during update. Please try again.");
+      UserToast("error", "An error occurred during update. Please try again.");
     }
   };
 
   return (
     <>
+    <ToastContainer />
       <a className="back-button" href="/admin/manage-certification">
         Back
       </a>

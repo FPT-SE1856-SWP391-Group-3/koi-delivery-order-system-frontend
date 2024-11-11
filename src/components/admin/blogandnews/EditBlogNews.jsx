@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import api from "../../../api/CallAPI";
 import "../blogandnews/EditBlogNews.css";
+import UserToast from "../../user/alert/UserToast";
+import { ToastContainer } from "react-toastify";
 
 export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
   const [blogNews, setBlogNews] = useState({
@@ -18,12 +20,12 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
           if (data.success) {
             setBlogNews(data.blogNews);
           } else {
-            alert("Không tìm thấy BlogNews!");
+            UserToast("error", "No blog/news found with this ID.");
           }
         });
       } catch (error) {
         console.error("Error fetching BlogNews:", error);
-        alert("An error occurred while fetching the BlogNews.");
+        UserToast("error", "An error occurred while fetching the BlogNews.");
       }
     };
 
@@ -35,21 +37,22 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
     try {
       api.put("BlogNews/" + postId, blogNews).then((data) => {
         if (data.success) {
-          alert("Cập nhật thành công!");
+          UserToast("success", "Update blog/news successfully!");
           onClose(); // Đóng modal
           onUpdateSuccess(); // Cập nhật danh sách
         } else {
-          alert("Cập nhật thất bại!");
+          UserToast("error", "Failed to update blog/news!");
         }
       });
     } catch (error) {
       console.error("Error during update:", error);
-      alert("An error occurred during update. Please try again.");
+      UserToast("error", "An error occurred during update. Please try again.");
     }
   };
 
   return (
     <div className="updateblog-container">
+      <ToastContainer />
       <form onSubmit={handleSubmit} className="updateblog-form">
         <div className="form-group">
           <label htmlFor="title">Title</label>
@@ -95,9 +98,7 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
             id="content"
             name="content"
             value={blogNews.content}
-            onChange={(value) =>
-              setBlogNews({ ...blogNews, content: value })
-            }
+            onChange={(value) => setBlogNews({ ...blogNews, content: value })}
           />
         </div>
         <div className="form-group">
