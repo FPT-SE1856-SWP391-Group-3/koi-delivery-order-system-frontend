@@ -122,7 +122,7 @@ const SenderPackage = ({ onChange, setTotalPrice }) => {
                   color="danger"
                   onClick={() => handleRemoveItem(index)}
                 >
-                  Xóa
+                  Delete
                 </Button>
               </Grid>
             </Grid>
@@ -137,8 +137,8 @@ const SenderPackage = ({ onChange, setTotalPrice }) => {
           {orderServiceDetails.map((orderServiceDetail, idx) => (
             <>
               <div key={idx}>
-                <p>Gía dịch vụ: {orderServiceDetail.orderServiceDetailName} </p>
-                <p>Giá cước: {orderServiceDetail.orderServiceDetailPrice} </p>
+                <p>Service price: {orderServiceDetail.orderServiceDetailName} </p>
+                <p>Freight price: {orderServiceDetail.orderServiceDetailPrice} </p>
               </div>
               <Divider sx={{ m: "1em 0" }} />
             </>

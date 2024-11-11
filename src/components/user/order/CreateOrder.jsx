@@ -129,9 +129,9 @@ function CreateOrder() {
 
     api.postForm("Orders", formData).then((data) => {
       if (data.success) {
-        UserToast("success", "Đơn hàng đã được tạo!");
+        UserToast("success", "Order has been placed");
       } else {
-        UserToast("error", "Đơn hàng tạo thất bại!");
+        UserToast("error", "Fail to place order");
       }
       setIsLoading(false);
     }).catch((error) => {
@@ -149,7 +149,7 @@ function CreateOrder() {
       customerDocument,
     };
     localStorage.setItem("orderData", JSON.stringify(formData));
-    alert("Thông tin đơn hàng đã được lưu!");
+    alert("Order information has been saved!");
   }, [senderInfo, receiverInfo, senderPackage, customerDocument]);
 
   const handleResetClick = useCallback(() => {
@@ -159,7 +159,7 @@ function CreateOrder() {
     setSenderPackage({});
     setCustomerDocument({});
     setIsCheckboxChecked(false);
-    alert("Form đã được đặt lại!");
+    alert("Form has been updated");
   }, []);
 
   const toggleDropdown = () => {
@@ -237,7 +237,7 @@ function CreateOrder() {
                           onChange={handleCheckboxChange}
                         />
                       }
-                      label="Tôi đã đọc và đồng ý với Điều khoản quy định"
+                      label="I have read and accept the terms and conditions"
                     />
                     {isLoading ? (
                       <ButtonGroup variant="contained" disabled>
