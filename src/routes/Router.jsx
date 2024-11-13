@@ -76,6 +76,7 @@ import ResetPassword from "../components/user/auth/ResetPassword";
 import CreateRoute from "../components/admin/order/CreateRoute";
 import path from "path";
 import ViewFeedback from "../components/admin/feedback/ManageFeedback";
+import ValidateEmailCallBack from "../components/user/auth/ValidateEmailCallBack";
 
 // Function to get the access token from cookies
 var adminUrl = "/admin";
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: ComponentPath.user.user.validateEmail,
+    element: <ValidateEmailCallBack />,
   },
   {
     path: "/login",

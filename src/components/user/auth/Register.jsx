@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import UserToast from "../alert/UserToast";
+import ComponentPath from "../../../routes/ComponentPath";
 
 export default function Register() {
   const {
@@ -39,7 +40,7 @@ export default function Register() {
         .post("Users/register", data)
         .then((data) => {
           if (data.success) {
-            UserToast("success", "Đăng ký thành công! Đang chuyển hướng đến trang đăng nhập...");
+            UserToast("success", "Đăng ký thành công! Vuilong kiểm tra email để xác nhận tài khoản");
             setIsLoading(false);
             setTimeout(() => {
               navigate("/login");
@@ -80,6 +81,14 @@ export default function Register() {
                 <span style={{ color: "red" }}>This field is required</span>
               )}
               <form onSubmit={handleSubmit(onSubmit)}>
+                <input
+                  type="hidden"
+                  value={
+                    window.location.origin +
+                    ComponentPath.user.user.validateEmail
+                  }
+                  {...register("clientURI")}
+                />
                 <label htmlFor="email">Email/SDT</label>
                 <input
                   type="text"
@@ -102,12 +111,24 @@ export default function Register() {
                   {...register("username", { required: true })}
                   className="input-field"
                 />
-                {errors.password && (
+                {errors.username && (
                   <span style={{ color: "red" }}>This field is required</span>
                 )}
                 <br />
-                <label htmlFor="password">Password</label>
 
+                <label htmlFor="fullname">Full Name</label>
+                <input
+                  type="text"
+                  id="fullname"
+                  placeholder="Full Name"
+                  {...register("fullname", { required: true })}
+                  className="input-field"
+                />
+                {errors.fullname && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
+
+                <label htmlFor="password">Password</label>
                 <div className="password-wrapper">
                   <input
                     type="password"

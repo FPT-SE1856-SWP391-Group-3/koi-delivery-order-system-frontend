@@ -73,7 +73,6 @@ function OrderRow({ row }) {
             console.log(`Route with ID ${response.routeId} not found`);
           }
         }
-
         setMatchingRoutes(detailedRoutes);
         setRouteModalOpen(true);
       } else {

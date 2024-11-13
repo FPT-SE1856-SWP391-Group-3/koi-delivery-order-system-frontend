@@ -38,6 +38,7 @@ const ComponentPath = {
       updatePassword: user + "/password/update/",
       forgetPassword: user + "/password/forget/",
       resetPassword: user + "/password/reset/", 
+      validateEmail: user + "/email/validate/",
     },
     order: {
       orderPath: order,
