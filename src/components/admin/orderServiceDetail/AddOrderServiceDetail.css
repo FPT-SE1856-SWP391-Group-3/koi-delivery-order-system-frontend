@@ -1,88 +1,90 @@
 /* Container chính của form */
 .add-orderservice-container {
-  max-width: 500px; /* Độ rộng form */
-  margin: 0 auto;
-  padding: 30px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  border: none;
-  text-align: center;
+    max-width: 500px; /* Độ rộng form */
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
 }
 
 /* Tiêu đề form */
 .form-title {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
 }
 
 /* Form và các trường nhập liệu */
 .add-orderservice-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* Khoảng cách giữa các trường */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Khoảng cách giữa các trường */
 }
 
 /* Nhãn của từng trường nhập liệu */
 .form-group label {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 5px;
-  display: block;
-  font-weight: 500;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: 500;
 }
 
 /* Trường nhập liệu */
 .form-control {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 /* Hiệu ứng khi focus vào trường nhập liệu */
 .form-control:focus {
-  outline: none;
-  border-color: #16a085;
-  box-shadow: 0px 0px 5px rgba(22, 160, 133, 0.3);
+    outline: none;
+    border-color: #16a085;
+    box-shadow: 0px 0px 5px rgba(22, 160, 133, 0.3);
 }
 
 /* Nút thêm dịch vụ */
 .btn-add {
-  background-color: #16a085;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  padding: 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-  margin-top: 10px;
+    background-color: #16a085;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .btn-add:hover {
-  background-color: #138d75;
+    background-color: #138d75;
 }
 
 /* Nút đóng modal */
 .btn-close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  font-weight: bold;
-  color: #333;
-  cursor: pointer;
-  transition: color 0.3s ease;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .btn-close:hover {
-  color: #e74c3c;
+    color: #e74c3c;
 }
