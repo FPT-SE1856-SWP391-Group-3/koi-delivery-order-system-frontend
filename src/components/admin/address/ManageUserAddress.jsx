@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react"
-import api from "../../../api/CallAPI"
-import "../address/ManageUserAddress.css"
+import { useEffect, useState } from "react";
+import api from "../../../api/CallAPI";
+import "../address/ManageUserAddress.css";
 import {
-    Box,
-    Typography,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    CircularProgress,
-    Paper,
-} from "@mui/material"
-import { ToastContainer } from "react-toastify"
-import UserToast from "../../user/alert/UserToast"
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  CircularProgress,
+  Paper,
+} from "@mui/material";
+import { ToastContainer } from "react-toastify";
+import UserToast from "../../user/alert/UserToast";
 
 export default function ManageUserAddress({ userId }) {
-    const [addresses, setAddresses] = useState([])
-    const [loading, setLoading] = useState(true) // Loading state
+  const [addresses, setAddresses] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
 
   // Fetch address data when `userId` changes
   useEffect(() => {
@@ -30,12 +30,10 @@ export default function ManageUserAddress({ userId }) {
           setAddresses(data.address);
         } else {
           setAddresses([]);
-          alert("No address information found for this user.");
+          UserToast("error", "No address information found for this user.");
         }
       } catch (error) {
-        alert(
-          "An error has occurred while fetching addresses. Please try again."
-        );
+        UserToast("error", "An error occurred while fetching addresses.");
       } finally {
         setLoading(false); // Stop loading after fetching
       }
@@ -45,6 +43,7 @@ export default function ManageUserAddress({ userId }) {
 
   return (
     <Box>
+      <ToastContainer />
       {loading ? (
         <CircularProgress />
       ) : addresses.length > 0 ? (
