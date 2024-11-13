@@ -1,15 +1,15 @@
-import React from "react"
-import Navbar from "./user/common/Navbar"
-import Footer from "./user/common/Footer"
+import React from "react";
+import Navbar from "./user/common/Navbar";
+import Footer from "./user/common/Footer";
 
 const Service = () => {
-    return (
-        <div>
-            <Navbar />
+  return (
+    <div>
+      <Navbar />
 
-            <Footer />
-        </div>
-    )
-}
+      <Footer />
+    </div>
+  );
+};
 
-export default Service
+export default Service;
