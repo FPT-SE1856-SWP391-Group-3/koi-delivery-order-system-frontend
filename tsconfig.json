@@ -1,8 +1,8 @@
 {
-  "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "jsx": "react-jsx",
-    "types": ["node", "vite/client"],
-  }
+    "compilerOptions": {
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "jsx": "react-jsx",
+        "types": ["node", "vite/client"]
+    }
 }
