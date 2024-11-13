@@ -1,25 +1,25 @@
-const address = "/address";
-const user = "/user";
-const order = "/order";
-const feedback = "/feedback";
-const notification = "/notification";
-const document = "/document";
-const payment = "/payment";
-const profile = "/profile";
-const adminPath = "/admin";
-const manage = "/manage/";
-const blogNews = "/blog-news";
-const certification = "/certification";
-const faq = "/faq";
-const koi = "/koi";
-const report = "/report/transporation";
-const type = "/type";
-const dashboard = "/dashboard";
-const manangeroute = "manangeroute";
-const view = "/view/";
-const edit = "/edit/";
-const create = "/create/";
-const admin = "/admin";
+const address = "/address"
+const user = "/user"
+const order = "/order"
+const feedback = "/feedback"
+const notification = "/notification"
+const document = "/document"
+const payment = "/payment"
+const profile = "/profile"
+const adminPath = "/admin"
+const manage = "/manage/"
+const blogNews = "/blog-news"
+const certification = "/certification"
+const faq = "/faq"
+const koi = "/koi"
+const report = "/report/transporation"
+const type = "/type"
+const dashboard = "/dashboard"
+const manangeroute = "manangeroute"
+const view = "/view/"
+const edit = "/edit/"
+const create = "/create/"
+const admin = "/admin"
 
 const ComponentPath = {
   user: {
@@ -146,4 +146,4 @@ const ComponentPath = {
   },
 };
 
-export default ComponentPath;
+export default ComponentPath

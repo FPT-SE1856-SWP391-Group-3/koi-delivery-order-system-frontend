@@ -12,21 +12,20 @@ import UserToast from "../alert/UserToast";
 import ComponentPath from "../../../routes/ComponentPath";
 
 export default function Register() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    mode: "onBlur",
-  });
-  const navigate = useNavigate();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        mode: "onBlur",
+    })
+    const navigate = useNavigate()
 
-  const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
 
-
-  const checkPassword = (password, confirmPassword) => {
-    return password === confirmPassword;
-  };
+    const checkPassword = (password, confirmPassword) => {
+        return password === confirmPassword
+    }
 
   const onSubmit = async (data) => {
     try {
@@ -59,21 +58,24 @@ export default function Register() {
       setIsLoading(false);
       UserToast("error", "Đăng ký thất bại!");
     }
-  };
 
-  return (
-    <>
-      <ToastContainer />
-      <div className="register">
-        <a href="/" className="registerhome-icon">
-          <img src={home} alt="Home" />
-        </a>
+    return (
+        <>
+            <ToastContainer />
+            <div className="register">
+                <a href="/" className="registerhome-icon">
+                    <img src={home} alt="Home" />
+                </a>
 
-        <div className="register-container">
-          <div className="content-box">
-            <div className="image-side">
-              <img src={koiFish} alt="Koi Fish" className="koi-fish" />
-            </div>
+                <div className="register-container">
+                    <div className="content-box">
+                        <div className="image-side">
+                            <img
+                                src={koiFish}
+                                alt="Koi Fish"
+                                className="koi-fish"
+                            />
+                        </div>
 
             <div className="form-side">
               <h1>Sign Up!</h1>
@@ -98,11 +100,13 @@ export default function Register() {
                   className="input-field"
                 />
 
-                {errors.username && (
-                  <span style={{ color: "red" }}>This field is required</span>
-                )}
-                <br />
-                <label htmlFor="username">Username</label>
+                                {errors.username && (
+                                    <span style={{ color: "red" }}>
+                                        This field is required
+                                    </span>
+                                )}
+                                <br />
+                                <label htmlFor="username">Username</label>
 
                 <input
                   type="text"
@@ -139,45 +143,58 @@ export default function Register() {
                   />
                 </div>
 
-                {errors.confirmPassword && (
-                  <span style={{ color: "red" }}>This field is required</span>
-                )}
-                <br />
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <div className="password-wrapper">
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    placeholder="Confirm Password"
-                    {...register("confirmPassword", { required: true })}
-                    className="input-field"
-                  />
-                </div>
-                <br />
+                                {errors.confirmPassword && (
+                                    <span style={{ color: "red" }}>
+                                        This field is required
+                                    </span>
+                                )}
+                                <br />
+                                <label htmlFor="confirmPassword">
+                                    Confirm Password
+                                </label>
+                                <div className="password-wrapper">
+                                    <input
+                                        type="password"
+                                        id="confirmPassword"
+                                        placeholder="Confirm Password"
+                                        {...register("confirmPassword", {
+                                            required: true,
+                                        })}
+                                        className="input-field"
+                                    />
+                                </div>
+                                <br />
 
-                {isLoading ? (
-                  <button type="submit" className="signup-btn" disabled>
-                    Loading...
-                  </button>
-                ) : (
-                  <button type="submit" className="signup-btn">
-                    Sign Up
-                  </button>
-                )}
-              </form>
+                                {isLoading ? (
+                                    <button
+                                        type="submit"
+                                        className="signup-btn"
+                                        disabled
+                                    >
+                                        Loading...
+                                    </button>
+                                ) : (
+                                    <button
+                                        type="submit"
+                                        className="signup-btn"
+                                    >
+                                        Sign Up
+                                    </button>
+                                )}
+                            </form>
 
-              <div className="social-login">
-                <p className="social-text">or continue with</p>
-                <div className="social-icons">
-                  <button className="social-btn google-btn">
-                    <img src={google} alt="Google" />
-                  </button>
+                            <div className="social-login">
+                                <p className="social-text">or continue with</p>
+                                <div className="social-icons">
+                                    <button className="social-btn google-btn">
+                                        <img src={google} alt="Google" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+        </>
+    )
 }

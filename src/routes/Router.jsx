@@ -79,7 +79,7 @@ import ViewFeedback from "../components/admin/feedback/ManageFeedback";
 import ValidateEmailCallBack from "../components/user/auth/ValidateEmailCallBack";
 
 // Function to get the access token from cookies
-var adminUrl = "/admin";
+var adminUrl = "/admin"
 
 // // Function to check if the user is authenticated
 // const isAuthenticated = async () => {
@@ -89,9 +89,9 @@ var adminUrl = "/admin";
 
 // Function to check if the user is admin
 const isAdmin = async () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  return user && user.roleId >= 3;
-};
+    const user = JSON.parse(localStorage.getItem("user"))
+    return user && user.roleId >= 3
+}
 
 // Create the router configuration
 const router = createBrowserRouter([
@@ -169,270 +169,296 @@ const router = createBrowserRouter([
         element: <CallBackPayment />,
       },
 
-      {
-        path: ComponentPath.user.dashboard,
-        element: <UserDashboard />,
-      },
-      {
-        path: ComponentPath.user.payment.createPayment,
-        element: <AddPayment />,
-      },
-      {
-        path: ComponentPath.user.user.updatePassword,
-        element: <UpdatePassword />,
-      },
-      {
-        path: "/CreateOrderInter",
-        element: <CreateOrderInter />,
-      },
-      {
-        path: ComponentPath.user.order.createOrder,
-        element: <CreateOrder />,
-      },
-      {
-        path: ComponentPath.user.profile.viewProfile,
-        element: <ViewProfile />,
-      },
-      {
-        path: ComponentPath.user.profile.editProfile,
-        element: <EditProfile />,
-      },
-      {
-        path: ComponentPath.user.profile.updatePassword,
-        element: <UpdatePassword />,
-      },
-      {
-        path: ComponentPath.user.address.createAddress,
-        element: <AddAddress />,
-      },
-      {
-        path: ComponentPath.user.address.viewAddress,
-        element: <UserAddress />,
-      },
-      {
-        path: ComponentPath.user.address.editAddress + ":addressId",
-        element: <EditAddress />,
-      },
-      {
-        path: ComponentPath.user.payment.viewPayment,
-        element: <UserPayment />,
-      },
-      {
-        path: ComponentPath.user.payment.createPayment,
-        element: <AddPayment />,
-      },
-      {
-        path: ComponentPath.user.payment.editPayment + ":paymentId",
-        element: <EditPayment />,
-      },
-      {
-        path: ComponentPath.user.order.createOrder,
-        element: <CreateOrder />,
-      },
-      {
-        path: ComponentPath.user.order.viewOrder,
-        element: <UserOrder />,
-      },
-      {
-        path: ComponentPath.user.order.orderDetai.viewOrderDetail + ":orderId",
-        element: <UserOrderDetail />,
-      },
-      {
-        path: ComponentPath.user.feedback.createFeedback + ":orderId",
-        element: <CreateFeedback />,
-      },
-      {
-        path: ComponentPath.user.feedback.viewFeedback,
-        element: <ManageFeedBack />,
-      },
-      {
-        path: ComponentPath.user.feedback.editFeedback + ":customerFeedbackId",
-        element: <EditFeedback />,
-      },
-      {
-        path: ComponentPath.user.document.createDocument + ":orderId/:userId",
-        element: <AddDocument />,
-      },
-      {
-        path: ComponentPath.user.document.editDocument + ":documentId",
-        element: <EditDocument />,
-      },
-      {
-        path: ComponentPath.user.document.viewDocument + ":orderId",
-        element: <ManageDocument />,
-      },
-      {
-        path: ComponentPath.user.notification.createNotification,
-        element: <CreateNotification />,
-      },
-      {
-        path: ComponentPath.user.dashboard,
-        element: <UserDashboard />,
-      },
-      {
-        path: ComponentPath.user.notification.viewNotification,
-        element: <GetNotification />,
-      },
-      {
-        path: ComponentPath.user.notification.viewNotification,
-        element: <GetNotification />,
-      },
-      {
-        element: <AdminRoute />,
-        children: [
-          {
-            path: ComponentPath.admin.dashboard,
-            element: <AdminDashboard />,
-          },
-          {
-            path: ComponentPath.admin.route.manageRoute,
-            element: <ManageRoute />,
-          },
-        {
-          path: ComponentPath.admin.feedback.manageFeedback,
-          element: <ViewFeedback />,
-        },
-          {
-            path: ComponentPath.admin.route.createRoute,
-            element: <CreateRoute />,
-          },
-          {
-            path: ComponentPath.admin.user.manageUser,
-            element: <ManageUser />,
-          },
-          {
-            path: ComponentPath.admin.user.editUser + ":id",
-            element: <UpdateUser />,
-          },
-          {
-            path: ComponentPath.admin.address.manageUserAddress + ":id",
-            element: <ManageUserAddress />,
-          },
-          {
-            path: ComponentPath.admin.koi.manageKoi,
-            element: <ManageKoi />,
-          },
-          {
-            path: ComponentPath.admin.koi.editKoi + ":koiId",
-            element: <EditKoi />,
-          },
-          {
-            path: ComponentPath.admin.koi.createKoi,
-            element: <CreatKoi />,
-          },
-          {
-            path: ComponentPath.admin.order.service.manageOrderService,
-            element: <ManageOrderServiceDetail />,
-          },
-          {
-            path: ComponentPath.admin.order.service.createOrderService,
-            element: <AddOrderServiceDetail />,
-          },
-          {
-            path: ComponentPath.admin.order.service.editOrderService + ":id",
-            element: <EditOrderServiceDetail />,
-          },
-          {
-            path: ComponentPath.admin.payment.managePaymentType,
-            element: <ManagePaymentType />,
-          },
-          {
-            path: ComponentPath.admin.payment.editPaymentType + ":id",
-            element: <EditPaymentType />,
-          },
-          {
-            path: ComponentPath.admin.payment.addPaymentType,
-            element: <AddPaymentType />,
-          },
-          {
-            path: ComponentPath.admin.faq.manageFaq,
-            element: <ManageFaq />,
-          },
-          {
-            path: ComponentPath.admin.faq.editFaq + ":faqId",
-            element: <UpdateFaq />,
-          },
-          {
-            path: ComponentPath.admin.faq.createFaq,
-            element: <NewFaq />,
-          },
-          {
-            path: ComponentPath.admin.order.manageOrder,
-            element: <ManageOrder />,
-          },
-          {
-            path: ComponentPath.admin.order.manageOrderDetail + ":orderId",
-            element: <ManageOrderDetail />,
-          },
-          {
-            path: ComponentPath.admin.report.createReport + ":orderId",
-            element: <CreateTransportationReportDetails />,
-          },
-          {
-            path: ComponentPath.admin.report.manageReport,
-            element: <ManageTransportationReportDetails />,
-          },
-          {
-            path: ComponentPath.admin.report.editReport + ":reportId",
-            element: <EditTransportationReportDetails />,
-          },
-          {
-            path: ComponentPath.admin.blogNews.editBlogNews + ":postId",
-            element: <EditBlogNews />,
-          },
-          {
-            path: ComponentPath.admin.blogNews.manageBlogNews,
-            element: <ManageBlogNews />,
-          },
-          {
-            path: ComponentPath.admin.blogNews.createBlogNews,
-            element: <CreateBlogNews />,
-          },
-          {
-            path:
-              ComponentPath.admin.certification.editCertification +
-              ":certificationId",
-            element: <EditCertification />,
-          },
-          {
-            path: ComponentPath.admin.certification.manageCertification,
-            element: <ManageCertification />,
-          },
-          {
-            path: ComponentPath.admin.certification.createCertification,
-            element: <CreateCertification />,
-          },
-          {
-            path: ComponentPath.admin.notification.manageNotification,
-            element: <ManageNotification />,
-          },
-          {
-            path: ComponentPath.admin.order.document.manageOrderDocument,
-            element: <ManageOrderDocument />,
-          },
-          {
-            path:
-              ComponentPath.admin.order.document.createOrderDocument +
-              ":orderId/:orderStatusId",
-            element: <CreateOrderDocument />,
-          },
-          {
-            path:
-              ComponentPath.admin.order.document.editOrderDocument + ":orderId",
-            element: <EditOrderDocument />,
-          },
-          {
-            path: ComponentPath.admin.dashboard,
-            element: <AdminDashboard />,
-          },
+            {
+                path: ComponentPath.user.dashboard,
+                element: <UserDashboard />,
+            },
+            {
+                path: ComponentPath.user.payment.createPayment,
+                element: <AddPayment />,
+            },
+            {
+                path: ComponentPath.user.user.updatePassword,
+                element: <UpdatePassword />,
+            },
+            {
+                path: "/CreateOrderInter",
+                element: <CreateOrderInter />,
+            },
+            {
+                path: ComponentPath.user.order.createOrder,
+                element: <CreateOrder />,
+            },
+            {
+                path: ComponentPath.user.profile.viewProfile,
+                element: <ViewProfile />,
+            },
+            {
+                path: ComponentPath.user.profile.editProfile,
+                element: <EditProfile />,
+            },
+            {
+                path: ComponentPath.user.profile.updatePassword,
+                element: <UpdatePassword />,
+            },
+            {
+                path: ComponentPath.user.address.createAddress,
+                element: <AddAddress />,
+            },
+            {
+                path: ComponentPath.user.address.viewAddress,
+                element: <UserAddress />,
+            },
+            {
+                path: ComponentPath.user.address.editAddress + ":addressId",
+                element: <EditAddress />,
+            },
+            {
+                path: ComponentPath.user.payment.viewPayment,
+                element: <UserPayment />,
+            },
+            {
+                path: ComponentPath.user.payment.createPayment,
+                element: <AddPayment />,
+            },
+            {
+                path: ComponentPath.user.payment.editPayment + ":paymentId",
+                element: <EditPayment />,
+            },
+            {
+                path: ComponentPath.user.order.createOrder,
+                element: <CreateOrder />,
+            },
+            {
+                path: ComponentPath.user.order.viewOrder,
+                element: <UserOrder />,
+            },
+            {
+                path:
+                    ComponentPath.user.order.orderDetai.viewOrderDetail +
+                    ":orderId",
+                element: <UserOrderDetail />,
+            },
+            {
+                path: ComponentPath.user.feedback.createFeedback + ":orderId",
+                element: <CreateFeedback />,
+            },
+            {
+                path: ComponentPath.user.feedback.viewFeedback,
+                element: <ManageFeedBack />,
+            },
+            {
+                path:
+                    ComponentPath.user.feedback.editFeedback +
+                    ":customerFeedbackId",
+                element: <EditFeedback />,
+            },
+            {
+                path:
+                    ComponentPath.user.document.createDocument +
+                    ":orderId/:userId",
+                element: <AddDocument />,
+            },
+            {
+                path: ComponentPath.user.document.editDocument + ":documentId",
+                element: <EditDocument />,
+            },
+            {
+                path: ComponentPath.user.document.viewDocument + ":orderId",
+                element: <ManageDocument />,
+            },
+            {
+                path: ComponentPath.user.notification.createNotification,
+                element: <CreateNotification />,
+            },
+            {
+                path: ComponentPath.user.dashboard,
+                element: <UserDashboard />,
+            },
+            {
+                path: ComponentPath.user.notification.viewNotification,
+                element: <GetNotification />,
+            },
+            {
+                path: ComponentPath.user.notification.viewNotification,
+                element: <GetNotification />,
+            },
+            {
+                element: <AdminRoute />,
+                children: [
+                    {
+                        path: ComponentPath.admin.dashboard,
+                        element: <AdminDashboard />,
+                    },
+                    {
+                        path: ComponentPath.admin.route.manageRoute,
+                        element: <ManageRoute />,
+                    },
+                    {
+                        path: ComponentPath.admin.feedback.manageFeedback,
+                        element: <ViewFeedback />,
+                    },
+                    {
+                        path: ComponentPath.admin.route.createRoute,
+                        element: <CreateRoute />,
+                    },
+                    {
+                        path: ComponentPath.admin.user.manageUser,
+                        element: <ManageUser />,
+                    },
+                    {
+                        path: ComponentPath.admin.user.editUser + ":id",
+                        element: <UpdateUser />,
+                    },
+                    {
+                        path:
+                            ComponentPath.admin.address.manageUserAddress +
+                            ":id",
+                        element: <ManageUserAddress />,
+                    },
+                    {
+                        path: ComponentPath.admin.koi.manageKoi,
+                        element: <ManageKoi />,
+                    },
+                    {
+                        path: ComponentPath.admin.koi.editKoi + ":koiId",
+                        element: <EditKoi />,
+                    },
+                    {
+                        path: ComponentPath.admin.koi.createKoi,
+                        element: <CreatKoi />,
+                    },
+                    {
+                        path: ComponentPath.admin.order.service
+                            .manageOrderService,
+                        element: <ManageOrderServiceDetail />,
+                    },
+                    {
+                        path: ComponentPath.admin.order.service
+                            .createOrderService,
+                        element: <AddOrderServiceDetail />,
+                    },
+                    {
+                        path:
+                            ComponentPath.admin.order.service.editOrderService +
+                            ":id",
+                        element: <EditOrderServiceDetail />,
+                    },
+                    {
+                        path: ComponentPath.admin.payment.managePaymentType,
+                        element: <ManagePaymentType />,
+                    },
+                    {
+                        path:
+                            ComponentPath.admin.payment.editPaymentType + ":id",
+                        element: <EditPaymentType />,
+                    },
+                    {
+                        path: ComponentPath.admin.payment.addPaymentType,
+                        element: <AddPaymentType />,
+                    },
+                    {
+                        path: ComponentPath.admin.faq.manageFaq,
+                        element: <ManageFaq />,
+                    },
+                    {
+                        path: ComponentPath.admin.faq.editFaq + ":faqId",
+                        element: <UpdateFaq />,
+                    },
+                    {
+                        path: ComponentPath.admin.faq.createFaq,
+                        element: <NewFaq />,
+                    },
+                    {
+                        path: ComponentPath.admin.order.manageOrder,
+                        element: <ManageOrder />,
+                    },
+                    {
+                        path:
+                            ComponentPath.admin.order.manageOrderDetail +
+                            ":orderId",
+                        element: <ManageOrderDetail />,
+                    },
+                    {
+                        path:
+                            ComponentPath.admin.report.createReport +
+                            ":orderId",
+                        element: <CreateTransportationReportDetails />,
+                    },
+                    {
+                        path: ComponentPath.admin.report.manageReport,
+                        element: <ManageTransportationReportDetails />,
+                    },
+                    {
+                        path:
+                            ComponentPath.admin.report.editReport + ":reportId",
+                        element: <EditTransportationReportDetails />,
+                    },
+                    {
+                        path:
+                            ComponentPath.admin.blogNews.editBlogNews +
+                            ":postId",
+                        element: <EditBlogNews />,
+                    },
+                    {
+                        path: ComponentPath.admin.blogNews.manageBlogNews,
+                        element: <ManageBlogNews />,
+                    },
+                    {
+                        path: ComponentPath.admin.blogNews.createBlogNews,
+                        element: <CreateBlogNews />,
+                    },
+                    {
+                        path:
+                            ComponentPath.admin.certification
+                                .editCertification + ":certificationId",
+                        element: <EditCertification />,
+                    },
+                    {
+                        path: ComponentPath.admin.certification
+                            .manageCertification,
+                        element: <ManageCertification />,
+                    },
+                    {
+                        path: ComponentPath.admin.certification
+                            .createCertification,
+                        element: <CreateCertification />,
+                    },
+                    {
+                        path: ComponentPath.admin.notification
+                            .manageNotification,
+                        element: <ManageNotification />,
+                    },
+                    {
+                        path: ComponentPath.admin.order.document
+                            .manageOrderDocument,
+                        element: <ManageOrderDocument />,
+                    },
+                    {
+                        path:
+                            ComponentPath.admin.order.document
+                                .createOrderDocument +
+                            ":orderId/:orderStatusId",
+                        element: <CreateOrderDocument />,
+                    },
+                    {
+                        path:
+                            ComponentPath.admin.order.document
+                                .editOrderDocument + ":orderId",
+                        element: <EditOrderDocument />,
+                    },
+                    {
+                        path: ComponentPath.admin.dashboard,
+                        element: <AdminDashboard />,
+                    },
+                ],
+            },
         ],
-      },
-    ],
-  },
-  {
-    path: "*",
-    element: <p>404 Error - Nothing here...</p>,
-  },
-]);
+    },
+    {
+        path: "*",
+        element: <p>404 Error - Nothing here...</p>,
+    },
+])
 
-export default router;
+export default router
