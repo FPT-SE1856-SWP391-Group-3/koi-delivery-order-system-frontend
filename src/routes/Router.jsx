@@ -100,6 +100,14 @@ const router = createBrowserRouter([
         element: <Dashboard />,
     },
     {
+        path: "/payment/choose",
+        element: <ChoosePayment />,
+    },
+    {
+        path: "/payment/callback",
+        element: <CallBackPayment />,
+    },
+    {
         path: ComponentPath.user.user.validateEmail,
         element: <ValidateEmailCallBack />,
     },
@@ -160,15 +168,6 @@ const router = createBrowserRouter([
             //   path: ComponentPath.admin.route.manageroute,
             //   element: <ManageRoute />,
             // },
-            {
-                path: "/payment/choose",
-                element: <ChoosePayment />,
-            },
-            {
-                path: "/payment/callback",
-                element: <CallBackPayment />,
-            },
-
             {
                 path: ComponentPath.user.dashboard,
                 element: <UserDashboard />,

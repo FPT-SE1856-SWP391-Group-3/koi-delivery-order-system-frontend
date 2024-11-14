@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react"
+import React, { useState, useCallback, useEffect, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import ReceiverInfo from "./COC/ReceiverInfo"
 import SenderInfo from "./COC/SenderInfo"
@@ -23,6 +23,7 @@ import { Grid } from "@mui/joy"
 import UserToast from "../alert/UserToast"
 import { ToastContainer } from "react-toastify"
 import SenderPackage from "./COC/SenderPackage"
+import ComponentPath from "../../../routes/ComponentPath"
 
 function CreateOrder() {
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
@@ -34,8 +35,10 @@ function CreateOrder() {
 
     const [serviceSelectionState, setServiceSelectionState] = useState(true)
     const [totalPrice, setTotalPrice] = useState(0)
+    const [totalServicePrice, setTotalServicePrice] = useState(0)
 
     const [isLoading, setIsLoading] = useState(false)
+    const inputRef = useRef(null);
 
     const navigate = useNavigate()
 
@@ -181,13 +184,12 @@ function CreateOrder() {
 
     const handleResetClick = useCallback(() => {
         localStorage.removeItem("orderData")
-        setSenderInfo({})
-        setReceiverInfo({})
-        setSenderPackage({})
-        setCustomerDocument({})
         setIsCheckboxChecked(false)
-        alert("Form has been updated")
+        navigate(ComponentPath.user.order.createOrder);
+        UserToast("success", "Order information has been reset!")
     }, [])
+
+
 
     const toggleDropdown = () => {
         setIsDropdownOpen((prevOpen) => !prevOpen)
@@ -221,7 +223,7 @@ function CreateOrder() {
                             </Card>
                             <Card>
                                 <CardContent>
-                                    <ReceiverInfo onChange={setReceiverInfo} />
+                                    <ReceiverInfo onChange={setReceiverInfo} ref={inputRef}/>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -229,21 +231,29 @@ function CreateOrder() {
                             <Card sx={{ mb: 2 }}>
                                 <CardContent>
                                     <SenderPackage
-                                        onChange={setSenderPackage}
+                                        setSenderPackage={setSenderPackage}
+                                        setCustomerDocument={
+                                            setCustomerDocument
+                                        }
                                         stateChange={
                                             handleServiceSelectionChange
                                         }
                                         setTotalPrice={setTotalPrice}
+                                        setTotalServicePrice={
+                                            setTotalServicePrice
+                                        }
+
+                                        ref={inputRef}
                                     />
                                 </CardContent>
                             </Card>
-                            <Card>
+                            {/* <Card>
                                 <CardContent>
                                     <CustomerDocumentInfo
                                         onChange={setCustomerDocument}
                                     />
                                 </CardContent>
-                            </Card>
+                            </Card> */}
                         </Grid>
                     </Grid>
 
@@ -253,7 +263,14 @@ function CreateOrder() {
                                 <Grid container spacing={2} alignItems="center">
                                     <Grid item xs={12} md={8}>
                                         <Typography variant="body1">
-                                            Total Freight: 0 đ
+                                            Total Service Price:{" "}
+                                            {totalServicePrice.toLocaleString(
+                                                "en-US",
+                                                {
+                                                    style: "currency",
+                                                    currency: "VND",
+                                                }
+                                            )}
                                         </Typography>
                                         <Typography variant="body1">
                                             Total Cost:{" "}

@@ -6,7 +6,7 @@ import { Grid } from "@mui/joy"
 import api from "../../../../api/CallAPI"
 import { useForm } from "react-hook-form"
 
-const ReceiverInfo = ({ onChange }) => {
+const ReceiverInfo = ({ onChange, ref }) => {
     const [addresses, setAddresses] = useState([])
     const [cityName, setCityName] = useState("")
     const [districtName, setDistrictName] = useState("")
@@ -73,6 +73,9 @@ const ReceiverInfo = ({ onChange }) => {
         receiverFullAddressLine,
         receiverPartAddressLine,
     ])
+    
+
+
 
     return (
         <div>
