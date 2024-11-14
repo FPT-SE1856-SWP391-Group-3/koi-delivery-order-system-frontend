@@ -7,7 +7,9 @@
         "dev": "vite",
         "build": "vite build",
         "lint": "eslint .",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "format": "prettier --write .",
+        "check-format": "prettier --check ."
     },
     "dependencies": {
         "@emotion/css": "^11.13.4",
