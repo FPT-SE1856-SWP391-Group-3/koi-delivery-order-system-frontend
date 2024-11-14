@@ -64,11 +64,10 @@ function ValidateEmailCallBack() {
           "Xác nhận email thành công"
         ) : (
           <>
-            <h1>
+        
               Xác nhận email thất bại. Vui lòng bấm vào
-              <a href="" onClick={(e) => apiOneTimeRevalidate(e)}></a>+ để gửi
+              <a href="" onClick={(e) => apiOneTimeRevalidate(e)}> <u>đây</u></a> để gửi
               lại email xác nhận
-            </h1>
           </>
         )}
       </h1>

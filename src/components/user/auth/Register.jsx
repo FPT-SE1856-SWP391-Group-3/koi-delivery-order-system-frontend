@@ -98,11 +98,11 @@ export default function Register() {
                                     }
                                     {...register("clientURI")}
                                 />
-                                <label htmlFor="email">Email/SDT</label>
+                                <label htmlFor="email">Email</label>
                                 <input
                                     type="text"
                                     id="email"
-                                    placeholder="Email or Phone Number"
+                                    placeholder="Email  "
                                     {...register("email", { required: true })}
                                     className="input-field"
                                 />
@@ -146,7 +146,25 @@ export default function Register() {
                                         This field is required
                                     </span>
                                 )}
-
+                                <br />
+                                <label htmlFor="phoneNumber">
+                                    Phone Number
+                                </label>
+                                <input
+                                    type="number"
+                                    id="phoneNumber"
+                                    placeholder="Phone Number"
+                                    {...register("phoneNumber", {
+                                        required: true,
+                                    })}
+                                    className="input-field"
+                                />
+                                {errors.phoneNumber && (
+                                    <span style={{ color: "red" }}>
+                                        This field is required
+                                    </span>
+                                )}
+                                <br />
                                 <label htmlFor="password">Password</label>
                                 <div className="password-wrapper">
                                     <input

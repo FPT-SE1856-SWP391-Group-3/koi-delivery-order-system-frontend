@@ -158,7 +158,7 @@ const SenderPackage = ({ onChange, setTotalPrice }) => {
                     Add Package
                 </Button>
                 <Grid>
-                    <h1>Các dịch vụ</h1>
+                    <h1>Services</h1>
                     {orderServiceDetails.map((orderServiceDetail, idx) => (
                         <>
                             <div key={idx}>

@@ -79,11 +79,11 @@ export default function ViewProfile() {
                                         <Button variant="contained">
                                             <Link
                                                 to={
-                                                    ComponentPath.user.payment
-                                                        .editPayment
+                                                    ComponentPath.user.profile
+                                                        .editProfile
                                                 }
                                             >
-                                                Edit Payment
+                                                Edit Profile
                                             </Link>
                                         </Button>
                                         <Button

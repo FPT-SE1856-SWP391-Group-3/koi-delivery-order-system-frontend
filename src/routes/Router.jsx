@@ -95,79 +95,79 @@ const isAdmin = async () => {
 
 // Create the router configuration
 const router = createBrowserRouter([
-  {
-    path: "/dashboard",
-    element: <Dashboard />,
-  },
-  {
-    path: ComponentPath.user.user.validateEmail,
-    element: <ValidateEmailCallBack />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/logout",
-    element: <Logout />,
-  },
-  {
-    path: "/",
-    element: <HomePage />,
-    index: true,
-  },
-  {
-    path: "/news",
-    element: <BlogNews />,
-    index: true,
-  },
-  {
-    path: "/customer-support",
-    element: <CustomerSupport />,
-    index: true,
-  },
-  {
-    path: "/services",
-    element: <Service />,
-    index: true,
-  },
-  {
-    path: "/recruitment",
-    element: <Recruitment />,
-    index: true,
-  },
-  {
-    path: ComponentPath.user.user.forgetPassword,
-    element: <ForgetPassword />,
-  },
-  {
-    path: ComponentPath.user.user.resetPassword,
-    element: <ResetPassword />,
-  },
-  // {
-  //   path: ComponentPath.uploadFile,
-  //   element: <UploadFile />,
-  //   index: true,
-  // },
-  {
-    element: <ProtectedRoute />,
-    children: [
-      // {
-      //   path: ComponentPath.admin.route.manageroute,
-      //   element: <ManageRoute />,
-      // },
-      {
-        path: "/payment/choose",
-        element: <ChoosePayment />,
-      },
-      {
-        path: "/payment/callback",
-        element: <CallBackPayment />,
-      },
+    {
+        path: "/dashboard",
+        element: <Dashboard />,
+    },
+    {
+        path: ComponentPath.user.user.validateEmail,
+        element: <ValidateEmailCallBack />,
+    },
+    {
+        path: "/login",
+        element: <Login />,
+    },
+    {
+        path: "/register",
+        element: <Register />,
+    },
+    {
+        path: "/logout",
+        element: <Logout />,
+    },
+    {
+        path: "/",
+        element: <HomePage />,
+        index: true,
+    },
+    {
+        path: "/news",
+        element: <BlogNews />,
+        index: true,
+    },
+    {
+        path: "/customer-support",
+        element: <CustomerSupport />,
+        index: true,
+    },
+    {
+        path: "/services",
+        element: <Service />,
+        index: true,
+    },
+    {
+        path: "/recruitment",
+        element: <Recruitment />,
+        index: true,
+    },
+    {
+        path: ComponentPath.user.user.forgetPassword,
+        element: <ForgetPassword />,
+    },
+    {
+        path: ComponentPath.user.user.resetPassword,
+        element: <ResetPassword />,
+    },
+    // {
+    //   path: ComponentPath.uploadFile,
+    //   element: <UploadFile />,
+    //   index: true,
+    // },
+    {
+        element: <ProtectedRoute />,
+        children: [
+            // {
+            //   path: ComponentPath.admin.route.manageroute,
+            //   element: <ManageRoute />,
+            // },
+            {
+                path: "/payment/choose",
+                element: <ChoosePayment />,
+            },
+            {
+                path: "/payment/callback",
+                element: <CallBackPayment />,
+            },
 
             {
                 path: ComponentPath.user.dashboard,
