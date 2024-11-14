@@ -87,9 +87,6 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
         receiverFullAddressLine,
         receiverPartAddressLine,
     ])
-    
-
-
 
     return (
         <div>

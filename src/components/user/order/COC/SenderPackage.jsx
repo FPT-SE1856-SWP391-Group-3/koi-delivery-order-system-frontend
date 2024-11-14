@@ -6,15 +6,21 @@ import { Grid } from "@mui/joy"
 import TextField from "@mui/material/TextField"
 import { Button, Divider, Typography } from "@mui/material"
 
-const SenderPackage = ({ setSenderPackage, setCustomerDocument ,setTotalPrice, setTotalServicePrice, resetInput, setResetInput}) => {
+const SenderPackage = ({
+    setSenderPackage,
+    setCustomerDocument,
+    setTotalPrice,
+    setTotalServicePrice,
+    resetInput,
+    setResetInput,
+}) => {
     const [orderServiceDetails, setOrderServiceDetails] = useState([])
     const [itemList, setItemList] = useState([
         { koiName: "", weight: "", price: "", amount: 1, koiCondition: "" },
-    ]);
+    ])
     const [document, setDocument] = useState([
         { customerDocumentFile: null, description: "" },
     ])
-
 
     useEffect(() => {
         let total = 0
@@ -31,7 +37,6 @@ const SenderPackage = ({ setSenderPackage, setCustomerDocument ,setTotalPrice, s
         })
         setTotalServicePrice(total)
     }, [orderServiceDetails])
-        
 
     useEffect(() => {
         api.get("OrderServiceDetails/").then((data) => {
@@ -46,17 +51,19 @@ const SenderPackage = ({ setSenderPackage, setCustomerDocument ,setTotalPrice, s
 
     useEffect(() => {
         if (resetInput) {
-            setItemList([{
-                koiName: "",
-                weight: "",
-                price: "",
-                amount: 1,
-                koiCondition: "",
-            }])
+            setItemList([
+                {
+                    koiName: "",
+                    weight: "",
+                    price: "",
+                    amount: 1,
+                    koiCondition: "",
+                },
+            ])
             setDocument([{ customerDocumentFile: null, description: "" }])
             setSenderPackage(itemList)
             setCustomerDocument(document)
-            setResetInput(false)    
+            setResetInput(false)
         }
     }, [resetInput])
 
@@ -81,11 +88,11 @@ const SenderPackage = ({ setSenderPackage, setCustomerDocument ,setTotalPrice, s
                 amount: "1",
                 koiCondition: "",
             },
-        ]);
+        ])
         setDocument([
             ...document,
             { customerDocumentFile: null, description: "" },
-        ]);
+        ])
     }
 
     const handleRemoveItem = (index) => {
@@ -97,7 +104,6 @@ const SenderPackage = ({ setSenderPackage, setCustomerDocument ,setTotalPrice, s
         setSenderPackage(updatedItemList)
         setCustomerDocument(updatedDocuments)
     }
-
 
     return (
         <div>

@@ -1,15 +1,15 @@
-import { set, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import api from "../../../api/CallAPI";
-import google from "../../../assets/google.png";
-import koiFish from "../../../assets/koi-fish.png";
-import home from "../../../assets/home.png";
-import "../css/Register.css";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useState } from "react";
-import UserToast from "../alert/UserToast";
-import ComponentPath from "../../../routes/ComponentPath";
+import { set, useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
+import api from "../../../api/CallAPI"
+import google from "../../../assets/google.png"
+import koiFish from "../../../assets/koi-fish.png"
+import home from "../../../assets/home.png"
+import "../css/Register.css"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { useState } from "react"
+import UserToast from "../alert/UserToast"
+import ComponentPath from "../../../routes/ComponentPath"
 
 export default function Register() {
     const {
