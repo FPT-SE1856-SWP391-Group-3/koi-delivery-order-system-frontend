@@ -38,9 +38,9 @@ function CreateOrder() {
     const [totalServicePrice, setTotalServicePrice] = useState(0)
 
     const [isLoading, setIsLoading] = useState(false)
-    const inputRef = useRef(null);
-
     const navigate = useNavigate()
+
+    const [resetInput, setResetInput] = useState(false)
 
     useEffect(() => {
         const savedOrderData = JSON.parse(localStorage.getItem("orderData"))
@@ -146,6 +146,8 @@ function CreateOrder() {
             }
         })
 
+        setResetInput(true)
+
         api.postForm("Orders", formData)
             .then((data) => {
                 if (data.success) {
@@ -185,11 +187,9 @@ function CreateOrder() {
     const handleResetClick = useCallback(() => {
         localStorage.removeItem("orderData")
         setIsCheckboxChecked(false)
-        navigate(ComponentPath.user.order.createOrder);
+        setResetInput(true)
         UserToast("success", "Order information has been reset!")
     }, [])
-
-
 
     const toggleDropdown = () => {
         setIsDropdownOpen((prevOpen) => !prevOpen)
@@ -223,7 +223,11 @@ function CreateOrder() {
                             </Card>
                             <Card>
                                 <CardContent>
-                                    <ReceiverInfo onChange={setReceiverInfo} ref={inputRef}/>
+                                    <ReceiverInfo
+                                        onChange={setReceiverInfo}
+                                        resetInput={resetInput}
+                                        setResetInput={setResetInput}
+                                    />
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -242,8 +246,8 @@ function CreateOrder() {
                                         setTotalServicePrice={
                                             setTotalServicePrice
                                         }
-
-                                        ref={inputRef}
+                                        resetInput={resetInput}
+                                        setResetInput={setResetInput}
                                     />
                                 </CardContent>
                             </Card>

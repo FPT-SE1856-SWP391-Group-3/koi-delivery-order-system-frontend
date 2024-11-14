@@ -6,7 +6,7 @@ import { Grid } from "@mui/joy"
 import api from "../../../../api/CallAPI"
 import { useForm } from "react-hook-form"
 
-const ReceiverInfo = ({ onChange, ref }) => {
+const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
     const [addresses, setAddresses] = useState([])
     const [cityName, setCityName] = useState("")
     const [districtName, setDistrictName] = useState("")
@@ -34,6 +34,20 @@ const ReceiverInfo = ({ onChange, ref }) => {
         }
         fetchAddressData()
     }, [])
+
+    useEffect(() => {
+        if (resetInput) {
+            setCityName("")
+            setDistrictName("")
+            setWardName("")
+            setPhoneNumber("")
+            setFullName("")
+            setEmail("")
+            setReceiverFullAddressLine("")
+            setReceiverPartAddressLine("")
+            setResetInput(false)
+        }
+    }, [resetInput])
 
     const filteredDistricts =
         addresses.find((address) => address.name === cityName)?.level2s || []
@@ -168,6 +182,7 @@ const ReceiverInfo = ({ onChange, ref }) => {
 ReceiverInfo.propTypes = {
     onChange: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
+    resetInput: PropTypes.bool,
 }
 
 export default ReceiverInfo

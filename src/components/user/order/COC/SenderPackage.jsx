@@ -6,7 +6,7 @@ import { Grid } from "@mui/joy"
 import TextField from "@mui/material/TextField"
 import { Button, Divider, Typography } from "@mui/material"
 
-const SenderPackage = ({ setSenderPackage, setCustomerDocument ,setTotalPrice, setTotalServicePrice, ref}) => {
+const SenderPackage = ({ setSenderPackage, setCustomerDocument ,setTotalPrice, setTotalServicePrice, resetInput, setResetInput}) => {
     const [orderServiceDetails, setOrderServiceDetails] = useState([])
     const [itemList, setItemList] = useState([
         { koiName: "", weight: "", price: "", amount: 1, koiCondition: "" },
@@ -44,20 +44,21 @@ const SenderPackage = ({ setSenderPackage, setCustomerDocument ,setTotalPrice, s
         })
     }, [])
 
-    useImperativeHandle(ref, () => ({
-        resetInput() {
-            setItemList([
-                {
-                    koiName: "",
-                    weight: "",
-                    price: "",
-                    amount: 1,
-                    koiCondition: "",
-                },
-            ])
+    useEffect(() => {
+        if (resetInput) {
+            setItemList([{
+                koiName: "",
+                weight: "",
+                price: "",
+                amount: 1,
+                koiCondition: "",
+            }])
             setDocument([{ customerDocumentFile: null, description: "" }])
-        },
-    }))
+            setSenderPackage(itemList)
+            setCustomerDocument(document)
+            setResetInput(false)    
+        }
+    }, [resetInput])
 
     const handleInputChange = (index, field, value) => {
         const updatedItemList = [...itemList]
@@ -236,6 +237,7 @@ const SenderPackage = ({ setSenderPackage, setCustomerDocument ,setTotalPrice, s
 SenderPackage.propTypes = {
     onChange: PropTypes.func.isRequired,
     stateChange: PropTypes.func.isRequired,
+    resetInput: PropTypes.bool,
 }
 
 export default SenderPackage
