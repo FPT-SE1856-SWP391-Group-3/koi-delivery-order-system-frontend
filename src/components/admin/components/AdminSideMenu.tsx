@@ -11,6 +11,8 @@ import logo from "/Logo.png"
 import OptionsMenu from "./OptionsMenu"
 import MenuContent from "./MenuContent"
 import { useState } from "react"
+import ComponentPath from "../../../routes/ComponentPath"
+import { useNavigate } from "react-router-dom"
 
 const drawerWidth = 260
 
@@ -27,6 +29,13 @@ const Drawer = styled(MuiDrawer)({
 
 export default function AdminSideMenu() {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
+    const navigate = useNavigate() // Initialize navigate function
+
+    // Handler function to navigate to the profile view
+    const handleAvatarClick = () => {
+        navigate(ComponentPath.user.profile.viewProfile) // Replace with the actual path
+    }
+
     return (
         <Drawer
             variant="permanent"
@@ -74,6 +83,8 @@ export default function AdminSideMenu() {
                     alt="avatar"
                     src={avatar}
                     sx={{ width: 36, height: 36 }}
+                    onClick={handleAvatarClick} // Add onClick handler
+                    style={{ cursor: "pointer" }} // Optional: change cursor to pointer
                 />
                 <Box sx={{ mr: "auto" }}>
                     <Typography
