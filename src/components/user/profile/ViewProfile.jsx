@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
+import React, { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import ComponentPath from "routes/ComponentPath"
@@ -14,14 +13,19 @@ import {
     Stack,
     Typography,
 } from "@mui/material"
-import SideMenu from "../SideMenu"
+import SideMenu from "../SideMenu" // Assuming you have this component
+import AdminSideMenu from "../../admin/components/AdminSideMenu"
 import { Grid } from "@mui/joy"
 import UserAppNavbar from "../UserAppNavbar"
+
 export default function ViewProfile() {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
     const navigate = useNavigate()
 
-    //Xoa nguoi dung
+    // Check user role ID from local storage
+    const roleId = user?.roleId
+
+    // Function to delete user
     const deleteUser = async (e) => {
         e.preventDefault()
         try {
@@ -35,14 +39,19 @@ export default function ViewProfile() {
                 }
             })
         } catch (error) {
-            console.error("Error during registration:", error)
-            alert("An error occurred during registration. Please try again.")
+            console.error("Error during deletion:", error)
+            alert("An error occurred. Please try again.")
         }
+    }
+
+    // Conditionally render the correct sidebar based on roleId
+    const renderSidebar = () => {
+        return roleId === 2 ? <SideMenu /> : <AdminSideMenu />
     }
 
     return (
         <Box sx={{ display: "flex" }}>
-            <SideMenu />
+            {renderSidebar()}
             <Box sx={{ flexGrow: 1 }}>
                 <UserAppNavbar />
                 <Grid container spacing={3} paddingInline={3}>
@@ -86,10 +95,7 @@ export default function ViewProfile() {
                                                 Edit Profile
                                             </Link>
                                         </Button>
-                                        <Button
-                                            variant="outlined"
-                                            // href={ComponentPath.user.profile.updatePassword}
-                                        >
+                                        <Button variant="outlined">
                                             <Link
                                                 to={
                                                     ComponentPath.user.user
@@ -99,9 +105,6 @@ export default function ViewProfile() {
                                                 Update Password
                                             </Link>
                                         </Button>
-                                        {/* <Button variant="outlined" onClick={deleteUser}>
-                    <Link to={ComponentPath.user.payment.editPayment}>Edit Payment</Link>
-                    </Button> */}
                                     </Stack>
                                 </Box>
                             </CardContent>
