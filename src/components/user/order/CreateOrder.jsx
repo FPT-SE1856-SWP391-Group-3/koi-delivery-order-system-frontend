@@ -57,8 +57,6 @@ function CreateOrder() {
         setIsCheckboxChecked((prevChecked) => !prevChecked)
     }, [])
 
-  
-
     const validateForm = () => {
         if (
             !senderInfo.fullName ||
