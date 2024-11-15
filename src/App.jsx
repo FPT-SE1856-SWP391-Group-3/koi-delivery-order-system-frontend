@@ -13,7 +13,7 @@ function App() {
         //    <Route path="/register" element={<Register />} />
         //</Routes>
         <div className="app">
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense>
                 <RouterProvider router={router} />
             </Suspense>
         </div>

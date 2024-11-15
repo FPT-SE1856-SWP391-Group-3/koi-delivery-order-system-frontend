@@ -97,7 +97,6 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                 />
-
                 <label>Full Name</label>
                 <input
                     type="text"
