@@ -44,7 +44,7 @@ const SenderPackage = ({
                 console.log(data.orderServiceDetails)
                 setOrderServiceDetails(data.orderServiceDetails)
             } else {
-                console.log("Không có dịch vụ!")
+                console.log("No order service details found!")
             }
         })
     }, [])

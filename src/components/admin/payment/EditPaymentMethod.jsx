@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form"
 import api from "../../../api/CallAPI"
 import { useEffect, useState } from "react"
 import "../payment/EditPaymentMethod.css"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function EditPaymentType({ id, onClose, onUpdateSuccess }) {
     const { register, handleSubmit, setValue } = useForm()
@@ -16,10 +18,14 @@ export default function EditPaymentType({ id, onClose, onUpdateSuccess }) {
                         data.paymentMethod.paymentMethodName
                     )
                 } else {
-                    console.log("Không có phương thức thanh toán!")
+                    console.log("No payment method found.")
                 }
             } catch (error) {
-                alert("An error has occurred. Please try again.")
+                console.error("Error fetching PaymentMethod:", error)
+                UserToast(
+                    "error",
+                    "An error occurred while fetching the PaymentMethod."
+                )
             }
         }
 
@@ -31,20 +37,24 @@ export default function EditPaymentType({ id, onClose, onUpdateSuccess }) {
         try {
             const response = await api.put("PaymentMethods/" + id, data)
             if (response.success) {
-                alert("Cập nhật thành công!")
+                UserToast("success", "Update payment method successfully!")
                 onUpdateSuccess() // Gọi callback để cập nhật bảng phương thức thanh toán
                 onClose() // Đóng modal sau khi cập nhật thành công
             } else {
-                alert("Cập nhật thất bại!")
+                UserToast("error", "Failed to update payment method!")
             }
         } catch (error) {
             console.error("Error during update:", error)
-            alert("An error occurred during update. Please try again.")
+            UserToast(
+                "error",
+                "Failed to update payment method. Please try again."
+            )
         }
     }
 
     return (
         <div className="updatepayment-container">
+            <ToastContainer />
             <h1 className="form-title">Update Payment Method</h1>
             <form
                 onSubmit={handleSubmit(onSubmit)}

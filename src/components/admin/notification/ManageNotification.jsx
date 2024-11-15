@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import ComponentPath from "routes/ComponentPath"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function ManageNotification() {
     const [notifications, setNotifications] = useState([])
@@ -14,11 +16,11 @@ export default function ManageNotification() {
                     setNotifications(data.notifications)
                     console.log(data.notifications)
                 } else {
-                    console.log("Không có thông báo!")
+                    console.log("No notifications found.")
                 }
             })
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast("error", "An error occurred while fetching notifications.")
         }
     }, [])
 
@@ -26,24 +28,28 @@ export default function ManageNotification() {
         try {
             api.del("Notifications/" + notificationId).then((data) => {
                 if (data.success) {
-                    alert("Xóa thành công!")
+                    UserToast("success", "Deleted successfully!")
                     const newNotifications = notifications.filter(
                         (notification) =>
                             notification.notificationId !== notificationId
                     )
                     setNotifications(newNotifications)
                 } else {
-                    alert("Xóa thất bại!")
+                    UserToast("error", "Delete failed!")
                 }
             })
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred while deleting the notification."
+            )
         }
     }
 
     return (
         <div>
+            <ToastContainer />
             <h1>Notifications</h1>
             <a href={ComponentPath.admin.notification.createNotification}>
                 Add Notification

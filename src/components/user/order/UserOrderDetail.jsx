@@ -23,7 +23,7 @@ export default function UserOrderDetail({ orderId }) {
                     setUserOrderDetails(data.orderDetails)
                     console.log(data.orderDetails)
                 } else {
-                    console.log("Không có chi tiết đơn hàng!")
+                    console.log("No order details found!")
                 }
             }
         )
@@ -33,17 +33,17 @@ export default function UserOrderDetail({ orderId }) {
         <>
             {" "}
             <Typography variant="h4" align="center" sx={{ mb: 3 }}>
-                Danh sách chi tiết đơn hàng
+                Order Details List
             </Typography>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="order details table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Mã chi tiết đơn hàng</TableCell>
-                            <TableCell>Tên cá koi</TableCell>
-                            <TableCell>Trọng lượng</TableCell>
-                            <TableCell>Giá</TableCell>
-                            <TableCell>Loại</TableCell>
+                            <TableCell>Order Details ID</TableCell>
+                            <TableCell>Koi Name</TableCell>
+                            <TableCell>Weight</TableCell>
+                            <TableCell>Price</TableCell>
+                            <TableCell>Type</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -73,7 +73,7 @@ export default function UserOrderDetail({ orderId }) {
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={5} align="center">
-                                    Không có dữ liệu
+                                    No order details found!
                                 </TableCell>
                             </TableRow>
                         )}

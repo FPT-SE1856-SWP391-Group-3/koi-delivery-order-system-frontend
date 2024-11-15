@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
-import { useParams } from "react-router-dom"
 import { useEffect } from "react"
 import "../koi/EditKoi.css"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function EditKoi({ koiId, onClose, onUpdateSuccess }) {
     const [updateKoi, setUpdateKoi] = useState({
@@ -21,11 +21,11 @@ export default function EditKoi({ koiId, onClose, onUpdateSuccess }) {
                 if (data.success) {
                     setUpdateKoi(data.koi) // Set giá trị vào state
                 } else {
-                    alert("Không tìm thấy koi!")
+                    UserToast("error", "No koi found.")
                 }
             } catch (error) {
                 console.error("Error fetching koi:", error)
-                alert("An error occurred while fetching the koi.")
+                UserToast("error", "An error occurred while fetching the koi.")
             }
         }
 
@@ -38,19 +38,20 @@ export default function EditKoi({ koiId, onClose, onUpdateSuccess }) {
         try {
             const data = await api.put("Kois/" + koiId, updateKoi)
             if (data.success) {
-                alert("Cập nhật thành công!")
+                UserToast("success", "Update koi successfully!")
                 onUpdateSuccess() // Gọi callback để cập nhật danh sách Koi trong ManageKoi
                 onClose() // Đóng modal sau khi cập nhật thành công
             } else {
-                alert("Cập nhật thất bại!")
+                UserToast("error", "Failed to update koi!")
             }
         } catch (error) {
             console.error("Error during update:", error)
-            alert("An error occurred during update. Please try again.")
+            UserToast("error", "An error occurred during update. Please try again.")
         }
     }
     return (
         <div className="updatekoi-container">
+            <ToastContainer />
             <h1 className="form-title">Update Koi</h1>
             <form onSubmit={handleSubmit} className="updatekoi-form">
                 <div className="form-group">

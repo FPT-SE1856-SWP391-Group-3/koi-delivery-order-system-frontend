@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form"
 import api from "../../../api/CallAPI"
 import { useEffect } from "react"
 import "../orderServiceDetail/EditOrderServiceDetail.css"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function EditOrderServiceDetail({
     id,
@@ -25,10 +27,13 @@ export default function EditOrderServiceDetail({
                         data.orderServiceDetail.orderServiceDetailPrice
                     )
                 } else {
-                    console.log("Không có thông tin dịch vụ!")
+                    console.log("No order service detail found.")
                 }
             } catch (error) {
-                alert("An error has occurred. Please try again.")
+             UserToast(
+                 "error",
+                 "An error occurred while fetching the order service detail."
+             )
             }
         }
 
@@ -40,20 +45,24 @@ export default function EditOrderServiceDetail({
         try {
             const response = await api.put("OrderServiceDetails/" + id, data)
             if (response.success) {
-                alert("Cập nhật thành công!")
+              UserToast("success", "Update order service detail successfully!")
                 onUpdateSuccess() // Gọi callback để cập nhật danh sách trong ManageOrderServiceDetail
                 onClose() // Đóng modal
             } else {
-                alert("Cập nhật thất bại!")
+               UserToast("error", "Failed to update order service detail!")
             }
         } catch (error) {
             console.error("Error during update:", error)
-            alert("An error occurred during update. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred during update. Please try again."
+            )
         }
     }
 
     return (
         <div className="update-orderservice-container">
+            <ToastContainer />
             <h1 className="form-title">Update Order Service Details</h1>
             <form
                 onSubmit={handleSubmit(onSubmit)}

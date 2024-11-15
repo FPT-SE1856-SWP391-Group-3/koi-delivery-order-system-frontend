@@ -22,6 +22,8 @@ import AddOrderServiceDetail from "./AddOrderServiceDetail"
 import EditOrderServiceDetail from "./EditOrderServiceDetail"
 import Modal from "react-modal"
 import AdminSideMenu from "../components/AdminSideMenu"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function ManageOrderServiceDetail() {
     const [orderServiceDetails, setOrderServiceDetails] = useState([])
@@ -37,10 +39,13 @@ export default function ManageOrderServiceDetail() {
             if (data.success) {
                 setOrderServiceDetails(data.orderServiceDetails)
             } else {
-                console.log("Không có dữ liệu!")
+                console.log("No order service details found!")
             }
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred while fetching order services."
+            )
         }
     }
 
@@ -87,7 +92,10 @@ export default function ManageOrderServiceDetail() {
             }
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred during deletion. Please try again."
+            )
         }
         closeDeleteModal()
     }
@@ -115,6 +123,7 @@ export default function ManageOrderServiceDetail() {
     }
     return (
         <Box display="flex">
+            <ToastContainer />
             <AdminSideMenu />
             <Box flex={1} padding={3}>
                 <Typography variant="h5" gutterBottom fontWeight="bold">

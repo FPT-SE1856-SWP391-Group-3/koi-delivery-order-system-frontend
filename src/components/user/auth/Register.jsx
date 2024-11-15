@@ -32,7 +32,7 @@ export default function Register() {
             setIsLoading(true)
             if (!checkPassword(data.password, data.confirmPassword)) {
                 setIsLoading(false)
-                UserToast("error", "Mật khẩu không khớp!")
+                UserToast("error", "Password and Confirm Password do not match")
                 return
             }
             api.post("Users/register", data)
@@ -40,7 +40,7 @@ export default function Register() {
                     if (data.success) {
                         UserToast(
                             "success",
-                            "Đăng ký thành công! Vuilong kiểm tra email để xác nhận tài khoản"
+                            "Register successfully! Redirecting to login page..."
                         )
                         setIsLoading(false)
                         setTimeout(() => {
@@ -48,20 +48,20 @@ export default function Register() {
                         }, 3000)
                     } else {
                         setIsLoading(false)
-                        UserToast("error", "Đăng ký thất bại!")
+                        UserToast("error", "Register failed!")
                     }
                 })
                 .catch(() => {
                     setIsLoading(false)
                     UserToast(
                         "error",
-                        "Đăng ký thất bại!, Email hoặc Username đã tồn tại"
+                        "Register failed! Please try again later."
                     )
                 })
         } catch (error) {
             console.error("Register failed", error)
             setIsLoading(false)
-            UserToast("error", "Đăng ký thất bại!")
+            UserToast("error", "Register failed!")
         }
     }
     return (
@@ -107,7 +107,7 @@ export default function Register() {
                                     className="input-field"
                                 />
 
-                                {errors.username && (
+                                {errors.email && (
                                     <span style={{ color: "red" }}>
                                         This field is required
                                     </span>

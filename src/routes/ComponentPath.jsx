@@ -77,6 +77,11 @@ const ComponentPath = {
             createProfile: profile + create,
         },
     },
+
+    payment: {
+        paymentChoose: payment + "/choose",
+        paymentCallBack: payment + "/callback",
+    },
     admin: {
         dashboard: admin + dashboard,
         address: {

@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
-import axios from "axios"
 import "../../css/CreateOrder.css"
-import { Grid } from "@mui/joy"
-import api from "../../../../api/CallAPI"
-import { useForm } from "react-hook-form"
 
 const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
     const [addresses, setAddresses] = useState([])
@@ -94,7 +90,8 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
             <div className="sectionCompo">
                 <label>Phone Number </label>
                 <input
-                    type="number"
+                    type="tel"
+                    pattern="[0-9]{10}"
                     min={0}
                     placeholder="Enter phone number"
                     value={phoneNumber}
@@ -180,6 +177,7 @@ ReceiverInfo.propTypes = {
     onChange: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
     resetInput: PropTypes.bool,
+    setResetInput: PropTypes.func,
 }
 
 export default ReceiverInfo

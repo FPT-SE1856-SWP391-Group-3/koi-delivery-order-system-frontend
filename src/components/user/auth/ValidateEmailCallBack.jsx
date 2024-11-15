@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useMountEffect } from "react"
+import React, { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import "../css/ChoosePayment.css" // Import custom CSS
 import api from "../../../api/CallAPI"
-import { set } from "react-hook-form"
 import ComponentPath from "../../../routes/ComponentPath"
 import { ToastContainer } from "react-toastify"
 import UserToast from "../alert/UserToast"
@@ -46,7 +45,7 @@ function ValidateEmailCallBack() {
         }
 
         api.post(`Users/revalidate`, data).then((data) => {
-            UserToast("success", "Gửi lại email xác nhận thành công")
+            UserToast("success", "Sent email successfully!")
             console.log(data)
         })
     }
@@ -59,15 +58,15 @@ function ValidateEmailCallBack() {
             <h2>Validate Email</h2>
             <h1>
                 {code === "ves" ? (
-                    "Xác nhận email thành công"
+                    "Verify email successfully. Please login to continue."
                 ) : (
                     <>
-                        Xác nhận email thất bại. Vui lòng bấm vào
+                        Verify email failed. Please click{" "}
                         <a href="" onClick={(e) => apiOneTimeRevalidate(e)}>
                             {" "}
-                            <u>đây</u>
+                            <u>here</u>
                         </a>{" "}
-                        để gửi lại email xác nhận
+                        to re-verify email.
                     </>
                 )}
             </h1>

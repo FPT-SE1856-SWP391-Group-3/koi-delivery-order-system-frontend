@@ -38,7 +38,7 @@ export default function UserOrder() {
                 setOrders(data.order)
                 console.log(data.order)
             } else {
-                console.log("Không có đơn hàng!")
+                console.log("No orders found!")
             }
         })
     }, [userId])
@@ -231,7 +231,7 @@ export default function UserOrder() {
                                 color="error"
                                 onClick={handleCloseModal}
                             >
-                                Đóng
+                                Close
                             </Button>
                         </Box>
                     </Box>
@@ -262,7 +262,7 @@ export default function UserOrder() {
                             variant="h6"
                             component="h2"
                         >
-                            Thêm Feedback
+                            Add Feedback
                         </Typography>
                         <CreateFeedback orderId={selectedOrderId} />
                         <Box display="flex" justifyContent="flex-end" mt={2}>
@@ -271,7 +271,7 @@ export default function UserOrder() {
                                 color="error"
                                 onClick={handleCloseModal}
                             >
-                                Đóng
+                                Close
                             </Button>
                         </Box>
                     </Box>
@@ -302,7 +302,7 @@ export default function UserOrder() {
                             variant="h6"
                             component="h2"
                         >
-                            Thêm Document
+                            Add Document
                         </Typography>
                         <AddDocument
                             orderId={selectedOrderId}
@@ -314,7 +314,7 @@ export default function UserOrder() {
                                 color="error"
                                 onClick={handleCloseModal}
                             >
-                                Đóng
+                                Close
                             </Button>
                         </Box>
                     </Box>

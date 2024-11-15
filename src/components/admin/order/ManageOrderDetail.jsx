@@ -14,7 +14,7 @@ export default function ManageOrderDetail() {
                 setUserOrderDetails(data.orderDetail)
                 console.log(data.orderDetail)
             } else {
-                console.log("Không có chi tiết đơn hàng!")
+                console.error("Error fetching OrderDetails:", data.message)
             }
         })
     }, [])

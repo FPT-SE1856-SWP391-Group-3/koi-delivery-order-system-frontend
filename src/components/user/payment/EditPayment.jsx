@@ -9,6 +9,7 @@ import {
     Button,
     Box,
 } from "@mui/material"
+import UserToast from "../alert/UserToast"
 
 export default function EditPayment({ id }) {
     const [payment, setPayment] = useState()
@@ -24,7 +25,7 @@ export default function EditPayment({ id }) {
                     setPayment(data.payment[0])
                     console.log(data.payment[0])
                 } else {
-                    alert("Không có thanh toán!")
+                    UserToast("error", "No payment found.")
                 }
             })
         } catch (error) {
@@ -37,10 +38,10 @@ export default function EditPayment({ id }) {
             e.preventDefault()
             api.put("Payments/" + id, payment).then((data) => {
                 if (data.success) {
-                    alert("Sửa thành công!")
+                    UserToast("success", "Sửa thanh toán thành công!")
                     navigate("/user-payment")
                 } else {
-                    alert("Sửa thất bại!")
+                    UserToast("error", "Sửa thanh toán thất bại!")
                 }
             })
         } catch (error) {
@@ -53,7 +54,7 @@ export default function EditPayment({ id }) {
         <Container maxWidth="sm">
             <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
                 <Typography variant="h4" align="center" gutterBottom>
-                    Sửa Thanh toán mới
+                    Update Payment
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
                     <input
@@ -94,7 +95,7 @@ export default function EditPayment({ id }) {
                         fullWidth
                         sx={{ mt: 3 }}
                     >
-                        Thêm
+                        Add
                     </Button>
                 </Box>
             </Paper>

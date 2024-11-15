@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useFetcher, useNavigate, useParams } from "react-router-dom"
 import api from "../../../api/CallAPI"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function EditFeedback() {
     const navigate = useNavigate()
@@ -19,11 +21,11 @@ export default function EditFeedback() {
                     setFeedbacks(data.customerFeedback)
                     console.log(data.customerFeedback)
                 } else {
-                    alert("Không có phản hồi!")
+                    UserToast("error", "No feedback found.")
                 }
             })
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast("error", "An error occurred while fetching the feedback.")
         }
     }, [])
 
@@ -33,27 +35,28 @@ export default function EditFeedback() {
             api.put("CustomerFeedbacks/" + customerFeedbackId, feedbacks).then(
                 (data) => {
                     if (data.success) {
-                        alert("Sửa thành công!")
+                        UserToast("success", "Update feedback successfully!")
                     } else {
-                        alert("Sửa thất bại!")
+                        alert("Update failed!")
                     }
                 }
             )
         } catch (error) {
             console.error("Error during registration:", error)
-            alert("An error occurred during registration. Please try again.")
+            UserToast("error", "An error occurred during update. Please try again.")
         }
     }
 
     return (
         <div>
+            <ToastContainer />
             <div className="container">
                 <div className="row">
                     <div className="col-md-6 offset-md-3">
-                        <h2 className="text-center">Sửa Phản hồi mới</h2>
+                        <h2 className="text-center">Update Feedback</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <label htmlFor="comment">Bình luận</label>
+                                <label htmlFor="comment">Comment</label>
                                 <textarea
                                     className="form-control"
                                     id="comment"
@@ -68,7 +71,7 @@ export default function EditFeedback() {
                                 />
                             </div>
                             <button type="submit" className="btn btn-primary">
-                                Sửa
+                                Update
                             </button>
                         </form>
                     </div>

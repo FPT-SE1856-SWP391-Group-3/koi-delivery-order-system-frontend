@@ -100,11 +100,11 @@ const router = createBrowserRouter([
         element: <Dashboard />,
     },
     {
-        path: "/payment/choose",
+        path: ComponentPath.payment.paymentChoose,
         element: <ChoosePayment />,
     },
     {
-        path: "/payment/callback",
+        path: ComponentPath.payment.paymentCallBack,
         element: <CallBackPayment />,
     },
     {

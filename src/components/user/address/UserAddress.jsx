@@ -23,6 +23,8 @@ import {
     DialogContent,
     DialogActions,
 } from "@mui/material"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function UserAddress() {
     const [addresses, setAddresses] = useState([])
@@ -40,11 +42,11 @@ export default function UserAddress() {
                     setAddresses(data.address)
                     console.log(data.address)
                 } else {
-                    console.log("Không có địa chỉ!")
+                    console.log("No address information found for this user.")
                 }
             })
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast("error", "An error occurred while fetching addresses.")
         }
     }, [id])
 
@@ -58,7 +60,7 @@ export default function UserAddress() {
                     )
                     setAddresses(newAddresses)
                 } else {
-                    alert("Xóa thất bại!")
+                    UserToast("error", "An error occurred during deletion.")
                 }
             })
         } catch (error) {
@@ -78,6 +80,7 @@ export default function UserAddress() {
     return (
         <div>
             <UserSideNav>
+                <ToastContainer />
                 <Box sx={{ p: 3 }}>
                     <Typography variant="h4" gutterBottom>
                         Address
