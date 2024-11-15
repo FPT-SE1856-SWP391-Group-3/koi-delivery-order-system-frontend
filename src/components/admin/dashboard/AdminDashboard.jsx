@@ -14,12 +14,16 @@ import {
     Tooltip,
     ResponsiveContainer,
     Label,
+    Brush,
 } from "recharts"
 import api from "../../../api/CallAPI"
 
 export default function AdminDashboard() {
     const [ordersData, setOrdersData] = useState([])
     const [chartData, setChartData] = useState([])
+    const [totalOrders, setTotalOrders] = useState(0)
+    const [totalSuccess, setTotalSuccess] = useState(0)
+    const [totalCancel, setTotalCancel] = useState(0)
 
     // Fetch orders data from API
     useEffect(() => {
@@ -39,20 +43,54 @@ export default function AdminDashboard() {
                     customer: order.customerId,
                     date: order.orderDate,
                     total: order.totalPrice || 0,
+                    orderStatusId: order.orderStatusId, // Include orderStatusId
                 }))
                 setOrdersData(dataWithId)
 
-                // Prepare data for the chart by counting orders per date
-                const dateCountMap = dataWithId.reduce((acc, order) => {
-                    acc[order.date] = (acc[order.date] || 0) + 1
-                    return acc
-                }, {})
+                // Initialize counters
+                let totalOrderCount = 0
+                let successCount = 0
+                let cancelCount = 0
+
+                // Prepare data for the chart
+                const dateCountMap = {}
+                const successCountMap = {}
+                const cancelCountMap = {}
+
+                dataWithId.forEach((order) => {
+                    totalOrderCount++ // Total order count
+                    if (order.orderStatusId === 10) successCount++ // Successful orders
+                    if (order.orderStatusId === 11) cancelCount++ // Canceled orders
+
+                    // Total orders per date
+                    dateCountMap[order.date] =
+                        (dateCountMap[order.date] || 0) + 1
+
+                    // Count of successful orders (orderStatusId = 10)
+                    if (order.orderStatusId === 10) {
+                        successCountMap[order.date] =
+                            (successCountMap[order.date] || 0) + 1
+                    }
+
+                    // Count of canceled orders (orderStatusId = 11)
+                    if (order.orderStatusId === 11) {
+                        cancelCountMap[order.date] =
+                            (cancelCountMap[order.date] || 0) + 1
+                    }
+                })
+
+                // Set total counts
+                setTotalOrders(totalOrderCount)
+                setTotalSuccess(successCount)
+                setTotalCancel(cancelCount)
 
                 // Transform data into an array format for the chart
                 const transformedData = Object.keys(dateCountMap).map(
                     (date) => ({
                         date,
                         orderCount: dateCountMap[date],
+                        successCount: successCountMap[date] || 0,
+                        cancelCount: cancelCountMap[date] || 0,
                     })
                 )
                 setChartData(transformedData)
@@ -64,6 +102,7 @@ export default function AdminDashboard() {
         fetchOrders()
     }, [])
 
+    // Define columns for DataGrid
     const columns = [
         { field: "id", headerName: "ID", width: 100 },
         { field: "customer", headerName: "Customer ID", width: 200 },
@@ -76,21 +115,38 @@ export default function AdminDashboard() {
             <CssBaseline />
             <AdminSideMenu />
             <Box sx={{ marginLeft: "250px", padding: "20px" }}>
+                {/* Summary Section */}
+                <Typography variant="h4" gutterBottom>
+                    Order Summary
+                </Typography>
+                <Box display="flex" gap={4} mb={4}>
+                    <Box>
+                        <Typography variant="h6">Total Orders</Typography>
+                        <Typography variant="h5">{totalOrders}</Typography>
+                    </Box>
+                    <Box>
+                        <Typography variant="h6">Successful Orders</Typography>
+                        <Typography variant="h5" color="green">
+                            {totalSuccess}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Typography variant="h6">Canceled Orders</Typography>
+                        <Typography variant="h5" color="red">
+                            {totalCancel}
+                        </Typography>
+                    </Box>
+                </Box>
+
                 {/* Line Chart Section */}
                 <Typography variant="h4" gutterBottom>
-                    Order Counts Over Time
+                    Order Trends Over Time
                 </Typography>
                 <Box sx={{ width: "100%", height: 400, marginBottom: 4 }}>
                     <ResponsiveContainer width="100%" height="100%">
                         <LineChart data={chartData}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date">
-                                <Label
-                                    value="Date"
-                                    offset={-5}
-                                    position="insideBottom"
-                                />
-                            </XAxis>
+                            <XAxis dataKey="date"></XAxis>
                             <YAxis>
                                 <Label
                                     value="Order Count"
@@ -99,16 +155,41 @@ export default function AdminDashboard() {
                                 />
                             </YAxis>
                             <Tooltip />
+                            {/* Total Orders */}
                             <Line
                                 type="monotone"
                                 dataKey="orderCount"
                                 stroke="#8884d8"
                                 activeDot={{ r: 8 }}
+                                name="Total Orders"
+                            />
+                            {/* Successful Orders */}
+                            <Line
+                                type="monotone"
+                                dataKey="successCount"
+                                stroke="#82ca9d"
+                                activeDot={{ r: 8 }}
+                                name="Successful Orders"
+                            />
+                            {/* Canceled Orders */}
+                            <Line
+                                type="monotone"
+                                dataKey="cancelCount"
+                                stroke="#ff4d4d"
+                                activeDot={{ r: 8 }}
+                                name="Canceled Orders"
+                            />
+                            {/* Brush Component for Zooming */}
+                            <Brush
+                                dataKey="date"
+                                height={30}
+                                stroke="#8884d8"
                             />
                         </LineChart>
                     </ResponsiveContainer>
                 </Box>
 
+                {/* Order History Table Section */}
                 <Typography variant="h5" gutterBottom>
                     Order History
                 </Typography>

@@ -57,8 +57,7 @@ function CreateOrder() {
         setIsCheckboxChecked((prevChecked) => !prevChecked)
     }, [])
 
-    const username = "đăng khoa"
-    const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=0D8ABC&color=fff`
+  
 
     const validateForm = () => {
         if (

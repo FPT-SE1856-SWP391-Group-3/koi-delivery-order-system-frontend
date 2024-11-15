@@ -114,7 +114,7 @@ export default function MenuContent() {
         {
             text: "Feedback",
             icon: <FeedbackIcon />,
-            link: ComponentPath.admin.report.manageReport,
+            link: ComponentPath.admin.feedback.manageFeedback,
         },
         {
             text: "Blog News",

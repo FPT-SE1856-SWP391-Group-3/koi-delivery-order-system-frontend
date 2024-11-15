@@ -19,18 +19,18 @@ const SenderInfo = ({ onChange }) => {
 
     const userId = JSON.parse(localStorage.getItem("user"))?.userId
 
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const userResponse = await api.get(`Users/${userId}`)
-                if (userResponse.success) {
-                    setSenderInfo((prevInfo) => ({
-                        ...prevInfo,
-                        fullName: userResponse.user?.fullName || "",
-                        email: userResponse.user?.email || "",
-                        phoneNumber: userResponse.user?.phoneNumber || "",
-                        birthDate: userResponse.user?.birthDate || "",
-                        userId: userResponse.user?.userId || "",
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userResponse = await api.get(`Users/${userId}`);
+        if (userResponse.success) {
+          setSenderInfo((prevInfo) => ({
+            ...prevInfo,
+            fullName: userResponse.user?.userName || "",
+            email: userResponse.user?.email || "",
+            phoneNumber: userResponse.user?.phoneNumber || "",
+            birthDate: userResponse.user?.birthDate || "",
+            userId: userResponse.user?.userId || "",
 
                         serviceType:
                             userResponse.user?.serviceType || "domestic",

@@ -104,279 +104,257 @@ function OrderRow({
             console.error("Error updating koi condition:", error)
         }
     }
+}
 
-    return (
-        row != null &&
-        ((user.roleId === 3 && row.orderStatusId < 7) ||
-            (user.roleId === 4 && row.orderStatusId >= 7) ||
-            user.roleId === 5) && (
-            <React.Fragment>
-                <TableRow>
-                    <TableCell>
-                        <IconButton size="small" onClick={handleExpandClick}>
-                            {open ? (
-                                <KeyboardArrowUpIcon />
-                            ) : (
-                                <KeyboardArrowDownIcon />
-                            )}
-                        </IconButton>
-                    </TableCell>
-                    <TableCell>{row.orderId}</TableCell>
-                    <TableCell>{row.customerId}</TableCell>
-                    <TableCell>{row.orderDate}</TableCell>
-                    <TableCell>
-                        {row.paymentHistoryId == null
-                            ? "False"
-                            : row.paymentHistory.paymentStatusId == 2
-                              ? "True"
-                              : "False"}
-                    </TableCell>
-                    <TableCell>{row.deliveryDate}</TableCell>
-                    <TableCell>
-                        {row.orderStatus != null
-                            ? row.orderStatus.orderStatusName
-                            : ""}
-                    </TableCell>
-                    <TableCell>
-                        <select
-                            onChange={(event) =>
-                                updateOrderStatusBySelect(
-                                    event,
+// Function to calculate estimated delivery date
+const calculateEstimatedDeliveryDate = (orderDate, distance) => {
+    const estimatedDays = Math.ceil(distance / 200000) // Calculate days needed
+    return dayjs(orderDate).add(estimatedDays, "day").format("YYYY-MM-DD") // Add days to orderDate
+}
+
+return (
+    row != null &&
+    ((user.roleId === 3 && row.orderStatusId < 7) ||
+        (user.roleId === 4 && row.orderStatusId >= 7) ||
+        user.roleId === 5) && (
+        <React.Fragment>
+            <TableRow>
+                <TableCell>
+                    <IconButton size="small" onClick={handleExpandClick}>
+                        {open ? (
+                            <KeyboardArrowUpIcon />
+                        ) : (
+                            <KeyboardArrowDownIcon />
+                        )}
+                    </IconButton>
+                </TableCell>
+                <TableCell>{row.orderId}</TableCell>
+                <TableCell>{row.customerId}</TableCell>
+                <TableCell>{row.orderDate}</TableCell>
+                <TableCell>
+                    {row.paymentHistoryId == null
+                        ? "False"
+                        : row.paymentHistory.paymentStatusId == 2
+                          ? "True"
+                          : "False"}
+                </TableCell>
+                <TableCell>
+                    {row.orderStatus != null
+                        ? row.orderStatus.orderStatusName
+                        : ""}
+                </TableCell>
+                <TableCell>
+                    {calculateEstimatedDeliveryDate(
+                        row.orderDate,
+                        row.distance
+                    )}
+                </TableCell>{" "}
+                {/* Display Estimated Delivery Date */}
+                <TableCell>
+                    <select
+                        onChange={(event) =>
+                            updateOrderStatusBySelect(
+                                event,
+                                row.orderId,
+                                row.orderStatusId
+                            )
+                        }
+                        value={row == null ? "" : row.orderStatusId}
+                    >
+                        {orderStatus.map((status) => (
+                            <option
+                                key={status.orderStatusId}
+                                value={status.orderStatusId}
+                            >
+                                {status.orderStatusName}
+                            </option>
+                        ))}
+                    </select>
+                </TableCell>
+                <TableCell>
+                    <Box display="flex" flexDirection="column" gap={1}>
+                        <Button
+                            onClick={() =>
+                                updateOrderStatusByClick(
                                     row.orderId,
                                     row.orderStatusId
                                 )
                             }
-                            value={row == null ? "" : row.orderStatusId}
                         >
-                            {orderStatus.map((status) => (
-                                <option
-                                    key={status.orderStatusId}
-                                    value={status.orderStatusId}
-                                >
-                                    {status.orderStatusName}
-                                </option>
-                            ))}
-                        </select>
-                    </TableCell>
-                    <TableCell>
-                        <Box display="flex" flexDirection="column" gap={1}>
-                            <Button
-                                onClick={() =>
-                                    updateOrderStatusByClick(
-                                        row.orderId,
-                                        row.orderStatusId
-                                    )
-                                }
-                            >
-                                Update Status
-                            </Button>
-                            <Button
-                                onClick={() =>
-                                    openDocumentModal(
-                                        row.orderId,
-                                        row.orderStatusId
-                                    )
-                                }
-                            >
-                                Order Document
-                            </Button>
-                            <Button
-                                onClick={() => openReportModal(row.orderId)}
-                            >
-                                Transportation Report
-                            </Button>
-                            <Button
-                                onClick={() => cancelOrder(row.orderId)}
-                                color="error"
-                            >
-                                Cancel
-                            </Button>
-                        </Box>
-                    </TableCell>
-                    <TableCell>{row.deliveryStaffId}</TableCell>
-                </TableRow>
+                            Update Status
+                        </Button>
+                        <Button
+                            onClick={() =>
+                                openDocumentModal(
+                                    row.orderId,
+                                    row.orderStatusId
+                                )
+                            }
+                        >
+                            Order Document
+                        </Button>
+                        <Button onClick={() => openReportModal(row.orderId)}>
+                            Transportation Report
+                        </Button>
+                        <Button
+                            onClick={() => cancelOrder(row.orderId)}
+                            color="error"
+                        >
+                            Cancel
+                        </Button>
+                    </Box>
+                </TableCell>
+                <TableCell>{row.deliveryStaffId}</TableCell>
+            </TableRow>
 
-                {/* Order Details */}
-                <TableRow>
-                    <TableCell
-                        style={{ paddingBottom: 0, paddingTop: 0 }}
-                        colSpan={12}
-                    >
-                        <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box margin={2}>
+            {/* Order Details */}
+            <TableRow>
+                <TableCell
+                    style={{ paddingBottom: 0, paddingTop: 0 }}
+                    colSpan={12}
+                >
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box margin={2}>
+                            <Typography
+                                variant="h6"
+                                gutterBottom
+                                component="div"
+                            >
+                                Order Details
+                            </Typography>
+                            <Table size="small" aria-label="order details">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Pickup Address</TableCell>
+                                        <TableCell>Shipping Address</TableCell>
+                                        <TableCell>Distance</TableCell>
+
+                                        <TableCell>Total Price</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell>
+                                            {row.startAddress?.addressLine ||
+                                                ""}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row.endAddress?.addressLine || ""}
+                                        </TableCell>
+                                        <TableCell>{row.distance}</TableCell>
+
+                                        <TableCell>{row.totalPrice}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+
+                            <Box marginTop={2}>
                                 <Typography
                                     variant="h6"
                                     gutterBottom
                                     component="div"
                                 >
-                                    Order Details
+                                    Koi Details
                                 </Typography>
-                                <Table size="small" aria-label="order details">
+                                <Table size="small" aria-label="koi details">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>
-                                                Pickup Address
+                                            <TableCell>Koi ID</TableCell>
+                                            <TableCell>Koi Name</TableCell>
+                                            <TableCell>Weight (kg)</TableCell>
+                                            <TableCell>Koi Condition</TableCell>
+                                            <TableCell>Price ($)</TableCell>
+                                            <TableCell align="center">
+                                                Actions
                                             </TableCell>
-                                            <TableCell>
-                                                Shipping Address
-                                            </TableCell>
-                                            <TableCell>Distance</TableCell>
-                                            <TableCell>Delivery Time</TableCell>
-                                            <TableCell>Total Price</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        <TableRow>
-                                            <TableCell>
-                                                {row.startAddress
-                                                    ?.addressLine || ""}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.endAddress?.addressLine ||
-                                                    ""}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.distance}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.duration}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.totalPrice}
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-
-                                <Box marginTop={2}>
-                                    <Typography
-                                        variant="h6"
-                                        gutterBottom
-                                        component="div"
-                                    >
-                                        Koi Details
-                                    </Typography>
-                                    <Table
-                                        size="small"
-                                        aria-label="koi details"
-                                    >
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>Koi ID</TableCell>
-                                                <TableCell>Koi Name</TableCell>
-                                                <TableCell>
-                                                    Weight (kg)
-                                                </TableCell>
-                                                <TableCell>
-                                                    Koi Condition
-                                                </TableCell>
-                                                <TableCell>Price ($)</TableCell>
-                                                <TableCell align="center">
-                                                    Actions
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {Array.isArray(koiDetails) &&
-                                            koiDetails.length > 0 ? (
-                                                koiDetails.map((koiDetail) => (
-                                                    <TableRow
-                                                        key={
-                                                            koiDetail.orderDetailId
-                                                        }
-                                                    >
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .koiId
+                                        {Array.isArray(koiDetails) &&
+                                        koiDetails.length > 0 ? (
+                                            koiDetails.map((koiDetail) => (
+                                                <TableRow
+                                                    key={
+                                                        koiDetail.orderDetailId
+                                                    }
+                                                >
+                                                    <TableCell>
+                                                        {koiDetail.koi.koiId}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {koiDetail.koi.koiName}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {koiDetail.koi.weight}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {koiDetail.koiCondition}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {koiDetail.koi.price}
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        <Button
+                                                            variant="contained"
+                                                            size="small"
+                                                            onClick={() =>
+                                                                openUpdateModal(
+                                                                    koiDetail.orderDetailId,
+                                                                    koiDetail.koiCondition
+                                                                )
                                                             }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .koiName
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .weight
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koiCondition
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .price
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell align="center">
-                                                            <Button
-                                                                variant="contained"
-                                                                size="small"
-                                                                onClick={() =>
-                                                                    openUpdateModal(
-                                                                        koiDetail.orderDetailId,
-                                                                        koiDetail.koiCondition
-                                                                    )
-                                                                }
-                                                            >
-                                                                Update Condition
-                                                            </Button>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))
-                                            ) : (
-                                                <TableRow>
-                                                    <TableCell
-                                                        colSpan={5}
-                                                        align="center"
-                                                    >
-                                                        No Koi Details Available
+                                                        >
+                                                            Update Condition
+                                                        </Button>
                                                     </TableCell>
                                                 </TableRow>
-                                            )}
-                                        </TableBody>
-                                    </Table>
-                                </Box>
+                                            ))
+                                        ) : (
+                                            <TableRow>
+                                                <TableCell
+                                                    colSpan={5}
+                                                    align="center"
+                                                >
+                                                    No Koi Details Available
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
                             </Box>
-                        </Collapse>
-                    </TableCell>
-                </TableRow>
-                {/* Update Condition Modal */}
-                <Dialog open={isUpdateModalOpen} onClose={closeUpdateModal}>
-                    <DialogTitle>Update Koi Condition</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Enter a new condition for this koi:
-                        </DialogContentText>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            label="Koi Condition"
-                            fullWidth
-                            variant="outlined"
-                            value={newKoiCondition}
-                            onChange={(e) => setNewKoiCondition(e.target.value)}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={closeUpdateModal} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={updateKoiCondition} color="primary">
-                            Update
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </React.Fragment>
-        )
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+            {/* Update Condition Modal */}
+            <Dialog open={isUpdateModalOpen} onClose={closeUpdateModal}>
+                <DialogTitle>Update Koi Condition</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Enter a new condition for this koi:
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        label="Koi Condition"
+                        fullWidth
+                        variant="outlined"
+                        value={newKoiCondition}
+                        onChange={(e) => setNewKoiCondition(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeUpdateModal} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={updateKoiCondition} color="primary">
+                        Update
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </React.Fragment>
     )
-}
+)
 
 OrderRow.propTypes = {
     row: PropTypes.object.isRequired,
@@ -487,17 +465,25 @@ export default function ManageOrder() {
             const response = await api.put(`Orders/update-status/${orderId}`, {
                 updateOrderStatusId: selectedStatusId,
             })
-            setOrder((orders) =>
-                orders.map((order) =>
-                    order.orderId === orderId
-                        ? { ...order, orderStatusId: selectedStatusId }
-                        : order
-                )
-            )
-            setAlertMessage("Order status updated successfully!")
-            setAlertSeverity("success")
-            setAlertOpen(true)
-            fetchOrders()
+
+            if (response.success) {
+                // Refresh the orders list
+                await fetchOrders()
+
+                setAlertMessage("Order status updated successfully!")
+                setAlertSeverity("success")
+                setAlertOpen(true)
+            } else {
+                if (response.code === "error-payment") {
+                    setAlertMessage("Payment is not completed yet.")
+                } else if (response.code === "error-document") {
+                    setAlertMessage("Document is not uploaded yet.")
+                } else {
+                    setAlertMessage("Failed to update order status.")
+                }
+                setAlertSeverity("warning")
+                setAlertOpen(true)
+            }
         } catch (error) {
             setAlertMessage("An error occurred during status update.")
             setAlertSeverity("error")
@@ -655,73 +641,54 @@ export default function ManageOrder() {
                                 <TableCell>
                                     <Typography
                                         fontWeight={600}
-                                        allign="center"
-                                        width={100}
+                                        align="center"
+                                        width={50}
                                     >
                                         Order ID
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
                                         Customer ID
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
                                     <Typography
                                         fontWeight={600}
-                                        allign="center"
+                                        align="center"
+                                        width={100}
                                     >
                                         Order Date
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
                                         Is Payment
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
-                                        Delivery Date
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
                                         Status
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
+                                        Estimated Delivery Date
+                                    </Typography>
+                                </TableCell>{" "}
+                                {/* Add Estimated Delivery Date header */}
+                                <TableCell>
+                                    <Typography fontWeight={600} align="center">
                                         Edit Status
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
                                         Action
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
                                         Delivering Staff
                                     </Typography>
                                 </TableCell>
