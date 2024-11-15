@@ -54,7 +54,7 @@ export default function UserAddress() {
         try {
             api.del("Addresses/" + addressId).then((data) => {
                 if (data.success) {
-                  UserToast("success", "Address deleted successfully.")
+                    UserToast("success", "Address deleted successfully.")
                     const newAddresses = addresses.filter(
                         (address) => address.addressId !== addressId
                     )
@@ -65,7 +65,7 @@ export default function UserAddress() {
             })
         } catch (error) {
             console.error("Error during deletion:", error)
-           UserToast("error", "An error occurred during deletion.")
+            UserToast("error", "An error occurred during deletion.")
         }
     }
 

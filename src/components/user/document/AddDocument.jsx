@@ -40,7 +40,7 @@ export default function AddDocument({ orderId, userId }) {
                             console.log(
                                 `File ${index + 1} uploaded successfully!`
                             )
-                           UserToast("success", "Add document successfully!")
+                            UserToast("success", "Add document successfully!")
                         } else {
                             console.log(
                                 `File ${index + 1} uploaded successfully!`

@@ -397,7 +397,7 @@ export default function ManageRoute() {
             }
         } catch (error) {
             console.error("Error fetching orders:", error) // Log the error for debugging
-           UserToast("error", "An error occurred while fetching orders.")
+            UserToast("error", "An error occurred while fetching orders.")
         }
     }
 

@@ -58,7 +58,7 @@ export default function ManageOrderDocument() {
                         (doc) => doc.orderDocumentId !== documentId
                     )
                 )
-                 UserToast("success", "Document deleted successfully!")
+                UserToast("success", "Document deleted successfully!")
             } else {
                 UserToast("error", "Failed to delete document!")
             }

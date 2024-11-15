@@ -34,7 +34,10 @@ function CreateOrderInter() {
                 }
             } catch (error) {
                 console.error("Error fetching user:", error)
-               UserToast("error", "An error occurred while fetching user data.")
+                UserToast(
+                    "error",
+                    "An error occurred while fetching user data."
+                )
             }
         }
         if (userId) fetchUser()

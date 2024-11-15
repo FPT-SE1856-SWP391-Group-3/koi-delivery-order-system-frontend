@@ -54,7 +54,7 @@ export default function Login() {
                                 navigate(admin)
                                 break
                             case 2:
-                                navigate(ComponentPath.user.dashboard)
+                                navigate(ComponentPath.user.order.viewOrder)
                                 break
                             case 3:
                                 navigate(ComponentPath.admin.dashboard)
@@ -98,7 +98,7 @@ export default function Login() {
                     navigate(admin)
                     break
                 case 2:
-                    navigate(ComponentPath.user.profile.viewProfile)
+                    navigate(ComponentPath.user.order.viewOrder)
                     break
                 case 3:
                     navigate(ComponentPath.admin.dashboard)
@@ -154,7 +154,7 @@ export default function Login() {
     // Hàm xử lý khi đăng nhập bằng Google thất bại
     const handleGoogleFailure = (error) => {
         console.error("Google Login Failure:", error)
-        UserToast("error", "Failed to login with Google!")  
+        UserToast("error", "Failed to login with Google!")
     }
 
     return (

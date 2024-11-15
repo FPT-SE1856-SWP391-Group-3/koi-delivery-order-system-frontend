@@ -80,7 +80,10 @@ export default function ManageOrderServiceDetail() {
             )
             const data = await response.json()
             if (data.success) {
-                UserToast("success", "Order Service Detail deleted successfully!")
+                UserToast(
+                    "success",
+                    "Order Service Detail deleted successfully!"
+                )
                 const newOrderServiceDetails = orderServiceDetails.filter(
                     (orderServiceDetail) =>
                         orderServiceDetail.orderServiceDetailId !==
@@ -88,7 +91,7 @@ export default function ManageOrderServiceDetail() {
                 )
                 setOrderServiceDetails(newOrderServiceDetails)
             } else {
-               UserToast("error", "Failed to delete Order Service Detail!")
+                UserToast("error", "Failed to delete Order Service Detail!")
             }
         } catch (error) {
             console.error("Error during deletion:", error)

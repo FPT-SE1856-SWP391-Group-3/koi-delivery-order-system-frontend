@@ -38,7 +38,7 @@ const SenderInfo = ({ onChange }) => {
                             userResponse.user?.serviceType || "domestic",
                     }))
                 } else {
-                   UserToast("error", "User not found. Please log in again.")
+                    UserToast("error", "User not found. Please log in again.")
                 }
 
                 const addressResponse = await api.get(
@@ -58,7 +58,10 @@ const SenderInfo = ({ onChange }) => {
                 }
             } catch (error) {
                 console.error("Error fetching data:", error)
-                UserToast("error", "An error occurred while fetching user data.")
+                UserToast(
+                    "error",
+                    "An error occurred while fetching user data."
+                )
             }
         }
 

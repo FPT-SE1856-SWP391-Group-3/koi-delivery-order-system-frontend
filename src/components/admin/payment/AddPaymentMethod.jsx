@@ -13,7 +13,7 @@ export default function AddPaymentType({ onClose, onAddSuccess }) {
         try {
             const response = await api.post("PaymentMethods/", data)
             if (response.success) {
-                 UserToast("success", "Payment method added successfully!")
+                UserToast("success", "Payment method added successfully!")
                 onAddSuccess() // Gọi callback để cập nhật danh sách trong ManagePaymentMethod
                 onClose() // Đóng modal sau khi thêm mới thành công
             } else {

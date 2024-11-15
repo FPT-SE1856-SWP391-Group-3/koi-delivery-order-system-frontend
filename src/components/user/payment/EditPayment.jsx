@@ -46,7 +46,10 @@ export default function EditPayment({ id }) {
             })
         } catch (error) {
             console.error("Error!:", error)
-           UserToast("error", "An error occurred during update. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred during update. Please try again."
+            )
         }
     }
 

@@ -19,7 +19,10 @@ export default function CreateTransportationReportDetails({
                 orderId,
             })
             if (response.success) {
-               UserToast("success", "Transportation report added successfully!")
+                UserToast(
+                    "success",
+                    "Transportation report added successfully!"
+                )
                 onAddSuccess() // Cập nhật danh sách sau khi thêm thành công
                 onClose() // Đóng modal
             } else {

@@ -53,7 +53,7 @@ export default function EditAddress({ addressId, closeModal }) {
                         closeModal()
                         window.location.reload()
                     } else {
-                        UserToast("error", "Failed to update address!") 
+                        UserToast("error", "Failed to update address!")
                     }
                 })
         } catch (error) {

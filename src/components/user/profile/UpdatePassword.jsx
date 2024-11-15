@@ -39,7 +39,10 @@ export default function UpdatePassword() {
             })
         } catch (error) {
             console.error("Error:", error)
-           UserSideNav("error", "An error occurred during update. Please try again.")
+            UserSideNav(
+                "error",
+                "An error occurred during update. Please try again."
+            )
         }
     }
 

@@ -158,11 +158,15 @@ function CreateOrder() {
                 setIsLoading(false)
             })
             .catch((error) => {
-                console.error("Error during order creation:", error)
-                UserToast(
-                    "error",
-                    "An error occurred during order creation. Please try again."
-                )
+                if (error.code == "notrevalidemail") {
+                    UserToast("error", "Email is not valid")
+
+                } else {
+                    UserToast(
+                        "error",
+                        "An error occurred during order creation. Please try again."
+                    )
+                }
                 setIsLoading(false)
             })
     }, [

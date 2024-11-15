@@ -42,7 +42,7 @@ export default function ViewProfile() {
             })
         } catch (error) {
             console.error("Error during deletion:", error)
-           UserToast("error", "An error occurred while deleting the user.")
+            UserToast("error", "An error occurred while deleting the user.")
         }
     }
 
