@@ -5,7 +5,7 @@ import SenderInfo from "./COC/SenderInfo"
 import "../css/CreateOrder.css"
 
 import api from "../../../api/CallAPI"
-import CustomerDocumentInfo from "./COC/CustomerDocumentInfo"
+import CustomerDocumentInfo from "./COC/SelectPaymentMethod"
 import SideMenu from "../SideMenu"
 import {
     Box,
@@ -70,7 +70,6 @@ function CreateOrder() {
             !senderInfo.phoneNumber ||
             !senderInfo.addressLine ||
             !receiverInfo.fullName ||
-            !receiverInfo.email ||
             !receiverInfo.phoneNumber ||
             !receiverInfo.receiverPartAddressLine ||
             !receiverInfo.receiverFullAddressLine

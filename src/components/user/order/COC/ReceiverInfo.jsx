@@ -88,7 +88,7 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
         <div>
             <h2>Receiver Information</h2>
             <div className="sectionCompo">
-                <label>Phone Number </label>
+                <label>Phone Number* </label>
                 <input
                     type="tel"
                     pattern="[0-9]{10}"
@@ -97,21 +97,21 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                 />
-                <label>Full Name</label>
+                <label>Full Name*</label>
                 <input
                     type="text"
                     placeholder="Enter full name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                 />
-                <label>Email</label>
+                <label>Email (Optional)</label>
                 <input
                     type="text"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
-                <label htmlFor="city">City/Province</label>
+                <label htmlFor="city">City/Province*</label>
                 <select
                     value={cityName}
                     onChange={(e) => {
@@ -120,7 +120,7 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
                         setWardName("")
                     }}
                 >
-                    <option value="">Choose City</option>
+                    <option value="">Choose City*</option>
                     {addresses.map((address) => (
                         <option key={address.level1_id} value={address.name}>
                             {address.name}
@@ -128,7 +128,7 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
                     ))}
                 </select>
 
-                <label htmlFor="district">District</label>
+                <label htmlFor="district">District*</label>
                 <select
                     value={districtName}
                     onChange={(e) => {
@@ -137,7 +137,7 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
                     }}
                     disabled={!cityName}
                 >
-                    <option value="">Choose District</option>
+                    <option value="">Choose District*</option>
                     {filteredDistricts.map((district) => (
                         <option key={district.level2_id} value={district.name}>
                             {district.name}
@@ -145,7 +145,7 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
                     ))}
                 </select>
 
-                <label htmlFor="ward">Ward/Commune</label>
+                <label htmlFor="ward">Ward/Commune*</label>
                 <select
                     value={wardName}
                     onChange={(e) => setWardName(e.target.value)}
@@ -158,7 +158,7 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
                         </option>
                     ))}
                 </select>
-                <label>Specific Address</label>
+                <label>Specific Address*</label>
                 <input
                     type="text"
                     placeholder="Enter specific address"
