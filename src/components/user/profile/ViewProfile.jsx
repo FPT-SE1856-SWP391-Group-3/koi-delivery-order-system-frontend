@@ -17,6 +17,7 @@ import SideMenu from "../SideMenu" // Assuming you have this component
 import AdminSideMenu from "../../admin/components/AdminSideMenu"
 import { Grid } from "@mui/joy"
 import UserAppNavbar from "../UserAppNavbar"
+import UserToast from "../alert/UserToast"
 
 export default function ViewProfile() {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
@@ -31,11 +32,11 @@ export default function ViewProfile() {
         try {
             api.del("Users").then((data) => {
                 if (data.success) {
-                    alert("Xóa thành công!")
+                    UserToast("success", "Delete user successfully!")
                     localStorage.removeItem("user")
                     navigate("/")
                 } else {
-                    alert("Xóa thất bại!")
+                    UserToast("error", "Delete user failed!")
                 }
             })
         } catch (error) {

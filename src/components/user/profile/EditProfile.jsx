@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import UserSideNav from "../UserSideNav"
 import { Button, Card, CardContent } from "@mui/material"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
+import ComponentPath from "../../../routes/ComponentPath"
 
 export default function EditProfile() {
     const user = JSON.parse(localStorage.getItem("user") || "{}")
@@ -21,22 +24,22 @@ export default function EditProfile() {
             // Goi api update user
             api.put("Users/" + user.userId, updateUser).then((data) => {
                 if (data.success) {
-                    alert("Cập nhật thành công!")
+                    UserToast("success", "Update profile successfully!")
                     localStorage.setItem("user", JSON.stringify(data.user))
-                    navigate("/")
                 } else {
-                    alert("Cập nhật thất bại!")
+                    UserToast("error", "Update profile failed!")
                 }
             })
         } catch (error) {
             console.error("Error:", error)
-            alert("Error! Please try again.")
+            UserToast("error", "Error! Please try again.")
         }
     }
 
     return (
         <>
             <UserSideNav>
+                <ToastContainer />
                 <Card sx={{ marginInline: "1em" }}>
                     <CardContent>
                         <div>
@@ -44,6 +47,7 @@ export default function EditProfile() {
                                 <div className="card-header">
                                     <h1>Update Profile</h1>
                                 </div>
+
                                 <div className="card-body">
                                     <form onSubmit={handleSubmit}>
                                         <div>
@@ -132,6 +136,19 @@ export default function EditProfile() {
                                             type="submit"
                                         >
                                             Update
+                                        </Button>
+                                        <Button
+                                            sx={{ marginLeft: "1em" }}
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={() =>
+                                                navigate(
+                                                    ComponentPath.user.profile
+                                                        .viewProfile
+                                                )
+                                            }
+                                        >
+                                            Back
                                         </Button>
                                     </form>
                                 </div>
