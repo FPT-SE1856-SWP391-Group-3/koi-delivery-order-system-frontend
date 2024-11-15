@@ -80,7 +80,7 @@ const ComponentPath = {
 
     payment: {
         paymentChoose: payment + "/choose",
-        paymentCallBack,
+        paymentCallBack: payment + "/callback",
     },
     admin: {
         dashboard: admin + dashboard,
