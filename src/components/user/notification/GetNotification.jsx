@@ -64,10 +64,10 @@ export default function GetNotification() {
             })
         } catch (error) {
             console.error("Error during deletion:", error)
-           UserToast(
-               "error",
-               "An error occurred while deleting the notification."
-           )
+            UserToast(
+                "error",
+                "An error occurred while deleting the notification."
+            )
         }
     }
 

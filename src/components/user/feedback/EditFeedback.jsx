@@ -43,7 +43,10 @@ export default function EditFeedback() {
             )
         } catch (error) {
             console.error("Error during registration:", error)
-            UserToast("error", "An error occurred during update. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred during update. Please try again."
+            )
         }
     }
 

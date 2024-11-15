@@ -20,7 +20,10 @@ export default function ManageNotification() {
                 }
             })
         } catch (error) {
-            UserToast("error", "An error occurred while fetching notifications.")
+            UserToast(
+                "error",
+                "An error occurred while fetching notifications."
+            )
         }
     }, [])
 

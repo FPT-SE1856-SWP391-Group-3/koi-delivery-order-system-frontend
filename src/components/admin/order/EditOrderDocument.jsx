@@ -32,7 +32,10 @@ export default function EditOrderDocument() {
                 })
             } catch (error) {
                 console.error("Error fetching Document:", error)
-                UserToast("error", "An error occurred while fetching the Document.")
+                UserToast(
+                    "error",
+                    "An error occurred while fetching the Document."
+                )
             }
         }
 

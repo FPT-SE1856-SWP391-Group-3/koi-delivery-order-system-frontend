@@ -40,7 +40,10 @@ export default function ManagePaymentMethod() {
                 console.log("No payment methods found!")
             }
         } catch (error) {
-            UserToast("error", "An error occurred while fetching payment methods.")
+            UserToast(
+                "error",
+                "An error occurred while fetching payment methods."
+            )
         }
     }
 

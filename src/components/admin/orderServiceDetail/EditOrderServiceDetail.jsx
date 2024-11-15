@@ -30,10 +30,10 @@ export default function EditOrderServiceDetail({
                     console.log("No order service detail found.")
                 }
             } catch (error) {
-             UserToast(
-                 "error",
-                 "An error occurred while fetching the order service detail."
-             )
+                UserToast(
+                    "error",
+                    "An error occurred while fetching the order service detail."
+                )
             }
         }
 
@@ -45,11 +45,14 @@ export default function EditOrderServiceDetail({
         try {
             const response = await api.put("OrderServiceDetails/" + id, data)
             if (response.success) {
-              UserToast("success", "Update order service detail successfully!")
+                UserToast(
+                    "success",
+                    "Update order service detail successfully!"
+                )
                 onUpdateSuccess() // Gọi callback để cập nhật danh sách trong ManageOrderServiceDetail
                 onClose() // Đóng modal
             } else {
-               UserToast("error", "Failed to update order service detail!")
+                UserToast("error", "Failed to update order service detail!")
             }
         } catch (error) {
             console.error("Error during update:", error)

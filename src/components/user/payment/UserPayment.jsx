@@ -37,7 +37,7 @@ export default function UserPayment() {
                     setPayments(data.payment)
                     console.log(data.payment)
                 } else {
-                   UserToast("error", "No payment found.")
+                    UserToast("error", "No payment found.")
                 }
             } catch {
                 UserToast("error", "An error occurred while fetching payments.")
@@ -64,7 +64,7 @@ export default function UserPayment() {
             })
         } catch (error) {
             console.error("Error during deletion:", error)
-           UserToast("error", "An error occurred while deleting the payment.")
+            UserToast("error", "An error occurred while deleting the payment.")
         }
     }
 
@@ -94,14 +94,14 @@ export default function UserPayment() {
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>
-                                                Payment ID
-                                            </TableCell>
+                                            <TableCell>Payment ID</TableCell>
                                             <TableCell>Full Name</TableCell>
                                             <TableCell>
                                                 Payment Method
                                             </TableCell>
-                                            <TableCell>Payment Number</TableCell>
+                                            <TableCell>
+                                                Payment Number
+                                            </TableCell>
                                             <TableCell>Action</TableCell>
                                         </TableRow>
                                     </TableHead>

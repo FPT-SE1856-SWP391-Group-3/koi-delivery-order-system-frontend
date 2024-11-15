@@ -107,7 +107,7 @@ export default function Login() {
                     navigate(ComponentPath.admin.dashboard)
                     break
                 default:
-                    <Alert variant="filled" severity="error">
+                    ;<Alert variant="filled" severity="error">
                         This is a filled error Alert.
                     </Alert>
                     navigate("/")

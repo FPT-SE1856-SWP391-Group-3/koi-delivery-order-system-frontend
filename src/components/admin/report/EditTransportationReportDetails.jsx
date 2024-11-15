@@ -59,7 +59,7 @@ export default function EditTransportationReportDetails({
             UserToast(
                 "error",
                 "An error occurred during update. Please try again."
-            )    
+            )
         }
     }
 

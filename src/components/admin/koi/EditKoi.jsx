@@ -46,7 +46,10 @@ export default function EditKoi({ koiId, onClose, onUpdateSuccess }) {
             }
         } catch (error) {
             console.error("Error during update:", error)
-            UserToast("error", "An error occurred during update. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred during update. Please try again."
+            )
         }
     }
     return (
