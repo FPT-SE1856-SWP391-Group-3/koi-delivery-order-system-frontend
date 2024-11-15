@@ -29,7 +29,7 @@ export default function ManageFeedback() {
     useEffect(() => {
         const fetchFeedbacks = async () => {
             if (!userId) {
-                alert("User ID is not set. Please log in.")
+                UserToast("error", "Please login!")
                 return
             }
             try {

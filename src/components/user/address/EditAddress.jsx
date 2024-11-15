@@ -53,12 +53,12 @@ export default function EditAddress({ addressId, closeModal }) {
                         closeModal()
                         window.location.reload()
                     } else {
-                        alert("Failed to update address!")
+                        UserToast("error", "Failed to update address!") 
                     }
                 })
         } catch (error) {
             console.error("Error during update:", error)
-            alert("An error occurred during update. Please try again.")
+            UserToast("error", "An error occurred. Please try again.")
         }
     }
 

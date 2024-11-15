@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form"
 import api from "../../../api/CallAPI"
 import { Box, Button, TextField, Typography } from "@mui/material"
 import "../report/CreateTransportationReportDetails.css"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function CreateTransportationReportDetails({
     orderId,
@@ -17,20 +19,21 @@ export default function CreateTransportationReportDetails({
                 orderId,
             })
             if (response.success) {
-                alert("Thêm báo cáo thành công!")
+               UserToast("success", "Transportation report added successfully!")
                 onAddSuccess() // Cập nhật danh sách sau khi thêm thành công
                 onClose() // Đóng modal
             } else {
-                alert("Thêm báo cáo thất bại!")
+                UserToast("error", "Failed to add transportation report!")
             }
         } catch (error) {
             console.error("Error during registration:", error)
-            alert("An error occurred during registration. Please try again.")
+            UserToast("error", "Error! Please try again.")
         }
     }
 
     return (
         <Box className="transportation-container" sx={{ padding: 1.5 }}>
+            <ToastContainer />
             <Typography variant="h6" className="form-title" gutterBottom>
                 Add New Transportation Report
             </Typography>

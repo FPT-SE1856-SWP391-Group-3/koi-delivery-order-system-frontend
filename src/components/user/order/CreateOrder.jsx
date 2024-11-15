@@ -181,7 +181,7 @@ function CreateOrder() {
             customerDocument,
         }
         localStorage.setItem("orderData", JSON.stringify(formData))
-        alert("Order information has been saved!")
+        UserToast("success", "Order information has been saved!")
     }, [senderInfo, receiverInfo, senderPackage, customerDocument])
 
     const handleResetClick = useCallback(() => {

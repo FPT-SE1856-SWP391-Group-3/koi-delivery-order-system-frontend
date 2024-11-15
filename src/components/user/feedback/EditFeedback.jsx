@@ -37,7 +37,7 @@ export default function EditFeedback() {
                     if (data.success) {
                         UserToast("success", "Update feedback successfully!")
                     } else {
-                        alert("Update failed!")
+                       UserToast("error", "Failed to update feedback!")
                     }
                 }
             )

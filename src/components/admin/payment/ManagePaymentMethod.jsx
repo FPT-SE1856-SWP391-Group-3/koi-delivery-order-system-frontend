@@ -78,11 +78,11 @@ export default function ManagePaymentMethod() {
                 )
                 setPaymentMethods(newPaymentMethods)
             } else {
-                alert("Xóa thất bại!")
+                UserToast("error", "Failed to delete payment method!")
             }
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast("error", "An error occurred. Please try again.")
         }
         closeDeleteModal()
     }

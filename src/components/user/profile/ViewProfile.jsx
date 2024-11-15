@@ -18,6 +18,7 @@ import AdminSideMenu from "../../admin/components/AdminSideMenu"
 import { Grid } from "@mui/joy"
 import UserAppNavbar from "../UserAppNavbar"
 import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function ViewProfile() {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
@@ -41,7 +42,7 @@ export default function ViewProfile() {
             })
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred. Please try again.")
+           UserToast("error", "An error occurred while deleting the user.")
         }
     }
 
@@ -52,6 +53,7 @@ export default function ViewProfile() {
 
     return (
         <Box sx={{ display: "flex" }}>
+            <ToastContainer />
             {renderSidebar()}
             <Box sx={{ flexGrow: 1 }}>
                 <UserAppNavbar />

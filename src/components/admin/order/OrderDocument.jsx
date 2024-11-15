@@ -16,6 +16,8 @@ import {
     Alert,
 } from "@mui/material"
 import { format } from "date-fns" // Import date formatting library
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function ManageOrderDocument() {
     const [documents, setDocuments] = useState([])
@@ -56,18 +58,19 @@ export default function ManageOrderDocument() {
                         (doc) => doc.orderDocumentId !== documentId
                     )
                 )
-                alert("Document deleted successfully.")
+                 UserToast("success", "Document deleted successfully!")
             } else {
-                alert("Failed to delete the document.")
+                UserToast("error", "Failed to delete document!")
             }
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast("error", "An error occurred. Please try again.")
         }
     }
 
     return (
         <Box sx={{ display: "flex", minHeight: "100vh" }}>
+            <ToastContainer />
             <AdminSideMenu />
             <Box sx={{ flexGrow: 1, p: 3 }}>
                 <Typography variant="h4" gutterBottom>

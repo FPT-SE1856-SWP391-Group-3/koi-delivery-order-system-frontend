@@ -72,7 +72,7 @@ export default function ManageTransportationReportDetails() {
             )
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast("error", "An error occurred. Please try again.")
         }
         closeDeleteModal()
     }

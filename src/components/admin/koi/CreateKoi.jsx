@@ -4,6 +4,8 @@ import { TextField, Button, Box, Typography, IconButton } from "@mui/material"
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline"
 import { useForm } from "react-hook-form"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function CreatKoi({ koiData, onClose, onAddOrEditSuccess }) {
     const { register, handleSubmit, setValue } = useForm()
@@ -47,22 +49,27 @@ export default function CreatKoi({ koiData, onClose, onAddOrEditSuccess }) {
                 response = await api.post("Kois", koiPayload)
             }
             if (response.success) {
-                alert(
+                UserToast(
+                    "success",
                     koiData
                         ? "Koi updated successfully!"
                         : "Koi added successfully!"
                 )
                 onAddOrEditSuccess() // Refresh list and close modal
             } else {
-                alert(koiData ? "Failed to update koi!" : "Failed to add koi!")
+                UserToast(
+                    "error",
+                    koiData ? "Failed to update koi!" : "Failed to add koi!"
+                )
             }
         } catch (error) {
             console.error("Error:", error)
-            alert("Error! Please try again.")
+            UserToast("error", "Error! Please try again.")
         }
     }
     return (
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ p: 3 }}>
+            <ToastContainer />
             <Typography variant="h5" sx={{ mb: 3, textAlign: "center" }}>
                 {koiData ? "Edit Koi" : "Add New Koi"}
             </Typography>

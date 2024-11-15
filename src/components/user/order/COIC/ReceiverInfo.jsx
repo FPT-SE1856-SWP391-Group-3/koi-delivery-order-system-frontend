@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react"
 import axios from "axios"
 import "../../css/CreateOrder.css"
+import UserToast from "../../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 const ReceiverInfo = () => {
     const [phoneCodes, setPhoneCodes] = useState([]) // State for phone country codes
@@ -23,7 +25,10 @@ const ReceiverInfo = () => {
                 setPhoneCodes(codes)
             } catch (error) {
                 console.error("Error fetching phone codes:", error)
-                alert("Failed to load phone codes. Please try again later.")
+                UserToast(
+                    "error",
+                    "An error occurred while fetching phone codes."
+                )
             }
         }
 
@@ -32,6 +37,7 @@ const ReceiverInfo = () => {
 
     return (
         <div className="section">
+            <ToastContainer />
             <h2>Receiver Information</h2>
             <div className="sectionCompo">
                 <label>Phone Number</label>

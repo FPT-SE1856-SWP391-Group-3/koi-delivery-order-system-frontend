@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form"
 import api from "../../../api/CallAPI"
 import "../orderServiceDetail/AddOrderServiceDetail.css"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function AddOrderServiceDetail({ onClose, onAddSuccess }) {
     const { register, handleSubmit } = useForm()
@@ -10,20 +12,21 @@ export default function AddOrderServiceDetail({ onClose, onAddSuccess }) {
         try {
             const response = await api.post("OrderServiceDetails/", data)
             if (response.success) {
-                alert("Thêm thành công!")
+                UserToast("success", "Order service detail added successfully!")
                 onAddSuccess() // Gọi callback để cập nhật bảng trong ManageOrderServiceDetail
                 onClose() // Đóng modal sau khi thêm thành công
             } else {
-                alert("Thêm thất bại!")
+                UserToast("error", "Failed to add order service detail!")
             }
         } catch (error) {
             console.error("Error during registration:", error)
-            alert("An error occurred during registration. Please try again.")
+            UserToast("error", "Error! Please try again.")
         }
     }
 
     return (
         <div className="add-orderservice-container">
+            <ToastContainer />
             <h1 className="form-title">Add new order service details</h1>
             <form
                 onSubmit={handleSubmit(onSubmit)}

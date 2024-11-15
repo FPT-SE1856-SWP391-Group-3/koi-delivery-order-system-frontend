@@ -29,7 +29,7 @@ export default function EditPayment({ id }) {
                 }
             })
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast("error", "An error occurred while fetching the payment.")
         }
     }, [id])
 
@@ -38,15 +38,15 @@ export default function EditPayment({ id }) {
             e.preventDefault()
             api.put("Payments/" + id, payment).then((data) => {
                 if (data.success) {
-                    UserToast("success", "Sửa thanh toán thành công!")
+                    UserToast("success", "Update payment successfully!")
                     navigate("/user-payment")
                 } else {
-                    UserToast("error", "Sửa thanh toán thất bại!")
+                    UserToast("error", "Update failed!")
                 }
             })
         } catch (error) {
             console.error("Error!:", error)
-            alert("Error!. Please try again.")
+           UserToast("error", "An error occurred during update. Please try again.")
         }
     }
 

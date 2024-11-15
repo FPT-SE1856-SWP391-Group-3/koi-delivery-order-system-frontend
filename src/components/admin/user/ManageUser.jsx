@@ -29,6 +29,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert"
 import AdminSideMenu from "../components/AdminSideMenu"
 import UpdateUser from "./UpdateUser"
 import ManageUserAddress from "../address/ManageUserAddress"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function ManageUser() {
     const [users, setUsers] = useState([])
@@ -53,11 +55,11 @@ export default function ManageUser() {
                 })
                 setUsers(sortedData)
             } else {
-                alert("Failed to fetch users list.")
+                UserToast("error", "No users found!")
             }
         } catch (error) {
             console.error("Error fetching users:", error)
-            alert("An error occurred while fetching users. Please try again.")
+            UserToast("error", "An error occurred while fetching users.")
         }
     }
 
@@ -88,16 +90,14 @@ export default function ManageUser() {
         try {
             const data = await api.del("Users/" + selectedUserId)
             if (data.success) {
-                alert("Xóa thành công!")
+                UserToast("success", "User deleted successfully!")
                 fetchUsers() // Reload the user list after deletion
             } else {
-                alert("Xóa thất bại!")
+                UserToast("error", "Failed to delete user!")
             }
         } catch (error) {
             console.error("Error deleting user:", error)
-            alert(
-                "An error occurred while deleting the user. Please try again."
-            )
+            UserToast("error", "An error occurred. Please try again.")
         }
         closeConfirmDeleteModal()
     }
@@ -142,6 +142,7 @@ export default function ManageUser() {
     return (
         <>
             <AdminSideMenu />
+            <ToastContainer />
             <Box sx={{ ml: "260px", p: 3 }}>
                 <Typography variant="h5" gutterBottom fontWeight="bold">
                     User Management

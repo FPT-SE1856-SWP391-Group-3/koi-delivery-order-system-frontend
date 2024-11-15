@@ -154,7 +154,7 @@ export default function Login() {
     // Hàm xử lý khi đăng nhập bằng Google thất bại
     const handleGoogleFailure = (error) => {
         console.error("Google Login Failure:", error)
-        alert("Đăng nhập bằng Google thất bại!")
+        UserToast("error", "Failed to login with Google!")  
     }
 
     return (

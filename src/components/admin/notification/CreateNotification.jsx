@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
 
 import { useForm } from "react-hook-form"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function CreateNotification() {
     const { register, handleSubmit } = useForm()
@@ -15,22 +17,21 @@ export default function CreateNotification() {
         try {
             api.post("Notifications/", data).then((data) => {
                 if (data.success) {
-                    alert("Notification created successfully!")
+                    UserToast("success", "Notification created successfully!")
                     navigate("/")
                 } else {
-                    alert("Failed to create notification!")
+                    UserToast("error", "Failed to create notification!")
                 }
             })
         } catch (error) {
             console.error("Error during notification creation:", error)
-            alert(
-                "An error occurred during notification creation. Please try again."
-            )
+            UserToast("error", "Error! Please try again.")
         }
     }
 
     return (
         <div>
+            <ToastContainer />
             <div className="container">
                 <div className="row">
                     <div className="col-md-6 offset-md-3">

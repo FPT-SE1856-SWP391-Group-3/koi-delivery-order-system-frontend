@@ -21,6 +21,8 @@ import {
     KeyboardArrowUp as KeyboardArrowUpIcon,
 } from "@mui/icons-material"
 import api from "../../../api/CallAPI"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 function OrderRow({ row }) {
     const [open, setOpen] = useState(false)
@@ -116,18 +118,19 @@ function OrderRow({ row }) {
             }
 
             if (response.success) {
-                alert("Order successfully added to route!")
+                UserToast("success", "Order added to route successfully!")
                 setRouteModalOpen(false) // Close modal after successful addition
             } else {
-                alert("Failed to add order to route.")
+                UserToast("error", "Failed to add order to route!")
             }
         } catch (error) {
             console.error("Error adding order to route:", error)
-            alert("An error occurred while adding the order to the route.")
+            UserToast("error", "Error! Please try again.")
         }
     }
     return (
         <React.Fragment>
+            <ToastContainer />
             <TableRow>
                 <TableCell>
                     <IconButton size="small" onClick={handleExpandClick}>
@@ -394,7 +397,7 @@ export default function ManageRoute() {
             }
         } catch (error) {
             console.error("Error fetching orders:", error) // Log the error for debugging
-            alert("An error occurred while fetching orders.")
+           UserToast("error", "An error occurred while fetching orders.")
         }
     }
 
@@ -407,14 +410,17 @@ export default function ManageRoute() {
                 console.log("Error fetching order statuses.")
             }
         } catch (error) {
-            alert("An error occurred while fetching order statuses.")
+            UserToast(
+                "error",
+                "An error occurred while fetching order statuses."
+            )
         }
     }
 
     return (
         <Box display="flex">
             <AdminSideMenu />
-
+            <ToastContainer />
             {/* Main Table Area */}
             <Box width="100%" padding={2}>
                 <TableContainer component={Paper}>

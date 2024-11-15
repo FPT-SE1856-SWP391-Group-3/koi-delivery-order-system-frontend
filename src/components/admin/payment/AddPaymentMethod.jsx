@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import { useForm } from "react-hook-form"
 import "../payment/AddPaymentMethod.css"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function AddPaymentType({ onClose, onAddSuccess }) {
     const { register, handleSubmit } = useForm()
@@ -11,20 +13,21 @@ export default function AddPaymentType({ onClose, onAddSuccess }) {
         try {
             const response = await api.post("PaymentMethods/", data)
             if (response.success) {
-                alert("Thêm thành công!")
+                 UserToast("success", "Payment method added successfully!")
                 onAddSuccess() // Gọi callback để cập nhật danh sách trong ManagePaymentMethod
                 onClose() // Đóng modal sau khi thêm mới thành công
             } else {
-                alert("Thêm thất bại!")
+                UserToast("error", "Failed to add payment method!")
             }
         } catch (error) {
             console.error("Error during registration:", error)
-            alert("An error occurred during registration. Please try again.")
+            UserToast("error", "Error! Please try again.")
         }
     }
 
     return (
         <div className="addpayment-container">
+            <ToastContainer />
             <h2 className="form-title">Add New Payment Method</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="addpayment-form">
                 <div className="form-group">

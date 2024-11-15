@@ -2,6 +2,8 @@ import api from "../../../api/CallAPI"
 import { useState } from "react"
 import { useEffect } from "react"
 import { Box, TextField, Button, Typography } from "@mui/material"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function UpdateUser({ userId, onUpdateSuccess }) {
     const [updateUser, setUpdateUser] = useState({
@@ -24,13 +26,11 @@ export default function UpdateUser({ userId, onUpdateSuccess }) {
                         phoneNumber: data.user.phoneNumber || "",
                     })
                 } else {
-                    alert("Failed to fetch user information!")
+                    UserToast("error", "User not found!")
                 }
             } catch (error) {
                 console.error("Error fetching user:", error)
-                alert(
-                    "An error occurred while fetching user data. Please try again."
-                )
+                UserToast("error", "An error occurred while fetching user data.")
             }
         }
         if (userId) fetchUser()
@@ -48,14 +48,14 @@ export default function UpdateUser({ userId, onUpdateSuccess }) {
         try {
             const data = await api.put(`Users/${userId}`, updateUser)
             if (data.success) {
-                alert("Update successful!")
+                UserToast("success", "User updated successfully!")
                 onUpdateSuccess() // Call the onUpdateSuccess callback to refresh the table and close the modal
             } else {
-                alert("Update failed!")
+                UserToast("error", "Failed to update user!")
             }
         } catch (error) {
             console.error("Error updating user:", error)
-            alert("An error occurred while updating. Please try again.")
+            UserToast("error", "An error occurred. Please try again.")
         }
     }
 
@@ -74,6 +74,7 @@ export default function UpdateUser({ userId, onUpdateSuccess }) {
                 textAlign: "center",
             }}
         >
+            <ToastContainer />
             <Typography
                 variant="h5"
                 component="h1"

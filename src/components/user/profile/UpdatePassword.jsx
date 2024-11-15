@@ -12,6 +12,9 @@ import {
 } from "@mui/material"
 import { Grid } from "@mui/joy"
 import UserSideNav from "../UserSideNav"
+import UserToast from "../alert/UserToast"
+import ComponentPath from "../../../routes/ComponentPath"
+import { ToastContainer } from "react-toastify"
 export default function UpdatePassword() {
     const user = JSON.parse(localStorage.getItem("user") || "{}")
     const [passwordData, setPasswordData] = useState({
@@ -28,20 +31,21 @@ export default function UpdatePassword() {
             // Call API to update password
             api.put("Users/update-password", passwordData).then((data) => {
                 if (data.success) {
-                    alert("Password updated successfully!")
-                    navigate("/")
+                    UserToast("success", "Password updated successfully!")
+                    navigate(ComponentPath.user.profile.viewProfile)
                 } else {
-                    alert("Password update failed!")
+                    UserToast("error", "Failed to update password!")
                 }
             })
         } catch (error) {
             console.error("Error:", error)
-            alert("Error! Please try again.")
+           UserSideNav("error", "An error occurred during update. Please try again.")
         }
     }
 
     return (
         <UserSideNav>
+            <ToastContainer />
             <Box sx={{ marginInline: "2em" }}>
                 <Card>
                     <CardContent>

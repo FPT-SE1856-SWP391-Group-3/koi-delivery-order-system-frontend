@@ -44,7 +44,7 @@ export default function ManageDocument() {
         try {
             api.del("CustomerDocuments/" + documentId).then((data) => {
                 if (data.success) {
-                    alert("Xóa thành công!")
+                    UserToast("success", "Document deleted successfully.")
                     const newDocuments = customerDocuments.filter(
                         (document) => document.documentId !== documentId
                     )

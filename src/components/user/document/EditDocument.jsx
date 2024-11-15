@@ -54,16 +54,16 @@ export default function EditDocument() {
             api.putForm("CustomerDocuments/" + documentId, documentData).then(
                 (data) => {
                     if (data.success) {
-                        alert("Cập nhật thành công!")
+                        UserToast("success", "Document updated successfully!")
                         navigate("/admin/manage-document")
                     } else {
-                        alert("Cập nhật thất bại!")
+                        UserToast("error", "Failed to update document!")
                     }
                 }
             )
         } catch (error) {
             console.error("Error during update:", error)
-            alert("An error occurred during update. Please try again.")
+            UserToast("error", "An error occurred during update.")
         }
     }
 
