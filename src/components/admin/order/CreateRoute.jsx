@@ -289,47 +289,68 @@ const CreateRoute = () => {
                                                 </TableCell>
                                                 <TableCell>
                                                     {route.routeAddresses
-                                                        .length > 0 ? (
-                                                        <Tooltip
-                                                            title={route.routeAddresses
-                                                                .map(
-                                                                    (address) =>
-                                                                        address.city
-                                                                )
-                                                                .join(", ")} // Full list in tooltip
-                                                        >
-                                                            <Typography
-                                                                variant="body2"
-                                                                sx={{
-                                                                    cursor: "pointer",
-                                                                    whiteSpace:
-                                                                        "nowrap",
-                                                                    overflow:
-                                                                        "hidden",
-                                                                    textOverflow:
-                                                                        "ellipsis",
-                                                                }}
-                                                            >
-                                                                {route.routeAddresses
-                                                                    .slice(0, 2) // Show only the first 2 destinations
-                                                                    .map(
-                                                                        (
-                                                                            address
-                                                                        ) =>
-                                                                            address.city
-                                                                    )
-                                                                    .join(
-                                                                        ", "
-                                                                    )}{" "}
-                                                                {route
-                                                                    .routeAddresses
-                                                                    .length >
-                                                                    2 && "..."}
-                                                            </Typography>
-                                                        </Tooltip>
-                                                    ) : (
-                                                        "No Destinations"
-                                                    )}
+                                                        .length > 0
+                                                        ? (() => {
+                                                              const cities =
+                                                                  route.routeAddresses.map(
+                                                                      (
+                                                                          address
+                                                                      ) =>
+                                                                          address?.city ||
+                                                                          "Unknown"
+                                                                  )
+                                                              const visibleCities =
+                                                                  cities
+                                                                      .slice(
+                                                                          0,
+                                                                          2
+                                                                      )
+                                                                      .join(
+                                                                          ", "
+                                                                      )
+                                                              const tooltipCities =
+                                                                  cities.join(
+                                                                      ", "
+                                                                  )
+                                                              return (
+                                                                  <Tooltip
+                                                                      arrow
+                                                                      placement="top"
+                                                                      aria-label="View all destinations"
+                                                                      title={
+                                                                          tooltipCities
+                                                                      } // Full list in tooltip
+                                                                  >
+                                                                      <Typography
+                                                                          variant="body2"
+                                                                          sx={{
+                                                                              cursor: "pointer",
+                                                                              whiteSpace:
+                                                                                  "nowrap",
+                                                                              overflow:
+                                                                                  "hidden",
+                                                                              textOverflow:
+                                                                                  "ellipsis",
+                                                                              "&:hover":
+                                                                                  {
+                                                                                      textDecoration:
+                                                                                          "underline",
+                                                                                  },
+                                                                          }}
+                                                                      >
+                                                                          {
+                                                                              visibleCities
+                                                                          }
+                                                                          {route
+                                                                              .routeAddresses
+                                                                              .length >
+                                                                              2 &&
+                                                                              ` (+${route.routeAddresses.length - 2} more...)`}
+                                                                      </Typography>
+                                                                  </Tooltip>
+                                                              )
+                                                          })()
+                                                        : "No Destinations"}
                                                 </TableCell>
                                                 <TableCell>
                                                     {route.estimatedStartTime}
