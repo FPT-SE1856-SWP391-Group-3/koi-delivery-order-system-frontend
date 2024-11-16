@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import ComponentPath from "routes/ComponentPath"
 import InforColumn from "../props/InforColumn"
+import avatar from "../../../assets/avatar.png"
 import {
     Avatar,
     Box,
@@ -70,7 +71,7 @@ export default function ViewProfile() {
                                     }}
                                 >
                                     <Avatar
-                                        src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                                        src={avatar}
                                         alt="Admin"
                                         sx={{ width: 150, height: 150 }}
                                     />

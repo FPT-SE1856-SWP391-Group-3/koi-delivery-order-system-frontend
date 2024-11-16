@@ -19,7 +19,7 @@ import FolderIcon from "@mui/icons-material/Folder"
 import SpeedIcon from "@mui/icons-material/Speed"
 import { Link } from "react-router-dom"
 import { useState } from "react"
-import ComponentPath from "routes/ComponentPath"
+import ComponentPath from "../../../routes/ComponentPath"
 
 export default function MenuContent() {
     const [user, setUser] = useState(() =>
@@ -114,7 +114,7 @@ export default function MenuContent() {
         {
             text: "Feedback",
             icon: <FeedbackIcon />,
-            link: ComponentPath.admin.report.manageReport,
+            link: ComponentPath.admin.feedback.manageFeedback,
         },
         {
             text: "Blog News",

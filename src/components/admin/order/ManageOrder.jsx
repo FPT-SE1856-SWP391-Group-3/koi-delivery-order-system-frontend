@@ -5,6 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import AdminSideMenu from "../components/AdminSideMenu"
+import RefreshIcon from "@mui/icons-material/Refresh"
 import {
     Box,
     Table,
@@ -47,10 +48,13 @@ function OrderRow({
 }) {
     const [open, setOpen] = useState(false)
     const [koiDetails, setKoiDetails] = useState([])
+    const [selectedKoiId, setSelectedKoiId] = useState(null)
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
     const [selectedOrderDetailId, setSelectedOrderDetailId] = useState(null)
     const [newKoiCondition, setNewKoiCondition] = useState("")
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
+    const [user, setUser] = useState(() =>
+        JSON.parse(localStorage.getItem("user"))
+    )
 
     const fetchKoiDetails = async (orderId) => {
         try {
@@ -74,8 +78,8 @@ function OrderRow({
         }
     }
 
-    const openUpdateModal = (orderDetailId, currentCondition) => {
-        setSelectedOrderDetailId(orderDetailId)
+    const openUpdateModal = (koiId, currentCondition) => {
+        setSelectedKoiId(koiId) // Set koi ID for update
         setNewKoiCondition(currentCondition) // Prefill with current condition
         setIsUpdateModalOpen(true)
     }
@@ -88,14 +92,11 @@ function OrderRow({
 
     const updateKoiCondition = async () => {
         try {
-            const response = await api.put(
-                `OrderDetails/${selectedOrderDetailId}/update-condition`,
-                {
-                    koiCondition: newKoiCondition,
-                }
-            )
+            const response = await api.put(`Kois/${selectedKoiId}`, {
+                koiCondition: newKoiCondition,
+            })
             if (response.success) {
-                fetchKoiDetails(row.orderId) // Refresh koi details without page reload
+                fetchKoiDetails(row.orderId)
                 closeUpdateModal()
             } else {
                 console.error("Failed to update koi condition.")
@@ -105,9 +106,15 @@ function OrderRow({
         }
     }
 
+    // Function to calculate estimated delivery date
+    const calculateEstimatedDeliveryDate = (orderDate, distance) => {
+        const estimatedDays = Math.ceil(distance / 200000) // Calculate days needed
+        return dayjs(orderDate).add(estimatedDays, "day").format("YYYY-MM-DD") // Add days to orderDate
+    }
+
     return (
         row != null &&
-        ((user.roleId === 3 && row.orderStatusId < 7) ||
+        ((user.roleId === 3 && row.orderStatusId <= 7) ||
             (user.roleId === 4 && row.orderStatusId >= 7) ||
             user.roleId === 5) && (
             <React.Fragment>
@@ -131,12 +138,18 @@ function OrderRow({
                               ? "True"
                               : "False"}
                     </TableCell>
-                    <TableCell>{row.deliveryDate}</TableCell>
                     <TableCell>
                         {row.orderStatus != null
                             ? row.orderStatus.orderStatusName
                             : ""}
                     </TableCell>
+                    <TableCell>
+                        {calculateEstimatedDeliveryDate(
+                            row.orderDate,
+                            row.distance
+                        )}
+                    </TableCell>{" "}
+                    {/* Display Estimated Delivery Date */}
                     <TableCell>
                         <select
                             onChange={(event) =>
@@ -221,7 +234,7 @@ function OrderRow({
                                                 Shipping Address
                                             </TableCell>
                                             <TableCell>Distance</TableCell>
-                                            <TableCell>Delivery Time</TableCell>
+
                                             <TableCell>Total Price</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -238,9 +251,7 @@ function OrderRow({
                                             <TableCell>
                                                 {row.distance}
                                             </TableCell>
-                                            <TableCell>
-                                                {row.duration}
-                                            </TableCell>
+
                                             <TableCell>
                                                 {row.totalPrice}
                                             </TableCell>
@@ -305,7 +316,8 @@ function OrderRow({
                                                         </TableCell>
                                                         <TableCell>
                                                             {
-                                                                koiDetail.koiCondition
+                                                                koiDetail.koi
+                                                                    .koiCondition
                                                             }
                                                         </TableCell>
                                                         <TableCell>
@@ -320,8 +332,12 @@ function OrderRow({
                                                                 size="small"
                                                                 onClick={() =>
                                                                     openUpdateModal(
-                                                                        koiDetail.orderDetailId,
-                                                                        koiDetail.koiCondition
+                                                                        koiDetail
+                                                                            .koi
+                                                                            .koiId,
+                                                                        koiDetail
+                                                                            .koi
+                                                                            .koiCondition
                                                                     )
                                                                 }
                                                             >
@@ -377,7 +393,6 @@ function OrderRow({
         )
     )
 }
-
 OrderRow.propTypes = {
     row: PropTypes.object.isRequired,
     orderStatus: PropTypes.array.isRequired,
@@ -487,17 +502,25 @@ export default function ManageOrder() {
             const response = await api.put(`Orders/update-status/${orderId}`, {
                 updateOrderStatusId: selectedStatusId,
             })
-            setOrder((orders) =>
-                orders.map((order) =>
-                    order.orderId === orderId
-                        ? { ...order, orderStatusId: selectedStatusId }
-                        : order
-                )
-            )
-            setAlertMessage("Order status updated successfully!")
-            setAlertSeverity("success")
-            setAlertOpen(true)
-            fetchOrders()
+
+            if (response.success) {
+                // Refresh the orders list
+                await fetchOrders()
+
+                setAlertMessage("Order status updated successfully!")
+                setAlertSeverity("success")
+                setAlertOpen(true)
+            } else {
+                if (response.code === "error-payment") {
+                    setAlertMessage("Payment is not completed yet.")
+                } else if (response.code === "error-document") {
+                    setAlertMessage("Document is not uploaded yet.")
+                } else {
+                    setAlertMessage("Failed to update order status.")
+                }
+                setAlertSeverity("warning")
+                setAlertOpen(true)
+            }
         } catch (error) {
             setAlertMessage("An error occurred during status update.")
             setAlertSeverity("error")
@@ -621,6 +644,9 @@ export default function ManageOrder() {
         setIsReportModalOpen(false)
         setSelectedOrderId(null)
     }
+    const handleRefresh = () => {
+        fetchOrders()
+    }
 
     return (
         <Box display="flex">
@@ -629,21 +655,36 @@ export default function ManageOrder() {
             {/* Main Table Area */}
             <Box width="100%" padding={2}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Box display="flex" gap={2} marginBottom={2}>
-                        <DatePicker
-                            label="Start Date"
-                            value={dateRange[0]}
-                            onChange={(newValue) =>
-                                setDateRange([newValue, dateRange[1]])
-                            }
-                        />
-                        <DatePicker
-                            label="End Date"
-                            value={dateRange[1]}
-                            onChange={(newValue) =>
-                                setDateRange([dateRange[0], newValue])
-                            }
-                        />
+                    <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        marginBottom={2}
+                    >
+                        <Box display="flex" gap={2} marginBottom={2}>
+                            <DatePicker
+                                label="Start Date"
+                                value={dateRange[0]}
+                                onChange={(newValue) =>
+                                    setDateRange([newValue, dateRange[1]])
+                                }
+                            />
+                            <DatePicker
+                                label="End Date"
+                                value={dateRange[1]}
+                                onChange={(newValue) =>
+                                    setDateRange([dateRange[0], newValue])
+                                }
+                            />
+                        </Box>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleRefresh}
+                            sx={{ marginLeft: "auto" }}
+                        >
+                            <RefreshIcon />
+                        </Button>
                     </Box>
                 </LocalizationProvider>
 
@@ -655,73 +696,54 @@ export default function ManageOrder() {
                                 <TableCell>
                                     <Typography
                                         fontWeight={600}
-                                        allign="center"
-                                        width={100}
+                                        align="center"
+                                        width={50}
                                     >
                                         Order ID
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
                                         Customer ID
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
                                     <Typography
                                         fontWeight={600}
-                                        allign="center"
+                                        align="center"
+                                        width={100}
                                     >
                                         Order Date
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
                                         Is Payment
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
-                                        Delivery Date
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
                                         Status
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
+                                        Estimated Delivery Date
+                                    </Typography>
+                                </TableCell>{" "}
+                                {/* Add Estimated Delivery Date header */}
+                                <TableCell>
+                                    <Typography fontWeight={600} align="center">
                                         Edit Status
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
                                         Action
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
+                                    <Typography fontWeight={600} align="center">
                                         Delivering Staff
                                     </Typography>
                                 </TableCell>
@@ -729,22 +751,24 @@ export default function ManageOrder() {
                         </TableHead>
 
                         <TableBody>
-                            {filteredOrders?.map((order) => (
-                                <OrderRow
-                                    key={order == null ? 0 : order.orderId}
-                                    row={order}
-                                    orderStatus={orderStatus}
-                                    updateOrderStatusBySelect={
-                                        updateOrderStatusBySelect
-                                    }
-                                    updateOrderStatusByClick={
-                                        updateOrderStatusByClick
-                                    }
-                                    openDocumentModal={openDocumentModal}
-                                    openReportModal={openReportModal}
-                                    cancelOrder={cancelOrder}
-                                />
-                            ))}
+                            {filteredOrders?.map((order) =>
+                                order ? ( // Only render if order is not null
+                                    <OrderRow
+                                        key={order.orderId}
+                                        row={order}
+                                        orderStatus={orderStatus}
+                                        updateOrderStatusBySelect={
+                                            updateOrderStatusBySelect
+                                        }
+                                        updateOrderStatusByClick={
+                                            updateOrderStatusByClick
+                                        }
+                                        openDocumentModal={openDocumentModal}
+                                        openReportModal={openReportModal}
+                                        cancelOrder={cancelOrder}
+                                    />
+                                ) : null
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>

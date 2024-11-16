@@ -28,7 +28,7 @@ const SenderInfo = ({ onChange }) => {
                 if (userResponse.success) {
                     setSenderInfo((prevInfo) => ({
                         ...prevInfo,
-                        fullName: userResponse.user?.fullName || "",
+                        fullName: userResponse.user?.userName || "",
                         email: userResponse.user?.email || "",
                         phoneNumber: userResponse.user?.phoneNumber || "",
                         birthDate: userResponse.user?.birthDate || "",

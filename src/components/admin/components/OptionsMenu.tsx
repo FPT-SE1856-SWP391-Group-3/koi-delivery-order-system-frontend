@@ -11,7 +11,8 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded"
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded"
 import MenuButton from "../components/MenuButton"
 import { ButtonGroup } from "@mui/material"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import ComponentPath from "../../../routes/ComponentPath"
 
 const MenuItem = styled(MuiMenuItem)({
     margin: "2px 0",
@@ -20,12 +21,21 @@ const MenuItem = styled(MuiMenuItem)({
 export default function OptionsMenu() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
+    const navigate = useNavigate() // To programmatically navigate
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget)
     }
+
     const handleClose = () => {
         setAnchorEl(null)
     }
+
+    const handleProfileClick = () => {
+        handleClose()
+        navigate(ComponentPath.user.profile.viewProfile)
+    }
+
     return (
         <React.Fragment>
             <MenuButton
@@ -55,9 +65,13 @@ export default function OptionsMenu() {
                     },
                 }}
             >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                {/* Profile Menu Item */}
+                <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
+
                 <Divider />
                 <Divider />
+
+                {/* Logout Menu Item */}
                 <MenuItem
                     onClick={handleClose}
                     sx={{

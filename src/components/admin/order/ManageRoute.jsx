@@ -194,7 +194,6 @@ function OrderRow({ row }) {
                                         <TableCell>Current Location</TableCell>
                                         <TableCell>Capacity</TableCell>
                                         <TableCell>Current Load</TableCell>
-                                        <TableCell>Delivery Staff ID</TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -212,9 +211,6 @@ function OrderRow({ row }) {
                                             </TableCell>
                                             <TableCell>
                                                 {route.currentLoad}
-                                            </TableCell>
-                                            <TableCell>
-                                                {route.deliveryStaffId}
                                             </TableCell>
                                             <TableCell>
                                                 <Button
@@ -337,7 +333,10 @@ function OrderRow({ row }) {
                                                         {koiDetail.koi.weight}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {koiDetail.koiCondition}
+                                                        {
+                                                            koiDetail.koi
+                                                                .koiCondition
+                                                        }
                                                     </TableCell>
                                                     <TableCell>
                                                         {koiDetail.koi.price}
