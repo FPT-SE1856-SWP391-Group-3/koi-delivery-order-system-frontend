@@ -217,7 +217,16 @@ const CreateRoute = () => {
             setAlertSeverity("error")
         }
     }
+    const formatDestinations = (addresses) => {
+        if (!addresses?.length)
+            return { visibleCities: "No Destinations", tooltipCities: "" }
 
+        const cities = addresses.map((address) => address?.city || "Unknown")
+        return {
+            visibleCities: `${cities.slice(0, 2).join(", ")}${cities.length > 2 ? ` (+${cities.length - 2} more...)` : ""}`,
+            tooltipCities: cities.join(", "),
+        }
+    }
     return (
         <Box display="flex">
             <AdminSideMenu />
@@ -289,30 +298,15 @@ const CreateRoute = () => {
                                                 </TableCell>
                                                 <TableCell>
                                                     {route.routeAddresses
-                                                        .length > 0
                                                         ? (() => {
-                                                              const cities =
-                                                                  route.routeAddresses.map(
-                                                                      (
-                                                                          address
-                                                                      ) =>
-                                                                          address?.city ||
-                                                                          "Unknown"
+                                                              const {
+                                                                  visibleCities,
+                                                                  tooltipCities,
+                                                              } =
+                                                                  formatDestinations(
+                                                                      route.routeAddresses
                                                                   )
-                                                              const visibleCities =
-                                                                  cities
-                                                                      .slice(
-                                                                          0,
-                                                                          2
-                                                                      )
-                                                                      .join(
-                                                                          ", "
-                                                                      )
-                                                              const tooltipCities =
-                                                                  cities.join(
-                                                                      ", "
-                                                                  )
-                                                              return (
+                                                              return tooltipCities ? (
                                                                   <Tooltip
                                                                       arrow
                                                                       placement="top"
@@ -341,13 +335,14 @@ const CreateRoute = () => {
                                                                           {
                                                                               visibleCities
                                                                           }
-                                                                          {route
-                                                                              .routeAddresses
-                                                                              .length >
-                                                                              2 &&
-                                                                              ` (+${route.routeAddresses.length - 2} more...)`}
                                                                       </Typography>
                                                                   </Tooltip>
+                                                              ) : (
+                                                                  <Typography variant="body2">
+                                                                      {
+                                                                          visibleCities
+                                                                      }
+                                                                  </Typography>
                                                               )
                                                           })()
                                                         : "No Destinations"}
