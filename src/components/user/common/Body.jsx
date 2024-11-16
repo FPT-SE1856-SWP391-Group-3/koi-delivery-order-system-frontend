@@ -189,15 +189,6 @@ const Body = () => {
                         </li>
                         <li>
                             <button
-                                onClick={() => setSelector("fee")}
-                                className={selector === "fee" ? "chosen" : ""}
-                            >
-                                <img src={icon2} className="icon" />
-                                Freight rate lookup
-                            </button>
-                        </li>
-                        <li>
-                            <button
                                 onClick={() => setSelector("q&a")}
                                 className={selector === "q&a" ? "chosen" : ""}
                             >
@@ -233,15 +224,6 @@ const Body = () => {
                             <img src={consignment} alt="" />
                         </div>
                     )}
-
-                    {selector === "fee" && (
-                        <div className="fee-content">
-                            <h3>Freight Rate Lookup</h3>
-                            <input type="text" placeholder="Enter location" />
-                            <button>Lookup</button>
-                        </div>
-                    )}
-
                     {selector === "q&a" && (
                         <div className="qna-content">
                             <div className="text-content">

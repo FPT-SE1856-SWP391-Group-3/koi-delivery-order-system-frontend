@@ -5,6 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import AdminSideMenu from "../components/AdminSideMenu"
+import RefreshIcon from "@mui/icons-material/Refresh"
 import {
     Box,
     Table,
@@ -47,6 +48,7 @@ function OrderRow({
 }) {
     const [open, setOpen] = useState(false)
     const [koiDetails, setKoiDetails] = useState([])
+    const [selectedKoiId, setSelectedKoiId] = useState(null)
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
     const [selectedOrderDetailId, setSelectedOrderDetailId] = useState(null)
     const [newKoiCondition, setNewKoiCondition] = useState("")
@@ -76,9 +78,9 @@ function OrderRow({
         }
     }
 
-    const openUpdateModal = (orderDetailId, currentCondition) => {
-        setSelectedOrderDetailId(orderDetailId)
-        setNewKoiCondition(currentCondition)
+    const openUpdateModal = (koiId, currentCondition) => {
+        setSelectedKoiId(koiId) // Set koi ID for update
+        setNewKoiCondition(currentCondition) // Prefill with current condition
         setIsUpdateModalOpen(true)
     }
 
@@ -90,10 +92,9 @@ function OrderRow({
 
     const updateKoiCondition = async () => {
         try {
-            const response = await api.put(
-                `OrderDetails/${selectedOrderDetailId}/update-condition`,
-                { koiCondition: newKoiCondition }
-            )
+            const response = await api.put(`Kois/${selectedKoiId}`, {
+                koiCondition: newKoiCondition,
+            })
             if (response.success) {
                 fetchKoiDetails(row.orderId)
                 closeUpdateModal()
@@ -113,7 +114,7 @@ function OrderRow({
 
     return (
         row != null &&
-        ((user.roleId === 3 && row.orderStatusId < 7) ||
+        ((user.roleId === 3 && row.orderStatusId <= 7) ||
             (user.roleId === 4 && row.orderStatusId >= 7) ||
             user.roleId === 5) && (
             <React.Fragment>
@@ -315,7 +316,8 @@ function OrderRow({
                                                         </TableCell>
                                                         <TableCell>
                                                             {
-                                                                koiDetail.koiCondition
+                                                                koiDetail.koi
+                                                                    .koiCondition
                                                             }
                                                         </TableCell>
                                                         <TableCell>
@@ -330,8 +332,12 @@ function OrderRow({
                                                                 size="small"
                                                                 onClick={() =>
                                                                     openUpdateModal(
-                                                                        koiDetail.orderDetailId,
-                                                                        koiDetail.koiCondition
+                                                                        koiDetail
+                                                                            .koi
+                                                                            .koiId,
+                                                                        koiDetail
+                                                                            .koi
+                                                                            .koiCondition
                                                                     )
                                                                 }
                                                             >
@@ -638,6 +644,9 @@ export default function ManageOrder() {
         setIsReportModalOpen(false)
         setSelectedOrderId(null)
     }
+    const handleRefresh = () => {
+        fetchOrders()
+    }
 
     return (
         <Box display="flex">
@@ -646,21 +655,36 @@ export default function ManageOrder() {
             {/* Main Table Area */}
             <Box width="100%" padding={2}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Box display="flex" gap={2} marginBottom={2}>
-                        <DatePicker
-                            label="Start Date"
-                            value={dateRange[0]}
-                            onChange={(newValue) =>
-                                setDateRange([newValue, dateRange[1]])
-                            }
-                        />
-                        <DatePicker
-                            label="End Date"
-                            value={dateRange[1]}
-                            onChange={(newValue) =>
-                                setDateRange([dateRange[0], newValue])
-                            }
-                        />
+                    <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        marginBottom={2}
+                    >
+                        <Box display="flex" gap={2} marginBottom={2}>
+                            <DatePicker
+                                label="Start Date"
+                                value={dateRange[0]}
+                                onChange={(newValue) =>
+                                    setDateRange([newValue, dateRange[1]])
+                                }
+                            />
+                            <DatePicker
+                                label="End Date"
+                                value={dateRange[1]}
+                                onChange={(newValue) =>
+                                    setDateRange([dateRange[0], newValue])
+                                }
+                            />
+                        </Box>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleRefresh}
+                            sx={{ marginLeft: "auto" }}
+                        >
+                            <RefreshIcon />
+                        </Button>
                     </Box>
                 </LocalizationProvider>
 
@@ -727,22 +751,24 @@ export default function ManageOrder() {
                         </TableHead>
 
                         <TableBody>
-                            {filteredOrders?.map((order) => (
-                                <OrderRow
-                                    key={order == null ? 0 : order.orderId}
-                                    row={order}
-                                    orderStatus={orderStatus}
-                                    updateOrderStatusBySelect={
-                                        updateOrderStatusBySelect
-                                    }
-                                    updateOrderStatusByClick={
-                                        updateOrderStatusByClick
-                                    }
-                                    openDocumentModal={openDocumentModal}
-                                    openReportModal={openReportModal}
-                                    cancelOrder={cancelOrder}
-                                />
-                            ))}
+                            {filteredOrders?.map((order) =>
+                                order ? ( // Only render if order is not null
+                                    <OrderRow
+                                        key={order.orderId}
+                                        row={order}
+                                        orderStatus={orderStatus}
+                                        updateOrderStatusBySelect={
+                                            updateOrderStatusBySelect
+                                        }
+                                        updateOrderStatusByClick={
+                                            updateOrderStatusByClick
+                                        }
+                                        openDocumentModal={openDocumentModal}
+                                        openReportModal={openReportModal}
+                                        cancelOrder={cancelOrder}
+                                    />
+                                ) : null
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>

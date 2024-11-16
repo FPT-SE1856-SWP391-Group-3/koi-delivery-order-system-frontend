@@ -12,6 +12,7 @@ import {
     Fab,
     Grid,
     Alert,
+    Tooltip,
     Modal,
     TextField,
     Button,
@@ -245,6 +246,7 @@ const CreateRoute = () => {
                                     <TableCell>Capacity</TableCell>
                                     <TableCell>Current Load</TableCell>
                                     <TableCell>Current Location</TableCell>
+                                    <TableCell>Destinations</TableCell>
                                     <TableCell>Estimated Start Time</TableCell>
                                     <TableCell>Estimated End Time</TableCell>
                                     <TableCell>Delivery Staff ID</TableCell>
@@ -284,6 +286,50 @@ const CreateRoute = () => {
                                                 </TableCell>
                                                 <TableCell>
                                                     {route.currentLocation}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {route.routeAddresses
+                                                        .length > 0 ? (
+                                                        <Tooltip
+                                                            title={route.routeAddresses
+                                                                .map(
+                                                                    (address) =>
+                                                                        address.city
+                                                                )
+                                                                .join(", ")} // Full list in tooltip
+                                                        >
+                                                            <Typography
+                                                                variant="body2"
+                                                                sx={{
+                                                                    cursor: "pointer",
+                                                                    whiteSpace:
+                                                                        "nowrap",
+                                                                    overflow:
+                                                                        "hidden",
+                                                                    textOverflow:
+                                                                        "ellipsis",
+                                                                }}
+                                                            >
+                                                                {route.routeAddresses
+                                                                    .slice(0, 2) // Show only the first 2 destinations
+                                                                    .map(
+                                                                        (
+                                                                            address
+                                                                        ) =>
+                                                                            address.city
+                                                                    )
+                                                                    .join(
+                                                                        ", "
+                                                                    )}{" "}
+                                                                {route
+                                                                    .routeAddresses
+                                                                    .length >
+                                                                    2 && "..."}
+                                                            </Typography>
+                                                        </Tooltip>
+                                                    ) : (
+                                                        "No Destinations"
+                                                    )}
                                                 </TableCell>
                                                 <TableCell>
                                                     {route.estimatedStartTime}
