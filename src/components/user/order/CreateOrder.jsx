@@ -24,6 +24,7 @@ import UserToast from "../alert/UserToast"
 import { ToastContainer } from "react-toastify"
 import SenderPackage from "./COC/SenderPackage"
 import ComponentPath from "../../../routes/ComponentPath"
+import SelectPaymentMethod from "./COC/SelectPaymentMethod"
 
 function CreateOrder() {
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
@@ -32,6 +33,7 @@ function CreateOrder() {
     const [receiverInfo, setReceiverInfo] = useState({})
     const [senderPackage, setSenderPackage] = useState([{}])
     const [customerDocument, setCustomerDocument] = useState([{}])
+    const [selectPaymentMethod, setSelectPaymentMethod] = useState("")
 
     const [serviceSelectionState, setServiceSelectionState] = useState(true)
     const [totalPrice, setTotalPrice] = useState(0)
@@ -72,7 +74,8 @@ function CreateOrder() {
             !receiverInfo.fullName ||
             !receiverInfo.phoneNumber ||
             !receiverInfo.receiverPartAddressLine ||
-            !receiverInfo.receiverFullAddressLine
+            !receiverInfo.receiverFullAddressLine ||
+            !selectPaymentMethod
         ) {
             UserToast("error", "Please fill in all required fields!")
             return false
@@ -145,7 +148,9 @@ function CreateOrder() {
             }
         })
 
-        setResetInput(true)
+        formData.append("PaymentMethod", selectPaymentMethod)
+
+
 
         api.postForm("Orders", formData)
             .then((data) => {
@@ -168,6 +173,7 @@ function CreateOrder() {
                 }
                 setIsLoading(false)
             })
+            setResetInput(true)
     }, [
         senderInfo,
         receiverInfo,
@@ -198,169 +204,193 @@ function CreateOrder() {
         setIsDropdownOpen((prevOpen) => !prevOpen)
     }
 
+    console.log(selectPaymentMethod);
+
     return (
-        <Box sx={{ display: "flex" }}>
-            <SideMenu />
-            <ToastContainer />
-            <Box component="main" sx={{ flexGrow: 1 }}>
-                <UserAppBar />
-                <Box sx={{ p: 2 }}>
-                    <Box component="header" sx={{ mb: 2 }}>
-                        <ButtonGroup variant="contained">
-                            <Button color="primary" href="/CreateOrder">
-                                Create Domestic Order
-                            </Button>
-                            <Tooltip title="This function is not available yet">
-                                <Button color="secondary">
-                                    Create International Order
+        <>
+            <ToastContainer containerId="toast" limit={1} />
+            <Box sx={{ display: "flex" }}>
+                <SideMenu />
+                <Box component="main" sx={{ flexGrow: 1 }}>
+                    <UserAppBar />
+                    <Box sx={{ p: 2 }}>
+                        <Box component="header" sx={{ mb: 2 }}>
+                            <ButtonGroup variant="contained">
+                                <Button color="primary" href="/CreateOrder">
+                                    Create Domestic Order
                                 </Button>
-                            </Tooltip>
-                        </ButtonGroup>
-                    </Box>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} md={6}>
-                            <Card sx={{ mb: 2 }}>
-                                <CardContent>
-                                    <SenderInfo onChange={setSenderInfo} />
-                                </CardContent>
-                            </Card>
+                                <Tooltip title="This function is not available yet">
+                                    <Button color="secondary">
+                                        Create International Order
+                                    </Button>
+                                </Tooltip>
+                            </ButtonGroup>
+                        </Box>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                                <Card sx={{ mb: 2 }}>
+                                    <CardContent>
+                                        <SenderInfo onChange={setSenderInfo} />
+                                    </CardContent>
+                                </Card>
+                                <Card>
+                                    <CardContent>
+                                        <ReceiverInfo
+                                            onChange={setReceiverInfo}
+                                            resetInput={resetInput}
+                                            setResetInput={setResetInput}
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <Card sx={{ mb: 2 }}>
+                                    <CardContent>
+                                        <SenderPackage
+                                            setSenderPackage={setSenderPackage}
+                                            setCustomerDocument={
+                                                setCustomerDocument
+                                            }
+                                            stateChange={
+                                                handleServiceSelectionChange
+                                            }
+                                            setTotalPrice={setTotalPrice}
+                                            setTotalServicePrice={
+                                                setTotalServicePrice
+                                            }
+                                            resetInput={resetInput}
+                                            setResetInput={setResetInput}
+                                        />
+                                    </CardContent>
+                                </Card>
+                                <Card>
+                                    <CardContent>
+                                        <SelectPaymentMethod
+                                            setSelectPaymentMethod={
+                                                setSelectPaymentMethod
+                                            }
+                                        />
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </Grid>
+
+                        <Box component="footer" sx={{ mt: 4 }}>
                             <Card>
                                 <CardContent>
-                                    <ReceiverInfo
-                                        onChange={setReceiverInfo}
-                                        resetInput={resetInput}
-                                        setResetInput={setResetInput}
-                                    />
+                                    <Grid
+                                        container
+                                        spacing={2}
+                                        alignItems="center"
+                                    >
+                                        <Grid item xs={12} md={8}>
+                                            <Typography variant="body1">
+                                                Total Service Price:{" "}
+                                                {totalServicePrice.toLocaleString(
+                                                    "en-US",
+                                                    {
+                                                        style: "currency",
+                                                        currency: "VND",
+                                                    }
+                                                )}
+                                            </Typography>
+                                            <Typography variant="body1">
+                                                Total Cost:{" "}
+                                                {totalPrice.toLocaleString(
+                                                    "en-US",
+                                                    {
+                                                        style: "currency",
+                                                        currency: "VND",
+                                                    }
+                                                )}
+                                            </Typography>
+                                            <Typography variant="body1">
+                                                Estimated Delivery: Same Day
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={4}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={
+                                                            isCheckboxChecked
+                                                        }
+                                                        onChange={
+                                                            handleCheckboxChange
+                                                        }
+                                                    />
+                                                }
+                                                label="I have read and accept the terms and conditions"
+                                            />
+                                            {isLoading ? (
+                                                <ButtonGroup
+                                                    variant="contained"
+                                                    disabled
+                                                >
+                                                    <Button
+                                                        color="secondary"
+                                                        disabled={
+                                                            !isCheckboxChecked
+                                                        }
+                                                        onClick={
+                                                            handleSubmitClick
+                                                        }
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                    <Button
+                                                        onClick={
+                                                            handleSaveClick
+                                                        }
+                                                    >
+                                                        Save
+                                                    </Button>
+                                                    <Button
+                                                        onClick={
+                                                            handleResetClick
+                                                        }
+                                                    >
+                                                        Reset
+                                                    </Button>
+                                                </ButtonGroup>
+                                            ) : (
+                                                <ButtonGroup variant="contained">
+                                                    <Button
+                                                        color="primary"
+                                                        disabled={
+                                                            !isCheckboxChecked
+                                                        }
+                                                        onClick={
+                                                            handleSubmitClick
+                                                        }
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                    <Button
+                                                        onClick={
+                                                            handleSaveClick
+                                                        }
+                                                    >
+                                                        Save
+                                                    </Button>
+                                                    <Button
+                                                        onClick={
+                                                            handleResetClick
+                                                        }
+                                                    >
+                                                        Reset
+                                                    </Button>
+                                                </ButtonGroup>
+                                            )}
+                                        </Grid>
+                                    </Grid>
                                 </CardContent>
                             </Card>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <Card sx={{ mb: 2 }}>
-                                <CardContent>
-                                    <SenderPackage
-                                        setSenderPackage={setSenderPackage}
-                                        setCustomerDocument={
-                                            setCustomerDocument
-                                        }
-                                        stateChange={
-                                            handleServiceSelectionChange
-                                        }
-                                        setTotalPrice={setTotalPrice}
-                                        setTotalServicePrice={
-                                            setTotalServicePrice
-                                        }
-                                        resetInput={resetInput}
-                                        setResetInput={setResetInput}
-                                    />
-                                </CardContent>
-                            </Card>
-                            {/* <Card>
-                                <CardContent>
-                                    <CustomerDocumentInfo
-                                        onChange={setCustomerDocument}
-                                    />
-                                </CardContent>
-                            </Card> */}
-                        </Grid>
-                    </Grid>
-
-                    <Box component="footer" sx={{ mt: 4 }}>
-                        <Card>
-                            <CardContent>
-                                <Grid container spacing={2} alignItems="center">
-                                    <Grid item xs={12} md={8}>
-                                        <Typography variant="body1">
-                                            Total Service Price:{" "}
-                                            {totalServicePrice.toLocaleString(
-                                                "en-US",
-                                                {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                }
-                                            )}
-                                        </Typography>
-                                        <Typography variant="body1">
-                                            Total Cost:{" "}
-                                            {totalPrice.toLocaleString(
-                                                "en-US",
-                                                {
-                                                    style: "currency",
-                                                    currency: "VND",
-                                                }
-                                            )}
-                                        </Typography>
-                                        <Typography variant="body1">
-                                            Estimated Delivery: Same Day
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item xs={12} md={4}>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={isCheckboxChecked}
-                                                    onChange={
-                                                        handleCheckboxChange
-                                                    }
-                                                />
-                                            }
-                                            label="I have read and accept the terms and conditions"
-                                        />
-                                        {isLoading ? (
-                                            <ButtonGroup
-                                                variant="contained"
-                                                disabled
-                                            >
-                                                <Button
-                                                    color="secondary"
-                                                    disabled={
-                                                        !isCheckboxChecked
-                                                    }
-                                                    onClick={handleSubmitClick}
-                                                >
-                                                    Submit
-                                                </Button>
-                                                <Button
-                                                    onClick={handleSaveClick}
-                                                >
-                                                    Save
-                                                </Button>
-                                                <Button
-                                                    onClick={handleResetClick}
-                                                >
-                                                    Reset
-                                                </Button>
-                                            </ButtonGroup>
-                                        ) : (
-                                            <ButtonGroup variant="contained">
-                                                <Button
-                                                    color="primary"
-                                                    disabled={
-                                                        !isCheckboxChecked
-                                                    }
-                                                    onClick={handleSubmitClick}
-                                                >
-                                                    Submit
-                                                </Button>
-                                                <Button
-                                                    onClick={handleSaveClick}
-                                                >
-                                                    Save
-                                                </Button>
-                                                <Button
-                                                    onClick={handleResetClick}
-                                                >
-                                                    Reset
-                                                </Button>
-                                            </ButtonGroup>
-                                        )}
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
+                        </Box>
                     </Box>
                 </Box>
             </Box>
-        </Box>
+        </>
     )
 }
 export default CreateOrder

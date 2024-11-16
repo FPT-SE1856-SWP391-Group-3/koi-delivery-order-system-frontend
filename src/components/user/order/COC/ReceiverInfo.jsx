@@ -104,13 +104,13 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                 />
-                <label>Email (Optional)</label>
+                {/* <label>Email (Optional)</label>
                 <input
                     type="text"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                />
+                /> */}
                 <label htmlFor="city">City/Province*</label>
                 <select
                     value={cityName}
