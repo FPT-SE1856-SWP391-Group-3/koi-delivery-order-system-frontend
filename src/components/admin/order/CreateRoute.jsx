@@ -12,6 +12,7 @@ import {
     Fab,
     Grid,
     Alert,
+    Tooltip,
     Modal,
     TextField,
     Button,
@@ -216,7 +217,16 @@ const CreateRoute = () => {
             setAlertSeverity("error")
         }
     }
+    const formatDestinations = (addresses) => {
+        if (!addresses?.length)
+            return { visibleCities: "No Destinations", tooltipCities: "" }
 
+        const cities = addresses.map((address) => address?.city || "Unknown")
+        return {
+            visibleCities: `${cities.slice(0, 2).join(", ")}${cities.length > 2 ? ` (+${cities.length - 2} more...)` : ""}`,
+            tooltipCities: cities.join(", "),
+        }
+    }
     return (
         <Box display="flex">
             <AdminSideMenu />
@@ -245,6 +255,7 @@ const CreateRoute = () => {
                                     <TableCell>Capacity</TableCell>
                                     <TableCell>Current Load</TableCell>
                                     <TableCell>Current Location</TableCell>
+                                    <TableCell>Destinations</TableCell>
                                     <TableCell>Estimated Start Time</TableCell>
                                     <TableCell>Estimated End Time</TableCell>
                                     <TableCell>Delivery Staff ID</TableCell>
@@ -284,6 +295,57 @@ const CreateRoute = () => {
                                                 </TableCell>
                                                 <TableCell>
                                                     {route.currentLocation}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {route.routeAddresses
+                                                        ? (() => {
+                                                              const {
+                                                                  visibleCities,
+                                                                  tooltipCities,
+                                                              } =
+                                                                  formatDestinations(
+                                                                      route.routeAddresses
+                                                                  )
+                                                              return tooltipCities ? (
+                                                                  <Tooltip
+                                                                      arrow
+                                                                      placement="top"
+                                                                      aria-label="View all destinations"
+                                                                      title={
+                                                                          tooltipCities
+                                                                      } // Full list in tooltip
+                                                                  >
+                                                                      <Typography
+                                                                          variant="body2"
+                                                                          sx={{
+                                                                              cursor: "pointer",
+                                                                              whiteSpace:
+                                                                                  "nowrap",
+                                                                              overflow:
+                                                                                  "hidden",
+                                                                              textOverflow:
+                                                                                  "ellipsis",
+                                                                              "&:hover":
+                                                                                  {
+                                                                                      textDecoration:
+                                                                                          "underline",
+                                                                                  },
+                                                                          }}
+                                                                      >
+                                                                          {
+                                                                              visibleCities
+                                                                          }
+                                                                      </Typography>
+                                                                  </Tooltip>
+                                                              ) : (
+                                                                  <Typography variant="body2">
+                                                                      {
+                                                                          visibleCities
+                                                                      }
+                                                                  </Typography>
+                                                              )
+                                                          })()
+                                                        : "No Destinations"}
                                                 </TableCell>
                                                 <TableCell>
                                                     {route.estimatedStartTime}
