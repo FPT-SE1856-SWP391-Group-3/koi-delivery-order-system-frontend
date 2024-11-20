@@ -417,96 +417,105 @@ export default function ManageRoute() {
     }
 
     return (
-        <Box display="flex">
-            <AdminSideMenu />
+        <>
             <ToastContainer containerId={"Route"} />
-            {/* Main Table Area */}
-            <Box width="100%" padding={2}>
-                <TableContainer component={Paper}>
-                    <Table aria-label="collapsible table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell />
-                                <TableCell>
-                                    <Typography fontWeight={600} align="center">
-                                        Order ID
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
-                                        Customer ID
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
-                                        Order Date
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
-                                        Is Payment
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
-                                        Delivery Date
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
-                                        Status
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
-                                        Action
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
-                                        Delivering Staff
-                                    </Typography>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                            {filteredOrders.length > 0 ? (
-                                filteredOrders.map((order) => (
-                                    <OrderRow key={order.orderId} row={order} />
-                                ))
-                            ) : (
+            <Box display="flex">
+                <AdminSideMenu />
+                {/* Main Table Area */}
+                <Box width="100%" padding={2}>
+                    <TableContainer component={Paper}>
+                        <Table aria-label="collapsible table">
+                            <TableHead>
                                 <TableRow>
-                                    <TableCell colSpan={9} align="center">
-                                        No orders available for route creation.
+                                    <TableCell />
+                                    <TableCell>
+                                        <Typography
+                                            fontWeight={600}
+                                            align="center"
+                                        >
+                                            Order ID
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography
+                                            fontWeight={600}
+                                            allign="center"
+                                        >
+                                            Customer ID
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography
+                                            fontWeight={600}
+                                            allign="center"
+                                        >
+                                            Order Date
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography
+                                            fontWeight={600}
+                                            allign="center"
+                                        >
+                                            Is Payment
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography
+                                            fontWeight={600}
+                                            allign="center"
+                                        >
+                                            Delivery Date
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography
+                                            fontWeight={600}
+                                            allign="center"
+                                        >
+                                            Status
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography
+                                            fontWeight={600}
+                                            allign="center"
+                                        >
+                                            Action
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography
+                                            fontWeight={600}
+                                            allign="center"
+                                        >
+                                            Delivering Staff
+                                        </Typography>
                                     </TableCell>
                                 </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                            </TableHead>
+
+                            <TableBody>
+                                {filteredOrders.length > 0 ? (
+                                    filteredOrders.map((order) => (
+                                        <OrderRow
+                                            key={order.orderId}
+                                            row={order}
+                                        />
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={9} align="center">
+                                            No orders available for route
+                                            creation.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Box>
             </Box>
-        </Box>
+        </>
     )
 }
