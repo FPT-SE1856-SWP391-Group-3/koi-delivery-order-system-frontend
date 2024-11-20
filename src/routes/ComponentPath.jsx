@@ -38,6 +38,7 @@ const ComponentPath = {
             updatePassword: user + "/password/update/",
             forgetPassword: user + "/password/forget/",
             resetPassword: user + "/password/reset/",
+            validateEmail: user + "/email/validate/",
         },
         order: {
             orderPath: order,
@@ -75,6 +76,11 @@ const ComponentPath = {
             editProfile: profile + edit,
             createProfile: profile + create,
         },
+    },
+
+    payment: {
+        paymentChoose: payment + "/choose",
+        paymentCallBack: payment + "/callback",
     },
     admin: {
         dashboard: admin + dashboard,

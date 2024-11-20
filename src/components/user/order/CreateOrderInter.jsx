@@ -6,6 +6,7 @@ import SenderInfo from "./COC/SenderInfo"
 import api from "../../../api/CallAPI" // Adjust the import path for your API calls
 import "../css/CreateOrder.css"
 import UserSideNav from "../UserSideNav"
+import UserToast from "../alert/UserToast"
 
 function CreateOrderInter() {
     const [isCheckboxChecked, setIsCheckboxChecked] = useState(false)
@@ -29,12 +30,13 @@ function CreateOrderInter() {
                 if (data.success) {
                     setUserData(data.user || {})
                 } else {
-                    alert("Failed to retrieve user information!")
+                    UserToast("error", "User not found. Please log in again.")
                 }
             } catch (error) {
                 console.error("Error fetching user:", error)
-                alert(
-                    "An error occurred while fetching user data. Please try again."
+                UserToast(
+                    "error",
+                    "An error occurred while fetching user data."
                 )
             }
         }

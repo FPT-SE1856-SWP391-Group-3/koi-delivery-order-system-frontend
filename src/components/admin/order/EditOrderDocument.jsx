@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import api from "../../../api/CallAPI"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function EditOrderDocument() {
     const [orderDocument, setOrderDocument] = useState({
@@ -25,12 +27,15 @@ export default function EditOrderDocument() {
                             description: data.orderDocument.description,
                         }) // Set giá trị vào state
                     } else {
-                        alert("Không tìm thấy Document!")
+                        UserToast("error", "No document found.")
                     }
                 })
             } catch (error) {
                 console.error("Error fetching Document:", error)
-                alert("An error occurred while fetching the Document.")
+                UserToast(
+                    "error",
+                    "An error occurred while fetching the Document."
+                )
             }
         }
 
@@ -49,25 +54,29 @@ export default function EditOrderDocument() {
             api.putForm("OrderDocuments/" + documentId, documentData).then(
                 (data) => {
                     if (data.success) {
-                        alert("Cập nhật thành công!")
+                        UserToast("success", "Update document successfully!")
                         navigate("/admin/manage-document")
                     } else {
-                        alert("Cập nhật thất bại!")
+                        UserToast("error", "Failed to update document!")
                     }
                 }
             )
         } catch (error) {
             console.error("Error during update:", error)
-            alert("An error occurred during update. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred during update. Please try again."
+            )
         }
     }
 
     return (
         <div>
+            <ToastContainer />
             <div className="container">
                 <div className="row">
                     <div className="col-md-6 offset-md-3">
-                        <h2 className="text-center">Cập nhật Document</h2>
+                        <h2 className="text-center">Update Document</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
                                 <label htmlFor="orderStatusId">
@@ -103,7 +112,7 @@ export default function EditOrderDocument() {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="description">Mô tả</label>
+                                <label htmlFor="description">Description</label>
                                 <textarea
                                     className="form-control"
                                     id="description"
@@ -118,7 +127,7 @@ export default function EditOrderDocument() {
                                 />
                             </div>
                             <button type="submit" className="btn btn-primary">
-                                Cập nhật
+                                Update
                             </button>
                         </form>
                     </div>

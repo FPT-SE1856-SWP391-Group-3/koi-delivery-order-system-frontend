@@ -22,6 +22,8 @@ import AddIcon from "@mui/icons-material/Add"
 import CreateKoi from "./CreateKoi"
 import EditKoi from "./EditKoi"
 import AdminSideMenu from "../components/AdminSideMenu"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function ManageKoi() {
     const [kois, setKois] = useState([])
@@ -40,7 +42,7 @@ export default function ManageKoi() {
                 console.log("No Koi found!")
             }
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast("error", "Failed to fetch Koi. Please try again.")
         }
     }
 
@@ -65,16 +67,16 @@ export default function ManageKoi() {
         try {
             const data = await api.del("Kois/" + selectedKoiId)
             if (data.success) {
-                alert("Deleted successfully!")
+                UserToast("success", "Koi deleted successfully!")
                 setKois((prevKois) =>
                     prevKois.filter((koi) => koi.koiId !== selectedKoiId)
                 )
             } else {
-                alert("Deletion failed!")
+                UserToast("error", "Failed to delete Koi. Please try again.")
             }
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast("error", "Failed to delete Koi. Please try again.")
         }
         closeConfirmDeleteModal()
     }
@@ -93,6 +95,7 @@ export default function ManageKoi() {
 
     return (
         <Box display="flex">
+            <ToastContainer />
             <AdminSideMenu />
             <Box flex={1} padding={3}>
                 <Typography variant="h5" gutterBottom fontWeight="bold">

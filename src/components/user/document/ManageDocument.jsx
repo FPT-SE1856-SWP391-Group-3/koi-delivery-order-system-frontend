@@ -16,6 +16,8 @@ import {
     Typography,
 } from "@mui/material"
 import { Table } from "react-bootstrap"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 export default function ManageDocument() {
     const [customerDocuments, setCustomerDocuments] = useState([{}])
     const userId = JSON.parse(localStorage.getItem("userId"))
@@ -30,11 +32,11 @@ export default function ManageDocument() {
                     setCustomerDocuments(data.customerDocuments)
                     console.log(data.customerDocuments)
                 } else {
-                    console.log("Không có tài liệu!")
+                    console.log("No documents found!")
                 }
             })
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast("error", "An error occurred while fetching documents.")
         }
     }, [orderId])
 
@@ -42,23 +44,24 @@ export default function ManageDocument() {
         try {
             api.del("CustomerDocuments/" + documentId).then((data) => {
                 if (data.success) {
-                    alert("Xóa thành công!")
+                    UserToast("success", "Document deleted successfully.")
                     const newDocuments = customerDocuments.filter(
                         (document) => document.documentId !== documentId
                     )
                     setCustomerDocuments(newDocuments)
                 } else {
-                    alert("Xóa thất bại!")
+                    UserToast("error", "Delete failed!")
                 }
             })
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast("error", "An error occurred while deleting the document.")
         }
     }
 
     return (
         <UserSideNav>
+            <ToastContainer />
             <Box sx={{ marginInline: "1em" }}>
                 <Typography variant="h4" gutterBottom>
                     Documents

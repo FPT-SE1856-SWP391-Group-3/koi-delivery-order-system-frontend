@@ -28,7 +28,7 @@ export default function EditCertification() {
                             certificateFile: null, // File không thể set từ dữ liệu API
                         }) // Set giá trị vào state
                     } else {
-                        UserToast("error", "Không tìm thấy Certification!")
+                        UserToast("error", "No certification found.")
                     }
                 })
             } catch (error) {

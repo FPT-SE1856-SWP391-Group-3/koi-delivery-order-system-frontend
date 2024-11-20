@@ -56,12 +56,6 @@ export default function OptionsMenu() {
                     },
                 }}
             >
-                <MenuItem>
-                    <Link to={ComponentPath.user.profile.viewProfile}>
-                        Profile
-                    </Link>
-                </MenuItem>
-                <Divider />
                 <MenuItem
                     onClick={handleClose}
                     sx={{

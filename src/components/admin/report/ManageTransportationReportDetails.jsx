@@ -15,6 +15,8 @@ import {
 } from "@mui/material"
 import Modal from "react-modal"
 import AdminSideMenu from "../components/AdminSideMenu"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function ManageTransportationReportDetails() {
     const [reports, setReports] = useState([])
@@ -33,10 +35,10 @@ export default function ManageTransportationReportDetails() {
             if (data.success) {
                 setReports(data.transportReports)
             } else {
-                alert("Không có báo cáo vận chuyển!")
+                UserToast("error", "No reports found!")
             }
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast("error", "An error occurred while fetching reports.")
         }
     }
     // Mở modal xác nhận xóa
@@ -57,20 +59,20 @@ export default function ManageTransportationReportDetails() {
             api.del("TransportationReportDetails/" + selectedReportId).then(
                 (data) => {
                     if (data.success) {
-                        alert("Xóa thành công!")
+                        UserToast("success", "Delete report successfully!")
                         const newReports = reports.filter(
                             (report) =>
                                 report.transReportDetailId !== selectedReportId
                         )
                         setReports(newReports)
                     } else {
-                        alert("Xóa thất bại!")
+                        UserToast("error", "Failed to delete report!")
                     }
                 }
             )
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast("error", "An error occurred. Please try again.")
         }
         closeDeleteModal()
     }
@@ -89,6 +91,7 @@ export default function ManageTransportationReportDetails() {
 
     return (
         <Box display="flex">
+            <ToastContainer />
             <AdminSideMenu />
             <Box flex={1} padding={3}>
                 <Typography variant="h5" gutterBottom fontWeight="bold">

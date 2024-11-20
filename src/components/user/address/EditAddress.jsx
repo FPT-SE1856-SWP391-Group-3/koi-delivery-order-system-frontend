@@ -27,12 +27,15 @@ export default function EditAddress({ addressId, closeModal }) {
                         console.log(data.address)
                         setCurrentAddress(data.address.addressLine) // Set giá trị vào state
                     } else {
-                        alert("Không tìm thấy địa chỉ!")
+                        UserToast("error", "No address found.")
                     }
                 })
             } catch (error) {
                 console.error("Error fetching address:", error)
-                alert("An error occurred while fetching the address.")
+                UserToast(
+                    "error",
+                    "An error occurred while fetching the address."
+                )
             }
         }
 
@@ -46,16 +49,16 @@ export default function EditAddress({ addressId, closeModal }) {
                 .put("Addresses/" + addressId, updateAddress)
                 .then((data) => {
                     if (data.success) {
-                        UserToast("success", "Cập nhật thành công!")
+                        UserToast("success", "Update address successfully!")
                         closeModal()
                         window.location.reload()
                     } else {
-                        alert("Cập nhật thất bại!")
+                        UserToast("error", "Failed to update address!")
                     }
                 })
         } catch (error) {
             console.error("Error during update:", error)
-            alert("An error occurred during update. Please try again.")
+            UserToast("error", "An error occurred. Please try again.")
         }
     }
 
@@ -99,17 +102,17 @@ export default function EditAddress({ addressId, closeModal }) {
             <div className="">
                 <div className="row">
                     <div className="col-lg-12">
-                        <h2 className="text-center">Cập nhật địa chỉ</h2>
+                        <h2 className="text-center">Update City</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <label htmlFor="city">Thành phố</label>
+                                <label htmlFor="city">City</label>
                                 <select
                                     className="form-control"
                                     onChange={(e) => {
                                         setCityName(e.target.value)
                                     }}
                                 >
-                                    <option value="">Chọn thành phố</option>
+                                    <option value="">Choose City</option>
                                     {addresses.map((address) => (
                                         <option
                                             key={address.Id}
@@ -121,14 +124,14 @@ export default function EditAddress({ addressId, closeModal }) {
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="district">Huyện</label>
+                                <label htmlFor="district">District</label>
                                 <select
                                     className="form-control"
                                     onChange={(e) => {
                                         setDistrictName(e.target.value)
                                     }}
                                 >
-                                    <option value="">Chọn huyện</option>
+                                    <option value="">Choose District</option>
                                     {addresses.map((address) => {
                                         if (address.Name == cityName) {
                                             return address.Districts.map(
@@ -146,14 +149,14 @@ export default function EditAddress({ addressId, closeModal }) {
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="ward">Quận/Xã</label>
+                                <label htmlFor="ward">Ward</label>
                                 <select
                                     className="form-control"
                                     onChange={(e) => {
                                         setWardName(e.target.value)
                                     }}
                                 >
-                                    <option value="">Chọn quận/xã</option>
+                                    <option value="">Choose Ward</option>
                                     {addresses.map((address) => {
                                         if (address.Name == cityName) {
                                             return address.Districts.map(
@@ -185,7 +188,7 @@ export default function EditAddress({ addressId, closeModal }) {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="specificAddress">
-                                    Địa chỉ cụ thể
+                                    Specific Address
                                 </label>
                                 <input
                                     type="text"
@@ -199,7 +202,7 @@ export default function EditAddress({ addressId, closeModal }) {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="addressLine">
-                                    Địa chỉ hiện tại {currentAddress}{" "}
+                                    Current Address {currentAddress}{" "}
                                 </label>
                                 <input
                                     type="text"
@@ -211,7 +214,7 @@ export default function EditAddress({ addressId, closeModal }) {
                                 />
                             </div>
                             <button type="submit" className="btn btn-primary">
-                                Cập nhật
+                                Update
                             </button>
                         </form>
                     </div>

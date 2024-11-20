@@ -1,5 +1,7 @@
 import api from "../../api/CallAPI"
 import { useEffect, useState } from "react"
+import UserToast from "../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 export default function UploadFile() {
     const [file, setFile] = useState([]) //define list instead
     const [image, setImage] = useState({})
@@ -18,9 +20,9 @@ export default function UploadFile() {
                     api.postFile("CustomsDocuments/test", formData).then(
                         (data) => {
                             if (data.success) {
-                                alert("Upload thành công!")
+                                UserToast("success", "Upload successfully!")
                             } else {
-                                alert("Upload thất bại!")
+                                UserToast("error", "Upload failed!")
                             }
                         }
                     )
@@ -45,6 +47,7 @@ export default function UploadFile() {
 
     return (
         <>
+            <ToastContainer />
             <input
                 id="uploadFile"
                 name="uploadFile"

@@ -1,90 +1,171 @@
 import { createBrowserRouter } from "react-router-dom"
-import ManageUserAddress from "../components/admin/address/ManageUserAddress"
-import ManageUser from "../components/admin/user/ManageUser"
-import UpdateUser from "../components/admin/user/UpdateUser"
-import HomePage from "../components/HomePage"
-import BlogNews from "../components/BlogNews"
-import CustomerSupport from "../components/CustomerSupport"
-import Service from "../components/Service"
-import Recruitment from "../components/Recruitment"
-import AddAddress from "../components/user/address/AddAddress"
-import EditAddress from "../components/user/address/EditAddress"
-import UserAddress from "../components/user/address/UserAddress"
-import Login from "../components/user/auth/Login"
-import Logout from "../components/user/auth/Logout"
-import Register from "../components/user/auth/Register"
-import ViewProfile from "@components/user/profile/ViewProfile"
-import AdminRoute from "./AdminRoute"
-import ProtectedRoute from "./ProtectedRoute"
-import UserPayment from "../components/user/payment/UserPayment"
-import AddPayment from "../components/user/payment/AddPayment"
-import EditPayment from "../components/user/payment/EditPayment"
-import ManageKoi from "../components/admin/koi/ManageKoi"
-import EditKoi from "../components/admin/koi/EditKoi"
-import CreatKoi from "../components/admin/koi/CreateKoi"
-import ManageOrderServiceDetail from "../components/admin/orderServiceDetail/ManageOrderServiceDetail"
-import AddOrderServiceDetail from "../components/admin/orderServiceDetail/AddOrderServiceDetail"
-import EditOrderServiceDetail from "../components/admin/orderServiceDetail/EditOrderServiceDetail"
-import ManagePaymentType from "../components/admin/payment/ManagePaymentMethod"
-import EditPaymentType from "../components/admin/payment/EditPaymentMethod"
-import AddPaymentType from "../components/admin/payment/AddPaymentMethod"
-import ManageFaq from "../components/admin/faq/ManageFaq"
-import UpdateFaq from "../components/admin/faq/UpdateFaq"
-import NewFaq from "../components/admin/faq/NewFaq"
-import CreateOrder from "../components/user/order/CreateOrder"
-import UserOrder from "../components/user/order/UserOrder"
-import UserOrderDetail from "../components/user/order/UserOrderDetail"
-import ManageOrder from "../components/admin/order/ManageOrder"
-import ManageOrderDetail from "../components/admin/order/ManageOrderDetail"
-import CreateFeedback from "../components/user/feedback/CreateFeedback"
-import ManageFeedBack from "../components/user/feedback/ManageFeedback"
-import EditFeedback from "../components/user/feedback/EditFeedback"
-import AddDocument from "../components/user/document/AddDocument"
-import CreateTransportationReportDetails from "../components/admin/report/CreateTransportationReportDetails"
-import ManageTransportationReportDetails from "../components/admin/report/ManageTransportationReportDetails"
-import EditProfile from "../components/user/profile/EditProfile"
-import EditTransportationReportDetails from "../components/admin/report/EditTransportationReportDetails"
-import EditBlogNews from "../components/admin/blogandnews/EditBlogNews"
-import ManageBlogNews from "../components/admin/blogandnews/ManageBlogNews"
-import CreateBlogNews from "../components/admin/blogandnews/CreateBlogNews"
-import UploadFile from "../components/test/UploadFile"
-import ManageCertification from "../components/admin/certification/ManageCertification"
-import EditCertification from "../components/admin/certification/EditCertification"
-import CreateCertification from "../components/admin/certification/CreateCertification"
-import api from "../api/CallAPI"
-import EditDocument from "../components/user/document/EditDocument"
-import ManageDocument from "../components/user/document/ManageDocument"
-import CreateNotification from "../components/admin/notification/CreateNotification"
-import ManageNotification from "../components/admin/notification/ManageNotification"
-import GetNotification from "../components/user/notification/GetNotification"
-import UpdatePassword from "../components/user/profile/UpdatePassword"
-import ManageOrderDocument from "../components/admin/order/OrderDocument"
-import EditOrderDocument from "../components/admin/order/EditOrderDocument"
-import CreateOrderDocument from "../components/admin/order/CreateOrderDocument"
+import { lazy, Suspense } from "react"
 import ComponentPath from "./ComponentPath"
-import UserDashboard from "@components/user/dashboard/UserDashboard"
-import AdminDashboard from "@components/admin/dashboard/AdminDashboard"
-import { useEffect } from "react"
-import CreateOrderInter from "../components/user/order/CreateOrderInter"
-import ChoosePayment from "../components/user/payment/ChoosePayment"
-import CallBackPayment from "../components/user/payment/CallBackPayment"
-import Dashboard from "../components/user/dashboard/Dashboard"
-import ViewOrders from "../components/user/profile/ViewOrders"
-import ManageRoute from "../components/admin/order/ManageRoute"
-import ForgetPassword from "../components/user/auth/ForgetPassword"
-import ResetPassword from "../components/user/auth/ResetPassword"
-import CreateRoute from "../components/admin/order/CreateRoute"
+import api from "../api/CallAPI"
 import path from "path"
-import ViewFeedback from "../components/admin/feedback/ManageFeedback"
 
-// Function to get the access token from cookies
+// Lazy-loaded components
+const ManageUserAddress = lazy(
+    () => import("../components/admin/address/ManageUserAddress")
+)
+const ManageUser = lazy(() => import("../components/admin/user/ManageUser"))
+const UpdateUser = lazy(() => import("../components/admin/user/UpdateUser"))
+const HomePage = lazy(() => import("../components/HomePage"))
+const BlogNews = lazy(() => import("../components/BlogNews"))
+const CustomerSupport = lazy(() => import("../components/CustomerSupport"))
+const Service = lazy(() => import("../components/Service"))
+const Recruitment = lazy(() => import("../components/Recruitment"))
+const AddAddress = lazy(() => import("../components/user/address/AddAddress"))
+const EditAddress = lazy(() => import("../components/user/address/EditAddress"))
+const UserAddress = lazy(() => import("../components/user/address/UserAddress"))
+const Login = lazy(() => import("../components/user/auth/Login"))
+const Logout = lazy(() => import("../components/user/auth/Logout"))
+const Register = lazy(() => import("../components/user/auth/Register"))
+const ViewProfile = lazy(() => import("@components/user/profile/ViewProfile"))
+const AdminRoute = lazy(() => import("./AdminRoute"))
+const ProtectedRoute = lazy(() => import("./ProtectedRoute"))
+const UserPayment = lazy(() => import("../components/user/payment/UserPayment"))
+const AddPayment = lazy(() => import("../components/user/payment/AddPayment"))
+const EditPayment = lazy(() => import("../components/user/payment/EditPayment"))
+const ManageKoi = lazy(() => import("../components/admin/koi/ManageKoi"))
+const EditKoi = lazy(() => import("../components/admin/koi/EditKoi"))
+const CreatKoi = lazy(() => import("../components/admin/koi/CreateKoi"))
+const ManageOrderServiceDetail = lazy(
+    () =>
+        import(
+            "../components/admin/orderServiceDetail/ManageOrderServiceDetail"
+        )
+)
+const AddOrderServiceDetail = lazy(
+    () => import("../components/admin/orderServiceDetail/AddOrderServiceDetail")
+)
+const EditOrderServiceDetail = lazy(
+    () =>
+        import("../components/admin/orderServiceDetail/EditOrderServiceDetail")
+)
+const ManagePaymentType = lazy(
+    () => import("../components/admin/payment/ManagePaymentMethod")
+)
+const EditPaymentType = lazy(
+    () => import("../components/admin/payment/EditPaymentMethod")
+)
+const AddPaymentType = lazy(
+    () => import("../components/admin/payment/AddPaymentMethod")
+)
+const ManageFaq = lazy(() => import("../components/admin/faq/ManageFaq"))
+const UpdateFaq = lazy(() => import("../components/admin/faq/UpdateFaq"))
+const NewFaq = lazy(() => import("../components/admin/faq/NewFaq"))
+const CreateOrder = lazy(() => import("../components/user/order/CreateOrder"))
+const UserOrder = lazy(() => import("../components/user/order/UserOrder"))
+const UserOrderDetail = lazy(
+    () => import("../components/user/order/UserOrderDetail")
+)
+const ManageOrder = lazy(() => import("../components/admin/order/ManageOrder"))
+const ManageOrderDetail = lazy(
+    () => import("../components/admin/order/ManageOrderDetail")
+)
+const CreateFeedback = lazy(
+    () => import("../components/user/feedback/CreateFeedback")
+)
+const ManageFeedBack = lazy(
+    () => import("../components/user/feedback/ManageFeedback")
+)
+const EditFeedback = lazy(
+    () => import("../components/user/feedback/EditFeedback")
+)
+const AddDocument = lazy(
+    () => import("../components/user/document/AddDocument")
+)
+const CreateTransportationReportDetails = lazy(
+    () => import("../components/admin/report/CreateTransportationReportDetails")
+)
+const ManageTransportationReportDetails = lazy(
+    () => import("../components/admin/report/ManageTransportationReportDetails")
+)
+const EditProfile = lazy(() => import("../components/user/profile/EditProfile"))
+const EditTransportationReportDetails = lazy(
+    () => import("../components/admin/report/EditTransportationReportDetails")
+)
+const EditBlogNews = lazy(
+    () => import("../components/admin/blogandnews/EditBlogNews")
+)
+const ManageBlogNews = lazy(
+    () => import("../components/admin/blogandnews/ManageBlogNews")
+)
+const CreateBlogNews = lazy(
+    () => import("../components/admin/blogandnews/CreateBlogNews")
+)
+const UploadFile = lazy(() => import("../components/test/UploadFile"))
+const ManageCertification = lazy(
+    () => import("../components/admin/certification/ManageCertification")
+)
+const EditCertification = lazy(
+    () => import("../components/admin/certification/EditCertification")
+)
+const CreateCertification = lazy(
+    () => import("../components/admin/certification/CreateCertification")
+)
+const EditDocument = lazy(
+    () => import("../components/user/document/EditDocument")
+)
+const ManageDocument = lazy(
+    () => import("../components/user/document/ManageDocument")
+)
+const CreateNotification = lazy(
+    () => import("../components/admin/notification/CreateNotification")
+)
+const ManageNotification = lazy(
+    () => import("../components/admin/notification/ManageNotification")
+)
+const GetNotification = lazy(
+    () => import("../components/user/notification/GetNotification")
+)
+const UpdatePassword = lazy(
+    () => import("../components/user/profile/UpdatePassword")
+)
+const ManageOrderDocument = lazy(
+    () => import("../components/admin/order/OrderDocument")
+)
+const EditOrderDocument = lazy(
+    () => import("../components/admin/order/EditOrderDocument")
+)
+const CreateOrderDocument = lazy(
+    () => import("../components/admin/order/CreateOrderDocument")
+)
+const UserDashboard = lazy(
+    () => import("@components/user/dashboard/UserDashboard")
+)
+const AdminDashboard = lazy(
+    () => import("@components/admin/dashboard/AdminDashboard")
+)
+const CreateOrderInter = lazy(
+    () => import("../components/user/order/CreateOrderInter")
+)
+const ChoosePayment = lazy(
+    () => import("../components/user/payment/ChoosePayment")
+)
+const CallBackPayment = lazy(
+    () => import("../components/user/payment/CallBackPayment")
+)
+const Dashboard = lazy(() => import("../components/user/dashboard/Dashboard"))
+const ViewOrders = lazy(() => import("../components/user/profile/ViewOrders"))
+const ManageRoute = lazy(() => import("../components/admin/order/ManageRoute"))
+const ForgetPassword = lazy(
+    () => import("../components/user/auth/ForgetPassword")
+)
+const ResetPassword = lazy(
+    () => import("../components/user/auth/ResetPassword")
+)
+const CreateRoute = lazy(() => import("../components/admin/order/CreateRoute"))
+const ViewFeedback = lazy(
+    () => import("../components/admin/feedback/ManageFeedback")
+)
+const ValidateEmailCallBack = lazy(
+    () => import("../components/user/auth/ValidateEmailCallBack")
+)
+
+// Variables
 var adminUrl = "/admin"
-
-// // Function to check if the user is authenticated
-// const isAuthenticated = async () => {
-//   const token = await getAccessToken();
-//   return !!token; // !! la chuyen doi ve kieu boolean
-// };
 
 // Function to check if the user is admin
 const isAdmin = async () => {
@@ -96,355 +177,653 @@ const isAdmin = async () => {
 const router = createBrowserRouter([
     {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+            <Suspense>
+                <Dashboard />
+            </Suspense>
+        ),
+    },
+    {
+        path: ComponentPath.payment.paymentChoose,
+        element: (
+            <Suspense>
+                <ChoosePayment />
+            </Suspense>
+        ),
+    },
+    {
+        path: ComponentPath.payment.paymentCallBack,
+        element: (
+            <Suspense>
+                <CallBackPayment />
+            </Suspense>
+        ),
+    },
+    {
+        path: ComponentPath.user.user.validateEmail,
+        element: (
+            <Suspense>
+                <ValidateEmailCallBack />
+            </Suspense>
+        ),
     },
     {
         path: "/login",
-        element: <Login />,
+        element: (
+            <Suspense>
+                <Login />
+            </Suspense>
+        ),
     },
     {
         path: "/register",
-        element: <Register />,
+        element: (
+            <Suspense>
+                <Register />
+            </Suspense>
+        ),
     },
     {
         path: "/logout",
-        element: <Logout />,
+        element: (
+            <Suspense>
+                <Logout />
+            </Suspense>
+        ),
     },
     {
         path: "/",
-        element: <HomePage />,
+        element: (
+            <Suspense>
+                <HomePage />
+            </Suspense>
+        ),
         index: true,
     },
     {
         path: "/news",
-        element: <BlogNews />,
+        element: (
+            <Suspense>
+                <BlogNews />
+            </Suspense>
+        ),
         index: true,
     },
     {
         path: "/customer-support",
-        element: <CustomerSupport />,
+        element: (
+            <Suspense>
+                <CustomerSupport />
+            </Suspense>
+        ),
         index: true,
     },
     {
         path: "/services",
-        element: <Service />,
+        element: (
+            <Suspense>
+                <Service />
+            </Suspense>
+        ),
         index: true,
     },
     {
         path: "/recruitment",
-        element: <Recruitment />,
+        element: (
+            <Suspense>
+                <Recruitment />
+            </Suspense>
+        ),
         index: true,
     },
     {
         path: ComponentPath.user.user.forgetPassword,
-        element: <ForgetPassword />,
+        element: (
+            <Suspense>
+                <ForgetPassword />
+            </Suspense>
+        ),
     },
     {
         path: ComponentPath.user.user.resetPassword,
-        element: <ResetPassword />,
+        element: (
+            <Suspense>
+                <ResetPassword />
+            </Suspense>
+        ),
     },
-    // {
-    //   path: ComponentPath.uploadFile,
-    //   element: <UploadFile />,
-    //   index: true,
-    // },
     {
-        element: <ProtectedRoute />,
+        element: (
+            <Suspense>
+                <ProtectedRoute />
+            </Suspense>
+        ),
         children: [
-            // {
-            //   path: ComponentPath.admin.route.manageroute,
-            //   element: <ManageRoute />,
-            // },
-            {
-                path: "/payment/choose",
-                element: <ChoosePayment />,
-            },
-            {
-                path: "/payment/callback",
-                element: <CallBackPayment />,
-            },
-
             {
                 path: ComponentPath.user.dashboard,
-                element: <UserDashboard />,
+                element: (
+                    <Suspense>
+                        <UserDashboard />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.payment.createPayment,
-                element: <AddPayment />,
+                element: (
+                    <Suspense>
+                        <AddPayment />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.user.updatePassword,
-                element: <UpdatePassword />,
+                element: (
+                    <Suspense>
+                        <UpdatePassword />
+                    </Suspense>
+                ),
             },
             {
                 path: "/CreateOrderInter",
-                element: <CreateOrderInter />,
+                element: (
+                    <Suspense>
+                        <CreateOrderInter />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.order.createOrder,
-                element: <CreateOrder />,
+                element: (
+                    <Suspense>
+                        <CreateOrder />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.profile.viewProfile,
-                element: <ViewProfile />,
+                element: (
+                    <Suspense>
+                        <ViewProfile />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.profile.editProfile,
-                element: <EditProfile />,
+                element: (
+                    <Suspense>
+                        <EditProfile />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.profile.updatePassword,
-                element: <UpdatePassword />,
+                element: (
+                    <Suspense>
+                        <UpdatePassword />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.address.createAddress,
-                element: <AddAddress />,
+                element: (
+                    <Suspense>
+                        <AddAddress />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.address.viewAddress,
-                element: <UserAddress />,
+                element: (
+                    <Suspense>
+                        <UserAddress />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.address.editAddress + ":addressId",
-                element: <EditAddress />,
+                element: (
+                    <Suspense>
+                        <EditAddress />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.payment.viewPayment,
-                element: <UserPayment />,
+                element: (
+                    <Suspense>
+                        <UserPayment />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.payment.createPayment,
-                element: <AddPayment />,
+                element: (
+                    <Suspense>
+                        <AddPayment />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.payment.editPayment + ":paymentId",
-                element: <EditPayment />,
+                element: (
+                    <Suspense>
+                        <EditPayment />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.order.createOrder,
-                element: <CreateOrder />,
+                element: (
+                    <Suspense>
+                        <CreateOrder />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.order.viewOrder,
-                element: <UserOrder />,
+                element: (
+                    <Suspense>
+                        <UserOrder />
+                    </Suspense>
+                ),
             },
             {
                 path:
                     ComponentPath.user.order.orderDetai.viewOrderDetail +
                     ":orderId",
-                element: <UserOrderDetail />,
+                element: (
+                    <Suspense>
+                        <UserOrderDetail />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.feedback.createFeedback + ":orderId",
-                element: <CreateFeedback />,
+                element: (
+                    <Suspense>
+                        <CreateFeedback />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.feedback.viewFeedback,
-                element: <ManageFeedBack />,
+                element: (
+                    <Suspense>
+                        <ManageFeedBack />
+                    </Suspense>
+                ),
             },
             {
                 path:
                     ComponentPath.user.feedback.editFeedback +
                     ":customerFeedbackId",
-                element: <EditFeedback />,
+                element: (
+                    <Suspense>
+                        <EditFeedback />
+                    </Suspense>
+                ),
             },
             {
                 path:
                     ComponentPath.user.document.createDocument +
                     ":orderId/:userId",
-                element: <AddDocument />,
+                element: (
+                    <Suspense>
+                        <AddDocument />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.document.editDocument + ":documentId",
-                element: <EditDocument />,
+                element: (
+                    <Suspense>
+                        <EditDocument />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.document.viewDocument + ":orderId",
-                element: <ManageDocument />,
+                element: (
+                    <Suspense>
+                        <ManageDocument />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.notification.createNotification,
-                element: <CreateNotification />,
+                element: (
+                    <Suspense>
+                        <CreateNotification />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.dashboard,
-                element: <UserDashboard />,
+                element: (
+                    <Suspense>
+                        <UserDashboard />
+                    </Suspense>
+                ),
             },
             {
                 path: ComponentPath.user.notification.viewNotification,
-                element: <GetNotification />,
+                element: (
+                    <Suspense>
+                        <GetNotification />
+                    </Suspense>
+                ),
             },
             {
-                path: ComponentPath.user.notification.viewNotification,
-                element: <GetNotification />,
-            },
-            {
-                element: <AdminRoute />,
+                element: (
+                    <Suspense>
+                        <AdminRoute />
+                    </Suspense>
+                ),
                 children: [
                     {
                         path: ComponentPath.admin.dashboard,
-                        element: <AdminDashboard />,
+                        element: (
+                            <Suspense>
+                                <AdminDashboard />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.route.manageRoute,
-                        element: <ManageRoute />,
+                        element: (
+                            <Suspense>
+                                <ManageRoute />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.feedback.manageFeedback,
-                        element: <ViewFeedback />,
+                        element: (
+                            <Suspense>
+                                <ViewFeedback />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.route.createRoute,
-                        element: <CreateRoute />,
+                        element: (
+                            <Suspense>
+                                <CreateRoute />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.user.manageUser,
-                        element: <ManageUser />,
+                        element: (
+                            <Suspense>
+                                <ManageUser />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.user.editUser + ":id",
-                        element: <UpdateUser />,
+                        element: (
+                            <Suspense>
+                                <UpdateUser />
+                            </Suspense>
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.address.manageUserAddress +
                             ":id",
-                        element: <ManageUserAddress />,
+                        element: (
+                            <Suspense>
+                                <ManageUserAddress />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.koi.manageKoi,
-                        element: <ManageKoi />,
+                        element: (
+                            <Suspense>
+                                <ManageKoi />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.koi.editKoi + ":koiId",
-                        element: <EditKoi />,
+                        element: (
+                            <Suspense>
+                                <EditKoi />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.koi.createKoi,
-                        element: <CreatKoi />,
+                        element: (
+                            <Suspense>
+                                <CreatKoi />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.order.service
                             .manageOrderService,
-                        element: <ManageOrderServiceDetail />,
+                        element: (
+                            <Suspense>
+                                <ManageOrderServiceDetail />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.order.service
                             .createOrderService,
-                        element: <AddOrderServiceDetail />,
+                        element: (
+                            <Suspense>
+                                <AddOrderServiceDetail />
+                            </Suspense>
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.order.service.editOrderService +
                             ":id",
-                        element: <EditOrderServiceDetail />,
+                        element: (
+                            <Suspense>
+                                <EditOrderServiceDetail />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.payment.managePaymentType,
-                        element: <ManagePaymentType />,
+                        element: (
+                            <Suspense>
+                                <ManagePaymentType />
+                            </Suspense>
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.payment.editPaymentType + ":id",
-                        element: <EditPaymentType />,
+                        element: (
+                            <Suspense>
+                                <EditPaymentType />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.payment.addPaymentType,
-                        element: <AddPaymentType />,
+                        element: (
+                            <Suspense>
+                                <AddPaymentType />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.faq.manageFaq,
-                        element: <ManageFaq />,
+                        element: (
+                            <Suspense>
+                                <ManageFaq />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.faq.editFaq + ":faqId",
-                        element: <UpdateFaq />,
+                        element: (
+                            <Suspense>
+                                <UpdateFaq />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.faq.createFaq,
-                        element: <NewFaq />,
+                        element: (
+                            <Suspense>
+                                <NewFaq />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.order.manageOrder,
-                        element: <ManageOrder />,
+                        element: (
+                            <Suspense>
+                                <ManageOrder />
+                            </Suspense>
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.order.manageOrderDetail +
                             ":orderId",
-                        element: <ManageOrderDetail />,
+                        element: (
+                            <Suspense>
+                                <ManageOrderDetail />
+                            </Suspense>
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.report.createReport +
                             ":orderId",
-                        element: <CreateTransportationReportDetails />,
+                        element: (
+                            <Suspense>
+                                <CreateTransportationReportDetails />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.report.manageReport,
-                        element: <ManageTransportationReportDetails />,
+                        element: (
+                            <Suspense>
+                                <ManageTransportationReportDetails />
+                            </Suspense>
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.report.editReport + ":reportId",
-                        element: <EditTransportationReportDetails />,
+                        element: (
+                            <Suspense>
+                                <EditTransportationReportDetails />
+                            </Suspense>
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.blogNews.editBlogNews +
                             ":postId",
-                        element: <EditBlogNews />,
+                        element: (
+                            <Suspense>
+                                <EditBlogNews />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.blogNews.manageBlogNews,
-                        element: <ManageBlogNews />,
+                        element: (
+                            <Suspense>
+                                <ManageBlogNews />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.blogNews.createBlogNews,
-                        element: <CreateBlogNews />,
+                        element: (
+                            <Suspense>
+                                <CreateBlogNews />
+                            </Suspense>
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.certification
                                 .editCertification + ":certificationId",
-                        element: <EditCertification />,
+                        element: (
+                            <Suspense>
+                                <EditCertification />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.certification
                             .manageCertification,
-                        element: <ManageCertification />,
+                        element: (
+                            <Suspense>
+                                <ManageCertification />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.certification
                             .createCertification,
-                        element: <CreateCertification />,
+                        element: (
+                            <Suspense>
+                                <CreateCertification />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.notification
                             .manageNotification,
-                        element: <ManageNotification />,
+                        element: (
+                            <Suspense>
+                                <ManageNotification />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.order.document
                             .manageOrderDocument,
-                        element: <ManageOrderDocument />,
+                        element: (
+                            <Suspense>
+                                <ManageOrderDocument />
+                            </Suspense>
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.order.document
                                 .createOrderDocument +
                             ":orderId/:orderStatusId",
-                        element: <CreateOrderDocument />,
+                        element: (
+                            <Suspense>
+                                <CreateOrderDocument />
+                            </Suspense>
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.order.document
                                 .editOrderDocument + ":orderId",
-                        element: <EditOrderDocument />,
+                        element: (
+                            <Suspense>
+                                <EditOrderDocument />
+                            </Suspense>
+                        ),
                     },
                     {
                         path: ComponentPath.admin.dashboard,
-                        element: <AdminDashboard />,
+                        element: (
+                            <Suspense>
+                                <AdminDashboard />
+                            </Suspense>
+                        ),
                     },
                 ],
             },

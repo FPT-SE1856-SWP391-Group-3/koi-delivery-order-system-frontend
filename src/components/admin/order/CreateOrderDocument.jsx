@@ -3,6 +3,8 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { Box, Button, TextField, Typography } from "@mui/material"
 import api from "../../../api/CallAPI"
 import "../order/CreateOrderDocument.css"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function CreateOrderDocument({
     orderId,
@@ -32,20 +34,21 @@ export default function CreateOrderDocument({
                 if (response.success) {
                     console.log("Document uploaded successfully!")
                 } else {
-                    alert("Failed to add document!")
+                    UserToast("error", "Failed to add document!")
                 }
             })
-            alert("All documents added successfully!")
+            UserToast("success", "Document added successfully!")
             // onAddSuccess(); // Update list after successful addition
             onClose() // Close modal
         } catch (error) {
             console.error("Error:", error)
-            alert("Error! Please try again.")
+            UserToast("error", "Error! Please try again.")
         }
     }
 
     return (
         <Box className="adddocument-container" p={3}>
+            <ToastContainer />
             <Typography
                 variant="h5"
                 component="h1"

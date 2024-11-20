@@ -100,9 +100,6 @@ export default function UserAppNavbar() {
             onClose={handleMenuClose}
         >
             <MenuItem onClick={handleMenuClose}>
-                <a href={ComponentPath.user.profile.viewProfile}>Profile</a>
-            </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
                 <a href="/logout">Log Out</a>
             </MenuItem>
         </Menu>

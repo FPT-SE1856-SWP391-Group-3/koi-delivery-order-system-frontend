@@ -13,6 +13,9 @@ import {
     InputLabel,
     Button,
 } from "@mui/material"
+import UserToast from "../alert/UserToast"
+import ComponentPath from "../../../routes/ComponentPath"
+import { ToastContainer } from "react-toastify"
 
 export default function AddPayment() {
     const { register, handleSubmit } = useForm()
@@ -25,19 +28,20 @@ export default function AddPayment() {
             const response = await api.post("Payments/", data)
 
             if (response.data.success) {
-                alert("Thêm thành công!")
-                navigate("/user-payment")
+                UserToast("success", "Add payment successfully!")
+                navigate(ComponentPath.user.payment.viewPayment)
             } else {
-                alert("Thêm thất bại!")
+                UserToast("error", "Failed to add payment!")
             }
         } catch (error) {
             console.error("Error:", error)
-            alert("Error! Please try again.")
+            UserToast("error", "Error! Please try again.")
         }
     }
 
     return (
         <Container maxWidth="sm">
+            <ToastContainer />
             <Box sx={{ mt: 4, mb: 4 }}>
                 <Typography
                     variant="h4"

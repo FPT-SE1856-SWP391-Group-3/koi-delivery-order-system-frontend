@@ -12,6 +12,8 @@ import {
     Rating,
 } from "@mui/material"
 import ComponentPath from "../../../routes/ComponentPath"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function CreateFeedback({ orderId, onSuccess }) {
     const {
@@ -32,7 +34,7 @@ export default function CreateFeedback({ orderId, onSuccess }) {
             setValue("userId", userId)
         } else {
             console.error("User ID is missing in localStorage.")
-            alert("User ID is missing. Please log in again.")
+            UserToast("error", "User ID is missing. Please log in again.")
             navigate("/login") // Redirect to login if userId is missing
         }
     }, [orderId, userId, setValue, navigate])
@@ -42,7 +44,7 @@ export default function CreateFeedback({ orderId, onSuccess }) {
 
         try {
             if (!data) {
-                alert("Error! Data is null. Please try again.")
+                UserToast("error", "Invalid data. Please try again.")
                 return
             }
 
@@ -57,25 +59,26 @@ export default function CreateFeedback({ orderId, onSuccess }) {
                 .post("CustomerFeedbacks/", payload)
                 .then((response) => {
                     if (response) {
-                        alert("Thêm thành công!")
+                        UserToast("success", "Add feedback successfully!")
                         if (onSuccess) onSuccess() // Callback to refresh feedback list after creation
                         navigate(ComponentPath.user.feedback.viewFeedback)
                     } else {
-                        alert("Thêm thất bại!")
+                        UserToast("error", "Failed to add feedback!")
                     }
                 })
                 .catch((error) => {
                     console.error("Error during submission:", error)
-                    alert("Error! Please try again.")
+                    UserToast("error", "Error! Please try again.")
                 })
         } catch (error) {
             console.error("Error during submission:", error)
-            alert("Error! Please try again.")
+            UserToast("error", "Error! Please try again.")
         }
     }
 
     return (
         <Box sx={{ p: 2 }}>
+            <ToastContainer />
             <Container maxWidth="md">
                 <Box sx={{ textAlign: "center", mb: 4 }}>
                     <Typography variant="h4">Thêm Phản hồi mới</Typography>

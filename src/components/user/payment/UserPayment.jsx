@@ -21,6 +21,8 @@ import { Grid } from "@mui/joy"
 import EditPayment from "./EditPayment"
 import AddPayment from "./AddPayment"
 import { ModalFooter } from "react-bootstrap"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function UserPayment() {
     const [payments, setPayments] = useState([])
@@ -35,10 +37,10 @@ export default function UserPayment() {
                     setPayments(data.payment)
                     console.log(data.payment)
                 } else {
-                    alert("Không có phương thức thanh toán!")
+                    UserToast("error", "No payment found.")
                 }
             } catch {
-                alert("An error has occurred. Please try again.")
+                UserToast("error", "An error occurred while fetching payments.")
             }
         }
         fetchPayments()
@@ -51,18 +53,18 @@ export default function UserPayment() {
         try {
             api.del("Payments/" + paymentId).then((data) => {
                 if (data.success) {
-                    alert("Xóa thành công!")
+                    UserToast("success", "Delete successful!")
                     const newPayments = payments.filter(
                         (payment) => payment.paymentId !== paymentId
                     )
                     setPayments(newPayments)
                 } else {
-                    alert("Xóa thất bại!")
+                    UserToast("error", "Delete failed!")
                 }
             })
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast("error", "An error occurred while deleting the payment.")
         }
     }
 
@@ -79,27 +81,28 @@ export default function UserPayment() {
 
     return (
         <UserSideNav>
+            <ToastContainer />
             <Box sx={{ flexGrow: 1, p: 3 }}>
                 <Grid spacing={3}>
                     <Grid item xs={3} />
                     <Grid item xs={9}>
                         <Paper sx={{ p: 3 }}>
                             <Typography variant="h4" gutterBottom>
-                                Quản lý phương thức thanh toán
+                                Manage Payment
                             </Typography>
                             <TableContainer component={Paper}>
                                 <Table>
                                     <TableHead>
                                         <TableRow>
+                                            <TableCell>Payment ID</TableCell>
+                                            <TableCell>Full Name</TableCell>
                                             <TableCell>
-                                                Mã phương thức thanh toán
+                                                Payment Method
                                             </TableCell>
-                                            <TableCell>Chủ thẻ</TableCell>
                                             <TableCell>
-                                                Phương thức thanh toán
+                                                Payment Number
                                             </TableCell>
-                                            <TableCell>Số thẻ</TableCell>
-                                            <TableCell>Thao tác</TableCell>
+                                            <TableCell>Action</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -136,7 +139,7 @@ export default function UserPayment() {
                                                                     )
                                                                 }
                                                             >
-                                                                Xóa
+                                                                Delete
                                                             </Button>
                                                             <Button
                                                                 variant="contained"
@@ -146,7 +149,7 @@ export default function UserPayment() {
                                                                     )
                                                                 }
                                                             >
-                                                                Sửa
+                                                                Update
                                                             </Button>
                                                         </Stack>
                                                     </TableCell>
@@ -181,8 +184,7 @@ export default function UserPayment() {
                                                             }}
                                                         >
                                                             <h2 id="detail-modal-title">
-                                                                Chi tiết đơn
-                                                                hàng
+                                                                Order Detail
                                                             </h2>
                                                             <EditPayment
                                                                 id={
@@ -197,7 +199,7 @@ export default function UserPayment() {
                                                                         handleCloseModal
                                                                     }
                                                                 >
-                                                                    Đóng
+                                                                    Close
                                                                 </Button>
                                                             </ModalFooter>
                                                         </Box>
@@ -232,7 +234,7 @@ export default function UserPayment() {
                                                             }}
                                                         >
                                                             <h2 id="add-payment-modal-title">
-                                                                Thêm Thanh Toán
+                                                                Add Payment
                                                             </h2>
                                                             <AddPayment />
                                                             <ModalFooter>
@@ -243,7 +245,7 @@ export default function UserPayment() {
                                                                         handleCloseModal
                                                                     }
                                                                 >
-                                                                    Đóng
+                                                                    Close
                                                                 </Button>
                                                             </ModalFooter>
                                                         </Box>
@@ -259,7 +261,7 @@ export default function UserPayment() {
                                 onClick={() => setShowAddPaymentModal(true)}
                                 sx={{ mt: 3 }}
                             >
-                                Thêm phương thức thanh toán
+                                Add Payment
                             </Button>
                         </Paper>
                     </Grid>

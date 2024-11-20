@@ -9,6 +9,7 @@ import home from "../../../assets/home.png"
 import ComponentPath from "routes/ComponentPath"
 import { Alert } from "@mui/material"
 import { ToastContainer } from "react-toastify"
+import UserToast from "../alert/UserToast"
 
 export default function Login() {
     const {
@@ -53,7 +54,7 @@ export default function Login() {
                                 navigate(admin)
                                 break
                             case 2:
-                                navigate(ComponentPath.user.dashboard)
+                                navigate(ComponentPath.user.order.viewOrder)
                                 break
                             case 3:
                                 navigate(ComponentPath.admin.dashboard)
@@ -62,20 +63,20 @@ export default function Login() {
                                 navigate(ComponentPath.admin.dashboard)
                                 break
                             default:
-                                alert("Không xác định được vai trò người dùng")
+                                UserToast("error", "Not found role")
                                 navigate("/")
                         }
                     }
                 })
                 .catch(() => {
-                    console.log("Đăng nhập thất bại!")
-                    setError("Đăng nhập thất bại!")
+                    console.log("Login failed.")
+                    setError("Login failed.")
                     setIsLoading(false)
                 })
         } catch (error) {
             console.error("Lỗi đang nhập:", error)
             setIsLoading(false)
-            alert("Lỗi đang nhập, vui lòng thử lại.")
+            UserToast("error", "Login failed!")
         }
     }
 
@@ -97,7 +98,7 @@ export default function Login() {
                     navigate(admin)
                     break
                 case 2:
-                    navigate(ComponentPath.user.profile.viewProfile)
+                    navigate(ComponentPath.user.order.viewOrder)
                     break
                 case 3:
                     navigate(ComponentPath.admin.dashboard)
@@ -138,22 +139,22 @@ export default function Login() {
             }
 
             if (data.success) {
-                alert("Đăng nhập bằng Google thành công!")
+                UserToast("success", "Login google successfully!")
                 localStorage.setItem("user", JSON.stringify(data.user))
                 navigate(ComponentPath.user.dashboard)
             } else {
-                alert("Đăng nhập bằng Google thất bại!")
+                UserToast("error", "Failed to login google!")
             }
         } catch (error) {
             console.error("Error during Google login:", error)
-            alert("An error occurred during Google login. Please try again.")
+            UserToast("error", "An error occurred during Google login.")
         }
     }
 
     // Hàm xử lý khi đăng nhập bằng Google thất bại
     const handleGoogleFailure = (error) => {
         console.error("Google Login Failure:", error)
-        alert("Đăng nhập bằng Google thất bại!")
+        UserToast("error", "Failed to login with Google!")
     }
 
     return (

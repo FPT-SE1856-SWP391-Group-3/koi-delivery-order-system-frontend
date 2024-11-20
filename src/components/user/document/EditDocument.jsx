@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import UserSideNav from "../UserSideNav"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function EditDocument() {
     const [customerDocument, setCustomerDocument] = useState({
@@ -23,12 +25,15 @@ export default function EditDocument() {
                             description: data.customerDocument.description,
                         }) // Set giá trị vào state
                     } else {
-                        alert("Không tìm thấy Document!")
+                        UserToast("error", "No document found.")
                     }
                 })
             } catch (error) {
                 console.error("Error fetching Document:", error)
-                alert("An error occurred while fetching the Document.")
+                UserToast(
+                    "error",
+                    "An error occurred while fetching the Document."
+                )
             }
         }
 
@@ -49,33 +54,32 @@ export default function EditDocument() {
             api.putForm("CustomerDocuments/" + documentId, documentData).then(
                 (data) => {
                     if (data.success) {
-                        alert("Cập nhật thành công!")
+                        UserToast("success", "Document updated successfully!")
                         navigate("/admin/manage-document")
                     } else {
-                        alert("Cập nhật thất bại!")
+                        UserToast("error", "Failed to update document!")
                     }
                 }
             )
         } catch (error) {
             console.error("Error during update:", error)
-            alert("An error occurred during update. Please try again.")
+            UserToast("error", "An error occurred during update.")
         }
     }
 
     return (
         <>
             <UserSideNav>
+                <ToastContainer />
                 <div>
                     <div className="container">
                         <div className="row">
                             <div className="col-md-6 offset-md-3">
-                                <h2 className="text-center">
-                                    Cập nhật Document
-                                </h2>
+                                <h2 className="text-center">Update Document</h2>
                                 <form onSubmit={handleSubmit}>
                                     <div className="form-group">
                                         <label htmlFor="documentFile">
-                                            Tệp tài liệu
+                                            Document File
                                         </label>
                                         <input
                                             type="file"
@@ -93,7 +97,7 @@ export default function EditDocument() {
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="description">
-                                            Mô tả
+                                            Description
                                         </label>
                                         <textarea
                                             className="form-control"
@@ -112,7 +116,7 @@ export default function EditDocument() {
                                         type="submit"
                                         className="btn btn-primary"
                                     >
-                                        Cập nhật
+                                        Update
                                     </button>
                                 </form>
                             </div>

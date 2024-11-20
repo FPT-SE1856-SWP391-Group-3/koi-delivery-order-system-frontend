@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react"
 import PropTypes from "prop-types"
-import axios from "axios"
 import "../../css/CreateOrder.css"
-import { Grid } from "@mui/joy"
-import api from "../../../../api/CallAPI"
-import { useForm } from "react-hook-form"
 
-const ReceiverInfo = ({ onChange }) => {
+const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
     const [addresses, setAddresses] = useState([])
     const [cityName, setCityName] = useState("")
     const [districtName, setDistrictName] = useState("")
@@ -34,6 +30,20 @@ const ReceiverInfo = ({ onChange }) => {
         }
         fetchAddressData()
     }, [])
+
+    useEffect(() => {
+        if (resetInput) {
+            setCityName("")
+            setDistrictName("")
+            setWardName("")
+            setPhoneNumber("")
+            setFullName("")
+            setEmail("")
+            setReceiverFullAddressLine("")
+            setReceiverPartAddressLine("")
+            setResetInput(false)
+        }
+    }, [resetInput])
 
     const filteredDistricts =
         addresses.find((address) => address.name === cityName)?.level2s || []
@@ -78,30 +88,30 @@ const ReceiverInfo = ({ onChange }) => {
         <div>
             <h2>Receiver Information</h2>
             <div className="sectionCompo">
-                <label>Phone Number </label>
+                <label>Phone Number* </label>
                 <input
-                    type="number"
+                    type="tel"
+                    pattern="[0-9]{10}"
                     min={0}
                     placeholder="Enter phone number"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                 />
-
-                <label>Full Name</label>
+                <label>Full Name*</label>
                 <input
                     type="text"
                     placeholder="Enter full name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                 />
-                <label>Email</label>
+                {/* <label>Email (Optional)</label>
                 <input
                     type="text"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                />
-                <label htmlFor="city">City/Province</label>
+                /> */}
+                <label htmlFor="city">City/Province*</label>
                 <select
                     value={cityName}
                     onChange={(e) => {
@@ -110,7 +120,7 @@ const ReceiverInfo = ({ onChange }) => {
                         setWardName("")
                     }}
                 >
-                    <option value="">Choose City</option>
+                    <option value="">Choose City*</option>
                     {addresses.map((address) => (
                         <option key={address.level1_id} value={address.name}>
                             {address.name}
@@ -118,7 +128,7 @@ const ReceiverInfo = ({ onChange }) => {
                     ))}
                 </select>
 
-                <label htmlFor="district">District</label>
+                <label htmlFor="district">District*</label>
                 <select
                     value={districtName}
                     onChange={(e) => {
@@ -127,7 +137,7 @@ const ReceiverInfo = ({ onChange }) => {
                     }}
                     disabled={!cityName}
                 >
-                    <option value="">Choose District</option>
+                    <option value="">Choose District*</option>
                     {filteredDistricts.map((district) => (
                         <option key={district.level2_id} value={district.name}>
                             {district.name}
@@ -135,7 +145,7 @@ const ReceiverInfo = ({ onChange }) => {
                     ))}
                 </select>
 
-                <label htmlFor="ward">Ward/Commune</label>
+                <label htmlFor="ward">Ward/Commune*</label>
                 <select
                     value={wardName}
                     onChange={(e) => setWardName(e.target.value)}
@@ -148,7 +158,7 @@ const ReceiverInfo = ({ onChange }) => {
                         </option>
                     ))}
                 </select>
-                <label>Specific Address</label>
+                <label>Specific Address*</label>
                 <input
                     type="text"
                     placeholder="Enter specific address"
@@ -165,6 +175,8 @@ const ReceiverInfo = ({ onChange }) => {
 ReceiverInfo.propTypes = {
     onChange: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
+    resetInput: PropTypes.bool,
+    setResetInput: PropTypes.func,
 }
 
 export default ReceiverInfo

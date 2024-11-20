@@ -31,7 +31,7 @@ export default function ManageCertification() {
                 if (data.success) {
                     setCertifications(data.certifications)
                 } else {
-                    console.log("Không có chứng chỉ!")
+                    console.log("No certifications found.")
                 }
             })
         } catch (error) {
@@ -61,7 +61,7 @@ export default function ManageCertification() {
                 "Certifications/" + selectedCertificationId
             )
             if (data.success) {
-                UserToast("success", "Xóa chứng chỉ thành công!")
+                UserToast("success", "Deleted certification successfully!")
                 setCertifications((prevCertifications) =>
                     prevCertifications.filter(
                         (certification) =>
@@ -71,7 +71,7 @@ export default function ManageCertification() {
                 )
                 closeDeleteModal()
             } else {
-                UserToast("error", "Xóa chứng chỉ thất bại!")
+                UserToast("error", "Deletion failed!")
             }
         } catch (error) {
             console.error("Error during deletion:", error)

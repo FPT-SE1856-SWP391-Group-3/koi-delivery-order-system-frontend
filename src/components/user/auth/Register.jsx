@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useState } from "react"
 import UserToast from "../alert/UserToast"
+import ComponentPath from "../../../routes/ComponentPath"
 
 export default function Register() {
     const {
@@ -31,7 +32,7 @@ export default function Register() {
             setIsLoading(true)
             if (!checkPassword(data.password, data.confirmPassword)) {
                 setIsLoading(false)
-                UserToast("error", "Mật khẩu không khớp!")
+                UserToast("error", "Password and Confirm Password do not match")
                 return
             }
             api.post("Users/register", data)
@@ -39,7 +40,7 @@ export default function Register() {
                     if (data.success) {
                         UserToast(
                             "success",
-                            "Đăng ký thành công! Đang chuyển hướng đến trang đăng nhập..."
+                            "Register successfully! Redirecting to login page..."
                         )
                         setIsLoading(false)
                         setTimeout(() => {
@@ -47,23 +48,22 @@ export default function Register() {
                         }, 3000)
                     } else {
                         setIsLoading(false)
-                        UserToast("error", "Đăng ký thất bại!")
+                        UserToast("error", "Register failed!")
                     }
                 })
                 .catch(() => {
                     setIsLoading(false)
                     UserToast(
                         "error",
-                        "Đăng ký thất bại!, Email hoặc Username đã tồn tại"
+                        "Register failed! Please try again later."
                     )
                 })
         } catch (error) {
             console.error("Register failed", error)
             setIsLoading(false)
-            UserToast("error", "Đăng ký thất bại!")
+            UserToast("error", "Register failed!")
         }
     }
-
     return (
         <>
             <ToastContainer />
@@ -90,16 +90,24 @@ export default function Register() {
                                 </span>
                             )}
                             <form onSubmit={handleSubmit(onSubmit)}>
-                                <label htmlFor="email">Email/SDT</label>
+                                <input
+                                    type="hidden"
+                                    value={
+                                        window.location.origin +
+                                        ComponentPath.user.user.validateEmail
+                                    }
+                                    {...register("clientURI")}
+                                />
+                                <label htmlFor="email">Email</label>
                                 <input
                                     type="text"
                                     id="email"
-                                    placeholder="Email or Phone Number"
+                                    placeholder="Email  "
                                     {...register("email", { required: true })}
                                     className="input-field"
                                 />
 
-                                {errors.username && (
+                                {errors.email && (
                                     <span style={{ color: "red" }}>
                                         This field is required
                                     </span>
@@ -116,14 +124,48 @@ export default function Register() {
                                     })}
                                     className="input-field"
                                 />
-                                {errors.password && (
+                                {errors.username && (
+                                    <span style={{ color: "red" }}>
+                                        This field is required
+                                    </span>
+                                )}
+                                <br />
+
+                                <label htmlFor="fullname">Full Name</label>
+                                <input
+                                    type="text"
+                                    id="fullname"
+                                    placeholder="Full Name"
+                                    {...register("fullname", {
+                                        required: true,
+                                    })}
+                                    className="input-field"
+                                />
+                                {errors.fullname && (
+                                    <span style={{ color: "red" }}>
+                                        This field is required
+                                    </span>
+                                )}
+                                <br />
+                                <label htmlFor="phoneNumber">
+                                    Phone Number
+                                </label>
+                                <input
+                                    type="number"
+                                    id="phoneNumber"
+                                    placeholder="Phone Number"
+                                    {...register("phoneNumber", {
+                                        required: true,
+                                    })}
+                                    className="input-field"
+                                />
+                                {errors.phoneNumber && (
                                     <span style={{ color: "red" }}>
                                         This field is required
                                     </span>
                                 )}
                                 <br />
                                 <label htmlFor="password">Password</label>
-
                                 <div className="password-wrapper">
                                     <input
                                         type="password"

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import "../report/EditTransportationReportDetails.css"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function EditTransportationReportDetails({
     reportId,
@@ -23,11 +25,14 @@ export default function EditTransportationReportDetails({
                 if (data.success) {
                     setUpdateReport(data.transportationReportDetail)
                 } else {
-                    alert("Không tìm thấy báo cáo!")
+                    UserToast("error", "No report found.")
                 }
             } catch (error) {
                 console.error("Error fetching report:", error)
-                alert("An error occurred while fetching the report.")
+                UserToast(
+                    "error",
+                    "An error occurred while fetching the report."
+                )
             }
         }
 
@@ -43,20 +48,24 @@ export default function EditTransportationReportDetails({
                 updateReport
             )
             if (data.success) {
-                alert("Cập nhật thành công!")
+                UserToast("success", "Update report successfully!")
                 onUpdateSuccess() // Gọi callback để tải lại dữ liệu
                 onClose() // Đóng modal sau khi cập nhật
             } else {
-                alert("Cập nhật thất bại!")
+                UserToast("error", "Failed to update report!")
             }
         } catch (error) {
             console.error("Error during update:", error)
-            alert("An error occurred during update. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred during update. Please try again."
+            )
         }
     }
 
     return (
         <div className="updatereport-container">
+            <ToastContainer />
             <h2 className="form-title">Update Transportation Report</h2>
             <form onSubmit={handleSubmit} className="updatereport-form">
                 <div className="form-group">

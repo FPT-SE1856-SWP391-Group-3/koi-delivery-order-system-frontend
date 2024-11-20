@@ -19,6 +19,8 @@ import api from "../../../api/CallAPI"
 
 import SideMenu from "../SideMenu"
 import UserAppBar from "../UserAppNavbar"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function GetNotification() {
     const [notifications, setNotifications] = useState([])
@@ -35,11 +37,14 @@ export default function GetNotification() {
                     setNotifications(data.notifications)
                     console.log(data.notifications)
                 } else {
-                    console.log("Không có thông báo!")
+                    console.log("No notifications found!")
                 }
             })
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred while fetching notifications."
+            )
         }
     }, [user.userId])
 
@@ -47,19 +52,22 @@ export default function GetNotification() {
         try {
             api.del("Notifications/" + notificationId).then((data) => {
                 if (data.success) {
-                    alert("Xóa thành công!")
+                    UserToast("success", "Delete successful!")
                     const newNotifications = notifications.filter(
                         (notification) =>
                             notification.notificationId !== notificationId
                     )
                     setNotifications(newNotifications)
                 } else {
-                    alert("Xóa thất bại!")
+                    UserToast("error", "Delete failed!")
                 }
             })
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred while deleting the notification."
+            )
         }
     }
 
@@ -82,6 +90,7 @@ export default function GetNotification() {
 
     return (
         <div>
+            <ToastContainer />
             <Box sx={{ display: "flex" }}>
                 <SideMenu />
                 <Box component="main" sx={{ flexGrow: 1 }}>
@@ -147,7 +156,7 @@ export default function GetNotification() {
                                                         )
                                                     }
                                                 >
-                                                    Xem đầy đủ
+                                                    View Full Content
                                                 </Button>
                                             </TableCell>
                                         </TableRow>

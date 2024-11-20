@@ -2,6 +2,8 @@ import { useFieldArray, useForm } from "react-hook-form"
 import { useNavigate, useParams } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import UserSideNav from "../UserSideNav"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function AddDocument({ orderId, userId }) {
     const { control, register, handleSubmit } = useForm()
@@ -38,24 +40,25 @@ export default function AddDocument({ orderId, userId }) {
                             console.log(
                                 `File ${index + 1} uploaded successfully!`
                             )
-                            alert("Thêm thành công!")
+                            UserToast("success", "Add document successfully!")
                         } else {
                             console.log(
                                 `File ${index + 1} uploaded successfully!`
                             )
-                            alert("Thêm thất bại!")
+                            UserToast("error", "Failed to add document!")
                         }
                     }
                 )
             })
         } catch (error) {
             console.error("Error :", error)
-            alert("Error! Please try again.")
+            UserToast("error", "Error! Please try again.")
         }
     }
 
     return (
         <div>
+            <ToastContainer />
             <UserSideNav>
                 <div className="container">
                     <div className="row">

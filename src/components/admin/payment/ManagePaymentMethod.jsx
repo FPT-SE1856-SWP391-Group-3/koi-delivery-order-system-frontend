@@ -18,6 +18,8 @@ import {
 } from "@mui/material"
 import Modal from "react-modal"
 import AdminSideMenu from "../components/AdminSideMenu"
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 Modal.setAppElement("#root")
 
@@ -35,10 +37,13 @@ export default function ManagePaymentMethod() {
             if (data.success) {
                 setPaymentMethods(data.paymentMethods)
             } else {
-                console.log("Không có phương thức thanh toán!")
+                console.log("No payment methods found!")
             }
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast(
+                "error",
+                "An error occurred while fetching payment methods."
+            )
         }
     }
 
@@ -65,7 +70,7 @@ export default function ManagePaymentMethod() {
                 "PaymentMethods/" + selectedPaymentMethodId
             )
             if (data.success) {
-                alert("Xóa thành công!")
+                UserToast("success", "Delete payment method successfully!")
                 const newPaymentMethods = paymentMethods.filter(
                     (paymentMethod) =>
                         paymentMethod.paymentMethodId !==
@@ -73,11 +78,11 @@ export default function ManagePaymentMethod() {
                 )
                 setPaymentMethods(newPaymentMethods)
             } else {
-                alert("Xóa thất bại!")
+                UserToast("error", "Failed to delete payment method!")
             }
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast("error", "An error occurred. Please try again.")
         }
         closeDeleteModal()
     }
@@ -105,6 +110,7 @@ export default function ManagePaymentMethod() {
 
     return (
         <Box display="flex">
+            <ToastContainer />
             <AdminSideMenu />
             <Box flex={1} padding={3}>
                 <Typography variant="h5" gutterBottom fontWeight="bold">
