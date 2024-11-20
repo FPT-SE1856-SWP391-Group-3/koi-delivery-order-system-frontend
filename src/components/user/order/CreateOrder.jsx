@@ -63,11 +63,10 @@ function CreateOrder() {
     }, [])
 
     const validateForm = () => {
-        if (
-            !senderInfo.fullName ||
-            !senderInfo.email ||
-            !senderInfo.phoneNumber ||
-            !senderInfo.addressLine ||
+        if (!senderInfo.addressLine ) {
+            UserToast("error", "Please update your address in your profile!")
+            return false
+        } else if (
             !receiverInfo.fullName ||
             !receiverInfo.phoneNumber ||
             !receiverInfo.receiverPartAddressLine ||
@@ -153,6 +152,7 @@ function CreateOrder() {
             .then((data) => {
                 if (data.success) {
                     UserToast("success", "Order has been placed")
+                    setResetInput(true)
                 } else {
                     UserToast("error", "Fail to place order")
                 }
@@ -161,7 +161,6 @@ function CreateOrder() {
             .catch((error) => {
                 if (error.code == "notrevalidemail") {
                     UserToast("error", "Email is not valid")
-
                 } else {
                     UserToast(
                         "error",
@@ -170,12 +169,12 @@ function CreateOrder() {
                 }
                 setIsLoading(false)
             })
-            setResetInput(true)
     }, [
         senderInfo,
         receiverInfo,
         senderPackage,
         customerDocument,
+        selectPaymentMethod,
         setIsLoading,
     ])
 

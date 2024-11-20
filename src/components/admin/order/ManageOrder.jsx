@@ -45,6 +45,7 @@ function OrderRow({
     openDocumentModal,
     openReportModal,
     cancelOrder,
+    handleVerifyPayment,
 }) {
     const [open, setOpen] = useState(false)
     const [koiDetails, setKoiDetails] = useState([])
@@ -183,16 +184,22 @@ function OrderRow({
                             >
                                 Update Status
                             </Button>
-                            <Button
-                                onClick={() =>
-                                    openDocumentModal(
-                                        row.orderId,
-                                        row.orderStatusId
-                                    )
-                                }
-                            >
-                                Order Document
-                            </Button>
+
+                            {row.orderStatus.orderStatusId == 4 ||
+                            row.orderStatus.orderStatusId == 6 ? (
+                                <Button
+                                    onClick={() =>
+                                        openDocumentModal(
+                                            row.orderId,
+                                            row.orderStatusId
+                                        )
+                                    }
+                                >
+                                    Update Document
+                                </Button>
+                            ) : (
+                                <Button disabled>Update Document</Button>
+                            )}
                             <Button
                                 onClick={() => openReportModal(row.orderId)}
                             >
@@ -204,6 +211,19 @@ function OrderRow({
                             >
                                 Cancel
                             </Button>
+                            {user.roleId >= 4 &&
+                            row.paymentHistory?.paymentStatusId != 2 &&
+                            row.orderStatus.orderStatusId == 9 ? (
+                                <Button
+                                    onClick={() =>
+                                        handleVerifyPayment(row.orderId)
+                                    }
+                                >
+                                    Verify Payment
+                                </Button>
+                            ) : (
+                                <Button disabled>Verify Payment</Button>
+                            )}
                         </Box>
                     </TableCell>
                     <TableCell>{row.deliveryStaffId}</TableCell>
@@ -648,10 +668,35 @@ export default function ManageOrder() {
         fetchOrders()
     }
 
+    const handleVerifyPayment = async (orderId) => {
+        try {
+            api.post(`Payments/cod/verify/${orderId}`)
+                .then((data) => {
+                    if (data.success) {
+                        setAlertMessage("Verify payment successfully!")
+                        setAlertSeverity("success")
+                        setAlertOpen(true)
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error verifying payment:", error)
+                    setAlertMessage("Failed to verify payment.")
+                    setAlertSeverity("error")
+                    setAlertOpen(true)
+                })
+        } catch (error) {
+            console.error("Error verifying payment:", error)
+            setAlertMessage("Failed to verify payment.")
+            setAlertSeverity("error")
+            setAlertOpen(true)
+        }
+    }
+
     return (
         <Box display="flex">
             {/* Admin Side Menu */}
             <AdminSideMenu />
+            {/* <ToastContainer containerId="Order"/> */}
             {/* Main Table Area */}
             <Box width="100%" padding={2}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -766,6 +811,7 @@ export default function ManageOrder() {
                                         openDocumentModal={openDocumentModal}
                                         openReportModal={openReportModal}
                                         cancelOrder={cancelOrder}
+                                        handleVerifyPayment={handleVerifyPayment}
                                     />
                                 ) : null
                             )}
