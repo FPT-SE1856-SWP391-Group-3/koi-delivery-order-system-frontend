@@ -1,5 +1,4 @@
 export default function SelectPaymentMethod({ setSelectPaymentMethod }) {
-
     return (
         <>
             <div>

@@ -811,7 +811,9 @@ export default function ManageOrder() {
                                         openDocumentModal={openDocumentModal}
                                         openReportModal={openReportModal}
                                         cancelOrder={cancelOrder}
-                                        handleVerifyPayment={handleVerifyPayment}
+                                        handleVerifyPayment={
+                                            handleVerifyPayment
+                                        }
                                     />
                                 ) : null
                             )}

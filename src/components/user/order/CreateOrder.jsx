@@ -63,7 +63,7 @@ function CreateOrder() {
     }, [])
 
     const validateForm = () => {
-        if (!senderInfo.addressLine ) {
+        if (!senderInfo.addressLine) {
             UserToast("error", "Please update your address in your profile!")
             return false
         } else if (
@@ -146,8 +146,6 @@ function CreateOrder() {
 
         formData.append("PaymentMethod", selectPaymentMethod)
 
-
-
         api.postForm("Orders", formData)
             .then((data) => {
                 if (data.success) {
@@ -200,7 +198,7 @@ function CreateOrder() {
         setIsDropdownOpen((prevOpen) => !prevOpen)
     }
 
-    console.log(selectPaymentMethod);
+    console.log(selectPaymentMethod)
 
     return (
         <>
