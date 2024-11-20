@@ -1,93 +1,177 @@
-import { createBrowserRouter } from "react-router-dom";
-import { lazy, Suspense } from "react";
-import ComponentPath from "./ComponentPath";
-import api from "../api/CallAPI";
-import path from "path";
+import { createBrowserRouter } from "react-router-dom"
+import { lazy, Suspense } from "react"
+import ComponentPath from "./ComponentPath"
+import api from "../api/CallAPI"
+import path from "path"
 
 // Lazy-loaded components
-const ManageUserAddress = lazy(() => import("../components/admin/address/ManageUserAddress"));
-const ManageUser = lazy(() => import("../components/admin/user/ManageUser"));
-const UpdateUser = lazy(() => import("../components/admin/user/UpdateUser"));
-const HomePage = lazy(() => import("../components/HomePage"));
-const BlogNews = lazy(() => import("../components/BlogNews"));
-const CustomerSupport = lazy(() => import("../components/CustomerSupport"));
-const Service = lazy(() => import("../components/Service"));
-const Recruitment = lazy(() => import("../components/Recruitment"));
-const AddAddress = lazy(() => import("../components/user/address/AddAddress"));
-const EditAddress = lazy(() => import("../components/user/address/EditAddress"));
-const UserAddress = lazy(() => import("../components/user/address/UserAddress"));
-const Login = lazy(() => import("../components/user/auth/Login"));
-const Logout = lazy(() => import("../components/user/auth/Logout"));
-const Register = lazy(() => import("../components/user/auth/Register"));
-const ViewProfile = lazy(() => import("@components/user/profile/ViewProfile"));
-const AdminRoute = lazy(() => import("./AdminRoute"));
-const ProtectedRoute = lazy(() => import("./ProtectedRoute"));
-const UserPayment = lazy(() => import("../components/user/payment/UserPayment"));
-const AddPayment = lazy(() => import("../components/user/payment/AddPayment"));
-const EditPayment = lazy(() => import("../components/user/payment/EditPayment"));
-const ManageKoi = lazy(() => import("../components/admin/koi/ManageKoi"));
-const EditKoi = lazy(() => import("../components/admin/koi/EditKoi"));
-const CreatKoi = lazy(() => import("../components/admin/koi/CreateKoi"));
-const ManageOrderServiceDetail = lazy(() => import("../components/admin/orderServiceDetail/ManageOrderServiceDetail"));
-const AddOrderServiceDetail = lazy(() => import("../components/admin/orderServiceDetail/AddOrderServiceDetail"));
-const EditOrderServiceDetail = lazy(() => import("../components/admin/orderServiceDetail/EditOrderServiceDetail"));
-const ManagePaymentType = lazy(() => import("../components/admin/payment/ManagePaymentMethod"));
-const EditPaymentType = lazy(() => import("../components/admin/payment/EditPaymentMethod"));
-const AddPaymentType = lazy(() => import("../components/admin/payment/AddPaymentMethod"));
-const ManageFaq = lazy(() => import("../components/admin/faq/ManageFaq"));
-const UpdateFaq = lazy(() => import("../components/admin/faq/UpdateFaq"));
-const NewFaq = lazy(() => import("../components/admin/faq/NewFaq"));
-const CreateOrder = lazy(() => import("../components/user/order/CreateOrder"));
-const UserOrder = lazy(() => import("../components/user/order/UserOrder"));
-const UserOrderDetail = lazy(() => import("../components/user/order/UserOrderDetail"));
-const ManageOrder = lazy(() => import("../components/admin/order/ManageOrder"));
-const ManageOrderDetail = lazy(() => import("../components/admin/order/ManageOrderDetail"));
-const CreateFeedback = lazy(() => import("../components/user/feedback/CreateFeedback"));
-const ManageFeedBack = lazy(() => import("../components/user/feedback/ManageFeedback"));
-const EditFeedback = lazy(() => import("../components/user/feedback/EditFeedback"));
-const AddDocument = lazy(() => import("../components/user/document/AddDocument"));
-const CreateTransportationReportDetails = lazy(() => import("../components/admin/report/CreateTransportationReportDetails"));
-const ManageTransportationReportDetails = lazy(() => import("../components/admin/report/ManageTransportationReportDetails"));
-const EditProfile = lazy(() => import("../components/user/profile/EditProfile"));
-const EditTransportationReportDetails = lazy(() => import("../components/admin/report/EditTransportationReportDetails"));
-const EditBlogNews = lazy(() => import("../components/admin/blogandnews/EditBlogNews"));
-const ManageBlogNews = lazy(() => import("../components/admin/blogandnews/ManageBlogNews"));
-const CreateBlogNews = lazy(() => import("../components/admin/blogandnews/CreateBlogNews"));
-const UploadFile = lazy(() => import("../components/test/UploadFile"));
-const ManageCertification = lazy(() => import("../components/admin/certification/ManageCertification"));
-const EditCertification = lazy(() => import("../components/admin/certification/EditCertification"));
-const CreateCertification = lazy(() => import("../components/admin/certification/CreateCertification"));
-const EditDocument = lazy(() => import("../components/user/document/EditDocument"));
-const ManageDocument = lazy(() => import("../components/user/document/ManageDocument"));
-const CreateNotification = lazy(() => import("../components/admin/notification/CreateNotification"));
-const ManageNotification = lazy(() => import("../components/admin/notification/ManageNotification"));
-const GetNotification = lazy(() => import("../components/user/notification/GetNotification"));
-const UpdatePassword = lazy(() => import("../components/user/profile/UpdatePassword"));
-const ManageOrderDocument = lazy(() => import("../components/admin/order/OrderDocument"));
-const EditOrderDocument = lazy(() => import("../components/admin/order/EditOrderDocument"));
-const CreateOrderDocument = lazy(() => import("../components/admin/order/CreateOrderDocument"));
-const UserDashboard = lazy(() => import("@components/user/dashboard/UserDashboard"));
-const AdminDashboard = lazy(() => import("@components/admin/dashboard/AdminDashboard"));
-const CreateOrderInter = lazy(() => import("../components/user/order/CreateOrderInter"));
-const ChoosePayment = lazy(() => import("../components/user/payment/ChoosePayment"));
-const CallBackPayment = lazy(() => import("../components/user/payment/CallBackPayment"));
-const Dashboard = lazy(() => import("../components/user/dashboard/Dashboard"));
-const ViewOrders = lazy(() => import("../components/user/profile/ViewOrders"));
-const ManageRoute = lazy(() => import("../components/admin/order/ManageRoute"));
-const ForgetPassword = lazy(() => import("../components/user/auth/ForgetPassword"));
-const ResetPassword = lazy(() => import("../components/user/auth/ResetPassword"));
-const CreateRoute = lazy(() => import("../components/admin/order/CreateRoute"));
-const ViewFeedback = lazy(() => import("../components/admin/feedback/ManageFeedback"));
-const ValidateEmailCallBack = lazy(() => import("../components/user/auth/ValidateEmailCallBack"));
+const ManageUserAddress = lazy(
+    () => import("../components/admin/address/ManageUserAddress")
+)
+const ManageUser = lazy(() => import("../components/admin/user/ManageUser"))
+const UpdateUser = lazy(() => import("../components/admin/user/UpdateUser"))
+const HomePage = lazy(() => import("../components/HomePage"))
+const BlogNews = lazy(() => import("../components/BlogNews"))
+const CustomerSupport = lazy(() => import("../components/CustomerSupport"))
+const Service = lazy(() => import("../components/Service"))
+const Recruitment = lazy(() => import("../components/Recruitment"))
+const AddAddress = lazy(() => import("../components/user/address/AddAddress"))
+const EditAddress = lazy(() => import("../components/user/address/EditAddress"))
+const UserAddress = lazy(() => import("../components/user/address/UserAddress"))
+const Login = lazy(() => import("../components/user/auth/Login"))
+const Logout = lazy(() => import("../components/user/auth/Logout"))
+const Register = lazy(() => import("../components/user/auth/Register"))
+const ViewProfile = lazy(() => import("@components/user/profile/ViewProfile"))
+const AdminRoute = lazy(() => import("./AdminRoute"))
+const ProtectedRoute = lazy(() => import("./ProtectedRoute"))
+const UserPayment = lazy(() => import("../components/user/payment/UserPayment"))
+const AddPayment = lazy(() => import("../components/user/payment/AddPayment"))
+const EditPayment = lazy(() => import("../components/user/payment/EditPayment"))
+const ManageKoi = lazy(() => import("../components/admin/koi/ManageKoi"))
+const EditKoi = lazy(() => import("../components/admin/koi/EditKoi"))
+const CreatKoi = lazy(() => import("../components/admin/koi/CreateKoi"))
+const ManageOrderServiceDetail = lazy(
+    () =>
+        import(
+            "../components/admin/orderServiceDetail/ManageOrderServiceDetail"
+        )
+)
+const AddOrderServiceDetail = lazy(
+    () => import("../components/admin/orderServiceDetail/AddOrderServiceDetail")
+)
+const EditOrderServiceDetail = lazy(
+    () =>
+        import("../components/admin/orderServiceDetail/EditOrderServiceDetail")
+)
+const ManagePaymentType = lazy(
+    () => import("../components/admin/payment/ManagePaymentMethod")
+)
+const EditPaymentType = lazy(
+    () => import("../components/admin/payment/EditPaymentMethod")
+)
+const AddPaymentType = lazy(
+    () => import("../components/admin/payment/AddPaymentMethod")
+)
+const ManageFaq = lazy(() => import("../components/admin/faq/ManageFaq"))
+const UpdateFaq = lazy(() => import("../components/admin/faq/UpdateFaq"))
+const NewFaq = lazy(() => import("../components/admin/faq/NewFaq"))
+const CreateOrder = lazy(() => import("../components/user/order/CreateOrder"))
+const UserOrder = lazy(() => import("../components/user/order/UserOrder"))
+const UserOrderDetail = lazy(
+    () => import("../components/user/order/UserOrderDetail")
+)
+const ManageOrder = lazy(() => import("../components/admin/order/ManageOrder"))
+const ManageOrderDetail = lazy(
+    () => import("../components/admin/order/ManageOrderDetail")
+)
+const CreateFeedback = lazy(
+    () => import("../components/user/feedback/CreateFeedback")
+)
+const ManageFeedBack = lazy(
+    () => import("../components/user/feedback/ManageFeedback")
+)
+const EditFeedback = lazy(
+    () => import("../components/user/feedback/EditFeedback")
+)
+const AddDocument = lazy(
+    () => import("../components/user/document/AddDocument")
+)
+const CreateTransportationReportDetails = lazy(
+    () => import("../components/admin/report/CreateTransportationReportDetails")
+)
+const ManageTransportationReportDetails = lazy(
+    () => import("../components/admin/report/ManageTransportationReportDetails")
+)
+const EditProfile = lazy(() => import("../components/user/profile/EditProfile"))
+const EditTransportationReportDetails = lazy(
+    () => import("../components/admin/report/EditTransportationReportDetails")
+)
+const EditBlogNews = lazy(
+    () => import("../components/admin/blogandnews/EditBlogNews")
+)
+const ManageBlogNews = lazy(
+    () => import("../components/admin/blogandnews/ManageBlogNews")
+)
+const CreateBlogNews = lazy(
+    () => import("../components/admin/blogandnews/CreateBlogNews")
+)
+const UploadFile = lazy(() => import("../components/test/UploadFile"))
+const ManageCertification = lazy(
+    () => import("../components/admin/certification/ManageCertification")
+)
+const EditCertification = lazy(
+    () => import("../components/admin/certification/EditCertification")
+)
+const CreateCertification = lazy(
+    () => import("../components/admin/certification/CreateCertification")
+)
+const EditDocument = lazy(
+    () => import("../components/user/document/EditDocument")
+)
+const ManageDocument = lazy(
+    () => import("../components/user/document/ManageDocument")
+)
+const CreateNotification = lazy(
+    () => import("../components/admin/notification/CreateNotification")
+)
+const ManageNotification = lazy(
+    () => import("../components/admin/notification/ManageNotification")
+)
+const GetNotification = lazy(
+    () => import("../components/user/notification/GetNotification")
+)
+const UpdatePassword = lazy(
+    () => import("../components/user/profile/UpdatePassword")
+)
+const ManageOrderDocument = lazy(
+    () => import("../components/admin/order/OrderDocument")
+)
+const EditOrderDocument = lazy(
+    () => import("../components/admin/order/EditOrderDocument")
+)
+const CreateOrderDocument = lazy(
+    () => import("../components/admin/order/CreateOrderDocument")
+)
+const UserDashboard = lazy(
+    () => import("@components/user/dashboard/UserDashboard")
+)
+const AdminDashboard = lazy(
+    () => import("@components/admin/dashboard/AdminDashboard")
+)
+const CreateOrderInter = lazy(
+    () => import("../components/user/order/CreateOrderInter")
+)
+const ChoosePayment = lazy(
+    () => import("../components/user/payment/ChoosePayment")
+)
+const CallBackPayment = lazy(
+    () => import("../components/user/payment/CallBackPayment")
+)
+const Dashboard = lazy(() => import("../components/user/dashboard/Dashboard"))
+const ViewOrders = lazy(() => import("../components/user/profile/ViewOrders"))
+const ManageRoute = lazy(() => import("../components/admin/order/ManageRoute"))
+const ForgetPassword = lazy(
+    () => import("../components/user/auth/ForgetPassword")
+)
+const ResetPassword = lazy(
+    () => import("../components/user/auth/ResetPassword")
+)
+const CreateRoute = lazy(() => import("../components/admin/order/CreateRoute"))
+const ViewFeedback = lazy(
+    () => import("../components/admin/feedback/ManageFeedback")
+)
+const ValidateEmailCallBack = lazy(
+    () => import("../components/user/auth/ValidateEmailCallBack")
+)
 
 // Variables
-var adminUrl = "/admin";
+var adminUrl = "/admin"
 
 // Function to check if the user is admin
 const isAdmin = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    return user && user.roleId >= 3;
-};
+    const user = JSON.parse(localStorage.getItem("user"))
+    return user && user.roleId >= 3
+}
 
 // Create the router configuration
 const router = createBrowserRouter([
@@ -751,4 +835,4 @@ const router = createBrowserRouter([
     },
 ])
 
-export default router;
+export default router

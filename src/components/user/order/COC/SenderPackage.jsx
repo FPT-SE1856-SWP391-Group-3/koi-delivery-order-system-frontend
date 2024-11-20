@@ -247,7 +247,6 @@ SenderPackage.propTypes = {
     setTotalPrice: PropTypes.func.isRequired,
     setTotalServicePrice: PropTypes.func.isRequired,
     setResetInput: PropTypes.func.isRequired,
-
 }
 
 export default SenderPackage
