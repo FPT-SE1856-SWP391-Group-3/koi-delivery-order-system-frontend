@@ -11,6 +11,10 @@ import {
     Typography,
     Fab,
     Grid,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
     Alert,
     Tooltip,
     Modal,
@@ -45,14 +49,17 @@ const CreateRoute = () => {
 
     // Fields for creating a new route
     const [deliveryStaffId, setDeliveryStaffId] = useState("")
+    const [deliveryStaffOptions, setDeliveryStaffOptions] = useState([])
     const [cities, setCities] = useState([])
     const [currentLocation, setCurrentLocation] = useState("")
     const [capacity, setCapacity] = useState("")
+    const [capacityError, setCapacityError] = useState("")
     const [estimatedStartTime, setEstimatedStartTime] = useState(dayjs())
     const [estimatedEndTime, setEstimatedEndTime] = useState(dayjs())
 
     useEffect(() => {
         fetchRoutes()
+        fetchDeliveryStaffOptions()
     }, [])
 
     const fetchRoutes = async () => {
@@ -67,6 +74,29 @@ const CreateRoute = () => {
             console.error("Error fetching routes:", error)
             setError("An error occurred while fetching routes.")
         }
+    }
+    const fetchDeliveryStaffOptions = async () => {
+        try {
+            const response = await api.get("Users")
+            if (response.success && Array.isArray(response.users)) {
+                const filteredUsers = response.users.filter(
+                    (user) => user.roleId === 4
+                )
+                setDeliveryStaffOptions(filteredUsers)
+            } else {
+                console.error("Error fetching delivery staff")
+            }
+        } catch (error) {
+            console.error("Error fetching delivery staff:", error)
+        }
+    }
+    const validateCapacity = (value) => {
+        if (value < 1 || value > 10) {
+            setCapacityError("Capacity must be between 1 and 10")
+            return false
+        }
+        setCapacityError("")
+        return true
     }
 
     const fetchOrdersForRoute = async (routeId) => {
@@ -163,6 +193,10 @@ const CreateRoute = () => {
                 setAlertSeverity("warning")
             }
         } catch (error) {
+            setAlertMessage(
+                "You need to remove all orders from the route before deleting"
+            )
+            setAlertSeverity("warning")
             console.error("Error deleting route:", error)
         }
         setDeleteRouteModalOpen(false)
@@ -173,6 +207,11 @@ const CreateRoute = () => {
     }
 
     const handleRouteSubmit = async () => {
+        if (!validateCapacity(capacity)) {
+            setAlertMessage("Please correct the errors before submitting.")
+            setAlertSeverity("error")
+            return
+        }
         const newRoute = {
             deliveryStaffId: parseInt(deliveryStaffId, 10),
             cities: cities, // Ensure this is a single string, not an array
@@ -258,7 +297,7 @@ const CreateRoute = () => {
                                     <TableCell>Destinations</TableCell>
                                     <TableCell>Estimated Start Time</TableCell>
                                     <TableCell>Estimated End Time</TableCell>
-                                    <TableCell>Delivery Staff ID</TableCell>
+                                    <TableCell>Delivery Staff</TableCell>
                                     <TableCell>Delete Route</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -354,7 +393,11 @@ const CreateRoute = () => {
                                                     {route.estimatedEndTime}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {route.deliveryStaffId}
+                                                    {route.deliveryStaffId}.{" "}
+                                                    {
+                                                        route.deliveryStaff
+                                                            .fullName
+                                                    }
                                                 </TableCell>
                                                 <TableCell>
                                                     <IconButton
@@ -369,13 +412,14 @@ const CreateRoute = () => {
                                                     </IconButton>
                                                 </TableCell>
                                             </TableRow>
+
                                             <TableRow>
                                                 <TableCell
                                                     style={{
                                                         paddingBottom: 0,
                                                         paddingTop: 0,
                                                     }}
-                                                    colSpan={8}
+                                                    colSpan={12}
                                                 >
                                                     <Collapse
                                                         in={
@@ -405,15 +449,18 @@ const CreateRoute = () => {
                                                                         </TableCell>
                                                                         <TableCell>
                                                                             Customer
-                                                                            ID
                                                                         </TableCell>
                                                                         <TableCell>
                                                                             Order
                                                                             Date
                                                                         </TableCell>
                                                                         <TableCell>
-                                                                            Delivery
-                                                                            Date
+                                                                            Pickup
+                                                                            Address
+                                                                        </TableCell>
+                                                                        <TableCell>
+                                                                            Shipping
+                                                                            Address
                                                                         </TableCell>
                                                                         <TableCell>
                                                                             Total
@@ -455,6 +502,13 @@ const CreateRoute = () => {
                                                                                         {
                                                                                             order.customerId
                                                                                         }
+
+                                                                                        .{" "}
+                                                                                        {
+                                                                                            order
+                                                                                                .customer
+                                                                                                .fullName
+                                                                                        }
                                                                                     </TableCell>
                                                                                     <TableCell>
                                                                                         {
@@ -463,7 +517,16 @@ const CreateRoute = () => {
                                                                                     </TableCell>
                                                                                     <TableCell>
                                                                                         {
-                                                                                            order.deliveryDate
+                                                                                            order
+                                                                                                .startAddress
+                                                                                                .addressLine
+                                                                                        }
+                                                                                    </TableCell>
+                                                                                    <TableCell>
+                                                                                        {
+                                                                                            order
+                                                                                                .endAddress
+                                                                                                .addressLine
                                                                                         }
                                                                                     </TableCell>
                                                                                     <TableCell>
@@ -571,18 +634,25 @@ const CreateRoute = () => {
 
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Delivery Staff ID"
-                                    fullWidth
-                                    variant="outlined"
-                                    value={deliveryStaffId}
-                                    onChange={(e) =>
-                                        setDeliveryStaffId(e.target.value)
-                                    }
-                                    type="number"
-                                />
+                                <FormControl fullWidth>
+                                    <InputLabel>Delivery Staff</InputLabel>
+                                    <Select
+                                        value={deliveryStaffId}
+                                        onChange={(e) =>
+                                            setDeliveryStaffId(e.target.value)
+                                        }
+                                    >
+                                        {deliveryStaffOptions.map((staff) => (
+                                            <MenuItem
+                                                key={staff.userId}
+                                                value={staff.userId}
+                                            >
+                                                {`${staff.userId} - ${staff.fullName}`}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
-
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     label="Cities"
@@ -612,10 +682,13 @@ const CreateRoute = () => {
                                     fullWidth
                                     variant="outlined"
                                     value={capacity}
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                         setCapacity(e.target.value)
-                                    }
+                                        validateCapacity(e.target.value)
+                                    }}
                                     type="number"
+                                    error={!!capacityError}
+                                    helperText={capacityError}
                                 />
                             </Grid>
 
