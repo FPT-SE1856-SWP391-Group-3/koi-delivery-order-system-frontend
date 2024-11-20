@@ -241,9 +241,13 @@ const SenderPackage = ({
 }
 
 SenderPackage.propTypes = {
-    onChange: PropTypes.func.isRequired,
     stateChange: PropTypes.func.isRequired,
-    resetInput: PropTypes.bool,
+    setSenderPackage: PropTypes.func.isRequired,
+    setCustomerDocument: PropTypes.func.isRequired,
+    setTotalPrice: PropTypes.func.isRequired,
+    setTotalServicePrice: PropTypes.func.isRequired,
+    setResetInput: PropTypes.func.isRequired,
+
 }
 
 export default SenderPackage

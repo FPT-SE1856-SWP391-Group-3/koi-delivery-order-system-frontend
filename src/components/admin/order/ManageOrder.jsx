@@ -36,6 +36,8 @@ import Modal from "react-modal"
 import api from "../../../api/CallAPI"
 import CreateOrderDocument from "./CreateOrderDocument"
 import CreateTransportationReportDetails from "../report/CreateTransportationReportDetails"
+import { Tooltip } from "@mui/material"
+import { Select, MenuItem } from "@mui/material"
 
 function OrderRow({
     row,
@@ -64,6 +66,8 @@ function OrderRow({
             )
             if (data.success) {
                 setKoiDetails(data.orderDetails || [])
+
+                console.log(koiDetails)
             } else {
                 console.log("No koi details found!")
             }
@@ -130,7 +134,11 @@ function OrderRow({
                         </IconButton>
                     </TableCell>
                     <TableCell>{row.orderId}</TableCell>
-                    <TableCell>{row.customerId}</TableCell>
+                    <TableCell>
+                        <Tooltip title={`Customer ID: ${row.customerId}`} arrow>
+                            <span>{row.customerName}</span>
+                        </Tooltip>
+                    </TableCell>
                     <TableCell>{row.orderDate}</TableCell>
                     <TableCell>
                         {row.paymentHistoryId == null
@@ -139,11 +147,7 @@ function OrderRow({
                               ? "True"
                               : "False"}
                     </TableCell>
-                    <TableCell>
-                        {row.orderStatus != null
-                            ? row.orderStatus.orderStatusName
-                            : ""}
-                    </TableCell>
+                    <TableCell>{row.paymentMethod}</TableCell>
                     <TableCell>
                         {calculateEstimatedDeliveryDate(
                             row.orderDate,
@@ -173,60 +177,71 @@ function OrderRow({
                         </select>
                     </TableCell>
                     <TableCell>
-                        <Box display="flex" flexDirection="column" gap={1}>
-                            <Button
-                                onClick={() =>
+                        <Tooltip
+                            title={`Delivery Staff ID: ${row.deliveryStaffId}`}
+                            arrow
+                        >
+                            <span>{row.deliveryStaffName}</span>
+                        </Tooltip>
+                    </TableCell>
+                    <TableCell>
+                        <Select
+                            displayEmpty
+                            value=""
+                            onChange={(event) => {
+                                const action = event.target.value
+                                if (action === "updateStatus") {
                                     updateOrderStatusByClick(
                                         row.orderId,
                                         row.orderStatusId
                                     )
+                                } else if (action === "orderDocument") {
+                                    openDocumentModal(
+                                        row.orderId,
+                                        row.orderStatusId
+                                    )
+                                } else if (action === "report") {
+                                    openReportModal(row.orderId)
+                                } else if (action === "cancel") {
+                                    cancelOrder(row.orderId)
                                 }
-                            >
+                            }}
+                            fullWidth
+                        >
+                            <MenuItem value="" disabled>
+                                Select Action
+                            </MenuItem>
+                            <MenuItem value="updateStatus">
                                 Update Status
-                            </Button>
-
+                            </MenuItem>
                             {row.orderStatusId == 4 ||
                             row.orderStatusId == 6 ? (
-                                <Button
-                                    onClick={() =>
-                                        openDocumentModal(
-                                            row.orderId,
-                                            row.orderStatusId
-                                        )
-                                    }
-                                >
-                                    Update Document
-                                </Button>
+                                <MenuItem value="orderDocument">
+                                    Order Document
+                                </MenuItem>
                             ) : (
-                                <Button disabled>Update Document</Button>
+                                <MenuItem disabled>Order Document</MenuItem>
                             )}
-                            <Button
-                                onClick={() => openReportModal(row.orderId)}
-                            >
+                            <MenuItem value="report">
                                 Transportation Report
-                            </Button>
-                            <Button
-                                onClick={() => cancelOrder(row.orderId)}
-                                color="error"
-                            >
-                                Cancel
-                            </Button>
+                            </MenuItem>
+                            <MenuItem value="cancel">Cancel Order</MenuItem>
                             {user.roleId >= 4 &&
                             row.paymentHistory?.paymentStatusId != 2 &&
-                            row.orderStatusId == 9  && row.paymentMethodId == 1 ? (
-                                <Button
+                            row.orderStatusId == 9 &&
+                            row.paymentMethodId == 1 ? (
+                                <MenuItem
                                     onClick={() =>
                                         handleVerifyPayment(row.orderId)
                                     }
                                 >
                                     Verify Payment
-                                </Button>
+                                </MenuItem>
                             ) : (
-                                <Button disabled>Verify Payment</Button>
+                                <MenuItem disabled>Verify Payment</MenuItem>
                             )}
-                        </Box>
+                        </Select>
                     </TableCell>
-                    <TableCell>{row.deliveryStaffId}</TableCell>
                 </TableRow>
 
                 {/* Order Details */}
@@ -261,12 +276,10 @@ function OrderRow({
                                     <TableBody>
                                         <TableRow>
                                             <TableCell>
-                                                {row.startAddress
-                                                    ?.addressLine || ""}
+                                                {row.startAddressLine}
                                             </TableCell>
                                             <TableCell>
-                                                {row.endAddress?.addressLine ||
-                                                    ""}
+                                                {row.endAddressLine}
                                             </TableCell>
                                             <TableCell>
                                                 {row.distance}
@@ -749,7 +762,7 @@ export default function ManageOrder() {
                                 </TableCell>
                                 <TableCell>
                                     <Typography fontWeight={600} align="center">
-                                        Customer ID
+                                        Customer Name
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
@@ -768,7 +781,7 @@ export default function ManageOrder() {
                                 </TableCell>
                                 <TableCell>
                                     <Typography fontWeight={600} align="center">
-                                        Status
+                                        Payment Method
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
@@ -776,7 +789,6 @@ export default function ManageOrder() {
                                         Estimated Delivery Date
                                     </Typography>
                                 </TableCell>{" "}
-                                {/* Add Estimated Delivery Date header */}
                                 <TableCell>
                                     <Typography fontWeight={600} align="center">
                                         Edit Status
@@ -784,12 +796,12 @@ export default function ManageOrder() {
                                 </TableCell>
                                 <TableCell>
                                     <Typography fontWeight={600} align="center">
-                                        Action
+                                        Delivering Staff
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
                                     <Typography fontWeight={600} align="center">
-                                        Delivering Staff
+                                        Action
                                     </Typography>
                                 </TableCell>
                             </TableRow>

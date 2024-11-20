@@ -40,7 +40,7 @@ export default function AdminDashboard() {
                 // Prepare data for DataGrid with required fields
                 const dataWithId = ordersArray.map((order, index) => ({
                     id: order.orderId || index,
-                    customer: order.customerId,
+                    customer: order.customerName,
                     date: order.orderDate,
                     total: order.totalPrice || 0,
                     orderStatusId: order.orderStatusId, // Include orderStatusId
