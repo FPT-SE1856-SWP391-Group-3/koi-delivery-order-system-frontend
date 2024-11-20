@@ -58,36 +58,17 @@ function OrderRow({ row }) {
             const response = await api.get(
                 `RoutesControllers/findMatchingRouteForOrder/${row.orderId}`
             )
-            if (response.success) {
-                const detailedRoutes = []
-
-                try {
-                    const routeResponse = await api.get(
-                        `RoutesControllers/${response.matchingRoutes[0].routeId}`
-                    )
-                    if (routeResponse.success) {
-                        detailedRoutes.push(routeResponse.route)
-                    }
-                } catch (routeError) {
-                    if (
-                        routeError.response &&
-                        routeError.response.status === 404
-                    ) {
-                        console.log(
-                            `Route with ID ${response.routeId} not found`
-                        )
-                    }
-                }
-
-                setMatchingRoutes(detailedRoutes)
-                setRouteModalOpen(true)
+            if (response.success && Array.isArray(response.matchingRoutes)) {
+                setMatchingRoutes(response.matchingRoutes)
+                setError(null)
             } else {
                 setMatchingRoutes([])
                 setError("No Route Match!")
-                setRouteModalOpen(true)
             }
+            setRouteModalOpen(true)
         } catch (error) {
             console.error("Error fetching matching routes:", error)
+            setMatchingRoutes([])
             setError("An error occurred while fetching routes.")
             setRouteModalOpen(true)
         }
@@ -139,7 +120,9 @@ function OrderRow({ row }) {
                     </IconButton>
                 </TableCell>
                 <TableCell>{row.orderId}</TableCell>
-                <TableCell>{row.customerId}</TableCell>
+                <TableCell>
+                    {row.customerId}. {row.customerName}
+                </TableCell>
                 <TableCell>{row.orderDate}</TableCell>
                 <TableCell>
                     {row.paymentHistoryId != null &&
@@ -148,17 +131,15 @@ function OrderRow({ row }) {
                         ? "True"
                         : "False"}
                 </TableCell>
-                <TableCell>{row.deliveryDate}</TableCell>
-                <TableCell>
-                    {row.orderStatus ? row.orderStatus.orderStatusName : ""}
-                </TableCell>
+                <TableCell>{row.status ? row.status : ""}</TableCell>
+                <TableCell>{row.deliveryStaffName}</TableCell>
                 <TableCell>
                     <Button variant="contained" onClick={handleAddRouteClick}>
                         Add Route
                     </Button>
                 </TableCell>
-                <TableCell>{row.deliveryStaffId}</TableCell>
             </TableRow>
+
             {/* Modal for Matching Routes */}
             <Modal
                 open={routeModalOpen}
@@ -172,7 +153,7 @@ function OrderRow({ row }) {
                         top: "50%",
                         left: "50%",
                         transform: "translate(-50%, -50%)",
-                        width: 600,
+                        width: 900,
                         bgcolor: "background.paper",
                         boxShadow: 24,
                         p: 4,
@@ -189,8 +170,10 @@ function OrderRow({ row }) {
                                     <TableRow>
                                         <TableCell>Route ID</TableCell>
                                         <TableCell>Current Location</TableCell>
+                                        <TableCell>Route Addresses</TableCell>
                                         <TableCell>Capacity</TableCell>
                                         <TableCell>Current Load</TableCell>
+                                        <TableCell>Delivery Staff</TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -204,10 +187,21 @@ function OrderRow({ row }) {
                                                 {route.currentLocation}
                                             </TableCell>
                                             <TableCell>
+                                                {route.routeAddresses
+                                                    .map(
+                                                        (address) =>
+                                                            address.city
+                                                    )
+                                                    .join(", ")}
+                                            </TableCell>
+                                            <TableCell>
                                                 {route.capacity}
                                             </TableCell>
                                             <TableCell>
                                                 {route.currentLoad}
+                                            </TableCell>
+                                            <TableCell>
+                                                {route.deliveryStaff.fullName}
                                             </TableCell>
                                             <TableCell>
                                                 <Button
@@ -238,7 +232,7 @@ function OrderRow({ row }) {
                             align="center"
                             sx={{ mt: 2 }}
                         >
-                            {error || "No Route Match!"}
+                            {error || "No matching routes found!"}
                         </Typography>
                     )}
                     <Box mt={2} display="flex" justifyContent="flex-end">
@@ -273,21 +267,18 @@ function OrderRow({ row }) {
                                         <TableCell>Pickup Address</TableCell>
                                         <TableCell>Shipping Address</TableCell>
                                         <TableCell>Distance</TableCell>
-                                        <TableCell>Delivery Time</TableCell>
                                         <TableCell>Total Price</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     <TableRow>
                                         <TableCell>
-                                            {row.startAddress?.addressLine ||
-                                                ""}
+                                            {row?.startAddressLine || ""}
                                         </TableCell>
                                         <TableCell>
-                                            {row.endAddress?.addressLine || ""}
+                                            {row?.endAddressLine || ""}
                                         </TableCell>
                                         <TableCell>{row.distance}</TableCell>
-                                        <TableCell>{row.duration}</TableCell>
                                         <TableCell>{row.totalPrice}</TableCell>
                                     </TableRow>
                                 </TableBody>
@@ -415,7 +406,10 @@ export default function ManageRoute() {
             <AdminSideMenu />
 
             {/* Main Table Area */}
-            <Box width="100%" padding={2}>
+            <Box flex={1} padding={3}>
+                <Typography variant="h5" gutterBottom fontWeight="bold">
+                    Manage Routing
+                </Typography>
                 <TableContainer component={Paper}>
                     <Table aria-label="collapsible table">
                         <TableHead>
@@ -431,7 +425,7 @@ export default function ManageRoute() {
                                         fontWeight={600}
                                         allign="center"
                                     >
-                                        Customer ID
+                                        Customer
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
@@ -455,14 +449,6 @@ export default function ManageRoute() {
                                         fontWeight={600}
                                         allign="center"
                                     >
-                                        Delivery Date
-                                    </Typography>
-                                </TableCell>
-                                <TableCell>
-                                    <Typography
-                                        fontWeight={600}
-                                        allign="center"
-                                    >
                                         Status
                                     </Typography>
                                 </TableCell>
@@ -471,7 +457,7 @@ export default function ManageRoute() {
                                         fontWeight={600}
                                         allign="center"
                                     >
-                                        Action
+                                        Delivering Staff
                                     </Typography>
                                 </TableCell>
                                 <TableCell>
@@ -479,7 +465,7 @@ export default function ManageRoute() {
                                         fontWeight={600}
                                         allign="center"
                                     >
-                                        Delivering Staff
+                                        Action
                                     </Typography>
                                 </TableCell>
                             </TableRow>
