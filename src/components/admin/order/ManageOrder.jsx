@@ -185,8 +185,8 @@ function OrderRow({
                                 Update Status
                             </Button>
 
-                            {row.orderStatus.orderStatusId == 4 ||
-                            row.orderStatus.orderStatusId == 6 ? (
+                            {row.orderStatusId == 4 ||
+                            row.orderStatusId == 6 ? (
                                 <Button
                                     onClick={() =>
                                         openDocumentModal(
@@ -213,7 +213,7 @@ function OrderRow({
                             </Button>
                             {user.roleId >= 4 &&
                             row.paymentHistory?.paymentStatusId != 2 &&
-                            row.orderStatus.orderStatusId == 9 ? (
+                            row.orderStatusId == 9  && row.paymentMethodId == 1 ? (
                                 <Button
                                     onClick={() =>
                                         handleVerifyPayment(row.orderId)
