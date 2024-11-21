@@ -387,7 +387,7 @@ function OrderRow({
                         <DialogContentText>
                             Enter a new condition for this koi:
                         </DialogContentText>
-                        <TextField
+                        <TextField  
                             autoFocus
                             margin="dense"
                             label="Koi Condition"
