@@ -463,7 +463,7 @@ export default function ManageRoute() {
                                     <TableCell>
                                         <Typography
                                             fontWeight={600}
-                                            allign="center"
+                                            align="center"
                                         >
                                             Customer
                                         </Typography>
@@ -471,7 +471,7 @@ export default function ManageRoute() {
                                     <TableCell>
                                         <Typography
                                             fontWeight={600}
-                                            allign="center"
+                                            align="center"
                                         >
                                             Order Date
                                         </Typography>
@@ -479,7 +479,7 @@ export default function ManageRoute() {
                                     <TableCell>
                                         <Typography
                                             fontWeight={600}
-                                            allign="center"
+                                            align="center"
                                         >
                                             Payment Status
                                         </Typography>
@@ -487,7 +487,7 @@ export default function ManageRoute() {
                                     <TableCell>
                                         <Typography
                                             fontWeight={600}
-                                            allign="center"
+                                            align="center"
                                         >
                                             Status
                                         </Typography>
@@ -495,7 +495,7 @@ export default function ManageRoute() {
                                     <TableCell>
                                         <Typography
                                             fontWeight={600}
-                                            allign="center"
+                                            align="center"
                                         >
                                             Delivering Staff
                                         </Typography>
@@ -503,7 +503,7 @@ export default function ManageRoute() {
                                     <TableCell>
                                         <Typography
                                             fontWeight={600}
-                                            allign="center"
+                                            align="center"
                                         >
                                             Action
                                         </Typography>
@@ -536,7 +536,7 @@ export default function ManageRoute() {
                                         <TableCell>
                                             <Typography
                                                 fontWeight={600}
-                                                allign="center"
+                                                align="center"
                                             >
                                                 Customer ID
                                             </Typography>
@@ -544,7 +544,7 @@ export default function ManageRoute() {
                                         <TableCell>
                                             <Typography
                                                 fontWeight={600}
-                                                allign="center"
+                                                align="center"
                                             >
                                                 Order Date
                                             </Typography>
@@ -552,7 +552,7 @@ export default function ManageRoute() {
                                         <TableCell>
                                             <Typography
                                                 fontWeight={600}
-                                                allign="center"
+                                                align="center"
                                             >
                                                 Payment Status
                                             </Typography>
@@ -560,7 +560,7 @@ export default function ManageRoute() {
                                         <TableCell>
                                             <Typography
                                                 fontWeight={600}
-                                                allign="center"
+                                                align="center"
                                             >
                                                 Delivery Date
                                             </Typography>
@@ -568,7 +568,7 @@ export default function ManageRoute() {
                                         <TableCell>
                                             <Typography
                                                 fontWeight={600}
-                                                allign="center"
+                                                align="center"
                                             >
                                                 Status
                                             </Typography>
@@ -576,7 +576,7 @@ export default function ManageRoute() {
                                         <TableCell>
                                             <Typography
                                                 fontWeight={600}
-                                                allign="center"
+                                                align="center"
                                             >
                                                 Action
                                             </Typography>
@@ -584,7 +584,7 @@ export default function ManageRoute() {
                                         <TableCell>
                                             <Typography
                                                 fontWeight={600}
-                                                allign="center"
+                                                align="center"
                                             >
                                                 Delivering Staff
                                             </Typography>
