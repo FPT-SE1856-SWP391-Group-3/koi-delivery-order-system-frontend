@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../../../api/CallAPI";
+import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
+import api from "../../../api/CallAPI"
 import {
     Box,
     Card,
@@ -11,65 +11,68 @@ import {
     Alert,
     AlertTitle,
     Slide,
-} from "@mui/material";
-import { Grid } from "@mui/joy";
-import AdminSideMenu from "../../admin/components/AdminSideMenu";
-import SideMenu from "../SideMenu";
+} from "@mui/material"
+import { Grid } from "@mui/joy"
+import AdminSideMenu from "../../admin/components/AdminSideMenu"
+import SideMenu from "../SideMenu"
 
 export default function UpdatePassword() {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
     const [passwordData, setPasswordData] = useState({
         userId: user.userId,
         oldPassword: "",
         newPassword: "",
-    });
-    const [confirmPassword, setConfirmPassword] = useState(""); 
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
-    const [showAlert, setShowAlert] = useState(false); // State to control alert visibility
+    })
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const [error, setError] = useState("")
+    const [success, setSuccess] = useState(false)
+    const [showAlert, setShowAlert] = useState(false) // State to control alert visibility
 
-    const navigate = useNavigate();
-    const roleId = user?.roleId;
+    const navigate = useNavigate()
+    const roleId = user?.roleId
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         if (passwordData.newPassword !== confirmPassword) {
-            setError("New Password and Confirm Password do not match.");
-            setShowAlert(true);
-            return;
+            setError("New Password and Confirm Password do not match.")
+            setShowAlert(true)
+            return
         }
 
         try {
-            const response = await api.post("Users/password/update", passwordData);
+            const response = await api.post(
+                "Users/password/update",
+                passwordData
+            )
 
             if (response.success) {
-                setSuccess(true);
-                setError("");
-                setShowAlert(true);
+                setSuccess(true)
+                setError("")
+                setShowAlert(true)
                 setTimeout(() => {
-                    navigate(-1);
-                }, 2000);
+                    navigate(-1)
+                }, 2000)
             } else {
-                setError(response.msg || "Password update failed!");
-                setSuccess(false);
-                setShowAlert(true);
+                setError(response.msg || "Password update failed!")
+                setSuccess(false)
+                setShowAlert(true)
             }
         } catch (error) {
             if (error.response && error.response) {
-                setError(error.response.data.msg || "Wrong Password!");
+                setError(error.response.data.msg || "Wrong Password!")
             } else {
-                console.error("Error:", error);
-                setError("An unexpected error occurred. Please try again.");
+                console.error("Error:", error)
+                setError("An unexpected error occurred. Please try again.")
             }
-            setShowAlert(true);
+            setShowAlert(true)
         }
-    };
+    }
 
     const renderSidebar = () => {
-        if (roleId === 2) return <SideMenu />;
-        return <AdminSideMenu />;
-    };
+        if (roleId === 2) return <SideMenu />
+        return <AdminSideMenu />
+    }
 
     return (
         <Box sx={{ display: "flex" }}>
@@ -82,7 +85,12 @@ export default function UpdatePassword() {
                         </Typography>
                         {/* Display success or error alert */}
                         {showAlert && (
-                            <Slide direction="down" in={showAlert} mountOnEnter unmountOnExit>
+                            <Slide
+                                direction="down"
+                                in={showAlert}
+                                mountOnEnter
+                                unmountOnExit
+                            >
                                 <Alert
                                     severity={success ? "success" : "error"}
                                     sx={{
@@ -92,7 +100,9 @@ export default function UpdatePassword() {
                                     }}
                                     onClose={() => setShowAlert(false)}
                                 >
-                                    <AlertTitle>{success ? "Success" : "Error"}</AlertTitle>
+                                    <AlertTitle>
+                                        {success ? "Success" : "Error"}
+                                    </AlertTitle>
                                     {success
                                         ? "Password updated successfully! Redirecting..."
                                         : error}
@@ -137,7 +147,9 @@ export default function UpdatePassword() {
                                         type="password"
                                         fullWidth
                                         variant="outlined"
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        onChange={(e) =>
+                                            setConfirmPassword(e.target.value)
+                                        }
                                         required
                                     />
                                 </Grid>
@@ -157,5 +169,5 @@ export default function UpdatePassword() {
                 </Card>
             </Box>
         </Box>
-    );
+    )
 }

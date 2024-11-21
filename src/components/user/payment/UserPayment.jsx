@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import api from "../../../api/CallAPI";
+import { useEffect, useState } from "react"
+import api from "../../../api/CallAPI"
 import {
     Button,
     Paper,
@@ -13,71 +13,71 @@ import {
     Typography,
     Box,
     Modal,
-} from "@mui/material";
-import { Grid } from "@mui/joy";
-import EditPayment from "./EditPayment";
-import AddPayment from "./AddPayment";
-import AdminSideMenu from "../../admin/components/AdminSideMenu";
-import SideMenu from "../SideMenu";
+} from "@mui/material"
+import { Grid } from "@mui/joy"
+import EditPayment from "./EditPayment"
+import AddPayment from "./AddPayment"
+import AdminSideMenu from "../../admin/components/AdminSideMenu"
+import SideMenu from "../SideMenu"
 
 export default function UserPayment() {
-    const [payments, setPayments] = useState([]);
-    const [showEditPaymentModal, setShowEditPaymentModal] = useState(false);
-    const [showAddPaymentModal, setShowAddPaymentModal] = useState(false);
-    const [selectedPaymentId, setSelectedPaymentId] = useState(null);
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const roleId = user?.roleId;
+    const [payments, setPayments] = useState([])
+    const [showEditPaymentModal, setShowEditPaymentModal] = useState(false)
+    const [showAddPaymentModal, setShowAddPaymentModal] = useState(false)
+    const [selectedPaymentId, setSelectedPaymentId] = useState(null)
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    const roleId = user?.roleId
 
     useEffect(() => {
         const fetchPayments = async () => {
             try {
-                const data = await api.get(`Payments/${user.userId}`);
+                const data = await api.get(`Payments/${user.userId}`)
                 if (data.success) {
-                    setPayments(data.payment);
+                    setPayments(data.payment)
                 } else {
-                    alert("Không có phương thức thanh toán!");
+                    alert("Không có phương thức thanh toán!")
                 }
             } catch {
-                alert("An error has occurred. Please try again.");
+                alert("An error has occurred. Please try again.")
             }
-        };
-        fetchPayments();
-    }, [user.userId]);
+        }
+        fetchPayments()
+    }, [user.userId])
 
     async function deletePayment(paymentId) {
         try {
-            const data = await api.del(`Payments/${paymentId}`);
+            const data = await api.del(`Payments/${paymentId}`)
             if (data.success) {
-                alert("Xóa thành công!");
+                alert("Xóa thành công!")
                 const newPayments = payments.filter(
                     (payment) => payment.paymentId !== paymentId
-                );
-                setPayments(newPayments);
+                )
+                setPayments(newPayments)
             } else {
-                alert("Xóa thất bại!");
+                alert("Xóa thất bại!")
             }
         } catch (error) {
-            console.error("Error during deletion:", error);
-            alert("An error occurred during deletion. Please try again.");
+            console.error("Error during deletion:", error)
+            alert("An error occurred during deletion. Please try again.")
         }
     }
 
     // Modal handlers
     const handleEditPaymentModal = (paymentId) => {
-        setSelectedPaymentId(paymentId);
-        setShowEditPaymentModal(true);
-    };
+        setSelectedPaymentId(paymentId)
+        setShowEditPaymentModal(true)
+    }
 
     const handleCloseModal = () => {
-        setShowEditPaymentModal(false);
-        setShowAddPaymentModal(false);
-    };
+        setShowEditPaymentModal(false)
+        setShowAddPaymentModal(false)
+    }
 
     // Render sidebar dynamically
     const renderSidebar = () => {
-        if (roleId === 2) return <SideMenu />;
-        return <AdminSideMenu />;
-    };
+        if (roleId === 2) return <SideMenu />
+        return <AdminSideMenu />
+    }
 
     return (
         <Box sx={{ display: "flex" }}>
@@ -115,9 +115,7 @@ export default function UserPayment() {
                                                     {payment.userName}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {
-                                                        payment.paymentMethodName
-                                                    }
+                                                    {payment.paymentMethodName}
                                                 </TableCell>
                                                 <TableCell>
                                                     {payment.paymentNumber}
@@ -237,5 +235,5 @@ export default function UserPayment() {
                 </Modal>
             </Box>
         </Box>
-    );
+    )
 }
