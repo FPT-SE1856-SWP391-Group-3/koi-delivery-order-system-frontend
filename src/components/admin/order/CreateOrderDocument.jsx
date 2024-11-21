@@ -39,7 +39,6 @@ export default function CreateOrderDocument({
                     console.log("Document uploaded successfully!")
                     setAlertMessage("Document uploaded successfully!")
                     setAlertSeverity("success")
-                
                 } else {
                     console.error("Failed to upload document!")
                     setAlertMessage("Failed to upload document!")
