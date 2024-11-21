@@ -60,7 +60,9 @@ export default function Login() {
                                 navigate(ComponentPath.admin.dashboard)
                                 break
                             case 4:
-                                navigate(ComponentPath.admin.dashboard)
+                                navigate(
+                                    ComponentPath.admin.order.manageDeliverOrder
+                                )
                                 break
                             default:
                                 UserToast("error", "Not found role")
@@ -104,7 +106,7 @@ export default function Login() {
                     navigate(ComponentPath.admin.dashboard)
                     break
                 case 4:
-                    navigate(ComponentPath.admin.dashboard)
+                    navigate(ComponentPath.admin.order.manageDeliverOrder)
                     break
                 default:
                     ;<Alert variant="filled" severity="error">

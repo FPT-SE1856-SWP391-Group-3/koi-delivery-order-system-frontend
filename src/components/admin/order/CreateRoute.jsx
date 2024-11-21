@@ -117,12 +117,12 @@ const CreateRoute = () => {
 
     const handleExpandClick = (routeId) => {
         if (expandedRouteId === routeId) {
-            setExpandedRouteId(null)
-        } else {
             setExpandedRouteId(routeId)
             if (!orders[routeId]) {
                 fetchOrdersForRoute(routeId)
             }
+        } else {
+            setExpandedRouteId(null)
         }
     }
 
@@ -500,14 +500,7 @@ const CreateRoute = () => {
                                                                                     </TableCell>
                                                                                     <TableCell>
                                                                                         {
-                                                                                            order.customerId
-                                                                                        }
-
-                                                                                        .{" "}
-                                                                                        {
-                                                                                            order
-                                                                                                .customer
-                                                                                                .fullName
+                                                                                            order.customerName
                                                                                         }
                                                                                     </TableCell>
                                                                                     <TableCell>
@@ -517,16 +510,12 @@ const CreateRoute = () => {
                                                                                     </TableCell>
                                                                                     <TableCell>
                                                                                         {
-                                                                                            order
-                                                                                                .startAddress
-                                                                                                .addressLine
+                                                                                            order.startAddressLine
                                                                                         }
                                                                                     </TableCell>
                                                                                     <TableCell>
                                                                                         {
-                                                                                            order
-                                                                                                .endAddress
-                                                                                                .addressLine
+                                                                                            order.endAddressLine
                                                                                         }
                                                                                     </TableCell>
                                                                                     <TableCell>

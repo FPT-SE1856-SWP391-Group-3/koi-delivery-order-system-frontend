@@ -688,6 +688,10 @@ const router = createBrowserRouter([
                         ),
                     },
                     {
+                        path: ComponentPath.admin.order.manageDeliverOrder,
+                        element: <ManageDeliverOrder />,
+                    },
+                    {
                         path:
                             ComponentPath.admin.order.manageOrderDetail +
                             ":orderId",
