@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import UserSideNav from "../UserSideNav"
+import AdminSideMenu from "../../admin/components/AdminSideMenu"
 import { Button, Card, CardContent } from "@mui/material"
 import UserToast from "../alert/UserToast"
 import { ToastContainer } from "react-toastify"
@@ -17,6 +18,8 @@ export default function EditProfile() {
     })
 
     const navigate = useNavigate()
+
+    const roleId = user?.roleId
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -35,7 +38,9 @@ export default function EditProfile() {
             UserToast("error", "Error! Please try again.")
         }
     }
-
+    const renderSidebar = () => {
+        return roleId === 2 ? <UserSideNav /> : <AdminSideMenu />
+    }
     return (
         <>
             <UserSideNav>
