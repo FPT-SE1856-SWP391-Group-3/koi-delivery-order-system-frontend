@@ -19,6 +19,8 @@ import EditPayment from "./EditPayment"
 import AddPayment from "./AddPayment"
 import AdminSideMenu from "../../admin/components/AdminSideMenu"
 import SideMenu from "../SideMenu"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function UserPayment() {
     const [payments, setPayments] = useState([])
@@ -35,10 +37,10 @@ export default function UserPayment() {
                 if (data.success) {
                     setPayments(data.payment)
                 } else {
-                    alert("Không có phương thức thanh toán!")
+                    UserToast("error", "No payment found.")
                 }
             } catch {
-                alert("An error has occurred. Please try again.")
+                UserToast("error", "An error occurred while fetching payments.")
             }
         }
         fetchPayments()
@@ -48,17 +50,17 @@ export default function UserPayment() {
         try {
             const data = await api.del(`Payments/${paymentId}`)
             if (data.success) {
-                alert("Xóa thành công!")
+                UserToast("success", "Delete successful!")
                 const newPayments = payments.filter(
                     (payment) => payment.paymentId !== paymentId
                 )
                 setPayments(newPayments)
             } else {
-                alert("Xóa thất bại!")
+                UserToast("error", "Delete failed!")
             }
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast("error", "An error occurred while deleting the payment.")
         }
     }
 
@@ -81,6 +83,7 @@ export default function UserPayment() {
 
     return (
         <Box sx={{ display: "flex" }}>
+            <ToastContainer/>
             {renderSidebar()}
             <Box sx={{ flexGrow: 1, p: 3 }}>
                 <Grid spacing={3}>
