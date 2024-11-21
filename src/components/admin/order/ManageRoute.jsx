@@ -34,13 +34,17 @@ function OrderRow({ row }) {
 
     const fetchKoiDetails = async (orderId) => {
         try {
-            const data = await api.get(
+            const response = await api.get(
                 `OrderDetails/OrderDetailsByOrderId/${orderId}`
             )
-            if (data.success) {
-                setKoiDetails(data.orderDetails || [])
+            if (response.success && Array.isArray(response.orderDetails)) {
+                const kois = response.orderDetails.flatMap(
+                    (detail) => detail.kois
+                )
+                setKoiDetails(kois)
             } else {
                 console.log("No koi details found!")
+                setKoiDetails([])
             }
         } catch (error) {
             console.error("Error fetching koi details:", error)
