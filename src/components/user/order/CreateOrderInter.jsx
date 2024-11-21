@@ -26,7 +26,7 @@ function CreateOrderInter() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const data = await api.get("Users/" + userId)
+                const data = await api.get("users/" + userId)
                 if (data.success) {
                     setUserData(data.user || {})
                 } else {

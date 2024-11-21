@@ -37,7 +37,7 @@ export default function UserAddress() {
 
     useEffect(() => {
         try {
-            api.get("Addresses/user/" + id).then((data) => {
+            api.get("addresses/user/" + id).then((data) => {
                 if (data.success) {
                     setAddresses(data.address)
                     console.log(data.address)
@@ -52,7 +52,7 @@ export default function UserAddress() {
 
     async function deleteAddress(addressId) {
         try {
-            api.del("Addresses/" + addressId).then((data) => {
+            api.del("addresses/" + addressId).then((data) => {
                 if (data.success) {
                     UserToast("success", "Address deleted successfully.")
                     const newAddresses = addresses.filter(

@@ -62,7 +62,7 @@ function OrderRow({
     const fetchKoiDetails = async (orderId) => {
         try {
             const data = await api.get(
-                `OrderDetails/OrderDetailsByOrderId/${orderId}`
+                `order-details/order/${orderId}`
             )
             if (data.success) {
                 setKoiDetails(data.orderDetails || [])
@@ -97,7 +97,7 @@ function OrderRow({
 
     const updateKoiCondition = async () => {
         try {
-            const response = await api.put(`Kois/${selectedKoiId}`, {
+            const response = await api.put(`kois/${selectedKoiId}`, {
                 koiCondition: newKoiCondition,
             })
             if (response.success) {

@@ -32,7 +32,7 @@ export default function UserPayment() {
     useEffect(() => {
         const fetchPayments = async () => {
             try {
-                const data = await api.get("Payments/" + id)
+                const data = await api.get("payments/" + id)
                 if (data.success) {
                     setPayments(data.payment)
                     console.log(data.payment)
@@ -51,7 +51,7 @@ export default function UserPayment() {
 
     async function deletePayment(paymentId) {
         try {
-            api.del("Payments/" + paymentId).then((data) => {
+            api.del("payments/" + paymentId).then((data) => {
                 if (data.success) {
                     UserToast("success", "Delete successful!")
                     const newPayments = payments.filter(

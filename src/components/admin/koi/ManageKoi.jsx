@@ -35,7 +35,7 @@ export default function ManageKoi() {
     // Hàm tải lại danh sách Koi
     const fetchKois = async () => {
         try {
-            const data = await api.get("Kois/")
+            const data = await api.get("kois/")
             if (data.success) {
                 setKois(data.kois)
             } else {
@@ -65,7 +65,7 @@ export default function ManageKoi() {
     // Confirm delete Koi
     const confirmDeleteKoi = async () => {
         try {
-            const data = await api.del("Kois/" + selectedKoiId)
+            const data = await api.del("kois/" + selectedKoiId)
             if (data.success) {
                 UserToast("success", "Koi deleted successfully!")
                 setKois((prevKois) =>

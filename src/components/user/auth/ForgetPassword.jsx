@@ -27,7 +27,7 @@ export default function ForgetPassword() {
         }
         try {
             setIsLoading(true)
-            api.post("Users/password/forget", fullData)
+            api.post("users/password/forget", fullData)
                 .then((data) => {
                     if (data.success) {
                         setIsLoading(false)

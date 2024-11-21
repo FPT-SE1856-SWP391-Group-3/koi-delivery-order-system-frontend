@@ -32,7 +32,7 @@ export default function CreateOrderDocument({
                 orderData.append("description", orderDocument.description)
 
                 const response = await api.postForm(
-                    "OrderDocuments/",
+                    "order-documents/",
                     orderData
                 )
                 if (response.success) {

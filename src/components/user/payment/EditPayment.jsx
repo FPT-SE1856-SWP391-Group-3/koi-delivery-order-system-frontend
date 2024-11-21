@@ -20,7 +20,7 @@ export default function EditPayment({ id }) {
 
     useEffect(() => {
         try {
-            api.get("Payments/" + userId).then((data) => {
+            api.get("payments/" + userId).then((data) => {
                 if (data.success) {
                     setPayment(data.payment[0])
                     console.log(data.payment[0])
@@ -36,7 +36,7 @@ export default function EditPayment({ id }) {
     const handleSubmit = async (e) => {
         try {
             e.preventDefault()
-            api.put("Payments/" + id, payment).then((data) => {
+            api.put("payments/" + id, payment).then((data) => {
                 if (data.success) {
                     UserToast("success", "Update payment successfully!")
                     navigate("/user-payment")

@@ -29,7 +29,7 @@ function ValidateEmailCallBack() {
             email: searchParams.get("email"),
         }
 
-        api.post(`Users/validate`, data).then((data) => {
+        api.post(`users/validate`, data).then((data) => {
             getCode(data.code)
             console.log(data)
         })
@@ -44,7 +44,7 @@ function ValidateEmailCallBack() {
             email: searchParams.get("email"),
         }
 
-        api.post(`Users/revalidate`, data).then((data) => {
+        api.post(`users/revalidate`, data).then((data) => {
             UserToast("success", "Sent email successfully!")
             console.log(data)
         })

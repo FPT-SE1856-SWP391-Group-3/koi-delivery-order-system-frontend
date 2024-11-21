@@ -25,7 +25,7 @@ export default function ManageUserAddress({ userId }) {
         const fetchAddresses = async () => {
             try {
                 setLoading(true)
-                const data = await api.get(`Addresses/user/${userId}`)
+                const data = await api.get(`addresses/user/${userId}`)
                 if (data.success) {
                     setAddresses(data.address)
                 } else {

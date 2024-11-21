@@ -64,7 +64,7 @@ const CreateRoute = () => {
 
     const fetchRoutes = async () => {
         try {
-            const response = await api.get("RoutesControllers")
+            const response = await api.get("routes")
             if (response.success && Array.isArray(response.routes)) {
                 setRoutes(response.routes)
             } else {
@@ -77,7 +77,7 @@ const CreateRoute = () => {
     }
     const fetchDeliveryStaffOptions = async () => {
         try {
-            const response = await api.get("Users")
+            const response = await api.get("users")
             if (response.success && Array.isArray(response.users)) {
                 const filteredUsers = response.users.filter(
                     (user) => user.roleId === 4
@@ -101,7 +101,7 @@ const CreateRoute = () => {
 
     const fetchOrdersForRoute = async (routeId) => {
         try {
-            const response = await api.get(`Orders/orderByRouteId/${routeId}`)
+            const response = await api.get(`orders/route/${routeId}`)
             if (response.success && Array.isArray(response.orderIds)) {
                 setOrders((prevOrders) => ({
                     ...prevOrders,
@@ -135,7 +135,7 @@ const CreateRoute = () => {
         if (expandedRouteId && selectedOrderId) {
             try {
                 const response = await api.post(
-                    "RoutesControllers/removeOrderFromRoute",
+                    "routes/order",
                     {
                         routeId: expandedRouteId,
                         orderId: selectedOrderId,
@@ -177,7 +177,7 @@ const CreateRoute = () => {
     const handleConfirmDeleteRoute = async () => {
         try {
             const response = await api.del(
-                `RoutesControllers/${selectedRouteId}`
+                `routes/${selectedRouteId}`
             )
             if (response.success) {
                 setAlertMessage("Route deleted successfully!")
@@ -223,7 +223,7 @@ const CreateRoute = () => {
 
         try {
             const response = await api.post(
-                "RoutesControllers/createRoute",
+                "routes",
                 newRoute
             )
 

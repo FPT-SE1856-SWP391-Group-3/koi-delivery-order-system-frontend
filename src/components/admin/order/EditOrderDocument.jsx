@@ -18,7 +18,7 @@ export default function EditOrderDocument() {
         // Gọi API để lấy thông tin Document dựa trên documentId
         const fetchDocument = async () => {
             try {
-                api.get("OrderDocuments/" + documentId).then((data) => {
+                api.get("order-documents/" + documentId).then((data) => {
                     if (data.success) {
                         console.log(data.orderDocument)
                         setOrderDocument({
@@ -51,7 +51,7 @@ export default function EditOrderDocument() {
         documentData.set("filePath", orderDocument.filePath)
         documentData.set("description", orderDocument.description)
         try {
-            api.putForm("OrderDocuments/" + documentId, documentData).then(
+            api.putForm("order-documents/" + documentId, documentData).then(
                 (data) => {
                     if (data.success) {
                         UserToast("success", "Update document successfully!")

@@ -11,7 +11,7 @@ export default function NewFaq({ onClose, onAddSuccess }) {
     // Handle form submission
     const onSubmit = async (data) => {
         try {
-            const response = await api.post("Faqs/", data)
+            const response = await api.post("faqs/", data)
             if (response.success) {
                 UserToast("success", "FAQ added successfully!")
                 onAddSuccess() // Callback to update the FAQ list in ManageFaq

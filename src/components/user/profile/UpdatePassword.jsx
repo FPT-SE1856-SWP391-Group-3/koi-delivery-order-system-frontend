@@ -29,7 +29,7 @@ export default function UpdatePassword() {
         e.preventDefault()
         try {
             // Call API to update password
-            api.put("Users/update-password", passwordData).then((data) => {
+            api.put("users/password/update", passwordData).then((data) => {
                 if (data.success) {
                     UserToast("success", "Password updated successfully!")
                     navigate(ComponentPath.user.profile.viewProfile)

@@ -32,7 +32,7 @@ function OrderRow({ row, UserToast }) {
     const fetchKoiDetails = async (orderId) => {
         try {
             const response = await api.get(
-                `OrderDetails/OrderDetailsByOrderId/${orderId}`
+                `order-details/order/${orderId}`
             )
             if (response.success && Array.isArray(response.orderDetails)) {
                 const kois = response.orderDetails.flatMap(
@@ -59,7 +59,7 @@ function OrderRow({ row, UserToast }) {
     const handleAddRouteClick = async () => {
         try {
             const response = await api.get(
-                `RoutesControllers/findMatchingRouteForOrder/${row.orderId}`
+                `routes/matching-route/${row.orderId}`
             )
             if (response.success && Array.isArray(response.matchingRoutes)) {
                 setMatchingRoutes(response.matchingRoutes)
@@ -90,7 +90,7 @@ function OrderRow({ row, UserToast }) {
             console.log("Payload:", payload) // Add this to verify the payload
 
             const response = await api.post(
-                "RoutesControllers/addOrderToRoute",
+                "routes/add-order",
                 payload
             )
 

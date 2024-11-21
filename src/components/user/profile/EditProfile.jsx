@@ -22,7 +22,7 @@ export default function EditProfile() {
         e.preventDefault()
         try {
             // Goi api update user
-            api.put("Users/" + user.userId, updateUser).then((data) => {
+            api.put("users/" + user.userId, updateUser).then((data) => {
                 if (data.success) {
                     UserToast("success", "Update profile successfully!")
                     localStorage.setItem("user", JSON.stringify(data.user))

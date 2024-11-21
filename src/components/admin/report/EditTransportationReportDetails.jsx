@@ -20,7 +20,7 @@ export default function EditTransportationReportDetails({
         const fetchReport = async () => {
             try {
                 const data = await api.get(
-                    "TransportationReportDetails/" + reportId
+                    "transportation-report-details/" + reportId
                 )
                 if (data.success) {
                     setUpdateReport(data.transportationReportDetail)
@@ -44,7 +44,7 @@ export default function EditTransportationReportDetails({
         e.preventDefault()
         try {
             const data = await api.put(
-                "TransportationReportDetails/" + reportId,
+                "transportation-report-details/" + reportId,
                 updateReport
             )
             if (data.success) {

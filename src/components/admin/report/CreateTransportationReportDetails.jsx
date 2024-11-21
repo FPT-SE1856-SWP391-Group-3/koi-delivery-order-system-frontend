@@ -14,7 +14,7 @@ export default function CreateTransportationReportDetails({
 
     const onSubmit = async (data) => {
         try {
-            const response = await api.post("TransportationReportDetails", {
+            const response = await api.post("transportation-report-details", {
                 ...data,
                 orderId,
             })

@@ -39,7 +39,7 @@ const SenderPackage = ({
     }, [orderServiceDetails])
 
     useEffect(() => {
-        api.get("OrderServiceDetails/").then((data) => {
+        api.get("order-service-details/").then((data) => {
             if (data.success) {
                 console.log(data.orderServiceDetails)
                 setOrderServiceDetails(data.orderServiceDetails)

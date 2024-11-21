@@ -32,7 +32,7 @@ export default function GetNotification() {
     useEffect(() => {
         try {
             console.log(user.userId)
-            api.get("Notifications/" + user.userId).then((data) => {
+            api.get("notifications/" + user.userId).then((data) => {
                 if (data.success) {
                     setNotifications(data.notifications)
                     console.log(data.notifications)
@@ -50,7 +50,7 @@ export default function GetNotification() {
 
     async function deleteNotification(notificationId) {
         try {
-            api.del("Notifications/" + notificationId).then((data) => {
+            api.del("notifications/" + notificationId).then((data) => {
                 if (data.success) {
                     UserToast("success", "Delete successful!")
                     const newNotifications = notifications.filter(

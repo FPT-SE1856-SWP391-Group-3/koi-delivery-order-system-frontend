@@ -28,7 +28,7 @@ export default function ManageOrderDocument() {
     useEffect(() => {
         const fetchDocuments = async () => {
             try {
-                const response = await api.get("OrderDocuments")
+                const response = await api.get("order-documents")
                 console.log("API Response for OrderDocuments:", response)
 
                 if (!response.success) {
@@ -51,7 +51,7 @@ export default function ManageOrderDocument() {
     // Delete a document by its ID
     const deleteDocument = async (documentId) => {
         try {
-            const response = await api.del(`OrderDocuments/${documentId}`)
+            const response = await api.del(`order-documents/${documentId}`)
             if (response.success) {
                 setDocuments((prevDocuments) =>
                     prevDocuments.filter(

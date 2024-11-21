@@ -16,7 +16,7 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
         const fetchBlogNews = async () => {
             try {
                 if (!postId) return
-                api.get("BlogNews/" + postId).then((data) => {
+                api.get("blog-news/" + postId).then((data) => {
                     if (data.success) {
                         setBlogNews(data.blogNews)
                     } else {

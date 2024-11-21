@@ -16,7 +16,7 @@ export default function EditOrderServiceDetail({
         // Gọi API để lấy dữ liệu ban đầu của dịch vụ
         const fetchServiceDetail = async () => {
             try {
-                const data = await api.get("OrderServiceDetails/" + id)
+                const data = await api.get("order-service-details/" + id)
                 if (data.success) {
                     setValue(
                         "orderServiceDetailName",
@@ -43,7 +43,7 @@ export default function EditOrderServiceDetail({
     // Xử lý cập nhật dịch vụ
     const onSubmit = async (data) => {
         try {
-            const response = await api.put("OrderServiceDetails/" + id, data)
+            const response = await api.put("order-service-details/" + id, data)
             if (response.success) {
                 UserToast(
                     "success",

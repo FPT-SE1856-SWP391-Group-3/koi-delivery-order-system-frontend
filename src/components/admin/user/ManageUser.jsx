@@ -46,7 +46,7 @@ export default function ManageUser() {
     // Fetch users and sort automatically
     const fetchUsers = async () => {
         try {
-            const data = await api.get("Users")
+            const data = await api.get("users")
             if (data.success) {
                 const sortedData = [...data.users].sort((a, b) => {
                     return sortOrder === "asc"
@@ -88,7 +88,7 @@ export default function ManageUser() {
     const confirmDeleteUser = async () => {
         if (!selectedUserId) return // Ensure there's a selected user ID before proceeding
         try {
-            const data = await api.del("Users/" + selectedUserId)
+            const data = await api.del("users/" + selectedUserId)
             if (data.success) {
                 UserToast("success", "User deleted successfully!")
                 fetchUsers() // Reload the user list after deletion

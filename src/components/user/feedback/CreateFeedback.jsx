@@ -56,7 +56,7 @@ export default function CreateFeedback({ orderId, onSuccess }) {
             }
 
             await api
-                .post("CustomerFeedbacks/", payload)
+                .post("customer-feedbacks/", payload)
                 .then((response) => {
                     if (response) {
                         UserToast("success", "Add feedback successfully!")

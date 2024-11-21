@@ -35,7 +35,7 @@ export default function ManageFaq() {
     // Fetch FAQs from API
     const fetchFaqs = async () => {
         try {
-            const data = await api.get("Faqs/")
+            const data = await api.get("faqs/")
             if (data.success) {
                 setFaqs(data.faqs)
             } else {
@@ -53,7 +53,7 @@ export default function ManageFaq() {
     // Confirm deletion of FAQ
     const confirmDeleteFaq = async () => {
         try {
-            const data = await api.del(`Faqs/${selectedFaqId}`)
+            const data = await api.del(`faqs/${selectedFaqId}`)
             if (data.success) {
                 UserToast("success", "FAQ deleted successfully!")
                 setFaqs((prevFaqs) =>

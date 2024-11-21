@@ -23,7 +23,7 @@ function ChoosePayment() {
     }
 
     useEffect(() => {
-        api.get(`Orders/orderId/${orderId}`).then((data) => {
+        api.get(`orders/${orderId}`).then((data) => {
             console.log(data)
             setTotalPrice(data.order.totalPrice)
         })
@@ -46,7 +46,7 @@ function ChoosePayment() {
         }
 
         console.log(data)
-        api.post("Payments/create-payment", data).then((data) => {
+        api.post("payments/vnpay", data).then((data) => {
             console.log(data)
             if (paymentMethodId !== 1) {
                 window.location.href = data.paymentUrl

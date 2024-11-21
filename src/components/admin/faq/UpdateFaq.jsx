@@ -14,7 +14,7 @@ export default function UpdateFaq({ faqId, onClose, onUpdateSuccess }) {
         // Fetch FAQ information based on faqId
         const fetchFaq = async () => {
             try {
-                const data = await api.get(`Faqs/${faqId}`)
+                const data = await api.get(`faqs/${faqId}`)
                 if (data.success) {
                     setUpdateFaq(data.faq)
                 } else {
@@ -33,7 +33,7 @@ export default function UpdateFaq({ faqId, onClose, onUpdateSuccess }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const data = await api.put(`Faqs/${faqId}`, updateFaq)
+            const data = await api.put(`faqs/${faqId}`, updateFaq)
             if (data.success) {
                 UserToast("success", "FAQ updated successfully!")
                 onUpdateSuccess() // Callback to refresh FAQ list

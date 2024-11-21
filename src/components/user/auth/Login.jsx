@@ -32,7 +32,7 @@ export default function Login() {
         try {
             setIsLoading(true)
             await api
-                .post("Users/login/jwt/", data)
+                .post("users/login/jwt/", data)
                 .then((data) => {
                     if (data.success) {
                         console.log("Đăng nhập thành công!")
@@ -123,7 +123,7 @@ export default function Login() {
             const googleIdToken = response.credential
 
             // Gửi token Google IdToken tới backend để xác thực
-            const res = await fetch(api.buildUrl("Users/login/google"), {
+            const res = await fetch(api.buildUrl("users/login/google"), {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

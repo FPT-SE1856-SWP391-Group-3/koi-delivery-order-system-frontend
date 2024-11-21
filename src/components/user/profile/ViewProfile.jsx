@@ -32,7 +32,7 @@ export default function ViewProfile() {
     const deleteUser = async (e) => {
         e.preventDefault()
         try {
-            api.del("Users").then((data) => {
+            api.del("users").then((data) => {
                 if (data.success) {
                     UserToast("success", "Delete user successfully!")
                     localStorage.removeItem("user")

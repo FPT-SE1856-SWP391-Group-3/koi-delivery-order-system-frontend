@@ -18,7 +18,7 @@ export default function EditDocument() {
         // Gọi API để lấy thông tin Document dựa trên documentId
         const fetchDocument = async () => {
             try {
-                api.get("CustomerDocuments/" + documentId).then((data) => {
+                api.get("customer-documents/" + documentId).then((data) => {
                     if (data.success) {
                         console.log(data.customerDocument)
                         setCustomerDocument({

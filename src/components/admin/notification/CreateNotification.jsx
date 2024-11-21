@@ -15,7 +15,7 @@ export default function CreateNotification() {
     const onSubmit = async (data) => {
         console.log(data)
         try {
-            api.post("Notifications/", data).then((data) => {
+            api.post("notifications/", data).then((data) => {
                 if (data.success) {
                     UserToast("success", "Notification created successfully!")
                     navigate("/")

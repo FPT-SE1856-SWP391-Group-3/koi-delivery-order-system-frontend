@@ -23,7 +23,7 @@ const SenderInfo = ({ onChange }) => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const userResponse = await api.get(`Users/${userId}`)
+                const userResponse = await api.get(`users/${userId}`)
                 if (userResponse.success) {
                     setSenderInfo((prevInfo) => ({
                         ...prevInfo,
@@ -41,7 +41,7 @@ const SenderInfo = ({ onChange }) => {
                 }
 
                 const addressResponse = await api.get(
-                    `Addresses/user/${userId}`
+                    `addresses/user/${userId}`
                 )
                 if (
                     addressResponse.success &&

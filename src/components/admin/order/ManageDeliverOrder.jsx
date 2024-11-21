@@ -55,7 +55,7 @@ const ManageDeliverOrder = () => {
 
     const fetchOrders = async (routeId) => {
         try {
-            const response = await api.get(`Orders/orderByRouteId/${routeId}`)
+            const response = await api.get(`orders/route/${routeId}`)
             console.log("API Response for Orders:", response) // Debugging log
 
             if (response.success && Array.isArray(response.orderIds)) {
@@ -75,7 +75,7 @@ const ManageDeliverOrder = () => {
     }
     const fetchOrderStatus = async () => {
         try {
-            const response = await api.get("OrderStatus/")
+            const response = await api.get("order-status/")
             if (response.success) {
                 setOrderStatus(response.orderStatuses)
             } else {
@@ -88,7 +88,7 @@ const ManageDeliverOrder = () => {
     const fetchKoiDetails = async (orderId) => {
         try {
             const response = await api.get(
-                `OrderDetails/OrderDetailsByOrderId/${orderId}`
+                `order-details/order/${orderId}`
             )
             if (response.success) {
                 setKoiDetails(response.orderDetails || [])
@@ -101,7 +101,7 @@ const ManageDeliverOrder = () => {
     }
     const updateKoiCondition = async () => {
         try {
-            const response = await api.put(`Kois/${selectedKoiId}`, {
+            const response = await api.put(`kois/${selectedKoiId}`, {
                 koiCondition: newKoiCondition,
             })
             if (response.success) {
@@ -117,7 +117,7 @@ const ManageDeliverOrder = () => {
     const fetchRoutes = async (deliveryStaffId) => {
         try {
             const response = await api.get(
-                `RoutesControllers/DeliveryStaffId/${deliveryStaffId}`
+                `routes/delivery-staff/${deliveryStaffId}`
             )
             if (response.success && Array.isArray(response.route)) {
                 setRoutes(response.route)
