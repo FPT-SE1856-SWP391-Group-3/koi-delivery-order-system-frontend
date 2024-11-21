@@ -217,7 +217,7 @@ function OrderRow({
                             {row.orderStatusId == 4 ||
                             row.orderStatusId == 6 ? (
                                 <MenuItem value="orderDocument">
-                                    Order Document
+                                    Update Document
                                 </MenuItem>
                             ) : (
                                 <MenuItem disabled>Order Document</MenuItem>
@@ -323,62 +323,46 @@ function OrderRow({
                                         <TableBody>
                                             {Array.isArray(koiDetails) &&
                                             koiDetails.length > 0 ? (
-                                                koiDetails.map((koiDetail) => (
-                                                    <TableRow
-                                                        key={
-                                                            koiDetail.orderDetailId
-                                                        }
-                                                    >
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .koiId
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .koiName
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .weight
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .koiCondition
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .price
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell align="center">
-                                                            <Button
-                                                                variant="contained"
-                                                                size="small"
-                                                                onClick={() =>
-                                                                    openUpdateModal(
-                                                                        koiDetail
-                                                                            .koi
-                                                                            .koiId,
-                                                                        koiDetail
-                                                                            .koi
-                                                                            .koiCondition
-                                                                    )
+                                                koiDetails[0].kois.map(
+                                                    (koi) => (
+                                                        <TableRow
+                                                            key={koi.koiId}
+                                                        >
+                                                            <TableCell>
+                                                                {koi.koiId}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {koi.koiName}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {koi.weight}
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {
+                                                                    koi.koiCondition
                                                                 }
-                                                            >
-                                                                Update Condition
-                                                            </Button>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))
+                                                            </TableCell>
+                                                            <TableCell>
+                                                                {koi.price}
+                                                            </TableCell>
+                                                            <TableCell align="center">
+                                                                <Button
+                                                                    variant="contained"
+                                                                    size="small"
+                                                                    onClick={() =>
+                                                                        openUpdateModal(
+                                                                            koi.koiId,
+                                                                            koi.koiCondition
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Update
+                                                                    Condition
+                                                                </Button>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
+                                                )
                                             ) : (
                                                 <TableRow>
                                                     <TableCell
@@ -882,6 +866,9 @@ export default function ManageOrder() {
                         orderId={selectedOrderId}
                         orderStatusId={selectedOrderStatusId}
                         onClose={closeDocumentModal}
+                        setAlertMessage={setAlertMessage}
+                        setAlertSeverity={setAlertSeverity}
+                        setAlertOpen={setAlertOpen}
                     />
                 )}
             </Modal>

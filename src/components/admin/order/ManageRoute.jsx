@@ -105,8 +105,9 @@ function OrderRow({ row }) {
                 UserToast("error", "Failed to add order to route!")
             }
         } catch (error) {
-            console.error("Error adding order to route:", error)
             UserToast("error", "Error! Please try again.")
+            console.error("Error adding order to route:", error)
+
         }
     }
     return (
@@ -455,7 +456,6 @@ export default function ManageRoute() {
     return (
         <>
             <Box display="flex">
-                <ToastContainer containerId={"Route"} />
                 <AdminSideMenu />
                 {/* Main Table Area */}
                 <Box flex={1} padding={3}>
@@ -527,82 +527,6 @@ export default function ManageRoute() {
                             </TableHead>
 
                             <TableBody>
-                                {filteredOrders.length > 0 ? (
-                                    filteredOrders.map((order) => (
-                                        <OrderRow
-                                            key={order.orderId}
-                                            row={order}
-                                        />
-                                    ))
-                                ) : (
-                                    <TableRow>
-                                        <TableCell />
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                align="center"
-                                            >
-                                                Order ID
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                allign="center"
-                                            >
-                                                Customer ID
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                allign="center"
-                                            >
-                                                Order Date
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                allign="center"
-                                            >
-                                                Is Payment
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                allign="center"
-                                            >
-                                                Delivery Date
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                allign="center"
-                                            >
-                                                Status
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                allign="center"
-                                            >
-                                                Action
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                allign="center"
-                                            >
-                                                Delivering Staff
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                )}
                                 {filteredOrders.length > 0 ? (
                                     filteredOrders.map((order) => (
                                         <OrderRow

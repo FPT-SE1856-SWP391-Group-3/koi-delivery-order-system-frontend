@@ -31,7 +31,6 @@ const ComponentPath = {
             userAddress: address + "/user",
         },
         user: {
-            userPath: user,
             viewUser: user + view,
             editUser: user + edit,
             createUser: user + create,
@@ -41,7 +40,6 @@ const ComponentPath = {
             validateEmail: user + "/email/validate/",
         },
         order: {
-            orderPath: order,
             viewOrder: order + view,
             editOrder: order + edit,
             createOrder: order + create,
@@ -65,13 +63,11 @@ const ComponentPath = {
             createDocument: document + create,
         },
         payment: {
-            paymentPath: payment,
             viewPayment: payment + view,
             editPayment: payment + edit,
             createPayment: payment + create,
         },
         profile: {
-            profilePath: profile,
             viewProfile: profile + view,
             editProfile: profile + edit,
             createProfile: profile + create,

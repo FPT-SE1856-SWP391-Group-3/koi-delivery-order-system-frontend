@@ -4,7 +4,6 @@ import api from "../../../../api/CallAPI"
 import "../../css/CreateOrder.css"
 import { Grid } from "@mui/joy"
 import UserToast from "../../alert/UserToast"
-import { ToastContainer } from "react-toastify"
 
 const SenderInfo = ({ onChange }) => {
     const [senderInfo, setSenderInfo] = useState({
@@ -74,7 +73,6 @@ const SenderInfo = ({ onChange }) => {
 
     return (
         <div>
-            <ToastContainer />
             <h2>Sender Information</h2>
             <div className="sectionCompo">
                 <label>Sender Name</label>
