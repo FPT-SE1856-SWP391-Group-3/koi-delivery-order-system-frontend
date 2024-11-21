@@ -21,6 +21,8 @@ import {
     DialogContent,
     DialogActions,
 } from "@mui/material"
+import UserToast from "../alert/UserToast"
+import { ToastContainer } from "react-toastify"
 
 export default function UserAddress() {
     const [addresses, setAddresses] = useState([])
@@ -52,18 +54,18 @@ export default function UserAddress() {
         try {
             api.del("Addresses/" + addressId).then((data) => {
                 if (data.success) {
-                    alert("Xóa thành công!")
+                    UserToast("success", "Address deleted successfully.")
                     const newAddresses = addresses.filter(
                         (address) => address.addressId !== addressId
                     )
                     setAddresses(newAddresses)
                 } else {
-                    alert("Xóa thất bại!")
+                    UserToast("error", "An error occurred during deletion.")
                 }
             })
         } catch (error) {
             console.error("Error during deletion:", error)
-            alert("An error occurred during deletion. Please try again.")
+            UserToast("error", "An error occurred during deletion.")
         }
     }
 
