@@ -46,7 +46,7 @@ export default function UserAddress() {
                 }
             })
         } catch (error) {
-            UserToast("error", "An error occurred while fetching payments.")
+            UserToast("error", "An error occurred while fetching addresses.")
         }
     }, [id])
 
