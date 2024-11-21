@@ -23,7 +23,6 @@ import {
     DialogContent,
     DialogActions,
     TextField,
-    Tooltip,
 } from "@mui/material"
 import AdminSideMenu from "../components/AdminSideMenu"
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
@@ -36,7 +35,6 @@ const ManageDeliverOrder = () => {
     const [routes, setRoutes] = useState([])
     const [selectedRouteId, setSelectedRouteId] = useState("")
     const [orders, setOrders] = useState([])
-    const [orderStatus, setOrderStatus] = useState([])
     const [alertOpen, setAlertOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
     const [alertSeverity, setAlertSeverity] = useState("success")
@@ -49,13 +47,33 @@ const ManageDeliverOrder = () => {
     useEffect(() => {
         if (user?.userId) {
             fetchRoutes(user.userId)
-            fetchOrderStatus()
         }
     }, [user])
-
+    useEffect(() => {
+        // Automatically fetch orders for the first route when routes are loaded
+        if (routes.length > 0) {
+            const firstRouteId = routes[0].routeId
+            setSelectedRouteId(firstRouteId) // Set the selected route ID to the first route
+            fetchOrders(firstRouteId) // Fetch orders for the first route
+        }
+    }, [routes])
+    const fetchRoutes = async (deliveryStaffId) => {
+        try {
+            const response = await api.get(
+                `routes-controllers/DeliveryStaffId/${deliveryStaffId}`
+            )
+            if (response.success && Array.isArray(response.route)) {
+                setRoutes(response.route)
+            } else {
+                console.error("Failed to fetch routes or no routes available.")
+            }
+        } catch (error) {
+            console.error("Error fetching routes:", error)
+        }
+    }
     const fetchOrders = async (routeId) => {
         try {
-            const response = await api.get(`Orders/orderByRouteId/${routeId}`)
+            const response = await api.get(`orders/orderByRouteId/${routeId}`)
             console.log("API Response for Orders:", response) // Debugging log
 
             if (response.success && Array.isArray(response.orderIds)) {
@@ -73,40 +91,47 @@ const ManageDeliverOrder = () => {
             setAlertOpen(true)
         }
     }
-    const fetchOrderStatus = async () => {
-        try {
-            const response = await api.get("OrderStatus/")
-            if (response.success) {
-                setOrderStatus(response.orderStatuses)
-            } else {
-                console.error("Error fetching order statuses.")
-            }
-        } catch (error) {
-            console.error("Error fetching order statuses:", error)
-        }
-    }
+
     const fetchKoiDetails = async (orderId) => {
         try {
             const response = await api.get(
-                `OrderDetails/OrderDetailsByOrderId/${orderId}`
+                `order-details/OrderDetailsByOrderId/${orderId}`
             )
             if (response.success) {
-                setKoiDetails(response.orderDetails || [])
+                const allKois = response.orderDetails.flatMap(
+                    (detail) => detail.kois || []
+                )
+                setKoiDetails(allKois)
             } else {
+                setKoiDetails([])
                 console.log("No koi details found!")
             }
         } catch (error) {
             console.error("Error fetching koi details:", error)
         }
     }
+    const openUpdateModal = (koiId, currentCondition) => {
+        setSelectedKoiId(koiId)
+        setNewKoiCondition(currentCondition)
+        setIsUpdateModalOpen(true)
+    }
+
+    const closeUpdateModal = () => {
+        setIsUpdateModalOpen(false)
+        setSelectedKoiId(null)
+        setNewKoiCondition("")
+    }
     const updateKoiCondition = async () => {
         try {
-            const response = await api.put(`Kois/${selectedKoiId}`, {
+            const response = await api.put(`kois/${selectedKoiId}`, {
                 koiCondition: newKoiCondition,
             })
             if (response.success) {
+                setAlertMessage("Update Koi Condition successfully!")
+                setAlertSeverity("success")
+                setAlertOpen(true)
                 fetchKoiDetails(expandedOrderId)
-                setIsUpdateModalOpen(false)
+                closeUpdateModal()
             } else {
                 console.error("Failed to update koi condition.")
             }
@@ -114,29 +139,19 @@ const ManageDeliverOrder = () => {
             console.error("Error updating koi condition:", error)
         }
     }
-    const fetchRoutes = async (deliveryStaffId) => {
-        try {
-            const response = await api.get(
-                `RoutesControllers/DeliveryStaffId/${deliveryStaffId}`
-            )
-            if (response.success && Array.isArray(response.route)) {
-                setRoutes(response.route)
-            } else {
-                console.error("Failed to fetch routes or no routes available.")
-            }
-        } catch (error) {
-            console.error("Error fetching routes:", error)
-        }
-    }
+
     const handleRouteChange = (event) => {
         const routeId = event.target.value
         setSelectedRouteId(routeId)
         fetchOrders(routeId) // Fetch orders for the selected route
     }
     const toggleExpandOrder = (orderId) => {
-        setExpandedOrderId((prev) => (prev === orderId ? null : orderId))
+        const isExpanded = expandedOrderId === orderId
+        setExpandedOrderId(isExpanded ? null : orderId)
+        if (!isExpanded) {
+            fetchKoiDetails(orderId)
+        }
     }
-
     const handleAlertClose = () => {
         setAlertOpen(false)
     }
@@ -160,13 +175,20 @@ const ManageDeliverOrder = () => {
                         onChange={handleRouteChange}
                         label="Select Route"
                     >
-                        {routes.map((route) => (
-                            <MenuItem key={route.routeId} value={route.routeId}>
-                                {`Route ${route.routeId}: ${route.routeAddresses
-                                    .map((address) => address.city)
-                                    .join(", ")}`}
-                            </MenuItem>
-                        ))}
+                        {routes.length > 0 ? (
+                            routes.map((route) => (
+                                <MenuItem
+                                    key={route.routeId}
+                                    value={route.routeId}
+                                >
+                                    {`Route ${route.routeId}: ${route.routeAddresses
+                                        .map((address) => address.city)
+                                        .join(", ")}`}
+                                </MenuItem>
+                            ))
+                        ) : (
+                            <MenuItem>No route available</MenuItem>
+                        )}
                     </Select>
                 </FormControl>
 
@@ -180,7 +202,7 @@ const ManageDeliverOrder = () => {
                                     <TableCell>Order ID</TableCell>
                                     <TableCell>Customer</TableCell>
                                     <TableCell>Order Date</TableCell>
-                                    <TableCell>Is Payment</TableCell>
+                                    <TableCell>Payment Status</TableCell>
                                     <TableCell>Payment Method</TableCell>
                                     <TableCell>
                                         Estimate Delivery Date
@@ -221,9 +243,27 @@ const ManageDeliverOrder = () => {
                                                     {order.orderDate}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {order.isPayment == true
-                                                        ? "Paid"
-                                                        : "Unpaid"}
+                                                    <Box
+                                                        sx={{
+                                                            display:
+                                                                "inline-block",
+                                                            padding: "4px 8px",
+                                                            borderRadius: "4px",
+                                                            color: order.isPayment
+                                                                ? "green"
+                                                                : "red",
+                                                            backgroundColor:
+                                                                order.isPayment
+                                                                    ? "rgba(0, 200, 0, 0.1)"
+                                                                    : "rgba(255, 0, 0, 0.1)",
+                                                            textAlign: "center",
+                                                            fontWeight: "bold",
+                                                        }}
+                                                    >
+                                                        {order.isPayment
+                                                            ? " Paid "
+                                                            : "Unpaid"}
+                                                    </Box>
                                                 </TableCell>
                                                 <TableCell>
                                                     {order.paymentMethod}
@@ -236,11 +276,194 @@ const ManageDeliverOrder = () => {
                                                 </TableCell>
                                                 <TableCell></TableCell>
                                             </TableRow>
+                                            {expandedOrderId ===
+                                                order.orderId && (
+                                                <TableRow>
+                                                    <TableCell
+                                                        colSpan={12}
+                                                        style={{ padding: 0 }}
+                                                    >
+                                                        <Collapse
+                                                            in
+                                                            timeout="auto"
+                                                            unmountOnExit
+                                                        >
+                                                            <Box margin={2}>
+                                                                <Typography
+                                                                    variant="h6"
+                                                                    gutterBottom
+                                                                    component="div"
+                                                                >
+                                                                    Order
+                                                                    Details
+                                                                </Typography>
+                                                                <Table
+                                                                    size="small"
+                                                                    aria-label="order details"
+                                                                >
+                                                                    <TableHead>
+                                                                        <TableRow>
+                                                                            <TableCell>
+                                                                                Pickup
+                                                                                Address
+                                                                            </TableCell>
+                                                                            <TableCell>
+                                                                                Shipping
+                                                                                Address
+                                                                            </TableCell>
+                                                                            <TableCell>
+                                                                                Distance
+                                                                            </TableCell>
+
+                                                                            <TableCell>
+                                                                                Total
+                                                                                Price
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    </TableHead>
+                                                                    <TableBody>
+                                                                        <TableRow>
+                                                                            <TableCell>
+                                                                                {
+                                                                                    order.startAddressLine
+                                                                                }
+                                                                            </TableCell>
+                                                                            <TableCell>
+                                                                                {
+                                                                                    order.endAddressLine
+                                                                                }
+                                                                            </TableCell>
+                                                                            <TableCell>
+                                                                                {
+                                                                                    order.distance
+                                                                                }
+                                                                            </TableCell>
+
+                                                                            <TableCell>
+                                                                                {
+                                                                                    order.totalPrice
+                                                                                }
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    </TableBody>
+                                                                </Table>
+                                                                <Box
+                                                                    marginTop={
+                                                                        2
+                                                                    }
+                                                                >
+                                                                    <Typography
+                                                                        variant="h6"
+                                                                        gutterBottom
+                                                                    >
+                                                                        Koi
+                                                                        Details
+                                                                    </Typography>
+                                                                    <Table size="small">
+                                                                        <TableHead>
+                                                                            <TableRow>
+                                                                                <TableCell>
+                                                                                    Koi
+                                                                                    ID
+                                                                                </TableCell>
+                                                                                <TableCell>
+                                                                                    Name
+                                                                                </TableCell>
+                                                                                <TableCell>
+                                                                                    Weight
+                                                                                </TableCell>
+                                                                                <TableCell>
+                                                                                    Condition
+                                                                                </TableCell>
+                                                                                <TableCell>
+                                                                                    Price
+                                                                                </TableCell>
+                                                                                <TableCell>
+                                                                                    Action
+                                                                                </TableCell>
+                                                                            </TableRow>
+                                                                        </TableHead>
+                                                                        <TableBody>
+                                                                            {koiDetails.length >
+                                                                            0 ? (
+                                                                                koiDetails.map(
+                                                                                    (
+                                                                                        koi
+                                                                                    ) => (
+                                                                                        <TableRow
+                                                                                            key={
+                                                                                                koi.koiId
+                                                                                            }
+                                                                                        >
+                                                                                            <TableCell>
+                                                                                                {
+                                                                                                    koi.koiId
+                                                                                                }
+                                                                                            </TableCell>
+                                                                                            <TableCell>
+                                                                                                {
+                                                                                                    koi.koiName
+                                                                                                }
+                                                                                            </TableCell>
+                                                                                            <TableCell>
+                                                                                                {
+                                                                                                    koi.weight
+                                                                                                }
+                                                                                            </TableCell>
+                                                                                            <TableCell>
+                                                                                                {
+                                                                                                    koi.koiCondition
+                                                                                                }
+                                                                                            </TableCell>
+                                                                                            <TableCell>
+                                                                                                {koi.price ||
+                                                                                                    "N/A"}
+                                                                                            </TableCell>
+                                                                                            <TableCell>
+                                                                                                <Button
+                                                                                                    variant="contained"
+                                                                                                    size="small"
+                                                                                                    onClick={() =>
+                                                                                                        openUpdateModal(
+                                                                                                            koi.koiId,
+                                                                                                            koi.koiCondition
+                                                                                                        )
+                                                                                                    }
+                                                                                                >
+                                                                                                    Update
+                                                                                                </Button>
+                                                                                            </TableCell>
+                                                                                        </TableRow>
+                                                                                    )
+                                                                                )
+                                                                            ) : (
+                                                                                <TableRow>
+                                                                                    <TableCell
+                                                                                        colSpan={
+                                                                                            12
+                                                                                        }
+                                                                                        align="center"
+                                                                                    >
+                                                                                        No
+                                                                                        Koi
+                                                                                        Details
+                                                                                        Available
+                                                                                    </TableCell>
+                                                                                </TableRow>
+                                                                            )}
+                                                                        </TableBody>
+                                                                    </Table>
+                                                                </Box>
+                                                            </Box>
+                                                        </Collapse>
+                                                    </TableCell>
+                                                </TableRow>
+                                            )}
                                         </React.Fragment>
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={6} align="center">
+                                        <TableCell colSpan={12} align="center">
                                             No orders available for this route.
                                         </TableCell>
                                     </TableRow>
@@ -264,24 +487,21 @@ const ManageDeliverOrder = () => {
                         {alertMessage}
                     </Alert>
                 </Snackbar>
-                <Dialog
-                    open={isUpdateModalOpen}
-                    onClose={() => setIsUpdateModalOpen(false)}
-                >
+                <Dialog open={isUpdateModalOpen} onClose={closeUpdateModal}>
                     <DialogTitle>Update Koi Condition</DialogTitle>
                     <DialogContent>
                         <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Condition"
+                            type="text"
                             fullWidth
-                            label="New Condition"
                             value={newKoiCondition}
                             onChange={(e) => setNewKoiCondition(e.target.value)}
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button
-                            onClick={() => setIsUpdateModalOpen(false)}
-                            color="primary"
-                        >
+                        <Button onClick={closeUpdateModal} color="primary">
                             Cancel
                         </Button>
                         <Button onClick={updateKoiCondition} color="primary">

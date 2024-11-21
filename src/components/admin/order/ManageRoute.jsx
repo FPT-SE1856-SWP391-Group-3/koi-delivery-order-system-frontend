@@ -12,6 +12,8 @@ import {
     Paper,
     Button,
     Modal,
+    Alert,
+    Snackbar,
     IconButton,
     Typography,
     Collapse,
@@ -21,18 +23,22 @@ import {
     KeyboardArrowUp as KeyboardArrowUpIcon,
 } from "@mui/icons-material"
 import api from "../../../api/CallAPI"
-function OrderRow({ row, UserToast }) {
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
+
+function OrderRow({ row, setAlertOpen, setAlertMessage, setAlertSeverity }) {
     const [open, setOpen] = useState(false)
     const [koiDetails, setKoiDetails] = useState([])
     const [routeModalOpen, setRouteModalOpen] = useState(false)
     const [matchingRoutes, setMatchingRoutes] = useState([])
     const [error, setError] = useState(null) // State for error handling
+
     const user = JSON.parse(localStorage.getItem("user"))
 
     const fetchKoiDetails = async (orderId) => {
         try {
             const response = await api.get(
-                `OrderDetails/OrderDetailsByOrderId/${orderId}`
+                `order-details/OrderDetailsByOrderId/${orderId}`
             )
             if (response.success && Array.isArray(response.orderDetails)) {
                 const kois = response.orderDetails.flatMap(
@@ -59,7 +65,7 @@ function OrderRow({ row, UserToast }) {
     const handleAddRouteClick = async () => {
         try {
             const response = await api.get(
-                `RoutesControllers/findMatchingRouteForOrder/${row.orderId}`
+                `routes-controllers/findMatchingRouteForOrder/${row.orderId}`
             )
             if (response.success && Array.isArray(response.matchingRoutes)) {
                 setMatchingRoutes(response.matchingRoutes)
@@ -78,7 +84,6 @@ function OrderRow({ row, UserToast }) {
     }
 
     // Function to add the order to the selected route
-    // Function to add the order to the selected route
     const handleAddOrderToRoute = async (routeId) => {
         try {
             // Check if routeId is valid
@@ -90,7 +95,7 @@ function OrderRow({ row, UserToast }) {
             console.log("Payload:", payload) // Add this to verify the payload
 
             const response = await api.post(
-                "RoutesControllers/addOrderToRoute",
+                "routes-controllers/addOrderToRoute",
                 payload
             )
 
@@ -100,52 +105,64 @@ function OrderRow({ row, UserToast }) {
             }
 
             if (response.success) {
-                UserToast("success", "Order added to route successfully!")
                 setRouteModalOpen(false) // Close modal after successful addition
+                setAlertMessage("Order added to route successfully!")
+                setAlertSeverity("success")
+                setAlertOpen(true)
             } else {
-                UserToast("error", "Failed to add order to route!")
+                setAlertMessage("Failed to add order to route!")
+                setAlertSeverity("error")
+                setAlertOpen(true)
             }
         } catch (error) {
             UserToast("error", "Error! Please try again.")
             console.error("Error adding order to route:", error)
+            setAlertMessage("Error! Please try again.")
+            setAlertSeverity("error")
+            setAlertOpen(true)
         }
     }
+
     return (
-        <>
-            <React.Fragment>
-                <TableRow>
-                    <TableCell>
-                        <IconButton size="small" onClick={handleExpandClick}>
-                            {open ? (
-                                <KeyboardArrowUpIcon />
-                            ) : (
-                                <KeyboardArrowDownIcon />
-                            )}
-                        </IconButton>
-                    </TableCell>
-                    <TableCell>{row.orderId}</TableCell>
-                    <TableCell>
-                        {row.customerId}. {row.customerName}
-                    </TableCell>
-                    <TableCell>{row.orderDate}</TableCell>
-                    <TableCell>
-                        {row.paymentHistoryId != null &&
-                        row.paymentHistory &&
-                        row.paymentHistory.paymentStatusId === 2
-                            ? "Paid"
-                            : "Unpaid"}
-                    </TableCell>
-                    <TableCell>{row.status ? row.status : ""}</TableCell>
-                    <TableCell>{row.deliveryStaffName}</TableCell>
-                    <TableCell>
-                        <Button
-                            variant="contained"
-                            onClick={handleAddRouteClick}
-                        >
-                            Add Route
-                        </Button>
-                    </TableCell>
-                </TableRow>
+        <React.Fragment>
+            <TableRow>
+                <TableCell>
+                    <IconButton size="small" onClick={handleExpandClick}>
+                        {open ? (
+                            <KeyboardArrowUpIcon />
+                        ) : (
+                            <KeyboardArrowDownIcon />
+                        )}
+                    </IconButton>
+                </TableCell>
+                <TableCell align="center">{row.orderId}</TableCell>
+                <TableCell>{row.customerName}</TableCell>
+                <TableCell>{row.orderDate}</TableCell>
+                <TableCell>
+                    <Box
+                        sx={{
+                            display: "inline-block",
+                            padding: "4px 8px",
+                            borderRadius: "4px",
+                            color: row.isPayment ? "green" : "red",
+                            backgroundColor: row.isPayment
+                                ? "rgba(0, 200, 0, 0.1)"
+                                : "rgba(255, 0, 0, 0.1)",
+                            textAlign: "center",
+                            fontWeight: "bold",
+                        }}
+                    >
+                        {row.isPayment ? "Paid" : "Unpaid"}
+                    </Box>
+                </TableCell>
+                <TableCell>{row.status ? row.status : ""}</TableCell>
+                <TableCell>{row.deliveryStaffName}</TableCell>
+                <TableCell>
+                    <Button variant="contained" onClick={handleAddRouteClick}>
+                        Add Route
+                    </Button>
+                </TableCell>
+            </TableRow>
 
                 {/* Modal for Matching Routes */}
                 <Modal
@@ -402,7 +419,9 @@ function OrderRow({ row, UserToast }) {
 
 OrderRow.propTypes = {
     row: PropTypes.object.isRequired,
-    UserToast: PropTypes.func.isRequired,
+    setAlertOpen: PropTypes.func.isRequired,
+    setAlertMessage: PropTypes.func.isRequired,
+    setAlertSeverity: PropTypes.func.isRequired,
 }
 import UserToast from "../../user/alert/UserToast"
 import { ToastContainer } from "react-toastify"
@@ -411,6 +430,9 @@ export default function ManageRoute() {
     const [filteredOrders, setFilteredOrders] = useState([])
     const [orderStatus, setOrderStatus] = useState([])
     const user = JSON.parse(localStorage.getItem("user"))
+    const [alertOpen, setAlertOpen] = useState(false)
+    const [alertMessage, setAlertMessage] = useState("")
+    const [alertSeverity, setAlertSeverity] = useState("success")
 
     useEffect(() => {
         fetchOrders()
@@ -419,7 +441,7 @@ export default function ManageRoute() {
 
     const fetchOrders = async () => {
         try {
-            const data = await api.get("Orders") // Make sure this URL is correct and reachable
+            const data = await api.get("orders") // Make sure this URL is correct and reachable
             if (data.success && Array.isArray(data.order)) {
                 const filtered = data.order.filter(
                     (o) => o.orderStatusId === 7 && o.deliveryStaffId === null
@@ -440,7 +462,7 @@ export default function ManageRoute() {
 
     const fetchOrderStatus = async () => {
         try {
-            const data = await api.get("OrderStatus/")
+            const data = await api.get("order-status/")
             if (data.success) {
                 setOrderStatus(data.orderStatuses)
             } else {
@@ -452,6 +474,10 @@ export default function ManageRoute() {
                 "An error occurred while fetching order statuses."
             )
         }
+    }
+
+    const handleAlertClose = () => {
+        setAlertOpen(false)
     }
 
     return (
@@ -498,7 +524,7 @@ export default function ManageRoute() {
                                             fontWeight={600}
                                             allign="center"
                                         >
-                                            Is Payment
+                                            Payment Status
                                         </Typography>
                                     </TableCell>
                                     <TableCell>
@@ -534,7 +560,85 @@ export default function ManageRoute() {
                                         <OrderRow
                                             key={order.orderId}
                                             row={order}
-                                            UserToast={UserToast}
+                                            setAlertOpen={setAlertOpen}
+                                            setAlertMessage={setAlertMessage}
+                                            setAlertSeverity={setAlertSeverity}
+                                        />
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell />
+                                        <TableCell>
+                                            <Typography
+                                                fontWeight={600}
+                                                align="center"
+                                            >
+                                                Order ID
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                fontWeight={600}
+                                                allign="center"
+                                            >
+                                                Customer ID
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                fontWeight={600}
+                                                allign="center"
+                                            >
+                                                Order Date
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                fontWeight={600}
+                                                allign="center"
+                                            >
+                                                Payment Status
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                fontWeight={600}
+                                                allign="center"
+                                            >
+                                                Delivery Date
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                fontWeight={600}
+                                                allign="center"
+                                            >
+                                                Status
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                fontWeight={600}
+                                                allign="center"
+                                            >
+                                                Action
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography
+                                                fontWeight={600}
+                                                allign="center"
+                                            >
+                                                Delivering Staff
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                                {filteredOrders.length > 0 ? (
+                                    filteredOrders.map((order) => (
+                                        <OrderRow
+                                            key={order.orderId}
+                                            row={order}
                                         />
                                     ))
                                 ) : (
@@ -550,6 +654,21 @@ export default function ManageRoute() {
                     </TableContainer>
                 </Box>
             </Box>
+            {/* Snackbar and Alert */}
+            <Snackbar
+                open={alertOpen}
+                autoHideDuration={6000}
+                onClose={handleAlertClose}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <Alert
+                    onClose={handleAlertClose}
+                    severity={alertSeverity}
+                    sx={{ width: "100%" }}
+                >
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
         </>
     )
 }
