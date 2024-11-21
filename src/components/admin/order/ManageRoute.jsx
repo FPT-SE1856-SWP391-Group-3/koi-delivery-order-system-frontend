@@ -34,13 +34,17 @@ function OrderRow({ row }) {
 
     const fetchKoiDetails = async (orderId) => {
         try {
-            const data = await api.get(
+            const response = await api.get(
                 `OrderDetails/OrderDetailsByOrderId/${orderId}`
             )
-            if (data.success) {
-                setKoiDetails(data.orderDetails || [])
+            if (response.success && Array.isArray(response.orderDetails)) {
+                const kois = response.orderDetails.flatMap(
+                    (detail) => detail.kois
+                )
+                setKoiDetails(kois)
             } else {
                 console.log("No koi details found!")
+                setKoiDetails([])
             }
         } catch (error) {
             console.error("Error fetching koi details:", error)
@@ -110,293 +114,237 @@ function OrderRow({ row }) {
         }
     }
     return (
-        <>
-            <React.Fragment>
-                <ToastContainer />
-                <TableRow>
-                    <TableCell>
-                        <IconButton size="small" onClick={handleExpandClick}>
-                            {open ? (
-                                <KeyboardArrowUpIcon />
-                            ) : (
-                                <KeyboardArrowDownIcon />
-                            )}
-                        </IconButton>
-                    </TableCell>
-                    <TableCell>{row.orderId}</TableCell>
-                    <TableCell>
-                        {row.customerId}. {row.customerName}
-                    </TableCell>
-                    <TableCell>{row.orderDate}</TableCell>
-                    <TableCell>
-                        {row.paymentHistoryId != null &&
-                        row.paymentHistory &&
-                        row.paymentHistory.paymentStatusId === 2
-                            ? "True"
-                            : "False"}
-                    </TableCell>
-                    <TableCell>{row.status ? row.status : ""}</TableCell>
-                    <TableCell>{row.deliveryStaffName}</TableCell>
-                    <TableCell>
-                        <Button
-                            variant="contained"
-                            onClick={handleAddRouteClick}
-                        >
-                            Add Route
-                        </Button>
-                    </TableCell>
-                </TableRow>
-
-                {/* Modal for Matching Routes */}
-                <Modal
-                    open={routeModalOpen}
-                    onClose={() => setRouteModalOpen(false)}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-description"
-                >
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            width: 900,
-                            bgcolor: "background.paper",
-                            boxShadow: 24,
-                            p: 4,
-                            borderRadius: 2,
-                        }}
-                    >
-                        <Typography
-                            id="modal-title"
-                            variant="h6"
-                            component="h2"
-                        >
-                            Select a Route for Order #{row.orderId}
-                        </Typography>
-                        {matchingRoutes.length > 0 ? (
-                            <TableContainer component={Paper} sx={{ mt: 2 }}>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Route ID</TableCell>
-                                            <TableCell>
-                                                Current Location
-                                            </TableCell>
-                                            <TableCell>
-                                                Route Addresses
-                                            </TableCell>
-                                            <TableCell>Capacity</TableCell>
-                                            <TableCell>Current Load</TableCell>
-                                            <TableCell>
-                                                Delivery Staff
-                                            </TableCell>
-                                            <TableCell></TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {matchingRoutes.map((route) => (
-                                            <TableRow key={route.routeId}>
-                                                <TableCell>
-                                                    {route.routeId}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {route.currentLocation}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {route.routeAddresses
-                                                        .map(
-                                                            (address) =>
-                                                                address.city
-                                                        )
-                                                        .join(", ")}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {route.capacity}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {route.currentLoad}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {
-                                                        route.deliveryStaff
-                                                            .fullName
-                                                    }
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={() =>
-                                                            handleAddOrderToRoute(
-                                                                route.routeId
-                                                            )
-                                                        }
-                                                        disabled={
-                                                            route.currentLoad >=
-                                                            route.capacity
-                                                        }
-                                                    >
-                                                        Add
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
+        <React.Fragment>
+            <TableRow>
+                <TableCell>
+                    <IconButton size="small" onClick={handleExpandClick}>
+                        {open ? (
+                            <KeyboardArrowUpIcon />
                         ) : (
-                            <Typography
-                                variant="body1"
-                                color="textSecondary"
-                                align="center"
-                                sx={{ mt: 2 }}
-                            >
-                                {error || "No matching routes found!"}
-                            </Typography>
+                            <KeyboardArrowDownIcon />
                         )}
-                        <Box mt={2} display="flex" justifyContent="flex-end">
-                            <Button
-                                variant="outlined"
-                                onClick={() => setRouteModalOpen(false)}
-                            >
-                                Close
-                            </Button>
-                        </Box>
-                    </Box>
-                </Modal>
+                    </IconButton>
+                </TableCell>
+                <TableCell align="center">{row.orderId}</TableCell>
+                <TableCell>{row.customerName}</TableCell>
+                <TableCell>{row.orderDate}</TableCell>
+                <TableCell>
+                    {row.paymentHistoryId != null &&
+                    row.paymentHistory &&
+                    row.paymentHistory.paymentStatusId === 2
+                        ? "Paid"
+                        : "Unpaid"}
+                </TableCell>
+                <TableCell>{row.status ? row.status : ""}</TableCell>
+                <TableCell>{row.deliveryStaffName}</TableCell>
+                <TableCell>
+                    <Button variant="contained" onClick={handleAddRouteClick}>
+                        Add Route
+                    </Button>
+                </TableCell>
+            </TableRow>
 
-                {/* Order Details */}
-                <TableRow>
-                    <TableCell
-                        style={{ paddingBottom: 0, paddingTop: 0 }}
-                        colSpan={12}
-                    >
-                        <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box margin={2}>
+            {/* Modal for Matching Routes */}
+            <Modal
+                open={routeModalOpen}
+                onClose={() => setRouteModalOpen(false)}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 900,
+                        bgcolor: "background.paper",
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: 2,
+                    }}
+                >
+                    <Typography id="modal-title" variant="h6" component="h2">
+                        Select a Route for Order #{row.orderId}
+                    </Typography>
+                    {matchingRoutes.length > 0 ? (
+                        <TableContainer component={Paper} sx={{ mt: 2 }}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Route ID</TableCell>
+                                        <TableCell>Current Location</TableCell>
+                                        <TableCell>Route Addresses</TableCell>
+                                        <TableCell>Capacity</TableCell>
+                                        <TableCell>Current Load</TableCell>
+                                        <TableCell>Delivery Staff</TableCell>
+                                        <TableCell></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {matchingRoutes.map((route) => (
+                                        <TableRow key={route.routeId}>
+                                            <TableCell>
+                                                {route.routeId}
+                                            </TableCell>
+                                            <TableCell>
+                                                {route.currentLocation}
+                                            </TableCell>
+                                            <TableCell>
+                                                {route.routeAddresses
+                                                    .map(
+                                                        (address) =>
+                                                            address.city
+                                                    )
+                                                    .join(", ")}
+                                            </TableCell>
+                                            <TableCell>
+                                                {route.capacity}
+                                            </TableCell>
+                                            <TableCell>
+                                                {route.currentLoad}
+                                            </TableCell>
+                                            <TableCell>
+                                                {route.deliveryStaff.fullName}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() =>
+                                                        handleAddOrderToRoute(
+                                                            route.routeId
+                                                        )
+                                                    }
+                                                    disabled={
+                                                        route.currentLoad >=
+                                                        route.capacity
+                                                    }
+                                                >
+                                                    Add
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    ) : (
+                        <Typography
+                            variant="body1"
+                            color="textSecondary"
+                            align="center"
+                            sx={{ mt: 2 }}
+                        >
+                            {error || "No matching routes found!"}
+                        </Typography>
+                    )}
+                    <Box mt={2} display="flex" justifyContent="flex-end">
+                        <Button
+                            variant="outlined"
+                            onClick={() => setRouteModalOpen(false)}
+                        >
+                            Close
+                        </Button>
+                    </Box>
+                </Box>
+            </Modal>
+
+            {/* Order Details */}
+            <TableRow>
+                <TableCell
+                    style={{ paddingBottom: 0, paddingTop: 0 }}
+                    colSpan={12}
+                >
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box margin={2}>
+                            <Typography
+                                variant="h6"
+                                gutterBottom
+                                component="div"
+                            >
+                                Order Details
+                            </Typography>
+                            <Table size="small" aria-label="order details">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Pickup Address</TableCell>
+                                        <TableCell>Shipping Address</TableCell>
+                                        <TableCell>Distance</TableCell>
+                                        <TableCell>Total Price</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell>
+                                            {row?.startAddressLine || ""}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row?.endAddressLine || ""}
+                                        </TableCell>
+                                        <TableCell>{row.distance}</TableCell>
+                                        <TableCell>{row.totalPrice}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+
+                            <Box marginTop={2}>
                                 <Typography
                                     variant="h6"
                                     gutterBottom
                                     component="div"
                                 >
-                                    Order Details
+                                    Koi Details
                                 </Typography>
-                                <Table size="small" aria-label="order details">
+                                <Table size="small" aria-label="koi details">
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>
-                                                Pickup Address
-                                            </TableCell>
-                                            <TableCell>
-                                                Shipping Address
-                                            </TableCell>
-                                            <TableCell>Distance</TableCell>
-                                            <TableCell>Total Price</TableCell>
+                                            <TableCell>Koi ID</TableCell>
+                                            <TableCell>Koi Name</TableCell>
+                                            <TableCell>Weight (kg)</TableCell>
+                                            <TableCell>Koi Condition</TableCell>
+                                            <TableCell>Price ($)</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        <TableRow>
-                                            <TableCell>
-                                                {row?.startAddressLine || ""}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row?.endAddressLine || ""}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.distance}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.totalPrice}
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-
-                                <Box marginTop={2}>
-                                    <Typography
-                                        variant="h6"
-                                        gutterBottom
-                                        component="div"
-                                    >
-                                        Koi Details
-                                    </Typography>
-                                    <Table
-                                        size="small"
-                                        aria-label="koi details"
-                                    >
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>Koi ID</TableCell>
-                                                <TableCell>Koi Name</TableCell>
-                                                <TableCell>
-                                                    Weight (kg)
-                                                </TableCell>
-                                                <TableCell>
-                                                    Koi Condition
-                                                </TableCell>
-                                                <TableCell>Price ($)</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {Array.isArray(koiDetails) &&
-                                            koiDetails.length > 0 ? (
-                                                koiDetails.map((koiDetail) => (
-                                                    <TableRow
-                                                        key={
-                                                            koiDetail.orderDetailId
-                                                        }
-                                                    >
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .koiId
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .koiName
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .weight
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .koiCondition
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            {
-                                                                koiDetail.koi
-                                                                    .price
-                                                            }
-                                                        </TableCell>
-                                                    </TableRow>
-                                                ))
-                                            ) : (
-                                                <TableRow>
-                                                    <TableCell
-                                                        colSpan={5}
-                                                        align="center"
-                                                    >
-                                                        No Koi Details Available
+                                        {koiDetails.length > 0 ? (
+                                            koiDetails.map((koi) => (
+                                                <TableRow key={koi.koiId}>
+                                                    <TableCell>
+                                                        {koi.koiId}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {koi.koiName}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {koi.weight}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {koi.koiCondition}
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        {koi.price}
                                                     </TableCell>
                                                 </TableRow>
-                                            )}
-                                        </TableBody>
-                                    </Table>
-                                </Box>
+                                            ))
+                                        ) : (
+                                            <TableRow>
+                                                <TableCell
+                                                    colSpan={5}
+                                                    align="center"
+                                                >
+                                                    No Koi Details Available
+                                                </TableCell>
+                                            </TableRow>
+                                        )}
+                                    </TableBody>
+                                </Table>
                             </Box>
-                        </Collapse>
-                    </TableCell>
-                </TableRow>
-            </React.Fragment>
-        </>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
     )
 }
 
