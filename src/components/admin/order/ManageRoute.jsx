@@ -21,10 +21,7 @@ import {
     KeyboardArrowUp as KeyboardArrowUpIcon,
 } from "@mui/icons-material"
 import api from "../../../api/CallAPI"
-import UserToast from "../../user/alert/UserToast"
-import { ToastContainer } from "react-toastify"
-
-function OrderRow({ row }) {
+function OrderRow({ row, UserToast }) {
     const [open, setOpen] = useState(false)
     const [koiDetails, setKoiDetails] = useState([])
     const [routeModalOpen, setRouteModalOpen] = useState(false)
@@ -116,7 +113,6 @@ function OrderRow({ row }) {
     return (
         <>
             <React.Fragment>
-                <ToastContainer />
                 <TableRow>
                     <TableCell>
                         <IconButton size="small" onClick={handleExpandClick}>
@@ -406,8 +402,10 @@ function OrderRow({ row }) {
 
 OrderRow.propTypes = {
     row: PropTypes.object.isRequired,
+    UserToast: PropTypes.func.isRequired,
 }
-
+import UserToast from "../../user/alert/UserToast"
+import { ToastContainer } from "react-toastify"
 export default function ManageRoute() {
     const [order, setOrder] = useState([])
     const [filteredOrders, setFilteredOrders] = useState([])
@@ -459,6 +457,7 @@ export default function ManageRoute() {
     return (
         <>
             <Box display="flex">
+                <ToastContainer className="route" limit={1} />
                 <AdminSideMenu />
                 {/* Main Table Area */}
                 <Box flex={1} padding={3}>
@@ -535,6 +534,7 @@ export default function ManageRoute() {
                                         <OrderRow
                                             key={order.orderId}
                                             row={order}
+                                            UserToast={UserToast}
                                         />
                                     ))
                                 ) : (

@@ -174,6 +174,7 @@ function CreateOrder() {
         customerDocument,
         selectPaymentMethod,
         setIsLoading,
+        validateForm,
     ])
 
     const handleSaveClick = useCallback(() => {
@@ -202,7 +203,7 @@ function CreateOrder() {
 
     return (
         <>
-            <ToastContainer containerId="toast" limit={1} />
+            <ToastContainer />
             <Box sx={{ display: "flex" }}>
                 <SideMenu />
                 <Box component="main" sx={{ flexGrow: 1 }}>
