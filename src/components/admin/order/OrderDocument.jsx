@@ -73,7 +73,7 @@ export default function ManageOrderDocument() {
             <ToastContainer />
             <AdminSideMenu />
             <Box sx={{ flexGrow: 1, p: 3 }}>
-                <Typography variant="h4" gutterBottom>
+                <Typography variant="h5" gutterBottom fontWeight="bold">
                     Manage Order Documents
                 </Typography>
 
