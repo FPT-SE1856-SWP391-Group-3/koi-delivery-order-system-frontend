@@ -39,35 +39,18 @@ export default function UserOrderDetail({ orderId }) {
                 <Table sx={{ minWidth: 650 }} aria-label="order details table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Order Details ID</TableCell>
                             <TableCell>Koi Name</TableCell>
                             <TableCell>Weight</TableCell>
                             <TableCell>Price</TableCell>
-                            <TableCell>Type</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {UserOrderDetails.length > 0 ? (
-                            UserOrderDetails.map((UserOrderDetail) => (
-                                <TableRow key={UserOrderDetail.orderDetailId}>
-                                    <TableCell>
-                                        {UserOrderDetail.orderDetailId}
-                                    </TableCell>
-                                    <TableCell>
-                                        {UserOrderDetail.koi.koiName}
-                                    </TableCell>
-                                    <TableCell>
-                                        {UserOrderDetail.koi.weight}
-                                    </TableCell>
-                                    <TableCell>
-                                        {UserOrderDetail.koi.price}
-                                    </TableCell>
-                                    <TableCell>
-                                        {UserOrderDetail.koi.koiType != null
-                                            ? UserOrderDetail.koi.koiType
-                                                  .koiTypeName
-                                            : ""}
-                                    </TableCell>
+                            UserOrderDetails[0].kois.map((koi) => (
+                                <TableRow key={koi.koiId}>
+                                    <TableCell>{koi.koiName}</TableCell>
+                                    <TableCell>{koi.weight}</TableCell>
+                                    <TableCell>{koi.price}</TableCell>
                                 </TableRow>
                             ))
                         ) : (
