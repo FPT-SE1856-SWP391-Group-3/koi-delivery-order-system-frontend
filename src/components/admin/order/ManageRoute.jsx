@@ -107,7 +107,6 @@ function OrderRow({ row }) {
         } catch (error) {
             UserToast("error", "Error! Please try again.")
             console.error("Error adding order to route:", error)
-
         }
     }
     return (
