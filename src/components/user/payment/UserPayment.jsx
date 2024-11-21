@@ -83,7 +83,7 @@ export default function UserPayment() {
 
     return (
         <Box sx={{ display: "flex" }}>
-            <ToastContainer/>
+            <ToastContainer />
             {renderSidebar()}
             <Box sx={{ flexGrow: 1, p: 3 }}>
                 <Grid spacing={3}>
