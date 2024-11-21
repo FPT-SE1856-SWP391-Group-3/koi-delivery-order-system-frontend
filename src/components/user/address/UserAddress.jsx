@@ -46,7 +46,7 @@ export default function UserAddress() {
                 }
             })
         } catch (error) {
-            alert("An error has occurred. Please try again.")
+            UserToast("error", "An error occurred while fetching payments.")
         }
     }, [id])
 
