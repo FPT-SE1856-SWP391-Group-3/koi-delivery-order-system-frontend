@@ -6,8 +6,6 @@ const notification = "/notification"
 const document = "/document"
 const payment = "/payment"
 const profile = "/profile"
-const adminPath = "/admin"
-const manage = "/manage/"
 const blogNews = "/blog-news"
 const certification = "/certification"
 const faq = "/faq"
@@ -16,7 +14,6 @@ const report = "/report/transporation"
 const type = "/type"
 const dashboard = "/dashboard"
 const manangeroute = "manangeroute"
-const view = "/view/"
 const edit = "/edit/"
 const create = "/create/"
 const admin = "/admin"
@@ -25,14 +22,13 @@ const ComponentPath = {
     user: {
         dashboard: user + dashboard,
         address: {
-            viewAddress: user + address + view,
+            viewAddress: user + address,
             editAddress: address + edit,
             createAddress: address + create,
-            userAddress: address + "/user",
+            userAddress: address + user,
         },
         user: {
-            userPath: user,
-            viewUser: user + view,
+            viewUser: user,
             editUser: user + edit,
             createUser: user + create,
             updatePassword: user + "/password/update/",
@@ -41,38 +37,35 @@ const ComponentPath = {
             validateEmail: user + "/email/validate/",
         },
         order: {
-            orderPath: order,
-            viewOrder: order + view,
+            viewOrder: order,
             editOrder: order + edit,
             createOrder: order + create,
             orderDetai: {
-                viewOrderDetail: order + view + "detail/",
+                viewOrderDetail: order + "detail/",
             },
         },
         feedback: {
-            viewFeedback: feedback + view,
+            viewFeedback: feedback,
             editFeedback: feedback + edit,
             createFeedback: feedback + create,
         },
         notification: {
-            viewNotification: notification + view,
+            viewNotification: notification,
             editNotification: notification + edit,
             createNotification: notification + create,
         },
         document: {
-            viewDocument: document + view,
+            viewDocument: document,
             editDocument: document + edit,
             createDocument: document + create,
         },
         payment: {
-            paymentPath: payment,
-            viewPayment: payment + view,
+            viewPayment: payment,
             editPayment: payment + edit,
             createPayment: payment + create,
         },
         profile: {
-            profilePath: profile,
-            viewProfile: profile + view,
+            viewProfile: profile,
             editProfile: profile + edit,
             createProfile: profile + create,
         },
@@ -85,68 +78,68 @@ const ComponentPath = {
     admin: {
         dashboard: admin + dashboard,
         address: {
-            manageUserAddress: admin + address + manage,
+            manageUserAddress: admin + address,
         },
         blogNews: {
-            manageBlogNews: admin + blogNews + manage,
+            manageBlogNews: admin + blogNews,
             editBlogNews: admin + blogNews + edit,
             createBlogNews: admin + blogNews + create,
         },
         certification: {
-            manageCertification: admin + certification + manage,
+            manageCertification: admin + certification,
             editCertification: admin + certification + edit,
             createCertification: admin + certification + create,
         },
         faq: {
-            manageFaq: admin + faq + manage,
+            manageFaq: admin + faq,
             editFaq: admin + faq + edit,
             createFaq: admin + faq + create,
         },
         feedback: {
-            manageFeedback: admin + feedback + manage,
+            manageFeedback: admin + feedback,
             createFeedback: admin + feedback + create,
         },
         notification: {
-            manageNotification: admin + notification + manage,
+            manageNotification: admin + notification,
             createNotification: admin + notification + create,
         },
         order: {
-            manageOrder: admin + order + manage,
-            manageOrderDetail: admin + order + manage + "detail/",
+            manageOrder: admin + order,
+            manageOrderDetail: admin + order + "detail/",
             document: {
                 createOrderDocument: admin + order + create + "document/",
                 editOrderDocment: admin + order + edit + "document/",
-                manageOrderDocument: admin + order + view + "document/",
+                manageOrderDocument: admin + order + "document/",
             },
             service: {
                 createOrderService: admin + order + create + "service/",
                 editOrderService: admin + order + edit + "service/",
-                manageOrderService: admin + order + view + "service/",
+                manageOrderService: admin + order + "service/",
             },
         },
         payment: {
-            managePaymentType: admin + payment + type + manage,
+            managePaymentType: admin + payment + type,
             createPaymentType: admin + payment + type + create,
             editPaymentType: admin + payment + type + edit,
         },
         koi: {
-            manageKoi: admin + koi + manage,
+            manageKoi: admin + koi,
             createKoi: admin + koi + create,
             editKoi: admin + koi + edit,
         },
         report: {
-            manageReport: admin + report + manage,
+            manageReport: admin + report,
             createReport: admin + report + create,
             editReport: admin + report + edit,
         },
         user: {
-            manageUser: admin + user + manage,
+            manageUser: admin + user,
             createUser: admin + user + create,
             editUser: admin + user + edit,
         },
         route: {
-            manageRoute: admin + manage + manangeroute,
-            createRoute: admin + manage + manangeroute + create,
+            manageRoute: admin + manangeroute,
+            createRoute: admin + manangeroute + create,
         },
     },
 }
