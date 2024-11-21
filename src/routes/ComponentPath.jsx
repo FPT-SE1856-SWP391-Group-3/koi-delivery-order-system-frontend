@@ -13,10 +13,12 @@ const koi = "/koi"
 const report = "/report/transporation"
 const type = "/type"
 const dashboard = "/dashboard"
-const manangeroute = "manangeroute"
+const manangeroute = "/manangeroute"
+const routing = "/routing"
 const edit = "/edit/"
 const create = "/create/"
 const admin = "/admin"
+const deliver = "/deliver"
 
 const ComponentPath = {
     user: {
@@ -105,6 +107,7 @@ const ComponentPath = {
         },
         order: {
             manageOrder: admin + order,
+            manageDeliverOrder: admin + deliver + order,
             manageOrderDetail: admin + order + "detail/",
             document: {
                 createOrderDocument: admin + order + create + "document/",
@@ -138,8 +141,8 @@ const ComponentPath = {
             editUser: admin + user + edit,
         },
         route: {
+            routingRoute: admin + manangeroute + routing,
             manageRoute: admin + manangeroute,
-            createRoute: admin + manangeroute + create,
         },
     },
 }

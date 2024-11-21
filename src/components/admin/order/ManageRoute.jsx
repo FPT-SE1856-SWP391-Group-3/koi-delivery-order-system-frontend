@@ -132,8 +132,8 @@ function OrderRow({ row }) {
                         {row.paymentHistoryId != null &&
                         row.paymentHistory &&
                         row.paymentHistory.paymentStatusId === 2
-                            ? "True"
-                            : "False"}
+                            ? "Paid"
+                            : "Unpaid"}
                     </TableCell>
                     <TableCell>{row.status ? row.status : ""}</TableCell>
                     <TableCell>{row.deliveryStaffName}</TableCell>

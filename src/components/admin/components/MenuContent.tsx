@@ -46,12 +46,12 @@ export default function MenuContent() {
         {
             text: "Routing for Orders",
             icon: <LocalShippingIcon />,
-            link: ComponentPath.admin.route.manageRoute,
+            link: ComponentPath.admin.route.routingRoute,
         },
         {
             text: "Route",
             icon: <LocalShippingIcon />,
-            link: ComponentPath.admin.route.createRoute,
+            link: ComponentPath.admin.route.manageRoute,
         },
         {
             text: "Feedback",
@@ -132,7 +132,7 @@ export default function MenuContent() {
         {
             text: "Order",
             icon: <LocalAtmIcon />,
-            link: ComponentPath.admin.order.manageOrder,
+            link: ComponentPath.admin.order.manageDeliverOrder,
         },
         {
             text: "Report",
