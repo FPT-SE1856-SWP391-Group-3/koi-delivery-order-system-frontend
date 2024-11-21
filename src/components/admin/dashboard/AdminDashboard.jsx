@@ -116,16 +116,19 @@ export default function AdminDashboard() {
             setFilteredOrdersData(filteredOrders)
             setFilteredChartData(filteredChart)
 
+            const statusCounts = filteredOrders.reduce(
+                (acc, order) => {
+                    if (order.orderStatusId === 10) acc.success++
+                    if (order.orderStatusId === 11) acc.canceled++
+                    return acc
+                },
+                { success: 0, canceled: 0 }
+            )
+
             // Update total counts based on filtered data
             setTotalOrders(filteredOrders.length)
-            setTotalSuccess(
-                filteredOrders.filter((order) => order.orderStatusId === 10)
-                    .length
-            )
-            setTotalCancel(
-                filteredOrders.filter((order) => order.orderStatusId === 11)
-                    .length
-            )
+            setTotalSuccess(statusCounts.success)
+            setTotalCancel(statusCounts.canceled)
         } else {
             setFilteredOrdersData(ordersData)
             setFilteredChartData(chartData)
