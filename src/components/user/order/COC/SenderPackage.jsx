@@ -120,7 +120,7 @@ const SenderPackage = ({
                             <Grid xs={12}>
                                 <TextField
                                     fullWidth
-                                    placeholder="Enter package type."
+                                    placeholder="Enter Koi Name"
                                     value={item.koiName}
                                     onChange={(e) =>
                                         handleInputChange(

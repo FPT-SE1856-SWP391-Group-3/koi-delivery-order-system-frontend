@@ -69,9 +69,7 @@ const ReceiverInfo = ({ onChange, resetInput, setResetInput }) => {
             setReceiverFullAddressLine(
                 `${e.target.value}, ${wardName}, ${districtName}, ${cityName}`
             )
-            setReceiverPartAddressLine(
-                `${wardName}, ${districtName}, ${cityName}`
-            )
+            setReceiverPartAddressLine(`${districtName},${cityName}`)
         }
     }
     useEffect(updateReceiverInfo, [

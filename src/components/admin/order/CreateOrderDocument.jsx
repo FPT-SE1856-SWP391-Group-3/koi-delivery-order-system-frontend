@@ -5,11 +5,15 @@ import api from "../../../api/CallAPI"
 import "../order/CreateOrderDocument.css"
 import UserToast from "../../user/alert/UserToast"
 import { ToastContainer } from "react-toastify"
+import { set } from "date-fns"
 
 export default function CreateOrderDocument({
     orderId,
     orderStatusId,
     onClose,
+    setAlertMessage,
+    setAlertSeverity,
+    setAlertOpen,
     // onAddSuccess,
 }) {
     const { control, register, handleSubmit } = useForm()
@@ -33,22 +37,27 @@ export default function CreateOrderDocument({
                 )
                 if (response.success) {
                     console.log("Document uploaded successfully!")
+                    setAlertMessage("Document uploaded successfully!")
+                    setAlertSeverity("success")
                 } else {
-                    UserToast("error", "Failed to add document!")
+                    console.error("Failed to upload document!")
+                    setAlertMessage("Failed to upload document!")
+                    setAlertSeverity("error")
                 }
+                setAlertOpen(true)
             })
-            UserToast("success", "Document added successfully!")
             // onAddSuccess(); // Update list after successful addition
             onClose() // Close modal
         } catch (error) {
             console.error("Error:", error)
-            UserToast("error", "Error! Please try again.")
+            setAlertMessage("An error occurred while uploading document!")
+            setAlertSeverity("error")
+            setAlertOpen(true)
         }
     }
 
     return (
         <Box className="adddocument-container" p={3}>
-            <ToastContainer />
             <Typography
                 variant="h5"
                 component="h1"
@@ -58,31 +67,8 @@ export default function CreateOrderDocument({
                 Add New Document
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)} className="add-form">
-                <Box mb={2}>
-                    <TextField
-                        label="Order ID"
-                        type="number"
-                        value={orderId}
-                        InputProps={{ readOnly: true }}
-                        fullWidth
-                        variant="outlined"
-                        margin="dense"
-                    />
-                </Box>
-                <Box mb={2}>
-                    <TextField
-                        label="Order Status ID"
-                        type="number"
-                        value={orderStatusId}
-                        InputProps={{ readOnly: true }}
-                        fullWidth
-                        variant="outlined"
-                        margin="dense"
-                    />
-                </Box>
-
                 {fields.map((field, index) => (
-                    <Box key={field.id} className="document-entry" mb={2}>
+                    <>
                         <Box mb={2}>
                             <input
                                 id="filePath"
@@ -117,7 +103,7 @@ export default function CreateOrderDocument({
                         >
                             Delete
                         </Button>
-                    </Box>
+                    </>
                 ))}
 
                 <Button
