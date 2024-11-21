@@ -163,7 +163,9 @@ const ViewFeedback = lazy(
 const ValidateEmailCallBack = lazy(
     () => import("../components/user/auth/ValidateEmailCallBack")
 )
-
+const ManageDeliverOrder = lazy(
+    () => import("../components/admin/order/ManageDeliverOrder")
+)
 // Variables
 var adminUrl = "/admin"
 
@@ -529,7 +531,7 @@ const router = createBrowserRouter([
                         ),
                     },
                     {
-                        path: ComponentPath.admin.route.manageRoute,
+                        path: ComponentPath.admin.route.routingRoute,
                         element: (
                             <Suspense>
                                 <ManageRoute />
@@ -545,7 +547,7 @@ const router = createBrowserRouter([
                         ),
                     },
                     {
-                        path: ComponentPath.admin.route.createRoute,
+                        path: ComponentPath.admin.route.manageRoute,
                         element: (
                             <Suspense>
                                 <CreateRoute />
