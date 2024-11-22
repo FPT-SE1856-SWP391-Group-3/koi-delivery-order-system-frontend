@@ -4,7 +4,7 @@ import Header from "./user/common/Header"
 import Navbar from "./user/common/Navbar"
 import { slides } from "../data/slidedata.json"
 
-export default function HomePage() {
+export function Component() {
     let user = JSON.parse(localStorage.getItem("user"))
 
     return (
