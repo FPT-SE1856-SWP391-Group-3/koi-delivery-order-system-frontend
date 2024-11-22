@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import "../css/ChoosePayment.css" // Import custom CSS
 import ATMCard from "../../../assets/atm-icon.png"

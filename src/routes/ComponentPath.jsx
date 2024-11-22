@@ -57,7 +57,7 @@ const ComponentPath = {
             createNotification: notification + create,
         },
         document: {
-            viewDocument: document,
+            viewDocument: document + "/",
             editDocument: document + edit,
             createDocument: document + create,
         },

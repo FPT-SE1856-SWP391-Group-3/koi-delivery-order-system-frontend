@@ -8,10 +8,8 @@ import { ToastContainer } from "react-toastify"
 export default function CreateTransportationReportDetails({
     orderId,
     onClose,
-    onAddSuccess,
 }) {
     const { register, handleSubmit } = useForm()
-
     const onSubmit = async (data) => {
         try {
             const response = await api.post("transportation-report-details", {
@@ -23,7 +21,6 @@ export default function CreateTransportationReportDetails({
                     "success",
                     "Transportation report added successfully!"
                 )
-                onAddSuccess() // Cập nhật danh sách sau khi thêm thành công
                 onClose() // Đóng modal
             } else {
                 UserToast("error", "Failed to add transportation report!")

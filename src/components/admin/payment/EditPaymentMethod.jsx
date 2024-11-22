@@ -11,7 +11,7 @@ export default function EditPaymentType({ id, onClose, onUpdateSuccess }) {
     useEffect(() => {
         const fetchPaymentMethod = async () => {
             try {
-                const data = await api.get("payment-methods/" + id)
+                const data = await api.get("payments/" + id)
                 if (data.success) {
                     setValue(
                         "paymentMethodName",
@@ -35,7 +35,7 @@ export default function EditPaymentType({ id, onClose, onUpdateSuccess }) {
     // Chỉnh sửa Payment Method
     const onSubmit = async (data) => {
         try {
-            const response = await api.put("payment-methods/" + id, data)
+            const response = await api.put("payments/" + id, data)
             if (response.success) {
                 UserToast("success", "Update payment method successfully!")
                 onUpdateSuccess() // Gọi callback để cập nhật bảng phương thức thanh toán

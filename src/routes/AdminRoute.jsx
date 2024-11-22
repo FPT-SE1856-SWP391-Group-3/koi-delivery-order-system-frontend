@@ -1,9 +1,4 @@
-import React from "react"
-import PropTypes from "prop-types"
 import { Navigate, Outlet } from "react-router-dom"
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import ComponentPath from "routes/ComponentPath"
 
 function AdminRoute() {
     // const [isAdmin, setIsAdmin] = useState(data.isAdmin);

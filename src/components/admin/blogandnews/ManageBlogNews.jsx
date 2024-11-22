@@ -67,7 +67,7 @@ export default function ManageBlogNews() {
     // Confirm delete post
     const confirmDeletePost = async () => {
         try {
-            const data = await api.del(`BlogNews/${selectedPostId}`)
+            const data = await api.del(`blog-news/${selectedPostId}`)
             if (data.success) {
                 UserToast("success", "Post deleted successfully!")
                 setPosts((prevPosts) =>

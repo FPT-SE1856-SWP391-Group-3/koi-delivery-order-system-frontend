@@ -1,11 +1,10 @@
-import React, { useState, useCallback, useEffect, useRef } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import ReceiverInfo from "./COC/ReceiverInfo"
 import SenderInfo from "./COC/SenderInfo"
 import "../css/CreateOrder.css"
 
 import api from "../../../api/CallAPI"
-import CustomerDocumentInfo from "./COC/SelectPaymentMethod"
 import SideMenu from "../SideMenu"
 import {
     Box,

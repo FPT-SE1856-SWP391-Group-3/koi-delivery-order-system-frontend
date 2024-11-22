@@ -1,6 +1,6 @@
 import * as React from "react"
 import { styled } from "@mui/material/styles"
-import Divider, { dividerClasses } from "@mui/material/Divider"
+import { dividerClasses } from "@mui/material/Divider"
 import Menu from "@mui/material/Menu"
 import MuiMenuItem from "@mui/material/MenuItem"
 import { paperClasses } from "@mui/material/Paper"
@@ -11,7 +11,6 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded"
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded"
 import MenuButton from "./MenuButton"
 import { Link } from "react-router-dom"
-import ComponentPath from "../../routes/ComponentPath"
 import { ButtonGroup } from "@mui/material"
 
 const MenuItem = styled(MuiMenuItem)({

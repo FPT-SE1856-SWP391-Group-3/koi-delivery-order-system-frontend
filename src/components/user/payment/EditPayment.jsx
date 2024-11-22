@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import {
     Container,
@@ -15,8 +15,6 @@ export default function EditPayment({ id }) {
     const [payment, setPayment] = useState()
     const navigate = useNavigate()
     let userId = JSON.parse(localStorage.getItem("userId"))
-
-    const [showEditPaymentModal, setShowEditPaymentModal] = useState(false)
 
     useEffect(() => {
         try {

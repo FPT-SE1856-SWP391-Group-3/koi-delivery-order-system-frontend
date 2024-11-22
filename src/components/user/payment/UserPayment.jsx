@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
-import ComponentPath from "routes/ComponentPath"
-import UserSideNav from "../UserSideNav"
 import {
     Button,
     Paper,
@@ -20,22 +17,25 @@ import {
 import { Grid } from "@mui/joy"
 import EditPayment from "./EditPayment"
 import AddPayment from "./AddPayment"
-import { ModalFooter } from "react-bootstrap"
+import AdminSideMenu from "../../admin/components/AdminSideMenu"
+import SideMenu from "../SideMenu"
 import UserToast from "../alert/UserToast"
 import { ToastContainer } from "react-toastify"
 
 export default function UserPayment() {
     const [payments, setPayments] = useState([])
-    const navigate = useNavigate()
-    const id = localStorage.getItem("userId")
+    const [showEditPaymentModal, setShowEditPaymentModal] = useState(false)
+    const [showAddPaymentModal, setShowAddPaymentModal] = useState(false)
+    const [selectedPaymentId, setSelectedPaymentId] = useState(null)
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    const roleId = user?.roleId
 
     useEffect(() => {
         const fetchPayments = async () => {
             try {
-                const data = await api.get("payments/" + id)
+                const data = await api.get(`payments/${user.userId}`)
                 if (data.success) {
                     setPayments(data.payment)
-                    console.log(data.payment)
                 } else {
                     UserToast("error", "No payment found.")
                 }
@@ -44,31 +44,27 @@ export default function UserPayment() {
             }
         }
         fetchPayments()
-    }, [id])
-    const [showEditPaymentModal, setShowEditPaymentModal] = useState(false)
-    const [showAddPaymentModal, setShowAddPaymentModal] = useState(false)
-    const [selectedPaymentId, setSelectedPaymentId] = useState(null)
+    }, [user.userId])
 
     async function deletePayment(paymentId) {
         try {
-            api.del("payments/" + paymentId).then((data) => {
-                if (data.success) {
-                    UserToast("success", "Delete successful!")
-                    const newPayments = payments.filter(
-                        (payment) => payment.paymentId !== paymentId
-                    )
-                    setPayments(newPayments)
-                } else {
-                    UserToast("error", "Delete failed!")
-                }
-            })
+            const data = await api.del(`payments/${paymentId}`)
+            if (data.success) {
+                UserToast("success", "Delete successful!")
+                const newPayments = payments.filter(
+                    (payment) => payment.paymentId !== paymentId
+                )
+                setPayments(newPayments)
+            } else {
+                UserToast("error", "Delete failed!")
+            }
         } catch (error) {
             console.error("Error during deletion:", error)
             UserToast("error", "An error occurred while deleting the payment.")
         }
     }
 
-    // Modal
+    // Modal handlers
     const handleEditPaymentModal = (paymentId) => {
         setSelectedPaymentId(paymentId)
         setShowEditPaymentModal(true)
@@ -79,9 +75,16 @@ export default function UserPayment() {
         setShowAddPaymentModal(false)
     }
 
+    // Render sidebar dynamically
+    const renderSidebar = () => {
+        if (roleId === 2) return <SideMenu />
+        return <AdminSideMenu />
+    }
+
     return (
-        <UserSideNav>
+        <Box sx={{ display: "flex" }}>
             <ToastContainer />
+            {renderSidebar()}
             <Box sx={{ flexGrow: 1, p: 3 }}>
                 <Grid spacing={3}>
                     <Grid item xs={3} />
@@ -107,151 +110,48 @@ export default function UserPayment() {
                                     </TableHead>
                                     <TableBody>
                                         {payments.map((payment) => (
-                                            <>
-                                                <TableRow
-                                                    key={payment.paymentId}
-                                                >
-                                                    <TableCell>
-                                                        {payment.paymentId}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {payment.userName}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {
-                                                            payment.paymentMethodName
-                                                        }
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {payment.paymentNumber}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Stack
-                                                            direction="row"
-                                                            spacing={2}
-                                                        >
-                                                            <Button
-                                                                variant="contained"
-                                                                color="error"
-                                                                onClick={() =>
-                                                                    deletePayment(
-                                                                        payment.paymentId
-                                                                    )
-                                                                }
-                                                            >
-                                                                Delete
-                                                            </Button>
-                                                            <Button
-                                                                variant="contained"
-                                                                onClick={() =>
-                                                                    handleEditPaymentModal(
-                                                                        payment.paymentId
-                                                                    )
-                                                                }
-                                                            >
-                                                                Update
-                                                            </Button>
-                                                        </Stack>
-                                                    </TableCell>
-                                                </TableRow>
-                                                <div>
-                                                    <Modal
-                                                        open={
-                                                            showEditPaymentModal
-                                                        }
-                                                        onClose={
-                                                            handleCloseModal
-                                                        }
-                                                        aria-labelledby="detail-modal-title"
+                                            <TableRow key={payment.paymentId}>
+                                                <TableCell>
+                                                    {payment.paymentId}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {payment.userName}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {payment.paymentMethodName}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {payment.paymentNumber}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Stack
+                                                        direction="row"
+                                                        spacing={2}
                                                     >
-                                                        <Box
-                                                            sx={{
-                                                                position:
-                                                                    "absolute",
-                                                                top: "50%",
-                                                                left: "50%",
-                                                                transform:
-                                                                    "translate(-50%, -50%)",
-                                                                width: "80%",
-                                                                bgcolor:
-                                                                    "background.paper",
-                                                                boxShadow: 24,
-                                                                p: 4,
-                                                                maxHeight:
-                                                                    "90vh",
-                                                                overflow:
-                                                                    "auto",
-                                                            }}
+                                                        <Button
+                                                            variant="contained"
+                                                            color="error"
+                                                            onClick={() =>
+                                                                deletePayment(
+                                                                    payment.paymentId
+                                                                )
+                                                            }
                                                         >
-                                                            <h2 id="detail-modal-title">
-                                                                Order Detail
-                                                            </h2>
-                                                            <EditPayment
-                                                                id={
-                                                                    selectedPaymentId
-                                                                }
-                                                            />
-                                                            <ModalFooter>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    color="error"
-                                                                    onClick={
-                                                                        handleCloseModal
-                                                                    }
-                                                                >
-                                                                    Close
-                                                                </Button>
-                                                            </ModalFooter>
-                                                        </Box>
-                                                    </Modal>
-
-                                                    <Modal
-                                                        open={
-                                                            showAddPaymentModal
-                                                        }
-                                                        onClose={
-                                                            handleCloseModal
-                                                        }
-                                                        aria-labelledby="add-payment-modal-title"
-                                                    >
-                                                        <Box
-                                                            sx={{
-                                                                position:
-                                                                    "absolute",
-                                                                top: "50%",
-                                                                left: "50%",
-                                                                transform:
-                                                                    "translate(-50%, -50%)",
-                                                                width: "80%",
-                                                                bgcolor:
-                                                                    "background.paper",
-                                                                boxShadow: 24,
-                                                                p: 4,
-                                                                maxHeight:
-                                                                    "90vh",
-                                                                overflow:
-                                                                    "auto",
-                                                            }}
+                                                            Xóa
+                                                        </Button>
+                                                        <Button
+                                                            variant="contained"
+                                                            onClick={() =>
+                                                                handleEditPaymentModal(
+                                                                    payment.paymentId
+                                                                )
+                                                            }
                                                         >
-                                                            <h2 id="add-payment-modal-title">
-                                                                Add Payment
-                                                            </h2>
-                                                            <AddPayment />
-                                                            <ModalFooter>
-                                                                <Button
-                                                                    variant="contained"
-                                                                    color="error"
-                                                                    onClick={
-                                                                        handleCloseModal
-                                                                    }
-                                                                >
-                                                                    Close
-                                                                </Button>
-                                                            </ModalFooter>
-                                                        </Box>
-                                                    </Modal>
-                                                </div>
-                                            </>
+                                                            Sửa
+                                                        </Button>
+                                                    </Stack>
+                                                </TableCell>
+                                            </TableRow>
                                         ))}
                                     </TableBody>
                                 </Table>
@@ -266,7 +166,77 @@ export default function UserPayment() {
                         </Paper>
                     </Grid>
                 </Grid>
+
+                {/* Edit Payment Modal */}
+                <Modal
+                    open={showEditPaymentModal}
+                    onClose={handleCloseModal}
+                    aria-labelledby="detail-modal-title"
+                >
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: "80%",
+                            bgcolor: "background.paper",
+                            boxShadow: 24,
+                            p: 4,
+                            maxHeight: "90vh",
+                            overflow: "auto",
+                        }}
+                    >
+                        <Typography id="detail-modal-title" variant="h6">
+                            Sửa phương thức thanh toán
+                        </Typography>
+                        <EditPayment id={selectedPaymentId} />
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={handleCloseModal}
+                            sx={{ mt: 2 }}
+                        >
+                            Đóng
+                        </Button>
+                    </Box>
+                </Modal>
+
+                {/* Add Payment Modal */}
+                <Modal
+                    open={showAddPaymentModal}
+                    onClose={handleCloseModal}
+                    aria-labelledby="add-payment-modal-title"
+                >
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: "80%",
+                            bgcolor: "background.paper",
+                            boxShadow: 24,
+                            p: 4,
+                            maxHeight: "90vh",
+                            overflow: "auto",
+                        }}
+                    >
+                        <Typography id="add-payment-modal-title" variant="h6">
+                            Thêm phương thức thanh toán
+                        </Typography>
+                        <AddPayment />
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={handleCloseModal}
+                            sx={{ mt: 2 }}
+                        >
+                            Đóng
+                        </Button>
+                    </Box>
+                </Modal>
             </Box>
-        </UserSideNav>
+        </Box>
     )
 }

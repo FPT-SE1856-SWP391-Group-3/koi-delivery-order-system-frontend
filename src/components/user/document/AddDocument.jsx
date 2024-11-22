@@ -1,5 +1,4 @@
 import { useFieldArray, useForm } from "react-hook-form"
-import { useNavigate, useParams } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import UserSideNav from "../UserSideNav"
 import UserToast from "../alert/UserToast"
@@ -7,18 +6,10 @@ import { ToastContainer } from "react-toastify"
 
 export default function AddDocument({ orderId, userId }) {
     const { control, register, handleSubmit } = useForm()
-    const { fields, append, prepend, remove, swap, move, insert } =
-        useFieldArray({
-            control,
-            name: "customerDocuments",
-        })
-    const navigate = useNavigate()
-    // const [customerDocumentFile, setCustomerDocumentFile] = useState([]);
-    // let { orderId, userId } = useParams();
-
-    // const handleFileChange = (e) => {
-    //   setCustomerDocumentFile([...customerDocumentFile, e.target.files[0]]); //append the file list
-    // };
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "customerDocuments",
+    })
 
     const onSubmit = async (data) => {
         try {

@@ -38,7 +38,7 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            api.put("BlogNews/" + postId, blogNews).then((data) => {
+            api.put("blog-news/" + postId, blogNews).then((data) => {
                 if (data.success) {
                     UserToast("success", "Update blog/news successfully!")
                     onClose() // Đóng modal

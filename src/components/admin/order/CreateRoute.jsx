@@ -78,6 +78,7 @@ const CreateRoute = () => {
     const fetchDeliveryStaffOptions = async () => {
         try {
             const response = await api.get("users")
+            const response = await api.get("users")
             if (response.success && Array.isArray(response.users)) {
                 const filteredUsers = response.users.filter(
                     (user) => user.roleId === 4
@@ -109,20 +110,24 @@ const CreateRoute = () => {
                 }))
             } else {
                 setOrders((prevOrders) => ({ ...prevOrders, [routeId]: [] }))
+                setAlertMessage(`No orders found for route ID ${routeId}`)
+                setAlertSeverity("info")
             }
         } catch (error) {
             console.error(`Error fetching orders for route ${routeId}:`, error)
+            setAlertMessage("Error fetching orders. Please try again.")
+            setAlertSeverity("error")
         }
     }
 
     const handleExpandClick = (routeId) => {
         if (expandedRouteId === routeId) {
+            setExpandedRouteId(null)
+        } else {
             setExpandedRouteId(routeId)
             if (!orders[routeId]) {
                 fetchOrdersForRoute(routeId)
             }
-        } else {
-            setExpandedRouteId(null)
         }
     }
 
@@ -150,6 +155,7 @@ const CreateRoute = () => {
                             (order) => order.orderId !== selectedOrderId
                         ),
                     }))
+                    fetchRoutes()
                     setSelectedOrderId(null) // Reset state after deletion
                 } else {
                     setAlertMessage("Failed to remove order from route.")
