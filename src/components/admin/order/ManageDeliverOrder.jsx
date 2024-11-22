@@ -199,7 +199,7 @@ const ManageDeliverOrder = () => {
         }
 
         try {
-            const response = await api.put(`orders/update-status/${orderId}`, {
+            const response = await api.put(`orders/${orderId}`, {
                 updateOrderStatusId: nextStatusId,
             })
 
@@ -253,7 +253,7 @@ const ManageDeliverOrder = () => {
             return
         }
         try {
-            await api.put(`orders/update-status/${orderId}`, {
+            await api.put(`orders/${orderId}`, {
                 updateOrderStatusId: finalStatusId,
             })
             setOrders((orders) =>

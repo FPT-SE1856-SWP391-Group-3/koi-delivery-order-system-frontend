@@ -42,7 +42,7 @@ export default function UpdatePassword() {
 
         try {
             const response = await api.put(
-                "users/password/update",
+                "users/password/",
                 passwordData
             )
 
