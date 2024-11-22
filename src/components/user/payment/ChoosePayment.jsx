@@ -74,22 +74,6 @@ function ChoosePayment() {
 
             <form>
                 <div className="payment-methods">
-                    {/* COD Payment Option */}
-                    <div>
-                        <input
-                            type="radio"
-                            id="COD"
-                            name="paymentMethod"
-                            value="COD"
-                            checked={selectedPayment === "COD"}
-                            onChange={handlePaymentChange}
-                        />
-                        <label htmlFor="COD">
-                            <img src={COD} alt="COD" />
-                            Cash on delivery
-                        </label>
-                    </div>
-
                     {/* ATM Payment Option */}
                     <div>
                         <input

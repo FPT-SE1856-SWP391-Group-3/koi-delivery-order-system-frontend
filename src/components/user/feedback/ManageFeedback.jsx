@@ -33,13 +33,13 @@ export default function ManageFeedback() {
                 return
             }
             try {
-                api.get(`customer-feedbacks/${userId}`).then((response) => {
+                api.get(`customer-feedbacks/customer/${userId}`).then((response) => {
                     if (!response || !response.success) {
                         UserToast("error", "No feedback!")
                         return
                     }
-                    if (response.customerFeedback) {
-                        setFeedbacks(response.customerFeedback)
+                    if (response.feedbacks) {
+                        setFeedbacks(response.feedbacks)
                     } else {
                         UserToast("error", "No feedback!")
                     }

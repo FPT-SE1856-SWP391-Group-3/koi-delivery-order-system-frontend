@@ -41,8 +41,8 @@ export default function UpdatePassword() {
         }
 
         try {
-            const response = await api.post(
-                "Users/password/update",
+            const response = await api.put(
+                "users/password/update",
                 passwordData
             )
 
@@ -59,7 +59,7 @@ export default function UpdatePassword() {
                 setShowAlert(true)
             }
         } catch (error) {
-            if (error.response && error.response) {
+            if (error.response) {
                 setError(error.response.data.msg || "Wrong Password!")
             } else {
                 console.error("Error:", error)

@@ -4,7 +4,7 @@ const GetAccessToken = async () => {
         return false
     }
     try {
-        const data = await api.post("Users/token/check", null)
+        const data = await api.post("users/token/check", null)
 
         if (data.success) {
             console.log(data)

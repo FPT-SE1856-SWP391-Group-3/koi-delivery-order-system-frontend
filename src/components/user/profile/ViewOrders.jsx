@@ -17,7 +17,7 @@ export default function ViewOrders() {
 
         try {
             const [orderData, statusData] = await Promise.all([
-                api.get(`orders/${user.userId}`),
+                api.get(`orders/user/${user.userId}`),
                 api.get("order-status/"),
             ])
 
