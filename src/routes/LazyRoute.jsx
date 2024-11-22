@@ -1,4 +1,6 @@
-export function LazyRoute(componentPath) {
-    return () =>
-        import(componentPath).then((module) => ({ Component: module.default }))
+export function lazyRoute(importPath) {
+    return async () => {
+        const module = await importPath
+        return { Component: module.default }
+    }
 }
