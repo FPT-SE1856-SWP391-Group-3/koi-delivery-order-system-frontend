@@ -145,7 +145,7 @@ function CreateOrder() {
 
         formData.append("PaymentMethod", selectPaymentMethod)
 
-        api.postForm("Orders", formData)
+        api.postForm("orders", formData)
             .then((data) => {
                 if (data.success) {
                     UserToast("success", "Order has been placed")

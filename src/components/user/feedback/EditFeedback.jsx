@@ -15,7 +15,7 @@ export default function EditFeedback() {
 
     useEffect(() => {
         try {
-            api.get("CustomerFeedbacks/" + customerFeedbackId).then((data) => {
+            api.get("customer-feedbacks/" + customerFeedbackId).then((data) => {
                 if (data.success) {
                     setFeedbacks(data.customerFeedback)
                     console.log(data.customerFeedback)
@@ -31,7 +31,7 @@ export default function EditFeedback() {
     const handleSubmit = async (event) => {
         event.preventDefault()
         try {
-            api.put("CustomerFeedbacks/" + customerFeedbackId, feedbacks).then(
+            api.put("customer-feedbacks/" + customerFeedbackId, feedbacks).then(
                 (data) => {
                     if (data.success) {
                         UserToast("success", "Update feedback successfully!")

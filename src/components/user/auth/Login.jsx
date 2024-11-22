@@ -32,7 +32,7 @@ export default function Login() {
         try {
             setIsLoading(true)
             await api
-                .post("Users/login/jwt/", data)
+                .post("users/login/jwt/", data)
                 .then((data) => {
                     if (data.success) {
                         console.log("Đăng nhập thành công!")

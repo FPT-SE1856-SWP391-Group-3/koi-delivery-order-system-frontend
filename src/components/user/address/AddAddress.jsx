@@ -24,7 +24,7 @@ export default function AddAddress() {
             addressLine: addressLine,
         }
         try {
-            await api.post("Addresses/", requestData).then((data) => {
+            await api.post("addresses/", requestData).then((data) => {
                 if (data.success) {
                     UserToast("success", "Thêm thành công!")
                     // navigate(ComponentPath.user.address.viewAddress);

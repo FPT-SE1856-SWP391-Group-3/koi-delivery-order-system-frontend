@@ -27,7 +27,7 @@ export default function ManageDocument() {
     useEffect(() => {
         try {
             console.log(orderId)
-            api.get("CustomerDocuments/order/" + orderId).then((data) => {
+            api.get("customer-documents/order/" + orderId).then((data) => {
                 if (data.success) {
                     setCustomerDocuments(data.customerDocuments)
                     console.log(data.customerDocuments)
@@ -42,7 +42,7 @@ export default function ManageDocument() {
 
     async function deleteDocument(documentId) {
         try {
-            api.del("CustomerDocuments/" + documentId).then((data) => {
+            api.del("customer-documents/" + documentId).then((data) => {
                 if (data.success) {
                     UserToast("success", "Document deleted successfully.")
                     const newDocuments = customerDocuments.filter(
@@ -100,9 +100,11 @@ export default function ManageDocument() {
                                         <Button variant="contained">
                                             {" "}
                                             <a
-                                                href={api.imageBuildUrl(
-                                                    doc.filePath
-                                                )}
+                                                href={
+                                                    api.imageBuildUrl(
+                                                        doc.filePath
+                                                    )
+                                                }
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 download

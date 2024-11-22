@@ -16,7 +16,7 @@ export default function UserOrderDetail({ orderId }) {
     const [UserOrderDetails, setUserOrderDetails] = useState([])
 
     useEffect(() => {
-        api.get("OrderDetails/OrderDetailsByOrderId/" + orderId).then(
+        api.get("order-details/order/" + orderId).then(
             (data) => {
                 if (data.success) {
                     setUserOrderDetails(data.orderDetails)

@@ -22,7 +22,7 @@ export default function EditAddress({ addressId, closeModal }) {
         // Gọi API để lấy thông tin địa chỉ dựa trên addressId
         const fetchAddress = async () => {
             try {
-                api.get("Addresses/" + addressId).then((data) => {
+                api.get("addresses/" + addressId).then((data) => {
                     if (data.success) {
                         console.log(data.address)
                         setCurrentAddress(data.address.addressLine) // Set giá trị vào state
@@ -46,7 +46,7 @@ export default function EditAddress({ addressId, closeModal }) {
         e.preventDefault() // Ngăn chặn reload trang
         try {
             await api
-                .put("Addresses/" + addressId, updateAddress)
+                .put("addresses/" + addressId, updateAddress)
                 .then((data) => {
                     if (data.success) {
                         UserToast("success", "Update address successfully!")

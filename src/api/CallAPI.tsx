@@ -3,12 +3,12 @@ import axios from "axios"
 const BASE_URL = import.meta.env.VITE_API_ENDPOINT
 
 // Địa chỉ API cơ bản
-const API_BASE_URL = BASE_URL + "api"
+const API_BASE_URL = BASE_URL
 
 // Hàm cấu hình URL đầy đủ
 const buildUrl = (url: string) => `${API_BASE_URL}/${url}`
 
-const imageBuildUrl = (imageUrl: string) => BASE_URL + imageUrl
+const imageBuildUrl = (imageUrl: string) => BASE_URL + "/" + imageUrl
 
 // Lấy token từ localStorage
 const getToken = () => {

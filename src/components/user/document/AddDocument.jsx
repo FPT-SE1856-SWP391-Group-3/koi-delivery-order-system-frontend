@@ -25,7 +25,7 @@ export default function AddDocument({ orderId, userId }) {
                 customerData.append("description", customerDocument.description)
                 customerData.append("userId", userId)
                 console.log(customerData)
-                api.postForm("CustomerDocuments/", customerData).then(
+                api.postForm("customer-documents/", customerData).then(
                     (data) => {
                         if (data.success) {
                             console.log(

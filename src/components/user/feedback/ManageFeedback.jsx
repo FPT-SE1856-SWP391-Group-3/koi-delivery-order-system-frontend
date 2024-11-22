@@ -33,13 +33,13 @@ export default function ManageFeedback() {
                 return
             }
             try {
-                api.get(`CustomerFeedbacks/${userId}`).then((response) => {
+                api.get(`customer-feedbacks/customer/${userId}`).then((response) => {
                     if (!response || !response.success) {
                         UserToast("error", "No feedback!")
                         return
                     }
-                    if (response.customerFeedback) {
-                        setFeedbacks(response.customerFeedback)
+                    if (response.feedbacks) {
+                        setFeedbacks(response.feedbacks)
                     } else {
                         UserToast("error", "No feedback!")
                     }
@@ -61,7 +61,7 @@ export default function ManageFeedback() {
 
     async function deleteFeedback(feedbackId) {
         try {
-            const response = await api.del(`CustomerFeedbacks/${feedbackId}`)
+            const response = await api.del(`customer-feedbacks/${feedbackId}`)
             if (response.success) {
                 // Adjusted to check response structure
                 UserToast("success", "Xóa thành công!")
