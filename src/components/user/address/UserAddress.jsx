@@ -101,7 +101,6 @@ export default function UserAddress() {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>AddressId</TableCell>
                                 <TableCell>Address Line</TableCell>
                                 <TableCell>Action</TableCell>
                             </TableRow>
@@ -109,7 +108,6 @@ export default function UserAddress() {
                         <TableBody>
                             {addresses.map((address) => (
                                 <TableRow key={address.addressId}>
-                                    <TableCell>{address.addressId}</TableCell>
                                     <TableCell>{address.addressLine}</TableCell>
                                     <TableCell>
                                         <Button

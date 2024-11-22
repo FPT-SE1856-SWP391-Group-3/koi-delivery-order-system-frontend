@@ -138,7 +138,7 @@ const CreateRoute = () => {
     const handleConfirmDelete = async () => {
         if (expandedRouteId && selectedOrderId) {
             try {
-                const response = await api.post("routes/order", {
+                const response = await api.del("routes/order", {
                     routeId: expandedRouteId,
                     orderId: selectedOrderId,
                 })

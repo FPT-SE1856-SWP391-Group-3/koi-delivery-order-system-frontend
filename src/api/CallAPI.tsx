@@ -140,10 +140,10 @@ const putForm = async (url: string, data: any) => {
 }
 
 // Hàm DELETE
-const del = async (url: string) => {
+const del = async (url: string, data?: any) => {
     const fullUrl = buildUrl(url)
     return apiInstance
-        .delete(fullUrl)
+        .delete(fullUrl, { data })
         .then((response) => response.data)
         .catch((error) => {
             console.error(`DELETE ${fullUrl} failed:`, error)
