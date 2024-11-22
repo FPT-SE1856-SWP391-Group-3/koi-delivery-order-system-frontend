@@ -78,7 +78,6 @@ const CreateRoute = () => {
     const fetchDeliveryStaffOptions = async () => {
         try {
             const response = await api.get("users")
-            const response = await api.get("users")
             if (response.success && Array.isArray(response.users)) {
                 const filteredUsers = response.users.filter(
                     (user) => user.roleId === 4
@@ -139,13 +138,10 @@ const CreateRoute = () => {
     const handleConfirmDelete = async () => {
         if (expandedRouteId && selectedOrderId) {
             try {
-                const response = await api.post(
-                    "routes/order",
-                    {
-                        routeId: expandedRouteId,
-                        orderId: selectedOrderId,
-                    }
-                )
+                const response = await api.post("routes/order", {
+                    routeId: expandedRouteId,
+                    orderId: selectedOrderId,
+                })
                 if (response.success) {
                     setAlertMessage("Order removed from route successfully!")
                     setAlertSeverity("success")
@@ -182,9 +178,7 @@ const CreateRoute = () => {
 
     const handleConfirmDeleteRoute = async () => {
         try {
-            const response = await api.del(
-                `routes/${selectedRouteId}`
-            )
+            const response = await api.del(`routes/${selectedRouteId}`)
             if (response.success) {
                 setAlertMessage("Route deleted successfully!")
                 setAlertSeverity("success")
@@ -228,10 +222,7 @@ const CreateRoute = () => {
         }
 
         try {
-            const response = await api.post(
-                "routes",
-                newRoute
-            )
+            const response = await api.post("routes", newRoute)
 
             // Check if the response data indicates success
             if (response.success) {

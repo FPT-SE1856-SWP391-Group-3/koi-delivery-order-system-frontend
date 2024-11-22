@@ -61,9 +61,7 @@ function OrderRow({
 
     const fetchKoiDetails = async (orderId) => {
         try {
-            const data = await api.get(
-                `order-details/order/${orderId}`
-            )
+            const data = await api.get(`order-details/order/${orderId}`)
             if (data.success) {
                 setKoiDetails(data.orderDetails || [])
 

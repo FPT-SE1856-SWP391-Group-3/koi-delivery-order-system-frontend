@@ -16,16 +16,14 @@ export default function UserOrderDetail({ orderId }) {
     const [UserOrderDetails, setUserOrderDetails] = useState([])
 
     useEffect(() => {
-        api.get("order-details/order/" + orderId).then(
-            (data) => {
-                if (data.success) {
-                    setUserOrderDetails(data.orderDetails)
-                    console.log(data.orderDetails)
-                } else {
-                    console.log("No order details found!")
-                }
+        api.get("order-details/order/" + orderId).then((data) => {
+            if (data.success) {
+                setUserOrderDetails(data.orderDetails)
+                console.log(data.orderDetails)
+            } else {
+                console.log("No order details found!")
             }
-        )
+        })
     }, [orderId])
 
     return (

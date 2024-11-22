@@ -69,8 +69,7 @@ export default function ManageOrderServiceDetail() {
     const confirmDeleteOrderService = async () => {
         try {
             const response = await fetch(
-                "order-service-details/" +
-                    selectedOrderServiceId,
+                "order-service-details/" + selectedOrderServiceId,
                 {
                     method: "DELETE",
                     headers: {

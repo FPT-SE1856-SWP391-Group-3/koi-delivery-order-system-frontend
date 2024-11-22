@@ -37,9 +37,7 @@ function OrderRow({ row, setAlertOpen, setAlertMessage, setAlertSeverity }) {
 
     const fetchKoiDetails = async (orderId) => {
         try {
-            const response = await api.get(
-                `order-details/order/${orderId}`
-            )
+            const response = await api.get(`order-details/order/${orderId}`)
             if (response.success && Array.isArray(response.orderDetails)) {
                 const kois = response.orderDetails.flatMap(
                     (detail) => detail.kois
@@ -94,10 +92,7 @@ function OrderRow({ row, setAlertOpen, setAlertMessage, setAlertSeverity }) {
             const payload = { routeId, orderId: row.orderId }
             console.log("Payload:", payload) // Add this to verify the payload
 
-            const response = await api.post(
-                "routes/add-order",
-                payload
-            )
+            const response = await api.post("routes/add-order", payload)
 
             // Check if response is valid
             if (!response || !response.success) {
