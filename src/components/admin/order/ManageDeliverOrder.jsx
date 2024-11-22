@@ -104,9 +104,7 @@ const ManageDeliverOrder = () => {
 
     const fetchKoiDetails = async (orderId) => {
         try {
-            const response = await api.get(
-                `order-details/order/${orderId}`
-            )
+            const response = await api.get(`order-details/order/${orderId}`)
             if (response.success) {
                 const allKois = response.orderDetails.flatMap(
                     (detail) => detail.kois || []
