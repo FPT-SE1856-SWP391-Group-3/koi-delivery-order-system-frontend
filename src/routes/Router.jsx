@@ -267,7 +267,7 @@ const router = createBrowserRouter([
             },
             {
                 path: ComponentPath.user.profile.viewProfile,
-                lazy: LazyRoute("@components/user/profile/ViewProfile"),
+                lazy: LazyRoute("../components/user/profile/ViewProfile"),
             },
             {
                 path: ComponentPath.user.profile.editProfile,
@@ -526,7 +526,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: ComponentPath.admin.dashboard,
-                        lazy: LazyRoute("@components/admin/dashboard/AdminDashboard"),
+                        lazy: LazyRoute("../components/admin/dashboard/AdminDashboard"),
                     },
                 ],
             },
