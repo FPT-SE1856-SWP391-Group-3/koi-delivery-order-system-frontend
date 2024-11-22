@@ -87,8 +87,6 @@ const SenderInfo = ({ onChange }) => {
         onChange(senderInfo)
     }
 
-
-
     return (
         <div>
             <h2>Sender Information</h2>
