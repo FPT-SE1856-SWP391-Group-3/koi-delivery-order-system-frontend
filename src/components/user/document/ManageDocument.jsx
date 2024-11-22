@@ -100,11 +100,9 @@ export default function ManageDocument() {
                                         <Button variant="contained">
                                             {" "}
                                             <a
-                                                href={
-                                                    api.imageBuildUrl(
-                                                        doc.filePath
-                                                    )
-                                                }
+                                                href={api.imageBuildUrl(
+                                                    doc.filePath
+                                                )}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 download

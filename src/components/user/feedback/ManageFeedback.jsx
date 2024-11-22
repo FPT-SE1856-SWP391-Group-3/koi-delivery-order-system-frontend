@@ -33,17 +33,19 @@ export default function ManageFeedback() {
                 return
             }
             try {
-                api.get(`customer-feedbacks/customer/${userId}`).then((response) => {
-                    if (!response || !response.success) {
-                        UserToast("error", "No feedback!")
-                        return
+                api.get(`customer-feedbacks/customer/${userId}`).then(
+                    (response) => {
+                        if (!response || !response.success) {
+                            UserToast("error", "No feedback!")
+                            return
+                        }
+                        if (response.feedbacks) {
+                            setFeedbacks(response.feedbacks)
+                        } else {
+                            UserToast("error", "No feedback!")
+                        }
                     }
-                    if (response.feedbacks) {
-                        setFeedbacks(response.feedbacks)
-                    } else {
-                        UserToast("error", "No feedback!")
-                    }
-                })
+                )
             } catch (error) {
                 if (error.response && error.response.status === 401) {
                     UserToast("error", "Please Login!")

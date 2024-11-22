@@ -41,10 +41,7 @@ export default function UpdatePassword() {
         }
 
         try {
-            const response = await api.put(
-                "users/password/",
-                passwordData
-            )
+            const response = await api.put("users/password/", passwordData)
 
             if (response.success) {
                 setSuccess(true)
