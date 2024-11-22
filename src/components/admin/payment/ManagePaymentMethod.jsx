@@ -33,7 +33,7 @@ export default function ManagePaymentMethod() {
     // Hàm tải danh sách Payment Methods
     const fetchPaymentMethods = async () => {
         try {
-            const data = await api.get("PaymentMethods/")
+            const data = await api.get("payments")
             if (data.success) {
                 setPaymentMethods(data.paymentMethods)
             } else {
@@ -66,9 +66,7 @@ export default function ManagePaymentMethod() {
     // Xác nhận xóa Payment Method
     const confirmDeletePaymentMethod = async () => {
         try {
-            const data = await api.del(
-                "PaymentMethods/" + selectedPaymentMethodId
-            )
+            const data = await api.del("payments/" + selectedPaymentMethodId)
             if (data.success) {
                 UserToast("success", "Delete payment method successfully!")
                 const newPaymentMethods = paymentMethods.filter(

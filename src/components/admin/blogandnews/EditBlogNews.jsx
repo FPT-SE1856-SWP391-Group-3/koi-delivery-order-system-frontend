@@ -16,7 +16,7 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
         const fetchBlogNews = async () => {
             try {
                 if (!postId) return
-                api.get("BlogNews/" + postId).then((data) => {
+                api.get("blog-news/" + postId).then((data) => {
                     if (data.success) {
                         setBlogNews(data.blogNews)
                     } else {
@@ -38,7 +38,7 @@ export default function EditBlogNews({ postId, onClose, onUpdateSuccess }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            api.put("BlogNews/" + postId, blogNews).then((data) => {
+            api.put("blog-news/" + postId, blogNews).then((data) => {
                 if (data.success) {
                     UserToast("success", "Update blog/news successfully!")
                     onClose() // Đóng modal

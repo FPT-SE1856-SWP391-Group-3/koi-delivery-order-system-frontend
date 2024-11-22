@@ -33,7 +33,7 @@ export default function ViewFeedback() {
     // Fetch all feedbacks
     const fetchAllFeedbacks = async () => {
         try {
-            const data = await api.get("CustomerFeedbacks")
+            const data = await api.get("customer-feedbacks")
 
             if (Array.isArray(data) && data.length > 0) {
                 setFeedbacks(data)
@@ -51,7 +51,7 @@ export default function ViewFeedback() {
     // Delete feedback by ID
     const handleDeleteFeedback = async (feedbackId) => {
         try {
-            const data = await api.del(`CustomerFeedbacks/${feedbackId}`)
+            const data = await api.del(`customer-feedbacks/${feedbackId}`)
             if (data.success) {
                 setFeedbacks((prevFeedbacks) =>
                     prevFeedbacks.filter(
@@ -82,7 +82,7 @@ export default function ViewFeedback() {
 
         try {
             const data = await api.put(
-                `CustomerFeedbacks/forAdmin/${selectedFeedback.customerFeedbackId}`,
+                `customer-feedbacks/forAdmin/${selectedFeedback.customerFeedbackId}`,
                 {
                     resolutionAnswer: answer,
                     resolutionStatusId: 1, // assuming 1 is the ID for "answered" status; adjust as needed
