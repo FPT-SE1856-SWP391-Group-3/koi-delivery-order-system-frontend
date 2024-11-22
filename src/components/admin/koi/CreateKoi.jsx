@@ -43,10 +43,10 @@ export default function CreatKoi({ koiData, onClose, onAddOrEditSuccess }) {
             let response
             if (koiData) {
                 // Update Koi
-                response = await api.put(`Kois/${koiData.koiId}`, koiPayload)
+                response = await api.put(`kois/${koiData.koiId}`, koiPayload)
             } else {
                 // Create New Koi
-                response = await api.post("Kois", koiPayload)
+                response = await api.post("kois", koiPayload)
             }
             if (response.success) {
                 UserToast(

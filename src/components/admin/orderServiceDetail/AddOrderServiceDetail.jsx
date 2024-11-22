@@ -10,7 +10,7 @@ export default function AddOrderServiceDetail({ onClose, onAddSuccess }) {
     // Thêm chi tiết dịch vụ đơn hàng
     const onSubmit = async (data) => {
         try {
-            const response = await api.post("OrderServiceDetails/", data)
+            const response = await api.post("order-service-details/", data)
             if (response.success) {
                 UserToast("success", "Order service detail added successfully!")
                 onAddSuccess() // Gọi callback để cập nhật bảng trong ManageOrderServiceDetail

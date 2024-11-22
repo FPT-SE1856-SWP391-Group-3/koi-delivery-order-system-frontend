@@ -64,7 +64,7 @@ const CreateRoute = () => {
 
     const fetchRoutes = async () => {
         try {
-            const response = await api.get("routes-controllers")
+            const response = await api.get("routes")
             if (response.success && Array.isArray(response.routes)) {
                 setRoutes(response.routes)
             } else {
@@ -101,7 +101,7 @@ const CreateRoute = () => {
 
     const fetchOrdersForRoute = async (routeId) => {
         try {
-            const response = await api.get(`orders/orderByRouteId/${routeId}`)
+            const response = await api.get(`orders/route/${routeId}`)
             if (response.success && Array.isArray(response.orderIds)) {
                 setOrders((prevOrders) => ({
                     ...prevOrders,
@@ -138,13 +138,10 @@ const CreateRoute = () => {
     const handleConfirmDelete = async () => {
         if (expandedRouteId && selectedOrderId) {
             try {
-                const response = await api.post(
-                    "routes-controllers/removeOrderFromRoute",
-                    {
-                        routeId: expandedRouteId,
-                        orderId: selectedOrderId,
-                    }
-                )
+                const response = await api.post("routes/order", {
+                    routeId: expandedRouteId,
+                    orderId: selectedOrderId,
+                })
                 if (response.success) {
                     setAlertMessage("Order removed from route successfully!")
                     setAlertSeverity("success")
@@ -181,9 +178,7 @@ const CreateRoute = () => {
 
     const handleConfirmDeleteRoute = async () => {
         try {
-            const response = await api.del(
-                `routes-controllers/${selectedRouteId}`
-            )
+            const response = await api.del(`routes/${selectedRouteId}`)
             if (response.success) {
                 setAlertMessage("Route deleted successfully!")
                 setAlertSeverity("success")
@@ -227,10 +222,7 @@ const CreateRoute = () => {
         }
 
         try {
-            const response = await api.post(
-                "routes-controllers/createRoute",
-                newRoute
-            )
+            const response = await api.post("routes", newRoute)
 
             // Check if the response data indicates success
             if (response.success) {

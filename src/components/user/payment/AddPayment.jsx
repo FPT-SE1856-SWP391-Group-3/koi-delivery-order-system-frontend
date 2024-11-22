@@ -24,7 +24,7 @@ export default function AddPayment() {
     const onSubmit = async (data) => {
         try {
             data.userId = userId
-            const response = await api.post("Payments/", data)
+            const response = await api.post("payments/", data)
 
             if (response.data.success) {
                 UserToast("success", "Add payment successfully!")

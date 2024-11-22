@@ -18,7 +18,7 @@ export default function EditDocument() {
         // Gọi API để lấy thông tin Document dựa trên documentId
         const fetchDocument = async () => {
             try {
-                api.get("CustomerDocuments/" + documentId).then((data) => {
+                api.get("customer-documents/" + documentId).then((data) => {
                     if (data.success) {
                         console.log(data.customerDocument)
                         setCustomerDocument({
@@ -45,17 +45,16 @@ export default function EditDocument() {
         e.preventDefault() // Ngăn chặn reload trang
         console.log(document)
         const documentData = new FormData()
-        documentData.set(
+        documentData.append(
             "customerDocumentFile",
-            customerDocument.customerDocumentFile
+            customerDocument.documentFile
         )
-        documentData.set("description", customerDocument.description)
+        documentData.append("description", customerDocument.description)
         try {
-            api.putForm("CustomerDocuments/" + documentId, documentData).then(
+            api.putForm("customer-documents/" + documentId, documentData).then(
                 (data) => {
                     if (data.success) {
                         UserToast("success", "Document updated successfully!")
-                        navigate("/admin/manage-document")
                     } else {
                         UserToast("error", "Failed to update document!")
                     }

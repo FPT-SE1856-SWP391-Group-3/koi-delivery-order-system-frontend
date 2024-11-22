@@ -67,23 +67,9 @@ const ManageDeliverOrder = () => {
             fetchOrders(firstRouteId) // Fetch orders for the first route
         }
     }, [routes])
-    const fetchRoutes = async (deliveryStaffId) => {
-        try {
-            const response = await api.get(
-                `routes-controllers/DeliveryStaffId/${deliveryStaffId}`
-            )
-            if (response.success && Array.isArray(response.route)) {
-                setRoutes(response.route)
-            } else {
-                console.error("Failed to fetch routes or no routes available.")
-            }
-        } catch (error) {
-            console.error("Error fetching routes:", error)
-        }
-    }
     const fetchOrders = async (routeId) => {
         try {
-            const response = await api.get(`orders/orderByRouteId/${routeId}`)
+            const response = await api.get(`orders/route/${routeId}`)
             console.log("API Response for Orders:", response) // Debugging log
 
             if (response.success && Array.isArray(response.orderIds)) {
@@ -103,9 +89,9 @@ const ManageDeliverOrder = () => {
     }
     const fetchOrderStatus = async () => {
         try {
-            const data = await api.get("order-status")
-            if (data.success) {
-                setOrderStatus(data.orderStatuses)
+            const response = await api.get("order-status/")
+            if (response.success) {
+                setOrderStatus(response.orderStatuses)
             } else {
                 console.log("Error fetching order statuses.")
             }
@@ -118,9 +104,7 @@ const ManageDeliverOrder = () => {
 
     const fetchKoiDetails = async (orderId) => {
         try {
-            const response = await api.get(
-                `order-details/OrderDetailsByOrderId/${orderId}`
-            )
+            const response = await api.get(`order-details/order/${orderId}`)
             if (response.success) {
                 const allKois = response.orderDetails.flatMap(
                     (detail) => detail.kois || []
@@ -163,7 +147,20 @@ const ManageDeliverOrder = () => {
             console.error("Error updating koi condition:", error)
         }
     }
-
+    const fetchRoutes = async (deliveryStaffId) => {
+        try {
+            const response = await api.get(
+                `routes/delivery-staff/${deliveryStaffId}`
+            )
+            if (response.success && Array.isArray(response.route)) {
+                setRoutes(response.route)
+            } else {
+                console.error("Failed to fetch routes or no routes available.")
+            }
+        } catch (error) {
+            console.error("Error fetching routes:", error)
+        }
+    }
     const handleRouteChange = (event) => {
         const routeId = event.target.value
         setSelectedRouteId(routeId)
@@ -202,7 +199,7 @@ const ManageDeliverOrder = () => {
         }
 
         try {
-            const response = await api.put(`orders/update-status/${orderId}`, {
+            const response = await api.put(`orders/${orderId}`, {
                 updateOrderStatusId: nextStatusId,
             })
 
@@ -256,7 +253,7 @@ const ManageDeliverOrder = () => {
             return
         }
         try {
-            await api.put(`orders/update-status/${orderId}`, {
+            await api.put(`orders/${orderId}`, {
                 updateOrderStatusId: finalStatusId,
             })
             setOrders((orders) =>

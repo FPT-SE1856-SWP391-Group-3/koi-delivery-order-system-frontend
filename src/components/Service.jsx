@@ -8,7 +8,7 @@ const Service = () => {
     const [shippingMethod, setShippingMethod] = React.useState([])
 
     React.useEffect(() => {
-        api.get("OrderServiceDetails")
+        api.get("order-service-details")
             .then((response) => {
                 setService(response.orderServiceDetails)
             })
@@ -16,7 +16,7 @@ const Service = () => {
                 console.error("Error fetching data: ", error)
             })
 
-        api.get("ShippingMethods")
+        api.get("shipping-methods")
             .then((response) => {
                 setShippingMethod(response.shippingMethods)
             })

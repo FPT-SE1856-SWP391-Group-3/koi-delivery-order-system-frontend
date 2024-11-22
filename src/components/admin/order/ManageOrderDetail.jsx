@@ -9,7 +9,7 @@ export default function ManageOrderDetail() {
     const { orderId } = useParams()
 
     useEffect(() => {
-        api.get("OrderDetails/" + orderId).then((data) => {
+        api.get("order-details/" + orderId).then((data) => {
             if (data.success) {
                 setUserOrderDetails(data.orderDetail)
                 console.log(data.orderDetail)

@@ -22,7 +22,7 @@ function CallBackPayment() {
     const [query, setQuery] = useState(window.location.search.substring(1))
 
     const apiOneTimePayment = () => {
-        api.get(`Payments/payment-callback?${query}`).then((data) => {
+        api.get(`payments/callback?${query}`).then((data) => {
             console.log(data)
         })
     }

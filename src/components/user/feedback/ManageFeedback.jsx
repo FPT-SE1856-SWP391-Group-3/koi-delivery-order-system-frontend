@@ -33,17 +33,19 @@ export default function ManageFeedback() {
                 return
             }
             try {
-                api.get(`CustomerFeedbacks/${userId}`).then((response) => {
-                    if (!response || !response.success) {
-                        UserToast("error", "No feedback!")
-                        return
+                api.get(`customer-feedbacks/customer/${userId}`).then(
+                    (response) => {
+                        if (!response || !response.success) {
+                            UserToast("error", "No feedback!")
+                            return
+                        }
+                        if (response.feedbacks) {
+                            setFeedbacks(response.feedbacks)
+                        } else {
+                            UserToast("error", "No feedback!")
+                        }
                     }
-                    if (response.customerFeedback) {
-                        setFeedbacks(response.customerFeedback)
-                    } else {
-                        UserToast("error", "No feedback!")
-                    }
-                })
+                )
             } catch (error) {
                 if (error.response && error.response.status === 401) {
                     UserToast("error", "Please Login!")
@@ -61,7 +63,7 @@ export default function ManageFeedback() {
 
     async function deleteFeedback(feedbackId) {
         try {
-            const response = await api.del(`CustomerFeedbacks/${feedbackId}`)
+            const response = await api.del(`customer-feedbacks/${feedbackId}`)
             if (response.success) {
                 // Adjusted to check response structure
                 UserToast("success", "Xóa thành công!")
@@ -83,7 +85,7 @@ export default function ManageFeedback() {
         setShowDetailModal(false) // Close the modal after creating feedback
         try {
             await api
-                .get(`CustomerFeedbacks/order/${userId}`)
+                .get(`customer-feedbacks/order/${userId}`)
                 .then((response) => {
                     if (response.success) {
                         setFeedbacks(response.customerFeedback)

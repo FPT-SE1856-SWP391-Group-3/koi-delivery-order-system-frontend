@@ -56,7 +56,7 @@ export default function CreateFeedback({ orderId, onSuccess }) {
             }
 
             await api
-                .post("CustomerFeedbacks/", payload)
+                .post("customer-feedbacks/", payload)
                 .then((response) => {
                     if (response) {
                         UserToast("success", "Add feedback successfully!")
@@ -68,7 +68,7 @@ export default function CreateFeedback({ orderId, onSuccess }) {
                 })
                 .catch((error) => {
                     console.error("Error during submission:", error)
-                    UserToast("error", "Error! Please try again.")
+                    UserToast("error", error.response.data.message)
                 })
         } catch (error) {
             console.error("Error during submission:", error)

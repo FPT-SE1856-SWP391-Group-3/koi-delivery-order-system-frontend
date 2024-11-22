@@ -19,7 +19,7 @@ export default function EditCertification() {
         // Gọi API để lấy thông tin Certification dựa trên certificationId
         const fetchCertification = async () => {
             try {
-                api.get("Certifications/" + certificationId).then((data) => {
+                api.get("certifications/" + certificationId).then((data) => {
                     if (data.success) {
                         console.log(data.certification)
                         setCertification({
@@ -56,7 +56,7 @@ export default function EditCertification() {
 
         try {
             api.putForm(
-                "Certifications/" + certificationId,
+                "certifications/" + certificationId,
                 certificationData
             ).then((data) => {
                 if (data.success) {

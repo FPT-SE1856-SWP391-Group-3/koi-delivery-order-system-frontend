@@ -35,7 +35,7 @@ export default function Register() {
                 UserToast("error", "Password and Confirm Password do not match")
                 return
             }
-            api.post("Users/register", data)
+            api.post("users/register", data)
                 .then((data) => {
                     if (data.success) {
                         UserToast(

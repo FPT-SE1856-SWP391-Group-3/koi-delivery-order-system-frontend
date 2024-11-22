@@ -35,7 +35,7 @@ export default function ManageOrderServiceDetail() {
     // Hàm tải lại danh sách Order Service Detail
     const fetchOrderServiceDetails = async () => {
         try {
-            const data = await api.get("order-service-details")
+            const data = await api.get("order-service-details/")
             if (data.success) {
                 setOrderServiceDetails(data.orderServiceDetails)
             } else {

@@ -33,7 +33,7 @@ export default function ResetPassword() {
         }
         try {
             setIsLoading(true)
-            api.post("Users/password/reset", fullData)
+            api.post("users/password/reset", fullData)
                 .then((data) => {
                     if (data.success) {
                         setIsLoading(false)

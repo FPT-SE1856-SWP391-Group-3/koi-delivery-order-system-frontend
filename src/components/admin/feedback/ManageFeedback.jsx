@@ -82,7 +82,7 @@ export default function ViewFeedback() {
 
         try {
             const data = await api.put(
-                `customer-feedbacks/forAdmin/${selectedFeedback.customerFeedbackId}`,
+                `resolutions/feedback/${selectedFeedback.customerFeedbackId}`,
                 {
                     resolutionAnswer: answer,
                     resolutionStatusId: 1, // assuming 1 is the ID for "answered" status; adjust as needed

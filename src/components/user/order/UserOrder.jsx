@@ -33,7 +33,7 @@ export default function UserOrder() {
     const [selectedOrderId, setSelectedOrderId] = useState(null)
 
     useEffect(() => {
-        api.get("Orders/" + userId).then((data) => {
+        api.get("orders/user/" + userId).then((data) => {
             if (data.success) {
                 setOrders(data.order)
                 console.log(data.order)

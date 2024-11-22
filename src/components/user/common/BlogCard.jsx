@@ -26,7 +26,7 @@ const BlogCard = ({ chunkSize = 3, firstChunk = false }) => {
 
     const fetchPosts = async () => {
         try {
-            const data = await CallAPI.get("BlogNews/")
+            const data = await CallAPI.get("blog-news/")
             if (data.success) {
                 const chunkedPosts = []
                 for (let i = 0; i < data.blogNews.length; i += chunkSize) {

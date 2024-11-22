@@ -17,7 +17,7 @@ export default function UpdateUser({ userId, onUpdateSuccess }) {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const data = await api.get(`Users/${userId}`)
+                const data = await api.get(`users/${userId}`)
                 if (data.success) {
                     setUpdateUser({
                         userName: data.user.userName || "",
@@ -49,7 +49,7 @@ export default function UpdateUser({ userId, onUpdateSuccess }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const data = await api.put(`Users/${userId}`, updateUser)
+            const data = await api.put(`users/${userId}`, updateUser)
             if (data.success) {
                 UserToast("success", "User updated successfully!")
                 onUpdateSuccess() // Call the onUpdateSuccess callback to refresh the table and close the modal

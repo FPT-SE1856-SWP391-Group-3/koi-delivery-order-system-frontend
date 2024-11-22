@@ -35,7 +35,7 @@ export default function AdminDashboard() {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const data = await api.get("Orders/")
+                const data = await api.get("orders/")
                 const ordersArray = Array.isArray(data.order)
                     ? data.order
                     : data.order || []

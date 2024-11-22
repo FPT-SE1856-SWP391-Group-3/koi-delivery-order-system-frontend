@@ -68,7 +68,7 @@ const Body = () => {
 
     const fetchFaq = async () => {
         try {
-            const data = await api.get("Faqs/")
+            const data = await api.get("faqs/")
             if (data.success) {
                 setFaq(data.faqs)
             } else {
@@ -85,7 +85,7 @@ const Body = () => {
     const fetchOrder = async () => {
         setOrderLoading(true)
         try {
-            const data = await api.get(`Orders/orderId/${orderId}`)
+            const data = await api.get(`orders/${orderId}`)
             if (data.success) {
                 setError(null)
                 setOrder(data.order)

@@ -36,7 +36,7 @@ export default function AddAddress({ closeModal }) {
             addressLine: addressLine,
         }
         try {
-            const response = await api.post("Addresses/", requestData)
+            const response = await api.post("addresses/", requestData)
             if (response.success) {
                 UserToast("success", "Address added successfully!")
                 // closeModal()

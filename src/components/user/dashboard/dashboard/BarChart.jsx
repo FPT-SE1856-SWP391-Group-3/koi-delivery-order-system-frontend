@@ -11,7 +11,7 @@ export default function BarChart() {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
 
     useEffect(() => {
-        api.get("Orders/" + user.userId).then((response) => {
+        api.get("orders/user/" + user.userId).then((response) => {
             console.log(response.order)
             setOrders(response.order)
         })

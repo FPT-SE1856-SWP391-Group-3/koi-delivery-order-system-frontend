@@ -61,9 +61,7 @@ function OrderRow({
 
     const fetchKoiDetails = async (orderId) => {
         try {
-            const data = await api.get(
-                `OrderDetails/OrderDetailsByOrderId/${orderId}`
-            )
+            const data = await api.get(`order-details/order/${orderId}`)
             if (data.success) {
                 setKoiDetails(data.orderDetails || [])
 
@@ -97,7 +95,7 @@ function OrderRow({
 
     const updateKoiCondition = async () => {
         try {
-            const response = await api.put(`Kois/${selectedKoiId}`, {
+            const response = await api.put(`kois/${selectedKoiId}`, {
                 koiCondition: newKoiCondition,
             })
             if (response.success) {
@@ -141,11 +139,7 @@ function OrderRow({
                     </TableCell>
                     <TableCell>{row.orderDate}</TableCell>
                     <TableCell>
-                        {row.paymentHistoryId == null
-                            ? "False"
-                            : row.paymentHistory.paymentStatusId == 2
-                              ? "True"
-                              : "False"}
+                        {row.paymentStatusId == 2 ? "Paid" : "Unpaid"}
                     </TableCell>
                     <TableCell>{row.paymentMethod}</TableCell>
                     <TableCell>
@@ -477,7 +471,7 @@ export default function ManageOrder() {
 
     const fetchOrderStatus = async () => {
         try {
-            const data = await api.get("OrderStatus/")
+            const data = await api.get("order-status/")
             if (data.success) {
                 setOrderStatus(data.orderStatuses)
             } else {
@@ -516,7 +510,7 @@ export default function ManageOrder() {
             return
         }
         try {
-            const response = await api.put(`Orders/update-status/${orderId}`, {
+            const response = await api.put(`orders/${orderId}`, {
                 updateOrderStatusId: selectedStatusId,
             })
 
@@ -571,7 +565,7 @@ export default function ManageOrder() {
         }
 
         try {
-            const response = await api.put(`Orders/update-status/${orderId}`, {
+            const response = await api.put(`orders/${orderId}`, {
                 updateOrderStatusId: nextStatusId,
             })
 
@@ -616,7 +610,7 @@ export default function ManageOrder() {
             return
         }
         try {
-            await api.put(`Orders/update-status/${orderId}`, {
+            await api.put(`orders/${orderId}`, {
                 updateOrderStatusId: finalStatusId,
             })
             setOrder((orders) =>
@@ -667,7 +661,7 @@ export default function ManageOrder() {
 
     const handleVerifyPayment = async (orderId) => {
         try {
-            api.post(`Payments/cod/verify/${orderId}`)
+            api.post(`payments/cod/verify/${orderId}`)
                 .then((data) => {
                     if (data.success) {
                         setAlertMessage("Verify payment successfully!")

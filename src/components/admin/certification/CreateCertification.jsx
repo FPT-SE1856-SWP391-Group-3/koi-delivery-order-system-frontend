@@ -29,7 +29,7 @@ export default function CreateCertification() {
                     "certificateFile",
                     certification.certificateFile[0]
                 )
-                api.postForm("Certifications/", certificationData).then(
+                api.postForm("certifications/", certificationData).then(
                     (data) => {
                         if (data.success) {
                             UserToast(

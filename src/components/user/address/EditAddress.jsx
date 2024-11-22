@@ -35,7 +35,7 @@ export default function EditAddress({ addressId, closeModal }) {
         // Fetch current address data by ID
         const fetchAddress = async () => {
             try {
-                api.get("Addresses/" + addressId).then((data) => {
+                api.get("addresses/" + addressId).then((data) => {
                     if (data.success) {
                         console.log(data.address)
                         setCurrentAddress(data.address.addressLine)
@@ -67,7 +67,7 @@ export default function EditAddress({ addressId, closeModal }) {
     const onSubmit = async (data) => {
         try {
             await api
-                .put("Addresses/" + addressId, {
+                .put("addresses/" + addressId, {
                     addressLine: `${specificAddress}, ${wardName}, ${districtName}, ${cityName}`,
                 })
                 .then((response) => {

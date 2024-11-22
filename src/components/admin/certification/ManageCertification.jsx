@@ -27,7 +27,7 @@ export default function ManageCertification() {
 
     useEffect(() => {
         try {
-            api.get("Certifications/").then((data) => {
+            api.get("certifications/").then((data) => {
                 if (data.success) {
                     setCertifications(data.certifications)
                 } else {

@@ -17,7 +17,7 @@ export default function EditKoi({ koiId, onClose, onUpdateSuccess }) {
         // Gọi API để lấy thông tin koi dựa trên koiId
         const fetchKoi = async () => {
             try {
-                const data = await api.get("Kois/" + koiId)
+                const data = await api.get("kois/" + koiId)
                 if (data.success) {
                     setUpdateKoi(data.koi) // Set giá trị vào state
                 } else {
@@ -36,7 +36,7 @@ export default function EditKoi({ koiId, onClose, onUpdateSuccess }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const data = await api.put("Kois/" + koiId, updateKoi)
+            const data = await api.put("kois/" + koiId, updateKoi)
             if (data.success) {
                 UserToast("success", "Update koi successfully!")
                 onUpdateSuccess() // Gọi callback để cập nhật danh sách Koi trong ManageKoi

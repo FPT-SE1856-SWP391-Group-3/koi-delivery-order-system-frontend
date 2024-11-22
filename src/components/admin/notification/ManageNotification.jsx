@@ -11,7 +11,7 @@ export default function ManageNotification() {
 
     useEffect(() => {
         try {
-            api.get("Notifications/").then((data) => {
+            api.get("notifications/").then((data) => {
                 if (data.success) {
                     setNotifications(data.notifications)
                     console.log(data.notifications)
@@ -29,7 +29,7 @@ export default function ManageNotification() {
 
     async function deleteNotification(notificationId) {
         try {
-            api.del("Notifications/" + notificationId).then((data) => {
+            api.del("notifications/" + notificationId).then((data) => {
                 if (data.success) {
                     UserToast("success", "Deleted successfully!")
                     const newNotifications = notifications.filter(
