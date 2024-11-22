@@ -1,8 +1,6 @@
 import { createBrowserRouter } from "react-router-dom"
 import ComponentPath from "./ComponentPath"
 import { LazyRoute } from "./LazyRoute"
-import AdminRoute from "./AdminRoute"
-import ProtectedRoute from "./ProtectedRoute"
 
 // Create the router configuration
 const router = createBrowserRouter([
