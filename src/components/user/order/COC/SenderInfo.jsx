@@ -3,6 +3,8 @@ import PropTypes from "prop-types"
 import api from "../../../../api/CallAPI"
 import "../../css/CreateOrder.css"
 import UserToast from "../../alert/UserToast"
+import { Link, useNavigate } from "react-router-dom"
+import ComponentPath from "../../../../routes/ComponentPath"
 
 const SenderInfo = ({ onChange }) => {
     const [senderInfo, setSenderInfo] = useState({
@@ -16,6 +18,8 @@ const SenderInfo = ({ onChange }) => {
         country: "",
         serviceType: "domestic",
     })
+    const [addresses, setAddresses] = useState([])
+    const navigate = useNavigate()
 
     const userId = JSON.parse(localStorage.getItem("user"))?.userId
 
@@ -46,11 +50,11 @@ const SenderInfo = ({ onChange }) => {
                     addressResponse.success &&
                     addressResponse.address.length > 0
                 ) {
-                    const { addressLine } = addressResponse.address[0]
-                    setSenderInfo((prevInfo) => ({
-                        ...prevInfo,
-                        addressLine: addressLine || "",
-                    }))
+                    setAddresses(addressResponse.address)
+                    // setSenderInfo((prevInfo) => ({
+                    //     ...prevInfo,
+                    //     addressLine: addressLine || "",
+                    // }))
                 } else {
                     // alert("Failed to retrieve address information!");
                 }
@@ -70,21 +74,39 @@ const SenderInfo = ({ onChange }) => {
         onChange(senderInfo)
     }, [senderInfo, onChange])
 
+    const handleOnChange = (e) => {
+        const { value } = e.target
+        if (value === "new") {
+            navigate(ComponentPath.user.address.viewAddress)
+            return
+        }
+        setSenderInfo((prevInfo) => ({
+            ...prevInfo,
+            addressLine: value || "",
+        }))
+        onChange(senderInfo)
+    }
+
     return (
         <div>
             <h2>Sender Information</h2>
             <div className="sectionCompo">
                 <label>Sender Name</label>
                 <input type="text" value={senderInfo.fullName} readOnly />
-
                 <div>
                     <label>Address Line</label>
-                    <input
-                        type="text"
-                        placeholder="Enter address line"
-                        value={senderInfo.addressLine}
-                        readOnly
-                    />
+                    <select onChange={handleOnChange}>
+                        <option value="">Select an address</option>
+                        <option value="new">Add an address</option>
+                        {addresses.map((address) => (
+                            <option
+                                key={address.addressId}
+                                value={address.addressLine}
+                            >
+                                {address.addressLine}
+                            </option>
+                        ))}
+                    </select>
                 </div>
             </div>
         </div>
