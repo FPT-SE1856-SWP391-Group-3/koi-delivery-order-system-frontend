@@ -29,6 +29,7 @@ export default function EditAddress({ addressId, closeModal }) {
     const [cityName, setCityName] = useState("")
     const [districtName, setDistrictName] = useState("")
     const [wardName, setWardName] = useState("")
+    const [specificAddress, setSpecificAddress] = useState("")
 
     useEffect(() => {
         // Fetch current address data by ID
@@ -38,7 +39,15 @@ export default function EditAddress({ addressId, closeModal }) {
                     if (data.success) {
                         console.log(data.address)
                         setCurrentAddress(data.address.addressLine)
-                        setValue("specificAddress", data.address.addressLine)
+
+                        const addressParts =
+                            data.address.addressLine.split(", ")
+                        setSpecificAddress(addressParts[0])
+                        setValue("specificAddress", addressParts[0])
+
+                        setCityName(addressParts[3])
+                        setDistrictName(addressParts[2])
+                        setWardName(addressParts[1])
                     } else {
                         UserToast("error", "No address found.")
                     }
@@ -59,13 +68,15 @@ export default function EditAddress({ addressId, closeModal }) {
         try {
             await api
                 .put("Addresses/" + addressId, {
-                    addressLine: updateAddress.addressLine,
+                    addressLine: `${specificAddress}, ${wardName}, ${districtName}, ${cityName}`,
                 })
                 .then((response) => {
                     if (response.success) {
                         UserToast("success", "Address updated successfully!")
-                        closeModal()
-                        //   window.location.reload();
+                        //closeModal()
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 1000)
                     } else {
                         UserToast("error", "Failed to update address!")
                     }
@@ -88,15 +99,7 @@ export default function EditAddress({ addressId, closeModal }) {
     }, [])
 
     const handleChange = (e) => {
-        if (cityName && districtName && wardName) {
-            if (e.target.value !== "") {
-                setUpdateAddress({
-                    addressLine: `${e.target.value}, ${wardName}, ${districtName}, ${cityName}`,
-                })
-            } else {
-                setUpdateAddress({ addressLine: "" })
-            }
-        }
+        setSpecificAddress(e.target.value)
     }
 
     return (
@@ -208,12 +211,21 @@ export default function EditAddress({ addressId, closeModal }) {
                     fullWidth
                     margin="normal"
                     label="Specific Address"
+                    value={specificAddress}
                     {...register("specificAddress", {
-                        required: "Specific address is required",
+                        required:
+                            cityName && districtName && wardName
+                                ? "Specific address is required"
+                                : false,
                         onChange: handleChange,
                     })}
+                    disabled={!cityName || !districtName || !wardName}
                     error={!!errors.specificAddress}
-                    helperText={errors.specificAddress?.message}
+                    helperText={
+                        !cityName || !districtName || !wardName
+                            ? "Fill City, District, and Ward first"
+                            : errors.specificAddress?.message
+                    }
                 />
 
                 <TextField

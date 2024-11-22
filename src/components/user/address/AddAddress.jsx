@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import axios from "axios"
-import ComponentPath from "../../../routes/ComponentPath"
 import UserToast from "../alert/UserToast"
 import { ToastContainer } from "react-toastify"
 import {
@@ -15,12 +13,16 @@ import {
     FormControl,
     InputLabel,
     Typography,
+    FormHelperText,
 } from "@mui/material"
 
-export default function AddAddress() {
-    const { register, handleSubmit } = useForm()
-    const navigate = useNavigate()
-    let userId = JSON.parse(localStorage.getItem("userId"))
+export default function AddAddress({ closeModal }) {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm()
+    const userId = JSON.parse(localStorage.getItem("userId"))
     const [cityName, setCityName] = useState("")
     const [districtName, setDistrictName] = useState("")
     const [wardName, setWardName] = useState("")
@@ -34,40 +36,43 @@ export default function AddAddress() {
             addressLine: addressLine,
         }
         try {
-            await api.post("Addresses/", requestData).then((data) => {
-                if (data.success) {
-                    UserToast("success", "Thêm thành công!")
+            const response = await api.post("Addresses/", requestData)
+            if (response.success) {
+                UserToast("success", "Address added successfully!")
+                // closeModal()
+                setTimeout(() => {
                     window.location.reload()
-                } else {
-                    UserToast("error", "Thêm thất bại!")
-                }
-            })
+                }, 1000)
+            } else {
+                UserToast("error", "Failed to add address!")
+            }
         } catch (error) {
-            console.error("Error during registration:", error)
-            UserToast("error", "Thêm thất bại!")
+            console.error("Error during address submission:", error)
+            UserToast("error", "Failed to add address!")
         }
     }
 
     useEffect(() => {
-        axios
-            .get(
-                "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-            )
-            .then((response) => response.data)
-            .then((data) => {
-                setAddresses(data)
-            })
+        const fetchAddresses = async () => {
+            try {
+                const response = await axios.get(
+                    "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+                )
+                setAddresses(response.data)
+            } catch (error) {
+                console.error("Error fetching addresses:", error)
+            }
+        }
+        fetchAddresses()
     }, [])
 
     const handleChange = (e) => {
         if (cityName && districtName && wardName) {
-            if (e.target.value !== "") {
-                setAddressLine(
-                    `${e.target.value}, ${wardName}, ${districtName}, ${cityName}`
-                )
-            } else {
-                setAddressLine("")
-            }
+            setAddressLine(
+                e.target.value
+                    ? `${e.target.value}, ${wardName}, ${districtName}, ${cityName}`
+                    : ""
+            )
         }
     }
 
@@ -75,7 +80,7 @@ export default function AddAddress() {
         <Box sx={{ padding: "2rem" }}>
             <ToastContainer />
             <Typography variant="h4" textAlign="center" gutterBottom>
-                Thêm địa chỉ mới
+                Add Address
             </Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <TextField
@@ -85,29 +90,44 @@ export default function AddAddress() {
                     value={userId}
                     {...register("userId")}
                 />
-                <FormControl fullWidth margin="normal">
-                    <InputLabel>Thành phố</InputLabel>
+                <FormControl
+                    fullWidth
+                    margin="normal"
+                    error={!!errors.cityName}
+                >
+                    <InputLabel>City</InputLabel>
                     <Select
+                        {...register("cityName", {
+                            required: "City is required",
+                        })}
                         value={cityName}
                         onChange={(e) => setCityName(e.target.value)}
-                        label="Thành phố"
+                        label="City"
                     >
-                        <MenuItem value="">Chọn thành phố</MenuItem>
+                        <MenuItem value="">Select City</MenuItem>
                         {addresses.map((address) => (
                             <MenuItem key={address.Id} value={address.Name}>
                                 {address.Name}
                             </MenuItem>
                         ))}
                     </Select>
+                    <FormHelperText>{errors.cityName?.message}</FormHelperText>
                 </FormControl>
-                <FormControl fullWidth margin="normal">
-                    <InputLabel>Huyện</InputLabel>
+                <FormControl
+                    fullWidth
+                    margin="normal"
+                    error={!!errors.districtName}
+                >
+                    <InputLabel>District</InputLabel>
                     <Select
+                        {...register("districtName", {
+                            required: "District is required",
+                        })}
                         value={districtName}
                         onChange={(e) => setDistrictName(e.target.value)}
-                        label="Huyện"
+                        label="District"
                     >
-                        <MenuItem value="">Chọn huyện</MenuItem>
+                        <MenuItem value="">Select District</MenuItem>
                         {addresses
                             .filter((address) => address.Name === cityName)
                             .flatMap((address) =>
@@ -121,15 +141,25 @@ export default function AddAddress() {
                                 ))
                             )}
                     </Select>
+                    <FormHelperText>
+                        {errors.districtName?.message}
+                    </FormHelperText>
                 </FormControl>
-                <FormControl fullWidth margin="normal">
-                    <InputLabel>Quận/Xã</InputLabel>
+                <FormControl
+                    fullWidth
+                    margin="normal"
+                    error={!!errors.wardName}
+                >
+                    <InputLabel>Ward</InputLabel>
                     <Select
+                        {...register("wardName", {
+                            required: "Ward is required",
+                        })}
                         value={wardName}
                         onChange={(e) => setWardName(e.target.value)}
-                        label="Quận/Xã"
+                        label="Ward"
                     >
-                        <MenuItem value="">Chọn quận/xã</MenuItem>
+                        <MenuItem value="">Select Ward</MenuItem>
                         {addresses
                             .filter((address) => address.Name === cityName)
                             .flatMap((address) =>
@@ -147,21 +177,31 @@ export default function AddAddress() {
                                 )
                             )}
                     </Select>
+                    <FormHelperText>{errors.wardName?.message}</FormHelperText>
                 </FormControl>
                 <TextField
                     fullWidth
                     margin="normal"
-                    label="Địa chỉ cụ thể"
-                    id="specificAddress"
-                    name="specificAddress"
-                    onChange={handleChange}
+                    label="Specific Address"
+                    {...register("specificAddress", {
+                        required:
+                            cityName && districtName && wardName
+                                ? "Specific Address is required"
+                                : false,
+                        onChange: handleChange,
+                    })}
+                    disabled={!cityName || !districtName || !wardName}
+                    error={!!errors.specificAddress}
+                    helperText={
+                        !cityName || !districtName || !wardName
+                            ? "Fill City, District, and Ward first"
+                            : errors.specificAddress?.message
+                    }
                 />
                 <TextField
                     fullWidth
                     margin="normal"
-                    label="Địa chỉ"
-                    id="addressLine"
-                    name="addressLine"
+                    label="Full Address"
                     value={addressLine}
                     InputProps={{
                         readOnly: true,
@@ -174,7 +214,7 @@ export default function AddAddress() {
                     fullWidth
                     sx={{ marginTop: "1rem" }}
                 >
-                    Thêm
+                    Add
                 </Button>
             </form>
         </Box>
