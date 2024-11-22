@@ -6,11 +6,10 @@ import { ToastContainer } from "react-toastify"
 
 export default function AddDocument({ orderId, userId }) {
     const { control, register, handleSubmit } = useForm()
-    const { fields, append, remove } =
-        useFieldArray({
-            control,
-            name: "customerDocuments",
-        })
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "customerDocuments",
+    })
 
     const onSubmit = async (data) => {
         try {

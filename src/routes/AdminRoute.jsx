@@ -1,6 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom"
 
-
 function AdminRoute() {
     // const [isAdmin, setIsAdmin] = useState(data.isAdmin);
     const user = JSON.parse(localStorage.getItem("user"))
