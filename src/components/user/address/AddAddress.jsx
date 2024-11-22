@@ -1,23 +1,33 @@
-import { set, useForm } from "react-hook-form"
+import React, { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import axios from "axios"
-import { useEffect, useState } from "react"
 import ComponentPath from "../../../routes/ComponentPath"
 import UserToast from "../alert/UserToast"
 import { ToastContainer } from "react-toastify"
+import {
+    Box,
+    TextField,
+    Button,
+    MenuItem,
+    Select,
+    FormControl,
+    InputLabel,
+    Typography,
+} from "@mui/material"
 
 export default function AddAddress() {
-    const { register, handleSubmit, setValue } = useForm()
+    const { register, handleSubmit } = useForm()
     const navigate = useNavigate()
     let userId = JSON.parse(localStorage.getItem("userId"))
     const [cityName, setCityName] = useState("")
     const [districtName, setDistrictName] = useState("")
     const [wardName, setWardName] = useState("")
-    const [addressLine, setAddressLine] = useState()
+    const [addressLine, setAddressLine] = useState("")
     const [addresses, setAddresses] = useState([])
 
-    //Them dia chi
+    // Add address function
     const onSubmit = async (data) => {
         const requestData = {
             userId: data.userId,
@@ -27,7 +37,6 @@ export default function AddAddress() {
             await api.post("Addresses/", requestData).then((data) => {
                 if (data.success) {
                     UserToast("success", "Thêm thành công!")
-                    // navigate(ComponentPath.user.address.viewAddress);
                     window.location.reload()
                 } else {
                     UserToast("error", "Thêm thất bại!")
@@ -52,16 +61,9 @@ export default function AddAddress() {
 
     const handleChange = (e) => {
         if (cityName && districtName && wardName) {
-            console.log(e.target.value)
-            if (e.target.value != "") {
+            if (e.target.value !== "") {
                 setAddressLine(
-                    e.target.value +
-                        ", " +
-                        wardName +
-                        ", " +
-                        districtName +
-                        ", " +
-                        cityName
+                    `${e.target.value}, ${wardName}, ${districtName}, ${cityName}`
                 )
             } else {
                 setAddressLine("")
@@ -69,135 +71,112 @@ export default function AddAddress() {
         }
     }
 
-    console.log(addresses)
     return (
-        <div>
+        <Box sx={{ padding: "2rem" }}>
             <ToastContainer />
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-6 offset-md-3">
-                        <h2 className="text-center">Thêm địa chỉ mới</h2>
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <div>
-                                <input
-                                    type="hidden"
-                                    id="userId"
-                                    name="userId"
-                                    value={userId}
-                                    {...register("userId")}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="city">Thành phố</label>
-                                <select
-                                    onChange={(e) => {
-                                        setCityName(e.target.value)
-                                    }}
-                                >
-                                    <option value="">Chọn thành phố</option>
-                                    {addresses.map((address) => (
-                                        <option
-                                            key={address.Id}
-                                            value={address.Name}
+            <Typography variant="h4" textAlign="center" gutterBottom>
+                Thêm địa chỉ mới
+            </Typography>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <TextField
+                    type="hidden"
+                    id="userId"
+                    name="userId"
+                    value={userId}
+                    {...register("userId")}
+                />
+                <FormControl fullWidth margin="normal">
+                    <InputLabel>Thành phố</InputLabel>
+                    <Select
+                        value={cityName}
+                        onChange={(e) => setCityName(e.target.value)}
+                        label="Thành phố"
+                    >
+                        <MenuItem value="">Chọn thành phố</MenuItem>
+                        {addresses.map((address) => (
+                            <MenuItem key={address.Id} value={address.Name}>
+                                {address.Name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                    <InputLabel>Huyện</InputLabel>
+                    <Select
+                        value={districtName}
+                        onChange={(e) => setDistrictName(e.target.value)}
+                        label="Huyện"
+                    >
+                        <MenuItem value="">Chọn huyện</MenuItem>
+                        {addresses
+                            .filter((address) => address.Name === cityName)
+                            .flatMap((address) =>
+                                address.Districts.map((district) => (
+                                    <MenuItem
+                                        key={district.Id}
+                                        value={district.Name}
+                                    >
+                                        {district.Name}
+                                    </MenuItem>
+                                ))
+                            )}
+                    </Select>
+                </FormControl>
+                <FormControl fullWidth margin="normal">
+                    <InputLabel>Quận/Xã</InputLabel>
+                    <Select
+                        value={wardName}
+                        onChange={(e) => setWardName(e.target.value)}
+                        label="Quận/Xã"
+                    >
+                        <MenuItem value="">Chọn quận/xã</MenuItem>
+                        {addresses
+                            .filter((address) => address.Name === cityName)
+                            .flatMap((address) =>
+                                address.Districts.filter(
+                                    (district) => district.Name === districtName
+                                ).flatMap((district) =>
+                                    district.Wards.map((ward) => (
+                                        <MenuItem
+                                            key={ward.Id}
+                                            value={ward.Name}
                                         >
-                                            {address.Name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="district">Huyện</label>
-                                <select
-                                    onChange={(e) => {
-                                        setDistrictName(e.target.value)
-                                    }}
-                                >
-                                    <option value="">Chọn huyện</option>
-                                    {addresses.map((address) => {
-                                        if (address.Name == cityName) {
-                                            return address.Districts.map(
-                                                (district) => (
-                                                    <option
-                                                        key={district.Id}
-                                                        value={district.Name}
-                                                    >
-                                                        {district.Name}
-                                                    </option>
-                                                )
-                                            )
-                                        }
-                                    })}
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="ward">Quận/Xã</label>
-                                <select
-                                    onChange={(e) => {
-                                        setWardName(e.target.value)
-                                    }}
-                                >
-                                    <option value="">Chọn quận/xã</option>
-                                    {addresses.map((address) => {
-                                        if (address.Name == cityName) {
-                                            return address.Districts.map(
-                                                (district) => {
-                                                    if (
-                                                        district.Name ==
-                                                        districtName
-                                                    ) {
-                                                        return district.Wards.map(
-                                                            (ward) => (
-                                                                <option
-                                                                    key={
-                                                                        ward.Id
-                                                                    }
-                                                                    value={
-                                                                        ward.Name
-                                                                    }
-                                                                >
-                                                                    {ward.Name}
-                                                                </option>
-                                                            )
-                                                        )
-                                                    }
-                                                }
-                                            )
-                                        }
-                                    })}
-                                </select>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="specificAddress">
-                                    Địa chỉ cụ thể
-                                </label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="specificAddress"
-                                    name="specificAddress"
-                                    onChange={(e) => {
-                                        handleChange(e)
-                                    }}
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="addressLine">Địa chỉ</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    id="addressLine"
-                                    name="addressLine"
-                                    readOnly
-                                    value={addressLine}
-                                />
-                            </div>
-                            <button type="submit" className="btn btn-primary">
-                                Thêm
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                            {ward.Name}
+                                        </MenuItem>
+                                    ))
+                                )
+                            )}
+                    </Select>
+                </FormControl>
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    label="Địa chỉ cụ thể"
+                    id="specificAddress"
+                    name="specificAddress"
+                    onChange={handleChange}
+                />
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    label="Địa chỉ"
+                    id="addressLine"
+                    name="addressLine"
+                    value={addressLine}
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+                <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ marginTop: "1rem" }}
+                >
+                    Thêm
+                </Button>
+            </form>
+        </Box>
     )
 }
