@@ -101,9 +101,8 @@ export default function GetNotification() {
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>NotificationId</TableCell>
                                         <TableCell>Title</TableCell>
-                                        <TableCell>SenderId</TableCell>
+                                        <TableCell>Sender</TableCell>
                                         <TableCell>Content</TableCell>
                                         <TableCell>SendDate</TableCell>
                                         <TableCell>Actions</TableCell>
@@ -114,9 +113,6 @@ export default function GetNotification() {
                                         <TableRow
                                             key={notification.notificationId}
                                         >
-                                            <TableCell>
-                                                {notification.notificationId}
-                                            </TableCell>
                                             <TableCell>
                                                 {notification.notificationTitle}
                                             </TableCell>

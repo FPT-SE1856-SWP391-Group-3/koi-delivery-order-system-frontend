@@ -390,7 +390,7 @@ export default function ManageRoute() {
 
     const fetchOrders = async () => {
         try {
-            const data = await api.get("orders") // Make sure this URL is correct and reachable
+            const data = await api.get("orders/unrouted") // Make sure this URL is correct and reachable
             if (data.success && Array.isArray(data.order)) {
                 const filtered = data.order.filter(
                     (o) => o.orderStatusId === 7 && o.deliveryStaffId === null
@@ -502,87 +502,7 @@ export default function ManageRoute() {
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
-
                             <TableBody>
-                                {filteredOrders.length > 0 ? (
-                                    filteredOrders.map((order) => (
-                                        <OrderRow
-                                            key={order.orderId}
-                                            row={order}
-                                            setAlertOpen={setAlertOpen}
-                                            setAlertMessage={setAlertMessage}
-                                            setAlertSeverity={setAlertSeverity}
-                                        />
-                                    ))
-                                ) : (
-                                    <TableRow>
-                                        <TableCell />
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                align="center"
-                                            >
-                                                Order ID
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                align="center"
-                                            >
-                                                Customer ID
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                align="center"
-                                            >
-                                                Order Date
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                align="center"
-                                            >
-                                                Payment Status
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                align="center"
-                                            >
-                                                Delivery Date
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                align="center"
-                                            >
-                                                Status
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                align="center"
-                                            >
-                                                Action
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell>
-                                            <Typography
-                                                fontWeight={600}
-                                                align="center"
-                                            >
-                                                Delivering Staff
-                                            </Typography>
-                                        </TableCell>
-                                    </TableRow>
-                                )}
                                 {filteredOrders.length > 0 ? (
                                     filteredOrders.map((order) => (
                                         <OrderRow
