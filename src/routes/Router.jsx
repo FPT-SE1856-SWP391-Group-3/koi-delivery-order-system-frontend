@@ -80,9 +80,7 @@ const router = createBrowserRouter([
     },
     {
         element: (
-            <Suspense>
                 <ProtectedRoute />
-            </Suspense>
         ),
         children: [
             {
@@ -201,9 +199,7 @@ const router = createBrowserRouter([
             },
             {
                 element: (
-                    <Suspense>
                         <AdminRoute />
-                    </Suspense>
                 ),
                 children: [
                     {
