@@ -14,77 +14,60 @@ import {
     Tooltip,
     ResponsiveContainer,
     Label,
-    Brush,
+    Legend,
 } from "recharts"
+import { TextField } from "@mui/material"
+import dayjs from "dayjs"
 import api from "../../../api/CallAPI"
 
 export default function AdminDashboard() {
     const [ordersData, setOrdersData] = useState([])
     const [chartData, setChartData] = useState([])
+    const [filteredOrdersData, setFilteredOrdersData] = useState([])
+    const [filteredChartData, setFilteredChartData] = useState([])
     const [totalOrders, setTotalOrders] = useState(0)
     const [totalSuccess, setTotalSuccess] = useState(0)
     const [totalCancel, setTotalCancel] = useState(0)
 
-    // Fetch orders data from API
+    const [startDate, setStartDate] = useState("")
+    const [endDate, setEndDate] = useState("")
+
+    // Fetch orders data
     useEffect(() => {
         const fetchOrders = async () => {
             try {
                 const data = await api.get("Orders/")
-                console.log("Fetched data:", data)
-
-                // Ensure data is an array to avoid errors
                 const ordersArray = Array.isArray(data.order)
                     ? data.order
                     : data.order || []
 
-                // Prepare data for DataGrid with required fields
                 const dataWithId = ordersArray.map((order, index) => ({
                     id: order.orderId || index,
                     customer: order.customerName,
                     date: order.orderDate,
                     total: order.totalPrice || 0,
-                    orderStatusId: order.orderStatusId, // Include orderStatusId
+                    orderStatusId: order.orderStatusId,
                 }))
                 setOrdersData(dataWithId)
+                setFilteredOrdersData(dataWithId)
 
-                // Initialize counters
-                let totalOrderCount = 0
-                let successCount = 0
-                let cancelCount = 0
-
-                // Prepare data for the chart
                 const dateCountMap = {}
                 const successCountMap = {}
                 const cancelCountMap = {}
 
                 dataWithId.forEach((order) => {
-                    totalOrderCount++ // Total order count
-                    if (order.orderStatusId === 10) successCount++ // Successful orders
-                    if (order.orderStatusId === 11) cancelCount++ // Canceled orders
-
-                    // Total orders per date
                     dateCountMap[order.date] =
                         (dateCountMap[order.date] || 0) + 1
-
-                    // Count of successful orders (orderStatusId = 10)
                     if (order.orderStatusId === 10) {
                         successCountMap[order.date] =
                             (successCountMap[order.date] || 0) + 1
                     }
-
-                    // Count of canceled orders (orderStatusId = 11)
                     if (order.orderStatusId === 11) {
                         cancelCountMap[order.date] =
                             (cancelCountMap[order.date] || 0) + 1
                     }
                 })
 
-                // Set total counts
-                setTotalOrders(totalOrderCount)
-                setTotalSuccess(successCount)
-                setTotalCancel(cancelCount)
-
-                // Transform data into an array format for the chart
                 const transformedData = Object.keys(dateCountMap).map(
                     (date) => ({
                         date,
@@ -94,6 +77,18 @@ export default function AdminDashboard() {
                     })
                 )
                 setChartData(transformedData)
+                setFilteredChartData(transformedData)
+
+                // Update total counts
+                setTotalOrders(dataWithId.length)
+                setTotalSuccess(
+                    dataWithId.filter((order) => order.orderStatusId === 10)
+                        .length
+                )
+                setTotalCancel(
+                    dataWithId.filter((order) => order.orderStatusId === 11)
+                        .length
+                )
             } catch (error) {
                 console.error("Error fetching orders data:", error)
             }
@@ -102,7 +97,44 @@ export default function AdminDashboard() {
         fetchOrders()
     }, [])
 
-    // Define columns for DataGrid
+    // Filter data based on date range
+    useEffect(() => {
+        if (startDate && endDate) {
+            const start = dayjs(startDate)
+            const end = dayjs(endDate)
+
+            const filteredOrders = ordersData.filter((order) => {
+                const orderDate = dayjs(order.date)
+                return orderDate.isBetween(start, end, "day", "[]")
+            })
+
+            const filteredChart = chartData.filter((data) => {
+                const chartDate = dayjs(data.date)
+                return chartDate.isBetween(start, end, "day", "[]")
+            })
+
+            setFilteredOrdersData(filteredOrders)
+            setFilteredChartData(filteredChart)
+
+            const statusCounts = filteredOrders.reduce(
+                (acc, order) => {
+                    if (order.orderStatusId === 10) acc.success++
+                    if (order.orderStatusId === 11) acc.canceled++
+                    return acc
+                },
+                { success: 0, canceled: 0 }
+            )
+
+            // Update total counts based on filtered data
+            setTotalOrders(filteredOrders.length)
+            setTotalSuccess(statusCounts.success)
+            setTotalCancel(statusCounts.canceled)
+        } else {
+            setFilteredOrdersData(ordersData)
+            setFilteredChartData(chartData)
+        }
+    }, [startDate, endDate, ordersData, chartData])
+
     const columns = [
         { field: "id", headerName: "ID", width: 100 },
         { field: "customer", headerName: "Customer ID", width: 200 },
@@ -115,7 +147,6 @@ export default function AdminDashboard() {
             <CssBaseline />
             <AdminSideMenu />
             <Box sx={{ marginLeft: "250px", padding: "20px" }}>
-                {/* Summary Section */}
                 <Typography variant="h4" gutterBottom>
                     Order Summary
                 </Typography>
@@ -138,15 +169,31 @@ export default function AdminDashboard() {
                     </Box>
                 </Box>
 
-                {/* Line Chart Section */}
+                <Box display="flex" gap={2} mb={4}>
+                    <TextField
+                        label="Start Date"
+                        type="date"
+                        InputLabelProps={{ shrink: true }}
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                    />
+                    <TextField
+                        label="End Date"
+                        type="date"
+                        InputLabelProps={{ shrink: true }}
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                    />
+                </Box>
+
                 <Typography variant="h4" gutterBottom>
                     Order Trends Over Time
                 </Typography>
                 <Box sx={{ width: "100%", height: 400, marginBottom: 4 }}>
                     <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={chartData}>
+                        <LineChart data={filteredChartData}>
                             <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="date"></XAxis>
+                            <XAxis dataKey="date" />
                             <YAxis>
                                 <Label
                                     value="Order Count"
@@ -155,53 +202,36 @@ export default function AdminDashboard() {
                                 />
                             </YAxis>
                             <Tooltip />
-                            {/* Total Orders */}
                             <Line
                                 type="monotone"
                                 dataKey="orderCount"
                                 stroke="#8884d8"
-                                activeDot={{ r: 8 }}
                                 name="Total Orders"
                             />
-                            {/* Successful Orders */}
                             <Line
                                 type="monotone"
                                 dataKey="successCount"
                                 stroke="#82ca9d"
-                                activeDot={{ r: 8 }}
                                 name="Successful Orders"
                             />
-                            {/* Canceled Orders */}
                             <Line
                                 type="monotone"
                                 dataKey="cancelCount"
                                 stroke="#ff4d4d"
-                                activeDot={{ r: 8 }}
                                 name="Canceled Orders"
-                            />
-                            {/* Brush Component for Zooming */}
-                            <Brush
-                                dataKey="date"
-                                height={30}
-                                stroke="#8884d8"
                             />
                         </LineChart>
                     </ResponsiveContainer>
                 </Box>
 
-                {/* Order History Table Section */}
                 <Typography variant="h5" gutterBottom>
                     Order History
                 </Typography>
                 <Box sx={{ height: 400, width: "100%" }}>
                     <DataGrid
-                        rows={ordersData}
+                        rows={filteredOrdersData}
                         columns={columns}
-                        initialState={{
-                            pagination: {
-                                pageSize: 5,
-                            },
-                        }}
+                        pageSize={5}
                         rowsPerPageOptions={[5]}
                         checkboxSelection
                     />

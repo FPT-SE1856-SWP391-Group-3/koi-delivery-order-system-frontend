@@ -28,6 +28,16 @@ export default function ViewProfile() {
     // Check user role ID from local storage
     const roleId = user?.roleId
 
+    // Define roles mapping
+    const roleMapping = {
+        2: "Customer",
+        3: "Sales Staff",
+        4: "Delivery Staff",
+        5: "Manager",
+    }
+
+    const userRole = roleMapping[roleId] || "Unknown Role"
+
     // Function to delete user
     const deleteUser = async (e) => {
         e.preventDefault()
@@ -49,7 +59,8 @@ export default function ViewProfile() {
 
     // Conditionally render the correct sidebar based on roleId
     const renderSidebar = () => {
-        return roleId === 2 ? <SideMenu /> : <AdminSideMenu />
+        if (roleId === 2) return <SideMenu />
+        return <AdminSideMenu />
     }
 
     return (
@@ -72,14 +83,20 @@ export default function ViewProfile() {
                                 >
                                     <Avatar
                                         src={avatar}
-                                        alt="Admin"
+                                        alt={user.fullName || "User"}
                                         sx={{ width: 150, height: 150 }}
                                     />
                                     <Typography variant="h4" sx={{ mt: 2 }}>
                                         {user.fullName}
                                     </Typography>
+                                    <Typography
+                                        variant="subtitle1"
+                                        color="textSecondary"
+                                    >
+                                        {userRole}
+                                    </Typography>
                                     <Stack spacing={2} sx={{ mt: 2 }}>
-                                        <Button variant="contained">
+                                        {/* <Button variant="contained">
                                             <Link
                                                 to={
                                                     ComponentPath.user.payment
@@ -88,17 +105,7 @@ export default function ViewProfile() {
                                             >
                                                 View Payment
                                             </Link>
-                                        </Button>
-                                        <Button variant="contained">
-                                            <Link
-                                                to={
-                                                    ComponentPath.user.profile
-                                                        .editProfile
-                                                }
-                                            >
-                                                Edit Profile
-                                            </Link>
-                                        </Button>
+                                        </Button> */}
                                         <Button variant="outlined">
                                             <Link
                                                 to={
