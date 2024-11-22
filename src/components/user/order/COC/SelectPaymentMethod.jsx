@@ -1,4 +1,4 @@
-export function SelectPaymentMethod({ setSelectPaymentMethod }) {
+export default function SelectPaymentMethod({ setSelectPaymentMethod }) {
     return (
         <>
             <div>
