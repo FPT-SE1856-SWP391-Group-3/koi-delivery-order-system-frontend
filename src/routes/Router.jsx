@@ -1,27 +1,11 @@
 import { createBrowserRouter } from "react-router-dom"
-import { lazy, Suspense } from "react"
 import ComponentPath from "./ComponentPath"
-import api from "../api/CallAPI"
-import path from "path"
 import { LazyRoute } from "./LazyRoute"
-
-const AdminRoute = lazy(() => import("./AdminRoute"))
-const ProtectedRoute = lazy(() => import("./ProtectedRoute"))
-
-var adminUrl = "/admin"
-
-// Function to check if the user is admin
-const isAdmin = async () => {
-    const user = JSON.parse(localStorage.getItem("user"))
-    return user && user.roleId >= 3
-}
+import AdminRoute from "./AdminRoute"
+import ProtectedRoute from "./ProtectedRoute"
 
 // Create the router configuration
 const router = createBrowserRouter([
-    {
-        path: "/dashboard",
-        lazy: LazyRoute("../components/user/dashboard/Dashboard"),
-    },
     {
         path: ComponentPath.payment.paymentChoose,
         lazy: LazyRoute("../components/user/payment/ChoosePayment"),
@@ -79,14 +63,8 @@ const router = createBrowserRouter([
         lazy: LazyRoute("../components/user/auth/ResetPassword"),
     },
     {
-        element: (
-                <ProtectedRoute />
-        ),
+        lazy: LazyRoute("./ProtectedRoute"),
         children: [
-            {
-                path: ComponentPath.user.dashboard,
-                lazy: LazyRoute("../components/user/dashboard/UserDashboard"),
-            },
             {
                 path: ComponentPath.user.payment.createPayment,
                 lazy: LazyRoute("../components/user/payment/AddPayment"),
@@ -198,20 +176,12 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                element: (
-                        <AdminRoute />
-                ),
+                lazy: LazyRoute("./AdminRoute"),
                 children: [
                     {
                         path: ComponentPath.admin.order.manageDeliverOrder,
                         lazy: LazyRoute(
                             "../components/admin/order/ManageDeliverOrder"
-                        ),
-                    },
-                    {
-                        path: ComponentPath.admin.dashboard,
-                        lazy: LazyRoute(
-                            "../components/admin/dashboard/AdminDashboard"
                         ),
                     },
                     {

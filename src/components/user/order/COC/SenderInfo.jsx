@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import PropTypes from "prop-types"
 import api from "../../../../api/CallAPI"
 import "../../css/CreateOrder.css"
-import { Grid } from "@mui/joy"
 import UserToast from "../../alert/UserToast"
 
 const SenderInfo = ({ onChange }) => {
