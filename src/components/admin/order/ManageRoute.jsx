@@ -432,7 +432,6 @@ export default function ManageRoute() {
     return (
         <>
             <Box display="flex">
-                <ToastContainer className="route" limit={1} />
                 <AdminSideMenu />
                 {/* Main Table Area */}
                 <Box flex={1} padding={3}>
@@ -508,6 +507,9 @@ export default function ManageRoute() {
                                         <OrderRow
                                             key={order.orderId}
                                             row={order}
+                                            setAlertOpen={setAlertOpen}
+                                            setAlertMessage={setAlertMessage}
+                                            setAlertSeverity={setAlertSeverity}
                                         />
                                     ))
                                 ) : (
