@@ -164,170 +164,149 @@ function OrderRow({ row, setAlertOpen, setAlertMessage, setAlertSeverity }) {
                 </TableCell>
             </TableRow>
 
-                {/* Modal for Matching Routes */}
-                <Modal
-                    open={routeModalOpen}
-                    onClose={() => setRouteModalOpen(false)}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-description"
+            {/* Modal for Matching Routes */}
+            <Modal
+                open={routeModalOpen}
+                onClose={() => setRouteModalOpen(false)}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: 900,
+                        bgcolor: "background.paper",
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: 2,
+                    }}
                 >
-                    <Box
-                        sx={{
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -50%)",
-                            width: 900,
-                            bgcolor: "background.paper",
-                            boxShadow: 24,
-                            p: 4,
-                            borderRadius: 2,
-                        }}
-                    >
-                        <Typography
-                            id="modal-title"
-                            variant="h6"
-                            component="h2"
-                        >
-                            Select a Route for Order #{row.orderId}
-                        </Typography>
-                        {matchingRoutes.length > 0 ? (
-                            <TableContainer component={Paper} sx={{ mt: 2 }}>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Route ID</TableCell>
+                    <Typography id="modal-title" variant="h6" component="h2">
+                        Select a Route for Order #{row.orderId}
+                    </Typography>
+                    {matchingRoutes.length > 0 ? (
+                        <TableContainer component={Paper} sx={{ mt: 2 }}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Route ID</TableCell>
+                                        <TableCell>Current Location</TableCell>
+                                        <TableCell>Route Addresses</TableCell>
+                                        <TableCell>Capacity</TableCell>
+                                        <TableCell>Current Load</TableCell>
+                                        <TableCell>Delivery Staff</TableCell>
+                                        <TableCell></TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {matchingRoutes.map((route) => (
+                                        <TableRow key={route.routeId}>
                                             <TableCell>
-                                                Current Location
+                                                {route.routeId}
                                             </TableCell>
                                             <TableCell>
-                                                Route Addresses
+                                                {route.currentLocation}
                                             </TableCell>
-                                            <TableCell>Capacity</TableCell>
-                                            <TableCell>Current Load</TableCell>
                                             <TableCell>
-                                                Delivery Staff
+                                                {route.routeAddresses
+                                                    .map(
+                                                        (address) =>
+                                                            address.city
+                                                    )
+                                                    .join(", ")}
                                             </TableCell>
-                                            <TableCell></TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {matchingRoutes.map((route) => (
-                                            <TableRow key={route.routeId}>
-                                                <TableCell>
-                                                    {route.routeId}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {route.currentLocation}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {route.routeAddresses
-                                                        .map(
-                                                            (address) =>
-                                                                address.city
+                                            <TableCell>
+                                                {route.capacity}
+                                            </TableCell>
+                                            <TableCell>
+                                                {route.currentLoad}
+                                            </TableCell>
+                                            <TableCell>
+                                                {route.deliveryStaff.fullName}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() =>
+                                                        handleAddOrderToRoute(
+                                                            route.routeId
                                                         )
-                                                        .join(", ")}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {route.capacity}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {route.currentLoad}
-                                                </TableCell>
-                                                <TableCell>
-                                                    {
-                                                        route.deliveryStaff
-                                                            .fullName
                                                     }
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={() =>
-                                                            handleAddOrderToRoute(
-                                                                route.routeId
-                                                            )
-                                                        }
-                                                        disabled={
-                                                            route.currentLoad >=
-                                                            route.capacity
-                                                        }
-                                                    >
-                                                        Add
-                                                    </Button>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        ) : (
-                            <Typography
-                                variant="body1"
-                                color="textSecondary"
-                                align="center"
-                                sx={{ mt: 2 }}
-                            >
-                                {error || "No matching routes found!"}
-                            </Typography>
-                        )}
-                        <Box mt={2} display="flex" justifyContent="flex-end">
-                            <Button
-                                variant="outlined"
-                                onClick={() => setRouteModalOpen(false)}
-                            >
-                                Close
-                            </Button>
-                        </Box>
+                                                    disabled={
+                                                        route.currentLoad >=
+                                                        route.capacity
+                                                    }
+                                                >
+                                                    Add
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    ) : (
+                        <Typography
+                            variant="body1"
+                            color="textSecondary"
+                            align="center"
+                            sx={{ mt: 2 }}
+                        >
+                            {error || "No matching routes found!"}
+                        </Typography>
+                    )}
+                    <Box mt={2} display="flex" justifyContent="flex-end">
+                        <Button
+                            variant="outlined"
+                            onClick={() => setRouteModalOpen(false)}
+                        >
+                            Close
+                        </Button>
                     </Box>
-                </Modal>
+                </Box>
+            </Modal>
 
-                {/* Order Details */}
-                <TableRow>
-                    <TableCell
-                        style={{ paddingBottom: 0, paddingTop: 0 }}
-                        colSpan={12}
-                    >
-                        <Collapse in={open} timeout="auto" unmountOnExit>
-                            <Box margin={2}>
-                                <Typography
-                                    variant="h6"
-                                    gutterBottom
-                                    component="div"
-                                >
-                                    Order Details
-                                </Typography>
-                                <Table size="small" aria-label="order details">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>
-                                                Pickup Address
-                                            </TableCell>
-                                            <TableCell>
-                                                Shipping Address
-                                            </TableCell>
-                                            <TableCell>Distance</TableCell>
-                                            <TableCell>Total Price</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell>
-                                                {row?.startAddressLine || ""}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row?.endAddressLine || ""}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.distance}
-                                            </TableCell>
-                                            <TableCell>
-                                                {row.totalPrice}
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
+            {/* Order Details */}
+            <TableRow>
+                <TableCell
+                    style={{ paddingBottom: 0, paddingTop: 0 }}
+                    colSpan={12}
+                >
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box margin={2}>
+                            <Typography
+                                variant="h6"
+                                gutterBottom
+                                component="div"
+                            >
+                                Order Details
+                            </Typography>
+                            <Table size="small" aria-label="order details">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Pickup Address</TableCell>
+                                        <TableCell>Shipping Address</TableCell>
+                                        <TableCell>Distance</TableCell>
+                                        <TableCell>Total Price</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell>
+                                            {row?.startAddressLine || ""}
+                                        </TableCell>
+                                        <TableCell>
+                                            {row?.endAddressLine || ""}
+                                        </TableCell>
+                                        <TableCell>{row.distance}</TableCell>
+                                        <TableCell>{row.totalPrice}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
 
                             <Box marginTop={2}>
                                 <Typography

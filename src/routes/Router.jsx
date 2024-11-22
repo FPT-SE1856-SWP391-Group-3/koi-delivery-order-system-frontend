@@ -345,7 +345,9 @@ const router = createBrowserRouter([
             },
             {
                 path: ComponentPath.user.notification.createNotification,
-                lazy: LazyRoute("../components/admin/notification/CreateNotification"),
+                lazy: LazyRoute(
+                    "../components/admin/notification/CreateNotification"
+                ),
             },
             {
                 path: ComponentPath.user.dashboard,
@@ -353,7 +355,9 @@ const router = createBrowserRouter([
             },
             {
                 path: ComponentPath.user.notification.viewNotification,
-                lazy: LazyRoute("../components/user/notification/GetNotification"),
+                lazy: LazyRoute(
+                    "../components/user/notification/GetNotification"
+                ),
             },
             {
                 element: (
@@ -364,23 +368,33 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: ComponentPath.admin.order.manageDeliverOrder,
-                        lazy: LazyRoute("../components/admin/order/ManageDeliverOrder"),
+                        lazy: LazyRoute(
+                            "../components/admin/order/ManageDeliverOrder"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.dashboard,
-                        lazy: LazyRoute("../components/admin/dashboard/AdminDashboard"),
+                        lazy: LazyRoute(
+                            "../components/admin/dashboard/AdminDashboard"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.route.routingRoute,
-                        lazy: LazyRoute("../components/admin/order/ManageRoute"),
+                        lazy: LazyRoute(
+                            "../components/admin/order/ManageRoute"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.feedback.manageFeedback,
-                        lazy: LazyRoute("../components/admin/feedback/ManageFeedback"),
+                        lazy: LazyRoute(
+                            "../components/admin/feedback/ManageFeedback"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.route.manageRoute,
-                        lazy: LazyRoute("../components/admin/order/CreateRoute"),
+                        lazy: LazyRoute(
+                            "../components/admin/order/CreateRoute"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.user.manageUser,
@@ -394,7 +408,9 @@ const router = createBrowserRouter([
                         path:
                             ComponentPath.admin.address.manageUserAddress +
                             ":id",
-                        lazy: LazyRoute("../components/admin/address/ManageUserAddress"),
+                        lazy: LazyRoute(
+                            "../components/admin/address/ManageUserAddress"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.koi.manageKoi,
@@ -409,30 +425,45 @@ const router = createBrowserRouter([
                         lazy: LazyRoute("../components/admin/koi/CreateKoi"),
                     },
                     {
-                        path: ComponentPath.admin.order.service.manageOrderService,
-                        lazy: LazyRoute("../components/admin/orderServiceDetail/ManageOrderServiceDetail"),
+                        path: ComponentPath.admin.order.service
+                            .manageOrderService,
+                        lazy: LazyRoute(
+                            "../components/admin/orderServiceDetail/ManageOrderServiceDetail"
+                        ),
                     },
                     {
-                        path: ComponentPath.admin.order.service.createOrderService,
-                        lazy: LazyRoute("../components/admin/orderServiceDetail/AddOrderServiceDetail"),
+                        path: ComponentPath.admin.order.service
+                            .createOrderService,
+                        lazy: LazyRoute(
+                            "../components/admin/orderServiceDetail/AddOrderServiceDetail"
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.order.service.editOrderService +
                             ":id",
-                        lazy: LazyRoute("../components/admin/orderServiceDetail/EditOrderServiceDetail"),
+                        lazy: LazyRoute(
+                            "../components/admin/orderServiceDetail/EditOrderServiceDetail"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.payment.managePaymentType,
-                        lazy: LazyRoute("../components/admin/payment/ManagePaymentMethod"),
+                        lazy: LazyRoute(
+                            "../components/admin/payment/ManagePaymentMethod"
+                        ),
                     },
                     {
-                        path: ComponentPath.admin.payment.editPaymentType + ":id",
-                        lazy: LazyRoute("../components/admin/payment/EditPaymentMethod"),
+                        path:
+                            ComponentPath.admin.payment.editPaymentType + ":id",
+                        lazy: LazyRoute(
+                            "../components/admin/payment/EditPaymentMethod"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.payment.addPaymentType,
-                        lazy: LazyRoute("../components/admin/payment/AddPaymentMethod"),
+                        lazy: LazyRoute(
+                            "../components/admin/payment/AddPaymentMethod"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.faq.manageFaq,
@@ -448,85 +479,123 @@ const router = createBrowserRouter([
                     },
                     {
                         path: ComponentPath.admin.order.manageOrder,
-                        lazy: LazyRoute("../components/admin/order/ManageOrder"),
+                        lazy: LazyRoute(
+                            "../components/admin/order/ManageOrder"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.order.manageDeliverOrder,
-                        lazy: LazyRoute("../components/admin/order/ManageDeliverOrder"),
+                        lazy: LazyRoute(
+                            "../components/admin/order/ManageDeliverOrder"
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.order.manageOrderDetail +
                             ":orderId",
-                        lazy: LazyRoute("../components/admin/order/ManageOrderDetail"),
+                        lazy: LazyRoute(
+                            "../components/admin/order/ManageOrderDetail"
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.report.createReport +
                             ":orderId",
-                        lazy: LazyRoute("../components/admin/report/CreateTransportationReportDetails"),
+                        lazy: LazyRoute(
+                            "../components/admin/report/CreateTransportationReportDetails"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.report.manageReport,
-                        lazy: LazyRoute("../components/admin/report/ManageTransportationReportDetails"),
+                        lazy: LazyRoute(
+                            "../components/admin/report/ManageTransportationReportDetails"
+                        ),
                     },
                     {
                         path:
-                            ComponentPath.admin.report.editReport +
-                            ":reportId",
-                        lazy: LazyRoute("../components/admin/report/EditTransportationReportDetails"),
+                            ComponentPath.admin.report.editReport + ":reportId",
+                        lazy: LazyRoute(
+                            "../components/admin/report/EditTransportationReportDetails"
+                        ),
                     },
                     {
                         path:
                             ComponentPath.admin.blogNews.editBlogNews +
                             ":postId",
-                        lazy: LazyRoute("../components/admin/blogandnews/EditBlogNews"),
+                        lazy: LazyRoute(
+                            "../components/admin/blogandnews/EditBlogNews"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.blogNews.manageBlogNews,
-                        lazy: LazyRoute("../components/admin/blogandnews/ManageBlogNews"),
+                        lazy: LazyRoute(
+                            "../components/admin/blogandnews/ManageBlogNews"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.blogNews.createBlogNews,
-                        lazy: LazyRoute("../components/admin/blogandnews/CreateBlogNews"),
+                        lazy: LazyRoute(
+                            "../components/admin/blogandnews/CreateBlogNews"
+                        ),
                     },
                     {
                         path:
-                            ComponentPath.admin.certification.editCertification +
-                            ":certificationId",
-                        lazy: LazyRoute("../components/admin/certification/EditCertification"),
+                            ComponentPath.admin.certification
+                                .editCertification + ":certificationId",
+                        lazy: LazyRoute(
+                            "../components/admin/certification/EditCertification"
+                        ),
                     },
                     {
-                        path: ComponentPath.admin.certification.manageCertification,
-                        lazy: LazyRoute("../components/admin/certification/ManageCertification"),
+                        path: ComponentPath.admin.certification
+                            .manageCertification,
+                        lazy: LazyRoute(
+                            "../components/admin/certification/ManageCertification"
+                        ),
                     },
                     {
-                        path: ComponentPath.admin.certification.createCertification,
-                        lazy: LazyRoute("../components/admin/certification/CreateCertification"),
+                        path: ComponentPath.admin.certification
+                            .createCertification,
+                        lazy: LazyRoute(
+                            "../components/admin/certification/CreateCertification"
+                        ),
                     },
                     {
-                        path: ComponentPath.admin.notification.manageNotification,
-                        lazy: LazyRoute("../components/admin/notification/ManageNotification"),
+                        path: ComponentPath.admin.notification
+                            .manageNotification,
+                        lazy: LazyRoute(
+                            "../components/admin/notification/ManageNotification"
+                        ),
                     },
                     {
-                        path: ComponentPath.admin.order.document.manageOrderDocument,
-                        lazy: LazyRoute("../components/admin/order/OrderDocument"),
+                        path: ComponentPath.admin.order.document
+                            .manageOrderDocument,
+                        lazy: LazyRoute(
+                            "../components/admin/order/OrderDocument"
+                        ),
                     },
                     {
                         path:
-                            ComponentPath.admin.order.document.createOrderDocument +
+                            ComponentPath.admin.order.document
+                                .createOrderDocument +
                             ":orderId/:orderStatusId",
-                        lazy: LazyRoute("../components/admin/order/CreateOrderDocument"),
+                        lazy: LazyRoute(
+                            "../components/admin/order/CreateOrderDocument"
+                        ),
                     },
                     {
                         path:
-                            ComponentPath.admin.order.document.editOrderDocument +
-                            ":orderId",
-                        lazy: LazyRoute("../components/admin/order/EditOrderDocument"),
+                            ComponentPath.admin.order.document
+                                .editOrderDocument + ":orderId",
+                        lazy: LazyRoute(
+                            "../components/admin/order/EditOrderDocument"
+                        ),
                     },
                     {
                         path: ComponentPath.admin.dashboard,
-                        lazy: LazyRoute("../components/admin/dashboard/AdminDashboard"),
+                        lazy: LazyRoute(
+                            "../components/admin/dashboard/AdminDashboard"
+                        ),
                     },
                 ],
             },
@@ -536,6 +605,6 @@ const router = createBrowserRouter([
         path: "*",
         element: <p>404 Error - Nothing here...</p>,
     },
-]);
+])
 
-export default router;
+export default router
