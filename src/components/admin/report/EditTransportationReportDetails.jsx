@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
 import api from "../../../api/CallAPI"
 import "../report/EditTransportationReportDetails.css"
 import UserToast from "../../user/alert/UserToast"

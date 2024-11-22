@@ -1,7 +1,5 @@
-import { Suspense, useEffect, useState } from "react"
+import { Suspense } from "react"
 import "./App.css"
-import { Route, Routes } from "react-router-dom"
-import { createBrowserRouter } from "react-router-dom"
 import { RouterProvider } from "react-router-dom"
 import router from "./routes/Router"
 

@@ -1,7 +1,6 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import "../css/Navbar.css"
 import logo from "/Logo.png"
-import ComponentPath from "routes/ComponentPath"
 
 const Navbar = () => {
     const [menu, setMenu] = useState()
