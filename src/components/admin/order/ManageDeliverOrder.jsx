@@ -67,20 +67,6 @@ const ManageDeliverOrder = () => {
             fetchOrders(firstRouteId) // Fetch orders for the first route
         }
     }, [routes])
-    const fetchRoutes = async (deliveryStaffId) => {
-        try {
-            const response = await api.get(
-                `routes-controllers/DeliveryStaffId/${deliveryStaffId}`
-            )
-            if (response.success && Array.isArray(response.route)) {
-                setRoutes(response.route)
-            } else {
-                console.error("Failed to fetch routes or no routes available.")
-            }
-        } catch (error) {
-            console.error("Error fetching routes:", error)
-        }
-    }
     const fetchOrders = async (routeId) => {
         try {
             const response = await api.get(`orders/route/${routeId}`)
@@ -147,7 +133,6 @@ const ManageDeliverOrder = () => {
     }
     const updateKoiCondition = async () => {
         try {
-            const response = await api.put(`kois/${selectedKoiId}`, {
             const response = await api.put(`kois/${selectedKoiId}`, {
                 koiCondition: newKoiCondition,
             })

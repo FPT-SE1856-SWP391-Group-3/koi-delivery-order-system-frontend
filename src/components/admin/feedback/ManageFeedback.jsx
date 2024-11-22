@@ -34,7 +34,6 @@ export default function ViewFeedback() {
     const fetchAllFeedbacks = async () => {
         try {
             const data = await api.get("customer-feedbacks")
-            const data = await api.get("customer-feedbacks")
 
             if (Array.isArray(data) && data.length > 0) {
                 setFeedbacks(data)
@@ -52,7 +51,6 @@ export default function ViewFeedback() {
     // Delete feedback by ID
     const handleDeleteFeedback = async (feedbackId) => {
         try {
-            const data = await api.del(`customer-feedbacks/${feedbackId}`)
             const data = await api.del(`customer-feedbacks/${feedbackId}`)
             if (data.success) {
                 setFeedbacks((prevFeedbacks) =>
