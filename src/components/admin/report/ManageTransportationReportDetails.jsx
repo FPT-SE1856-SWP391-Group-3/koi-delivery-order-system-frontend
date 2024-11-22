@@ -31,7 +31,7 @@ export default function ManageTransportationReportDetails() {
 
     const fetchReports = async () => {
         try {
-            const data = await api.get("TransportationReportDetails/")
+            const data = await api.get("transportation-report-details/")
             if (data.success) {
                 setReports(data.transportReports)
             } else {
@@ -56,7 +56,7 @@ export default function ManageTransportationReportDetails() {
     // Xác nhận xóa báo cáo
     async function confirmDeleteReport() {
         try {
-            api.del("TransportationReportDetails/" + selectedReportId).then(
+            api.del("transportation-report-details/" + selectedReportId).then(
                 (data) => {
                     if (data.success) {
                         UserToast("success", "Delete report successfully!")

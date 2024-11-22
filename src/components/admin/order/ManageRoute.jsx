@@ -336,22 +336,19 @@ function OrderRow({ row, setAlertOpen, setAlertMessage, setAlertSeverity }) {
                                                     }
                                                 >
                                                     <TableCell>
-                                                        {koiDetail.koi.koiId}
+                                                        {koiDetail.koiId}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {koiDetail.koi.koiName}
+                                                        {koiDetail.koiName}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {koiDetail.koi.weight}
+                                                        {koiDetail.weight}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {
-                                                            koiDetail.koi
-                                                                .koiCondition
-                                                        }
+                                                        {koiDetail.koiCondition}
                                                     </TableCell>
                                                     <TableCell>
-                                                        {koiDetail.koi.price}
+                                                        {koiDetail.price}
                                                     </TableCell>
                                                 </TableRow>
                                             ))

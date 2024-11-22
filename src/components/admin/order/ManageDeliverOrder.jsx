@@ -26,6 +26,9 @@ import {
 } from "@mui/material"
 import AdminSideMenu from "../components/AdminSideMenu"
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material"
+import Modal from "react-modal"
+import CreateOrderDocument from "./CreateOrderDocument"
+import CreateTransportationReportDetails from "../report/CreateTransportationReportDetails"
 import api from "../../../api/CallAPI" // Adjust path as per your project structure
 
 const ManageDeliverOrder = () => {
@@ -35,6 +38,7 @@ const ManageDeliverOrder = () => {
     const [routes, setRoutes] = useState([])
     const [selectedRouteId, setSelectedRouteId] = useState("")
     const [orders, setOrders] = useState([])
+    const [orderStatus, setOrderStatus] = useState([])
     const [alertOpen, setAlertOpen] = useState(false)
     const [alertMessage, setAlertMessage] = useState("")
     const [alertSeverity, setAlertSeverity] = useState("success")
@@ -43,10 +47,16 @@ const ManageDeliverOrder = () => {
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
     const [selectedKoiId, setSelectedKoiId] = useState(null)
     const [newKoiCondition, setNewKoiCondition] = useState("")
+    const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false)
+    const [isReportModalOpen, setIsReportModalOpen] = useState(false)
+    const [selectedOrderId, setSelectedOrderId] = useState(null)
+    const [selectedOrderStatusId, setSelectedOrderStatusId] = useState(null)
 
     useEffect(() => {
         if (user?.userId) {
             fetchRoutes(user.userId)
+            fetchOrderStatus()
+            Modal.setAppElement("#root")
         }
     }, [user])
     useEffect(() => {
@@ -87,6 +97,20 @@ const ManageDeliverOrder = () => {
         } catch (error) {
             console.error("Error fetching orders:", error)
             setAlertMessage("Error fetching orders for the selected route.")
+            setAlertSeverity("error")
+            setAlertOpen(true)
+        }
+    }
+    const fetchOrderStatus = async () => {
+        try {
+            const data = await api.get("order-status")
+            if (data.success) {
+                setOrderStatus(data.orderStatuses)
+            } else {
+                console.log("Error fetching order statuses.")
+            }
+        } catch (error) {
+            setAlertMessage("An error occurred while fetching order statuses.")
             setAlertSeverity("error")
             setAlertOpen(true)
         }
@@ -156,6 +180,146 @@ const ManageDeliverOrder = () => {
         setAlertOpen(false)
     }
 
+    const updateOrderStatusByClick = async (orderId, currentStatusId) => {
+        const currentIndex = orderStatus.findIndex(
+            (status) => status.orderStatusId === currentStatusId
+        )
+        if (currentIndex === -1 || currentIndex === orderStatus.length - 2) {
+            setAlertMessage("Order is already complete or status not found.")
+            setAlertSeverity("warning")
+            setAlertOpen(true)
+            return
+        }
+        const nextStatusId = orderStatus[currentIndex + 1].orderStatusId
+        // Check status constraints
+        if (nextStatusId < 7) {
+            setAlertMessage(
+                "You don't have permission to update to this status."
+            )
+            setAlertSeverity("warning")
+            setAlertOpen(true)
+            return
+        }
+
+        try {
+            const response = await api.put(`orders/update-status/${orderId}`, {
+                updateOrderStatusId: nextStatusId,
+            })
+
+            if (response.success) {
+                setOrders((orders) =>
+                    orders.map((order) =>
+                        order.orderId === orderId
+                            ? { ...order, orderStatusId: nextStatusId }
+                            : order
+                    )
+                )
+            } else if (response.success === false) {
+                if (response.code == "error-payment") {
+                    setAlertMessage("Payment is not completed yet.")
+                    setAlertSeverity("warning")
+                    setAlertOpen(true)
+                    return
+                } else if (response.code == "error-document") {
+                    setAlertMessage("Document is not uploaded yet.")
+                    setAlertSeverity("warning")
+                    setAlertOpen(true)
+                    return
+                }
+            }
+            setAlertMessage("Order status updated successfully!")
+            setAlertSeverity("success")
+            setAlertOpen(true)
+            fetchOrders(selectedRouteId)
+        } catch (error) {
+            setAlertMessage("An error occurred during status update.")
+            setAlertSeverity("error")
+            setAlertOpen(true)
+        }
+    }
+
+    const cancelOrder = async (orderId) => {
+        const orderToCancel = orders.find((order) => order.orderId === orderId)
+
+        if (orderToCancel && orderToCancel.orderStatusId === 10) {
+            setAlertMessage("Order is already finished.")
+            setAlertSeverity("warning")
+            setAlertOpen(true)
+            return
+        }
+
+        const finalStatusId = orderStatus[orderStatus.length - 1]?.orderStatusId
+        if (!finalStatusId) {
+            setAlertMessage("Final status not found.")
+            setAlertSeverity("error")
+            setAlertOpen(true)
+            return
+        }
+        try {
+            await api.put(`orders/update-status/${orderId}`, {
+                updateOrderStatusId: finalStatusId,
+            })
+            setOrders((orders) =>
+                orders.map((order) =>
+                    order.orderId === orderId
+                        ? { ...order, orderStatusId: finalStatusId }
+                        : order
+                )
+            )
+            setAlertMessage("Order canceled successfully!")
+            setAlertSeverity("success")
+            setAlertOpen(true)
+            fetchOrders(selectedRouteId)
+        } catch (error) {
+            setAlertMessage("An error occurred while canceling the order.")
+            setAlertSeverity("error")
+            setAlertOpen(true)
+        }
+    }
+    const openDocumentModal = (orderId, orderStatusId) => {
+        setSelectedOrderId(orderId)
+        setSelectedOrderStatusId(orderStatusId)
+        setIsDocumentModalOpen(true)
+    }
+
+    const closeDocumentModal = () => {
+        setIsDocumentModalOpen(false)
+        setSelectedOrderId(null)
+        setSelectedOrderStatusId(null)
+    }
+
+    const openReportModal = (orderId) => {
+        setSelectedOrderId(orderId)
+        setIsReportModalOpen(true)
+    }
+
+    const closeReportModal = () => {
+        setIsReportModalOpen(false)
+        setSelectedOrderId(null)
+    }
+    const handleVerifyPayment = async (orderId) => {
+        try {
+            api.post(`payments/cod/verify/${orderId}`)
+                .then((data) => {
+                    if (data.success) {
+                        setAlertMessage("Verify payment successfully!")
+                        setAlertSeverity("success")
+                        setAlertOpen(true)
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error verifying payment:", error)
+                    setAlertMessage("Failed to verify payment.")
+                    setAlertSeverity("error")
+                    setAlertOpen(true)
+                })
+        } catch (error) {
+            console.error("Error verifying payment:", error)
+            setAlertMessage("Failed to verify payment.")
+            setAlertSeverity("error")
+            setAlertOpen(true)
+        }
+    }
     return (
         <Box sx={{ display: "flex", minHeight: "100vh" }}>
             <AdminSideMenu />
@@ -274,7 +438,98 @@ const ManageDeliverOrder = () => {
                                                 <TableCell>
                                                     {order.status}
                                                 </TableCell>
-                                                <TableCell></TableCell>
+                                                <TableCell>
+                                                    <Select
+                                                        displayEmpty
+                                                        value=""
+                                                        onChange={(event) => {
+                                                            const action =
+                                                                event.target
+                                                                    .value
+                                                            if (
+                                                                action ===
+                                                                "updateStatus"
+                                                            ) {
+                                                                updateOrderStatusByClick(
+                                                                    order.orderId,
+                                                                    order.orderStatusId
+                                                                )
+                                                            } else if (
+                                                                action ===
+                                                                "orderDocument"
+                                                            ) {
+                                                                openDocumentModal(
+                                                                    order.orderId,
+                                                                    order.orderStatusId
+                                                                )
+                                                            } else if (
+                                                                action ===
+                                                                "report"
+                                                            ) {
+                                                                openReportModal(
+                                                                    order.orderId
+                                                                )
+                                                            } else if (
+                                                                action ===
+                                                                "cancel"
+                                                            ) {
+                                                                cancelOrder(
+                                                                    order.orderId
+                                                                )
+                                                            }
+                                                        }}
+                                                        fullWidth
+                                                    >
+                                                        <MenuItem
+                                                            value=""
+                                                            disabled
+                                                        >
+                                                            Select Action
+                                                        </MenuItem>
+                                                        <MenuItem value="updateStatus">
+                                                            Update Status
+                                                        </MenuItem>
+                                                        {order.orderStatusId ==
+                                                            4 ||
+                                                        order.orderStatusId ==
+                                                            6 ? (
+                                                            <MenuItem value="orderDocument">
+                                                                Update Document
+                                                            </MenuItem>
+                                                        ) : (
+                                                            <MenuItem disabled>
+                                                                Order Document
+                                                            </MenuItem>
+                                                        )}
+                                                        <MenuItem value="report">
+                                                            Transportation
+                                                            Report
+                                                        </MenuItem>
+                                                        <MenuItem value="cancel">
+                                                            Cancel Order
+                                                        </MenuItem>
+                                                        {order.paymentStatusId !=
+                                                            2 &&
+                                                        order.orderStatusId ==
+                                                            9 &&
+                                                        order.paymentMethodId ==
+                                                            1 ? (
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    handleVerifyPayment(
+                                                                        order.orderId
+                                                                    )
+                                                                }
+                                                            >
+                                                                Verify Payment
+                                                            </MenuItem>
+                                                        ) : (
+                                                            <MenuItem disabled>
+                                                                Verify Payment
+                                                            </MenuItem>
+                                                        )}
+                                                    </Select>
+                                                </TableCell>
                                             </TableRow>
                                             {expandedOrderId ===
                                                 order.orderId && (
@@ -334,15 +589,19 @@ const ManageDeliverOrder = () => {
                                                                                 }
                                                                             </TableCell>
                                                                             <TableCell>
-                                                                                {
-                                                                                    order.distance
-                                                                                }
+                                                                                {Math.round(
+                                                                                    order.distance /
+                                                                                        1000
+                                                                                )}
+                                                                                km
                                                                             </TableCell>
 
                                                                             <TableCell>
                                                                                 {
                                                                                     order.totalPrice
                                                                                 }
+
+                                                                                đ
                                                                             </TableCell>
                                                                         </TableRow>
                                                                     </TableBody>
@@ -510,6 +769,83 @@ const ManageDeliverOrder = () => {
                     </DialogActions>
                 </Dialog>
             </Box>
+            <Modal
+                isOpen={isDocumentModalOpen}
+                onRequestClose={closeDocumentModal}
+                style={{
+                    content: {
+                        width: "500px",
+                        maxHeight: "80vh",
+                        margin: "auto",
+                        padding: "15px",
+                        borderRadius: "8px",
+                        overflow: "auto",
+                    },
+                    overlay: {
+                        backgroundColor: "rgba(0, 0, 0, 0.4)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    },
+                }}
+            >
+                <Button
+                    onClick={closeDocumentModal}
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginBottom: "10px" }} // Optional: Adds space below the button
+                >
+                    Close
+                </Button>
+
+                {selectedOrderId && selectedOrderStatusId && (
+                    <CreateOrderDocument
+                        orderId={selectedOrderId}
+                        orderStatusId={selectedOrderStatusId}
+                        onClose={closeDocumentModal}
+                        setAlertMessage={setAlertMessage}
+                        setAlertSeverity={setAlertSeverity}
+                        setAlertOpen={setAlertOpen}
+                    />
+                )}
+            </Modal>
+
+            <Modal
+                isOpen={isReportModalOpen}
+                onRequestClose={closeReportModal}
+                style={{
+                    content: {
+                        width: "500px",
+                        maxHeight: "80vh",
+                        margin: "auto",
+                        padding: "15px",
+                        borderRadius: "8px",
+                        overflow: "auto",
+                    },
+                    overlay: {
+                        backgroundColor: "rgba(0, 0, 0, 0.4)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    },
+                }}
+            >
+                <Button
+                    onClick={closeReportModal}
+                    variant="contained"
+                    color="primary"
+                    sx={{ marginBottom: "10px" }} // Add spacing below the button
+                >
+                    Close
+                </Button>
+
+                {selectedOrderId && (
+                    <CreateTransportationReportDetails
+                        orderId={selectedOrderId}
+                        onClose={closeReportModal}
+                    />
+                )}
+            </Modal>
         </Box>
     )
 }

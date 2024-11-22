@@ -12,7 +12,7 @@ export default function CreateBlogNews({ onClose, onAddSuccess }) {
     // Add blog/news
     const onSubmit = async (data) => {
         try {
-            api.post("BlogNews", data).then((response) => {
+            api.post("blog-news", data).then((response) => {
                 if (response.success) {
                     UserToast("success", "Add blog/news successfully!")
                     onClose() // Đóng modal
