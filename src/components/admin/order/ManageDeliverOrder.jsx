@@ -502,9 +502,9 @@ const ManageDeliverOrder = () => {
                                                             Transportation
                                                             Report
                                                         </MenuItem>
-                                                        <MenuItem value="cancel">
+                                                        {/* <MenuItem value="cancel">
                                                             Cancel Order
-                                                        </MenuItem>
+                                                        </MenuItem> */}
                                                         {order.paymentStatusId !=
                                                             2 &&
                                                         order.orderStatusId ==
