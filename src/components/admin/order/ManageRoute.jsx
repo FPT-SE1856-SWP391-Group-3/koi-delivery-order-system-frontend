@@ -26,7 +26,13 @@ import api from "../../../api/CallAPI"
 import UserToast from "../../user/alert/UserToast"
 import { ToastContainer } from "react-toastify"
 
-function OrderRow({ row, setAlertOpen, setAlertMessage, setAlertSeverity }) {
+function OrderRow({
+    row,
+    setAlertOpen,
+    setAlertMessage,
+    setAlertSeverity,
+    fetchOrders,
+}) {
     const [open, setOpen] = useState(false)
     const [koiDetails, setKoiDetails] = useState([])
     const [routeModalOpen, setRouteModalOpen] = useState(false)
@@ -104,6 +110,7 @@ function OrderRow({ row, setAlertOpen, setAlertMessage, setAlertSeverity }) {
                 setAlertMessage("Order added to route successfully!")
                 setAlertSeverity("success")
                 setAlertOpen(true)
+                fetchOrders()
             } else {
                 setAlertMessage("Failed to add order to route!")
                 setAlertSeverity("error")
@@ -510,6 +517,7 @@ export default function ManageRoute() {
                                             setAlertOpen={setAlertOpen}
                                             setAlertMessage={setAlertMessage}
                                             setAlertSeverity={setAlertSeverity}
+                                            fetchOrders={fetchOrders}
                                         />
                                     ))
                                 ) : (
